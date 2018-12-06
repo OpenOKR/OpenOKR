@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>okr</artifactId>
+        <groupId>org.springframework.boot</groupId>
+        <version>dev-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>okr-service</artifactId>
+
+    <properties>
+        <!-- 数据库配置 -->
+        <mybatisGeneratorDbConfigFile>maven_build/mybatis-generator-entity.properties</mybatisGeneratorDbConfigFile>
+        <!-- java代码目录 -->
+        <mybatisGeneratorJavaFileDir>../okr-service/src/main/java</mybatisGeneratorJavaFileDir>
+        <!-- 资源文件目录 -->
+        <mybatisGeneratorResourcesFileDir>${basedir}/src/main/resources</mybatisGeneratorResourcesFileDir>
+        <!-- 实体生成配置文件 -->
+        <mybatisGeneratorConfigFile>${basedir}/src/main/resources/maven_build/mybatis-generator-entity.xml</mybatisGeneratorConfigFile>
+        <!-- 包名 -->
+        <mybatisGeneratorPackagePath>com.okr</mybatisGeneratorPackagePath>
+        <!--VO生成目录-->
+        <mybatisVOJavaFileDir>../okr-api/src/main/java</mybatisVOJavaFileDir>
+        <i18nJavaScriptTargetDir>../okr-api/src/main/webapp/assets/js/application/i18n</i18nJavaScriptTargetDir>
+        <start-class>com.okr.ApplicationOkrService</start-class>
+    </properties>
+
+    <dependencies>
+
+        <!--<dependency>-->
+            <!--<groupId>com.google.guava</groupId>-->
+            <!--<artifactId>guava</artifactId>-->
+        <!--</dependency>-->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>okr-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
+            <version>1.4.1.RELEASE</version>
+        </dependency>
+
+        <!--<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-service</artifactId>
+        </dependency>-->
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <version>1.4.1.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.25</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>4.3.9.RELEASE</version>
+        </dependency>
+
+
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <excludes>
+                    <exclude>maven_build/**/*</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <plugins>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <fork>true</fork>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+</project>

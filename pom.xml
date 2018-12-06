@@ -1,0 +1,96 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.4.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <artifactId>okr</artifactId>
+    <version>dev-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <properties>
+        <!-- begin 全局设置,被子工程继承 -->
+        <skipRequireRelease>true</skipRequireRelease><!-- 是否跳过 必须依赖正式版本的检查 -->
+        <!-- end -->
+        <!-- begin 框架版本 -->
+        <!-- end -->
+        <!-- begin 外部api -->
+        <!-- end -->
+        <!-- begin 其它第三方开源版本定义 -->
+        <postgresql.version>9.2-1004-jdbc4</postgresql.version>
+        <!-- end -->
+    </properties>
+
+    <!-- 依赖预配置 -->
+    <dependencyManagement>
+        <dependencies>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+
+                <plugin>
+                    <!-- node+gulp 静态资源压缩 -->
+                    <!-- 将被子工程继承 -->
+                    <groupId>com.github.eirslett</groupId>
+                    <artifactId>frontend-maven-plugin</artifactId>
+                    <version>1.0</version>
+                    <configuration>
+                        <nodeVersion>v7.1.0</nodeVersion><!--node.js版本-->
+                        <npmVersion>4.0.3</npmVersion><!--npm版本-->
+                        <npmDownloadRoot>http://172.16.11.54:88/npm_dist/</npmDownloadRoot><!-- npm安装包根目录 -->
+                        <installDirectory>src/main/resources/maven_build</installDirectory><!--插件的构建目录-->
+                        <outputdir>src/main/resources/maven_build</outputdir><!-- gulp的构建目录-->
+                        <skipTests>true</skipTests><!--跳过测试-->
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+    </build>
+
+    <profiles>
+        <profile>
+            <id>api</id>
+            <modules>
+                <module>okr-api</module>
+            </modules>
+        </profile>
+        <profile>
+            <!-- 开发环境为windows系统将生效 -->
+            <id>dev-windows</id>
+            <modules>
+                <module>okr-api</module>
+                <module>okr-service</module>
+                <module>okr-web</module>
+            </modules>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+        </profile>
+        <profile>
+            <!-- 开发环境为mac系统将生效 -->
+            <id>dev-mac</id>
+            <modules>
+                <module>okr-api</module>
+                <module>okr-service</module>
+                <module>okr-web</module>
+            </modules>
+            <activation>
+                <os>
+                    <family>mac</family>
+                </os>
+            </activation>
+        </profile>
+
+    </profiles>
+</project>
