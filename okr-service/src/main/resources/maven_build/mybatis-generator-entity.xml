@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+    <properties resource="${mybatisGeneratorDbConfigFile}"/>
+    <context id="admin.sys" targetRuntime="MyBatis3">
+        <!-- 国际化JS资源目标目录 -->
+        <property name="i18nJavaScriptTargetDir" value="${i18nJavaScriptTargetDir}"/>
+        <!-- -->
+        <plugin type="org.mybatis.generator.plugins.CaseInsensitiveLikePlugin"/>
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+        <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+            <property name="searchString" value="Example"/>
+            <property name="replaceString" value="Condition"/>
+        </plugin>
+        <plugin type="com.onlyou.framework.mybatis.generator.plugins.PostgreSqlPaginationPlugin"/>
+        <plugin type="com.onlyou.framework.mybatis.generator.plugins.EntityCommentPlugin"/>
+        <plugin type="com.onlyou.framework.mybatis.generator.plugins.EntityConditionPlugin"/>
+        <plugin type="com.onlyou.framework.mybatis.generator.plugins.EntityAnnotationPlugin"/>
+        <plugin type="com.onlyou.framework.mybatis.generator.plugins.EntityExtraMethodPlugin"/>
+        <plugin type="com.onlyou.framework.mybatis.generator.plugins.MapperAndSqlMapGeneratorPlugin"/>
+        <plugin type="com.onlyou.framework.mybatis.generator.plugins.LikeConditionExtendPlugin"/>
+        <plugin type="com.onlyou.framework.mybatis.generator.plugins.EntityI18nPlugin"/>
+
+        <plugin type="com.onlyou.framework.mybatis.generator.plugins.EntityVOPlugin"/>
+        <!-- 缓存配置参数 cache_eviction,cache_flushInterval,cache_size,cache_readOnly,cache_type,cache_group -->
+        <plugin type="com.onlyou.framework.mybatis.generator.plugins.CachePlugin"/>
+
+        <!-- 取消注释 -->
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+        <!-- 配置连接数据信息 -->
+        <jdbcConnection driverClass="${mvn.jdbc.driver}" connectionURL="${mvn.jdbc.url}" userId="${mvn.jdbc.username}" password="${mvn.jdbc.password}"/>
+        <!-- 配置自动生成的Model的保存路径与其它参数 -->
+        <javaModelGenerator targetPackage="${mybatisGeneratorPackagePath}" targetProject="${mybatisGeneratorJavaFileDir}">
+            <property name="rootClass" value="com.onlyou.framework.mybatis.entity.BaseEntity"/>
+            <property name="javaFileEncoding" value="UTF-8"/>
+        </javaModelGenerator>
+        <!-- 配置自动生成的Mappper.xml映射的保存路径与其它参数 -->
+        <sqlMapGenerator targetPackage="${mybatisGeneratorPackagePath}" targetProject="${mybatisGeneratorResourcesFileDir}"/>
+        <!-- 配置自动生成的Mappper.java接口的保存路径与其它参数 -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="${mybatisGeneratorPackagePath}" targetProject="${mybatisGeneratorJavaFileDir}">
+            <property name="rootInterface" value="com.onlyou.framework.mybatis.mapper.BaseMapper"/>
+        </javaClientGenerator>
+
+        <!-- ssm -->
+        <table tableName="t_pfm_ssm_menu" domainObjectName="ssm.entity.MenuEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="ssm.vo.MenuVO"/>
+        </table>
+
+
+    </context>
+</generatorConfiguration>

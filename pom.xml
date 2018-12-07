@@ -36,21 +36,6 @@
         <pluginManagement>
             <plugins>
 
-                <plugin>
-                    <!-- node+gulp 静态资源压缩 -->
-                    <!-- 将被子工程继承 -->
-                    <groupId>com.github.eirslett</groupId>
-                    <artifactId>frontend-maven-plugin</artifactId>
-                    <version>1.0</version>
-                    <configuration>
-                        <nodeVersion>v7.1.0</nodeVersion><!--node.js版本-->
-                        <npmVersion>4.0.3</npmVersion><!--npm版本-->
-                        <npmDownloadRoot>http://172.16.11.54:88/npm_dist/</npmDownloadRoot><!-- npm安装包根目录 -->
-                        <installDirectory>src/main/resources/maven_build</installDirectory><!--插件的构建目录-->
-                        <outputdir>src/main/resources/maven_build</outputdir><!-- gulp的构建目录-->
-                        <skipTests>true</skipTests><!--跳过测试-->
-                    </configuration>
-                </plugin>
             </plugins>
         </pluginManagement>
 
