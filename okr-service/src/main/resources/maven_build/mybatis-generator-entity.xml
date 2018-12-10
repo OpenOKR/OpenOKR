@@ -13,36 +13,37 @@
             <property name="searchString" value="Example"/>
             <property name="replaceString" value="Condition"/>
         </plugin>
-        <plugin type="com.onlyou.framework.mybatis.generator.plugins.PostgreSqlPaginationPlugin"/>
-        <plugin type="com.onlyou.framework.mybatis.generator.plugins.EntityCommentPlugin"/>
-        <plugin type="com.onlyou.framework.mybatis.generator.plugins.EntityConditionPlugin"/>
-        <plugin type="com.onlyou.framework.mybatis.generator.plugins.EntityAnnotationPlugin"/>
-        <plugin type="com.onlyou.framework.mybatis.generator.plugins.EntityExtraMethodPlugin"/>
-        <plugin type="com.onlyou.framework.mybatis.generator.plugins.MapperAndSqlMapGeneratorPlugin"/>
-        <plugin type="com.onlyou.framework.mybatis.generator.plugins.LikeConditionExtendPlugin"/>
-        <plugin type="com.onlyou.framework.mybatis.generator.plugins.EntityI18nPlugin"/>
+        <plugin type="com.jh.framework.mybatis.generator.plugins.PostgreSqlPaginationPlugin"/>
+        <plugin type="com.jh.framework.mybatis.generator.plugins.EntityCommentPlugin"/>
+        <plugin type="com.jh.framework.mybatis.generator.plugins.EntityConditionPlugin"/>
+        <plugin type="com.jh.framework.mybatis.generator.plugins.EntityAnnotationPlugin"/>
+        <plugin type="com.jh.framework.mybatis.generator.plugins.EntityExtraMethodPlugin"/>
+        <plugin type="com.jh.framework.mybatis.generator.plugins.MapperAndSqlMapGeneratorPlugin"/>
+        <plugin type="com.jh.framework.mybatis.generator.plugins.LikeConditionExtendPlugin"/>
+        <plugin type="com.jh.framework.mybatis.generator.plugins.EntityI18nPlugin"/>
 
-        <plugin type="com.onlyou.framework.mybatis.generator.plugins.EntityVOPlugin"/>
+        <plugin type="com.jh.framework.mybatis.generator.plugins.EntityVOPlugin"/>
         <!-- 缓存配置参数 cache_eviction,cache_flushInterval,cache_size,cache_readOnly,cache_type,cache_group -->
-        <plugin type="com.onlyou.framework.mybatis.generator.plugins.CachePlugin"/>
+        <plugin type="com.jh.framework.mybatis.generator.plugins.CachePlugin"/>
 
         <!-- 取消注释 -->
         <commentGenerator>
             <property name="suppressDate" value="true"/>
             <property name="suppressAllComments" value="true"/>
         </commentGenerator>
+
         <!-- 配置连接数据信息 -->
         <jdbcConnection driverClass="${mvn.jdbc.driver}" connectionURL="${mvn.jdbc.url}" userId="${mvn.jdbc.username}" password="${mvn.jdbc.password}"/>
         <!-- 配置自动生成的Model的保存路径与其它参数 -->
         <javaModelGenerator targetPackage="${mybatisGeneratorPackagePath}" targetProject="${mybatisGeneratorJavaFileDir}">
-            <property name="rootClass" value="com.onlyou.framework.mybatis.entity.BaseEntity"/>
+            <property name="rootClass" value="com.jh.framework.mybatis.entity.BaseEntity"/>
             <property name="javaFileEncoding" value="UTF-8"/>
         </javaModelGenerator>
         <!-- 配置自动生成的Mappper.xml映射的保存路径与其它参数 -->
         <sqlMapGenerator targetPackage="${mybatisGeneratorPackagePath}" targetProject="${mybatisGeneratorResourcesFileDir}"/>
         <!-- 配置自动生成的Mappper.java接口的保存路径与其它参数 -->
         <javaClientGenerator type="XMLMAPPER" targetPackage="${mybatisGeneratorPackagePath}" targetProject="${mybatisGeneratorJavaFileDir}">
-            <property name="rootInterface" value="com.onlyou.framework.mybatis.mapper.BaseMapper"/>
+            <property name="rootInterface" value="com.jh.framework.mybatis.mapper.BaseMapper"/>
         </javaClientGenerator>
 
         <!-- ssm -->

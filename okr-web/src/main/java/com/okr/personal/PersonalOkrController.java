@@ -1,4 +1,4 @@
-package com.okr.personal.web;
+package com.okr.personal;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

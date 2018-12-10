@@ -22,6 +22,9 @@
         <!-- end -->
         <!-- begin 其它第三方开源版本定义 -->
         <postgresql.version>9.2-1004-jdbc4</postgresql.version>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.compilerVersion>1.7</maven.compiler.compilerVersion>
         <!-- end -->
     </properties>
 

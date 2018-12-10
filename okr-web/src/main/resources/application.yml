@@ -1,6 +1,6 @@
 ## default config
 server:
-  port: 8898
+  port: 8892
   session:
     timeout: 1800
   context-path: /
@@ -41,6 +41,7 @@ framework:
         /loginEntry.htm: authc
         /logout.htm: logout
         /getEncryptKey.json: anon
+        /personal: anon
         /**/*.htm: user
         /**/*.json: user
       filters:

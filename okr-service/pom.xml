@@ -41,12 +41,6 @@
             <version>${project.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot</artifactId>
-            <version>1.4.1.RELEASE</version>
-        </dependency>
-
         <!--<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-service</artifactId>
@@ -86,6 +80,16 @@
             <artifactId>asm</artifactId>
             <version>1.5.3</version>
         </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.jh</groupId>
+            <artifactId>jh-framework-core</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
 
 
     </dependencies>
@@ -121,6 +125,11 @@
                     <configurationFile>${mybatisGeneratorConfigFile}</configurationFile>
                 </configuration>
                 <dependencies>
+                    <dependency>
+                        <groupId>com.jh</groupId>
+                        <artifactId>jh-mybatis-generator</artifactId>
+                        <version>1.0.0-SNAPSHOT</version>
+                    </dependency>
                     <dependency>
                         <groupId>org.postgresql</groupId>
                         <artifactId>postgresql</artifactId>

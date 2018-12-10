@@ -19,11 +19,6 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot</artifactId>
-            <version>1.4.1.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
             <version>1.4.1.RELEASE</version>
         </dependency>
@@ -44,7 +39,6 @@
             <version>1.0.5</version>
         </dependency>
 
-        &lt;!&ndash; ueditor 本地图片上传依赖 &ndash;&gt;
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
