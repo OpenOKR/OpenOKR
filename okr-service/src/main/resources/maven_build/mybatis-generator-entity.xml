@@ -21,8 +21,7 @@
         <plugin type="com.jh.framework.mybatis.generator.plugins.MapperAndSqlMapGeneratorPlugin"/>
         <plugin type="com.jh.framework.mybatis.generator.plugins.LikeConditionExtendPlugin"/>
         <plugin type="com.jh.framework.mybatis.generator.plugins.EntityI18nPlugin"/>
-
-        <plugin type="com.jh.framework.mybatis.generator.plugins.EntityVOPlugin"/>
+        <!--<plugin type="com.jh.framework.mybatis.generator.plugins.EntityVOPlugin"/>-->
         <!-- 缓存配置参数 cache_eviction,cache_flushInterval,cache_size,cache_readOnly,cache_type,cache_group -->
         <plugin type="com.jh.framework.mybatis.generator.plugins.CachePlugin"/>
 

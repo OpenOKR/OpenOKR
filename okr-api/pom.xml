@@ -10,7 +10,14 @@
     </parent>
 
     <artifactId>okr-api</artifactId>
+
     <dependencies>
+
+        <dependency>
+            <groupId>com.jh</groupId>
+            <artifactId>jh-framework-core</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
 
     </dependencies>
 

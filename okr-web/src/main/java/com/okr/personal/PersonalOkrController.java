@@ -1,5 +1,8 @@
 package com.okr.personal;
 
+import com.okr.personal.service.IPersonalOkrService;
+import com.okr.ssm.vo.MenuVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/personal")
 public class PersonalOkrController {
 
+    @Autowired
+    private IPersonalOkrService personalOkrService;
+
     /**
      * 个人OKR初始化页面
      *
@@ -20,6 +26,8 @@ public class PersonalOkrController {
      */
     @RequestMapping(value = "/init.htm")
     public String personalOkr(Model model) {
+        MenuVO menuVO = new MenuVO();
+        menuVO = personalOkrService.getPersonalOkr(menuVO);
         return "personal/personalOkr";
     }
 }
