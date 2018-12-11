@@ -19,7 +19,8 @@
         <!-- 资源文件目录 -->
         <mybatisGeneratorResourcesFileDir>${basedir}/src/main/resources</mybatisGeneratorResourcesFileDir>
         <!-- 实体生成配置文件 -->
-        <mybatisGeneratorConfigFile>${basedir}/src/main/resources/maven_build/mybatis-generator-entity.xml</mybatisGeneratorConfigFile>
+        <mybatisGeneratorConfigFile>${basedir}/src/main/resources/maven_build/mybatis-generator-entity.xml
+        </mybatisGeneratorConfigFile>
         <!-- 包名 -->
         <mybatisGeneratorPackagePath>com.okr</mybatisGeneratorPackagePath>
         <!--VO生成目录-->
@@ -30,8 +31,8 @@
 
     <dependencies>
         <!--<dependency>-->
-            <!--<groupId>com.google.guava</groupId>-->
-            <!--<artifactId>guava</artifactId>-->
+        <!--<groupId>com.google.guava</groupId>-->
+        <!--<artifactId>guava</artifactId>-->
         <!--</dependency>-->
 
         <dependency>
@@ -51,19 +52,25 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!--log4j2-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
-            <version>1.4.1.RELEASE</version>
+            <version>1.5.4.RELEASE</version>
         </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.25</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>4.3.9.RELEASE</version>
-        </dependency>
+
         <dependency>
             <groupId>javax.persistence</groupId>
             <artifactId>persistence-api</artifactId>
@@ -84,11 +91,11 @@
             <artifactId>mybatis</artifactId>
             <version>3.1.1</version>
         </dependency>
-
     </dependencies>
 
     <build>
         <finalName>${project.artifactId}</finalName>
+
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -98,6 +105,7 @@
                 </excludes>
             </resource>
         </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -131,6 +139,5 @@
                 </dependencies>
             </plugin>
         </plugins>
-
     </build>
 </project>
