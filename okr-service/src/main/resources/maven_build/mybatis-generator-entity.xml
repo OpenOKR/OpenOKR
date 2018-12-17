@@ -24,6 +24,7 @@
         <!--<plugin type="com.jh.framework.mybatis.generator.plugins.EntityVOPlugin"/>-->
         <!-- 缓存配置参数 cache_eviction,cache_flushInterval,cache_size,cache_readOnly,cache_type,cache_group -->
         <plugin type="com.jh.framework.mybatis.generator.plugins.CachePlugin"/>
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"></plugin>
 
         <!-- 取消注释 -->
         <commentGenerator>
@@ -46,7 +47,7 @@
         </javaClientGenerator>
 
         <!-- ssm -->
-        <table tableName="t_pfm_ssm_menu" domainObjectName="ssm.entity.MenuEntity">
+        <table tableName="t_okr_sys_menu" domainObjectName="sys.entity.MenuEntity">
             <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
             <property name="domainVOName" value="ssm.vo.MenuVO"/>
         </table>

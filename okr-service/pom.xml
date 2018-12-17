@@ -26,7 +26,7 @@
         <!--VO生成目录-->
         <mybatisVOJavaFileDir>../okr-api/src/main/java</mybatisVOJavaFileDir>
         <i18nJavaScriptTargetDir>../okr-api/src/main/webapp/assets/js/application/i18n</i18nJavaScriptTargetDir>
-        <start-class>com.okr.ApplicationOkrService</start-class>
+        <start-class>org.openokr.ApplicationOkrService</start-class>
     </properties>
 
     <dependencies>
@@ -119,7 +119,7 @@
             <plugin>
                 <groupId>org.mybatis.generator</groupId>
                 <artifactId>mybatis-generator-maven-plugin</artifactId>
-                <version>1.3.2</version>
+                <version>1.3.7</version>
                 <configuration>
                     <verbose>true</verbose>
                     <overwrite>true</overwrite>

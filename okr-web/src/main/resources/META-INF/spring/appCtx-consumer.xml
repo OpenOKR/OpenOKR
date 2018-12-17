@@ -13,6 +13,6 @@
     <dubbo:registry protocol="zookeeper" address="zookeeper://127.0.0.1:2181?backup=127.0.0.1:2812,127.0.0.1:2813"/>
 
     <!-- okr -->
-    <dubbo:reference interface="com.okr.personal.service.IPersonalOkrService" id="personalOkrService"/>
+    <dubbo:reference interface="org.openokr.personal.service.IPersonalOkrService" id="personalOkrService"/>
 
 </beans>

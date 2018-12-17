@@ -17,6 +17,6 @@
 	<dubbo:protocol name="dubbo" port="20880" />
 
 	<!-- okr -->
-	<dubbo:service interface="com.okr.personal.service.IPersonalOkrService" ref="personalOkrService"/>
+	<dubbo:service interface="org.openokr.personal.service.IPersonalOkrService" ref="personalOkrService"/>
 
 </beans>
