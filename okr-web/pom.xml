@@ -10,6 +10,12 @@
 
     <artifactId>okr-web</artifactId>
 
+    <properties>
+        <shiro.version>1.4.0</shiro.version>
+        <ehcache.version>2.10.3</ehcache.version>
+        <bcprov-jdk16.version>1.46</bcprov-jdk16.version>
+    </properties>
+
     <!-- 依赖项定义 -->
     <dependencies>
         <dependency>
@@ -43,6 +49,52 @@
             <groupId>net.sf.jxls</groupId>
             <artifactId>jxls-core</artifactId>
             <version>1.0.5</version>
+        </dependency>
+
+        <!-- shiro 依赖 -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <version>${shiro.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+            <version>${shiro.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-cas</artifactId>
+            <version>${shiro.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-web</artifactId>
+            <version>${shiro.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-ehcache</artifactId>
+            <version>${shiro.version}</version>
+        </dependency>
+
+        <!-- ehcache 依赖-->
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>${ehcache.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk16</artifactId>
+            <version>${bcprov-jdk16.version}</version>
         </dependency>
 
     </dependencies>

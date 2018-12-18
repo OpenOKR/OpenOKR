@@ -18,7 +18,7 @@ framework:
     base-packages: org.openokr,com.zzheng.framework
     mapper-locations:
       - classpath*:org/openokr/**/*Mapper.xml
-      - classpath*:com.zzheng.framework/FrameworkMapper.xml
+      - classpath*:com/zzheng/framework/FrameworkMapper.xml
   dubbo:
     application:
       name: okr-service
