@@ -25,6 +25,14 @@ spring:
   resources:
     static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:/data/file/
 
+framework:
+  dubbo:
+    application:
+      name: okr-web
+    registry1:
+      address: zookeeper://zkserver1:2181;zookeeper://zkserver2:2181
+      file: /data/log/okr/okr-web-log/okr-web-dubbo1.cache
+
 logging:
   level:
     root: debug
