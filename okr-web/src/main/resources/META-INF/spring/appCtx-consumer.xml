@@ -5,4 +5,9 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd" default-lazy-init="true">
 
+
+    <!-- okr -->
+    <dubbo:reference interface="org.openokr.personal.service.IPersonalOkrService" id="personalOkrService"/>
+
+
 </beans>

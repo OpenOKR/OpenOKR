@@ -22,7 +22,7 @@
         <mybatisGeneratorConfigFile>${basedir}/src/main/resources/maven_build/mybatis-generator-entity.xml
         </mybatisGeneratorConfigFile>
         <!-- 包名 -->
-        <mybatisGeneratorPackagePath>com.okr</mybatisGeneratorPackagePath>
+        <mybatisGeneratorPackagePath>org.openokr</mybatisGeneratorPackagePath>
         <!--VO生成目录-->
         <mybatisVOJavaFileDir>../okr-api/src/main/java</mybatisVOJavaFileDir>
         <i18nJavaScriptTargetDir>../okr-api/src/main/webapp/assets/js/application/i18n</i18nJavaScriptTargetDir>
@@ -30,6 +30,11 @@
     </properties>
 
     <dependencies>
+        <!--<dependency>-->
+        <!--<groupId>com.google.guava</groupId>-->
+        <!--<artifactId>guava</artifactId>-->
+        <!--</dependency>-->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>okr-api</artifactId>
@@ -67,6 +72,26 @@
             <artifactId>postgresql</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.8.3</version>
+        </dependency>
+        <dependency>
+            <groupId>asm</groupId>
+            <artifactId>asm</artifactId>
+            <version>1.5.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>4.3.3.RELEASE</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-jdbc</artifactId>

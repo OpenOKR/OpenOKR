@@ -6,4 +6,8 @@
 		http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
 	default-lazy-init="true">
 
+
+	<!-- okr -->
+	<dubbo:service interface="org.openokr.personal.service.IPersonalOkrService" ref="personalOkrService"/>
+
 </beans>

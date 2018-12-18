@@ -1,9 +1,9 @@
 package org.openokr.personal.service;
 
-import com.jh.framework.mybatis.service.impl.BaseServiceImpl;
-import org.openokr.ssm.entity.MenuEntity;
-import org.openokr.ssm.entity.MenuEntityCondition;
-import org.openokr.ssm.vo.MenuVO;
+import com.zzheng.framework.mybatis.service.impl.BaseServiceImpl;
+import org.openokr.sys.entity.MenuEntity;
+import org.openokr.sys.entity.MenuEntityCondition;
+import org.openokr.sys.vo.MenuVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

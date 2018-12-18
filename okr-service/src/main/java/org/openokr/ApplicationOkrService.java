@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ImportResource;
 
 import java.util.concurrent.CountDownLatch;
 
-@SpringBootApplication(scanBasePackages = {"com.okr"},
+@SpringBootApplication(scanBasePackages = {"org.openokr"},
         exclude = org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration.class)
 @ImportResource({
         "classpath:/META-INF/spring/appCtx-provider.xml"

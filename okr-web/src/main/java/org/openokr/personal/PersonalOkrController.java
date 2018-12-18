@@ -1,7 +1,6 @@
 package org.openokr.personal;
 
 import org.openokr.personal.service.IPersonalOkrService;
-import org.openokr.ssm.vo.MenuVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,8 +25,8 @@ public class PersonalOkrController {
      */
     @RequestMapping(value = "/init.htm")
     public String personalOkr(Model model) {
-        MenuVO menuVO = new MenuVO();
-        menuVO = personalOkrService.getPersonalOkr(menuVO);
+//        MenuVO menuVO = new MenuVO();
+        //menuVO = personalOkrService.getPersonalOkr(menuVO);
         return "personal/personalOkr";
     }
 }
