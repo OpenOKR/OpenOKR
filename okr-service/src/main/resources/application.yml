@@ -1,0 +1,82 @@
+## default config
+spring:
+  profiles:
+    active: local
+  aop:
+    auto: true
+    proxy-target-class: true
+  datasource:
+    name: dataSource
+    type: org.apache.tomcat.jdbc.pool.DataSource
+    driver-class-name: org.postgresql.Driver
+    tomcat:
+      jdbc-interceptors: ConnectionState;StatementFinalizer
+      validation-query: select 1
+
+framework:
+  mybatis:
+    base-packages: org.openokr
+    mapper-locations:
+      - classpath*:org/openokr/**/*Mapper.xml
+  dubbo:
+    application:
+      name: okr-service
+    protocol:
+      port: 20241
+    registry1:
+      address: zookeeper://zkserver1:2181;zookeeper://zkserver2:2181
+      file: /data/log/okr/okr-service-log/okr-service-dubbo1.cache
+
+logging:
+  level:
+    root: debug
+  file: /data/log/okr/okr-service-log/okr-service
+
+---
+spring:
+  profiles: local
+  datasource:
+    url: jdbc:postgresql://172.16.11.35:5433/okr_dev
+    username: okr_dev
+    password: okr_dev
+
+logging:
+  file: ./log/es_performance_service
+
+framework:
+  dubbo:
+    registry1:
+      address: zookeeper://localhost:2181;zookeeper://localhost:2182;
+      file: ./log/okr-service-dubbo1.cache
+
+---
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:postgresql://172.16.11.35:5433/okr_dev
+    username: okr_dev
+    password: okr_dev
+
+---
+spring:
+  profiles: test
+  datasource:
+    url: jdbc:postgresql://172.16.11.35:5433/okr_test
+    username: okr_test
+    password: okr_test
+
+---
+spring:
+  profiles: uat
+  datasource:
+    url: jdbc:postgresql://xxx.xxx.xxx.xxx:5433/okr_uat
+    username: okr_uat
+    password: okr_uat
+
+---
+spring:
+  profiles: prd
+  datasource:
+    url: jdbc:postgresql://172.16.128.27:5433/okr
+    username: okr
+    password: okr

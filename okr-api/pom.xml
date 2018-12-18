@@ -13,11 +13,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.jh</groupId>
-            <artifactId>jh-framework-core</artifactId>
+            <groupId>com.zzheng</groupId>
+            <artifactId>framework-boot-starter-dubbo</artifactId>
             <version>1.0.0-SNAPSHOT</version>
-            <!--<scope>system</scope>-->
-            <!--<systemPath>${basedir}/src/main/resources/META-INF/lib/jh-framework-core-1.0.0-SNAPSHOT.jar</systemPath>-->
         </dependency>
 
         <dependency>

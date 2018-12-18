@@ -30,43 +30,6 @@ logging:
     root: debug
   file: /data/log/okr/okr-web-log/okr-web
 
-framework:
-  shiro:
-    filter-factory-bean:
-      success-url: /index.htm
-      login-url: /loginEntry.htm
-      filter-chain-definition-map:
-        /: anon
-        /assets/**: anon
-        /loginEntry.htm: authc
-        /logout.htm: logout
-        /getEncryptKey.json: anon
-        /personal: anon
-        /**/*.htm: user
-        /**/*.json: user
-      filters:
-        authc: com.onlyou.performance.application.shiro.BaseFormAuthenticationFilter
-    security-manager:
-      authorizing-realm: com.onlyou.performance.application.shiro.ShiroDbRealm
-    annotation-enabled: true
-    remember-me:
-      cookie-max-age: 604800
-  dubbo:
-    application:
-      name: okr-web
-    registry1:
-      address: zookeeper://zkserver1:2181;zookeeper://zkserver2:2181
-      file: /data/log/okr/okr-web-log/okr-web-dubbo1.cache
-  cache:
-    address1: mmserver1:11211
-    address2: mmserver2:11211
-    revision:
-      project-name: okr-web
-
-app:
-  jsDebug: false
-  staticResourceVersion: $[mvn.staticResourceVersion]
-
 ---
 server:
   undertow:
@@ -80,19 +43,6 @@ spring:
   profiles: local
 logging:
   file: ../log/okr-web
-
-framework:
-  dubbo:
-    registry1:
-      address: zookeeper://localhost:2181
-      file: ../log/okr-web-dubbo1.cache
-  cache:
-    address1: localhost:11211
-    address2: localhost:11211
-
-app:
-  jsDebug: true
-  staticResourceVersion: dev
 
 ---
 spring:
