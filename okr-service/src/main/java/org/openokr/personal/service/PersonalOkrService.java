@@ -12,8 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class PersonalOkrService extends BaseServiceImpl implements IPersonalOkrService {
 
-    private final static String MAPPER_NAMESPACE = "com.okr.personal.sqlmapper.PersonalOkrMapper";
+    private final static String MAPPER_NAMESPACE = "org.openokr.personal.sqlmapper.PersonalOkrMapper";
 
+    @Override
     public MenuVO getPersonalOkr(MenuVO menuVO) {
         MenuEntityCondition condition = new MenuEntityCondition();
         condition.createCriteria().andNameEqualTo("用户管理");

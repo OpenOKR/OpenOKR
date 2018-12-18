@@ -15,14 +15,15 @@ spring:
 
 framework:
   mybatis:
-    base-packages: org.openokr
+    base-packages: org.openokr,com.zzheng.framework
     mapper-locations:
       - classpath*:org/openokr/**/*Mapper.xml
+      - classpath*:com.zzheng.framework/FrameworkMapper.xml
   dubbo:
     application:
       name: okr-service
     protocol:
-      port: 20241
+      port: 20242
     registry1:
       address: zookeeper://zkserver1:2181;zookeeper://zkserver2:2181
       file: /data/log/okr/okr-service-log/okr-service-dubbo1.cache
