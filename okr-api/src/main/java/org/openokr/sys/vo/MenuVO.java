@@ -2,6 +2,7 @@ package org.openokr.sys.vo;
 
 import com.zzheng.framework.base.vo.BaseVO;
 import java.io.Serializable;
+import java.util.Date;
 
 public class MenuVO extends BaseVO implements Serializable {
 
@@ -42,6 +43,26 @@ public class MenuVO extends BaseVO implements Serializable {
      * 权限前缀码
      */
     private String permissionPrefixCode;
+
+    /**
+     * 创建人
+     */
+    private String createUserId;
+
+    /**
+     * 创建时间
+     */
+    private Date createTs;
+
+    /**
+     * 更新人
+     */
+    private String updateUserId;
+
+    /**
+     * 更新时间
+     */
+    private Date updateTs;
 
 
 
@@ -141,6 +162,62 @@ public class MenuVO extends BaseVO implements Serializable {
      */
     public void setPermissionPrefixCode(String permissionPrefixCode) {
         this.permissionPrefixCode = permissionPrefixCode;
+    }
+
+    /**
+     * 创建人
+     */
+    public String getCreateUserId() {
+        return createUserId;
+    }
+
+    /**
+     * 创建人
+     */
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
+    }
+
+    /**
+     * 创建时间
+     */
+    public Date getCreateTs() {
+        return createTs;
+    }
+
+    /**
+     * 创建时间
+     */
+    public void setCreateTs(Date createTs) {
+        this.createTs = createTs;
+    }
+
+    /**
+     * 更新人
+     */
+    public String getUpdateUserId() {
+        return updateUserId;
+    }
+
+    /**
+     * 更新人
+     */
+    public void setUpdateUserId(String updateUserId) {
+        this.updateUserId = updateUserId;
+    }
+
+    /**
+     * 更新时间
+     */
+    public Date getUpdateTs() {
+        return updateTs;
+    }
+
+    /**
+     * 更新时间
+     */
+    public void setUpdateTs(Date updateTs) {
+        this.updateTs = updateTs;
     }
 
 }

@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.openokr.sys.entity.ShortcutMenuEntityMapper">
-  <resultMap id="BaseResultMap" type="org.openokr.sys.entity.ShortcutMenuEntity">
+<mapper namespace="org.openokr.sys.entity.OrganizationEntityMapper">
+  <resultMap id="BaseResultMap" type="org.openokr.sys.entity.OrganizationEntity">
     <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="user_id" jdbcType="VARCHAR" property="userId" />
-    <result column="menu_id" jdbcType="VARCHAR" property="menuId" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+    <result column="company_id" jdbcType="VARCHAR" property="companyId" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -65,15 +68,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_id, menu_id
+    id, description, name, parent_id, company_id, code
   </sql>
-  <select id="selectByCondition" parameterType="org.openokr.sys.entity.ShortcutMenuEntityCondition" resultMap="BaseResultMap">
+  <select id="selectByCondition" parameterType="org.openokr.sys.entity.OrganizationEntityCondition" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from t_okr_sys_shortcut_menu
+    from t_okr_sys_organization
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -82,29 +85,38 @@
     </if>
     <include refid="PostgreSqlPaginationSuffix" />
   </select>
-  <delete id="deleteByCondition" parameterType="org.openokr.sys.entity.ShortcutMenuEntityCondition">
-    delete from t_okr_sys_shortcut_menu
+  <delete id="deleteByCondition" parameterType="org.openokr.sys.entity.OrganizationEntityCondition">
+    delete from t_okr_sys_organization
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <select id="countByCondition" parameterType="org.openokr.sys.entity.ShortcutMenuEntityCondition" resultType="java.lang.Long">
-    select count(*) from t_okr_sys_shortcut_menu
+  <select id="countByCondition" parameterType="org.openokr.sys.entity.OrganizationEntityCondition" resultType="java.lang.Long">
+    select count(*) from t_okr_sys_organization
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByCondition" parameterType="map">
-    update t_okr_sys_shortcut_menu
+    update t_okr_sys_organization
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
       </if>
-      <if test="record.userId != null">
-        user_id = #{record.userId,jdbcType=VARCHAR},
+      <if test="record.description != null">
+        description = #{record.description,jdbcType=VARCHAR},
       </if>
-      <if test="record.menuId != null">
-        menu_id = #{record.menuId,jdbcType=VARCHAR},
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentId != null">
+        parent_id = #{record.parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyId != null">
+        company_id = #{record.companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.code != null">
+        code = #{record.code,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -117,9 +129,9 @@
     </if>
   </sql>
   <insert id="insertList" parameterType="java.util.List">
-     insert into t_okr_sys_shortcut_menu ( id,user_id,menu_id ) values
+     insert into t_okr_sys_organization ( id,description,name,parent_id,company_id,code ) values
     <foreach collection="list" index="index" item="item" separator=",">
-       ( #{item.id,jdbcType=VARCHAR},#{item.userId,jdbcType=VARCHAR},#{item.menuId,jdbcType=VARCHAR} )
+       ( #{item.id,jdbcType=VARCHAR},#{item.description,jdbcType=VARCHAR},#{item.name,jdbcType=VARCHAR},#{item.parentId,jdbcType=VARCHAR},#{item.companyId,jdbcType=VARCHAR},#{item.code,jdbcType=VARCHAR} )
     </foreach>
   </insert>
 </mapper>

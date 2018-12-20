@@ -79,6 +79,10 @@
             <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
             <property name="domainVOName" value="sys.vo.UserRoleVO"/>
         </table>
+        <table tableName="t_okr_sys_organization" domainObjectName="sys.entity.OrganizationEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="sys.vo.OrganizationVO"/>
+        </table>
 
         <!-- okr -->
         <table tableName="t_okr_manage_checkins" domainObjectName="manage.entity.CheckinsEntity">

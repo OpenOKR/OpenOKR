@@ -2,6 +2,7 @@ package org.openokr.sys.entity;
 
 import com.zzheng.framework.mybatis.entity.BaseEntity;
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -29,6 +30,18 @@ public class MenuEntity extends BaseEntity implements Serializable {
 
     /** 权限前缀码 */
     private String permissionPrefixCode;
+
+    /** 创建人 */
+    private String createUserId;
+
+    /** 创建时间 */
+    private Date createTs;
+
+    /** 更新人 */
+    private String updateUserId;
+
+    /** 更新时间 */
+    private Date updateTs;
 
     private static final long serialVersionUID = 1L;
 
@@ -132,6 +145,74 @@ public class MenuEntity extends BaseEntity implements Serializable {
      */
     public void setPermissionPrefixCode(String permissionPrefixCode) {
         this.permissionPrefixCode = permissionPrefixCode;
+    }
+
+    /**
+     * 创建人
+     * @return createUserId
+     */
+    @Column(name = "create_user_id")
+    public String getCreateUserId() {
+        return createUserId;
+    }
+
+    /**
+     * 创建人
+     * @param createUserId
+     */
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
+    }
+
+    /**
+     * 创建时间
+     * @return createTs
+     */
+    @Column(name = "create_ts")
+    public Date getCreateTs() {
+        return createTs;
+    }
+
+    /**
+     * 创建时间
+     * @param createTs
+     */
+    public void setCreateTs(Date createTs) {
+        this.createTs = createTs;
+    }
+
+    /**
+     * 更新人
+     * @return updateUserId
+     */
+    @Column(name = "update_user_id")
+    public String getUpdateUserId() {
+        return updateUserId;
+    }
+
+    /**
+     * 更新人
+     * @param updateUserId
+     */
+    public void setUpdateUserId(String updateUserId) {
+        this.updateUserId = updateUserId;
+    }
+
+    /**
+     * 更新时间
+     * @return updateTs
+     */
+    @Column(name = "update_ts")
+    public Date getUpdateTs() {
+        return updateTs;
+    }
+
+    /**
+     * 更新时间
+     * @param updateTs
+     */
+    public void setUpdateTs(Date updateTs) {
+        this.updateTs = updateTs;
     }
 
     /**

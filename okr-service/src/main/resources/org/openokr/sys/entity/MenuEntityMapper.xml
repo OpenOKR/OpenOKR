@@ -9,6 +9,10 @@
     <result column="url" jdbcType="VARCHAR" property="url" />
     <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
     <result column="permission_prefix_code" jdbcType="VARCHAR" property="permissionPrefixCode" />
+    <result column="create_user_id" jdbcType="VARCHAR" property="createUserId" />
+    <result column="create_ts" jdbcType="TIMESTAMP" property="createTs" />
+    <result column="update_user_id" jdbcType="VARCHAR" property="updateUserId" />
+    <result column="update_ts" jdbcType="TIMESTAMP" property="updateTs" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,7 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, description, name, priority, url, parent_id, permission_prefix_code
+    id, description, name, priority, url, parent_id, permission_prefix_code, create_user_id, 
+    create_ts, update_user_id, update_ts
   </sql>
   <select id="selectByCondition" parameterType="org.openokr.sys.entity.MenuEntityCondition" resultMap="BaseResultMap">
     select
@@ -122,6 +127,18 @@
       <if test="record.permissionPrefixCode != null">
         permission_prefix_code = #{record.permissionPrefixCode,jdbcType=VARCHAR},
       </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTs != null">
+        create_ts = #{record.createTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateUserId != null">
+        update_user_id = #{record.updateUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTs != null">
+        update_ts = #{record.updateTs,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -133,9 +150,9 @@
     </if>
   </sql>
   <insert id="insertList" parameterType="java.util.List">
-     insert into t_okr_sys_menu ( id,description,name,priority,url,parent_id,permission_prefix_code ) values
+     insert into t_okr_sys_menu ( id,description,name,priority,url,parent_id,permission_prefix_code,create_user_id,create_ts,update_user_id,update_ts ) values
     <foreach collection="list" index="index" item="item" separator=",">
-       ( #{item.id,jdbcType=VARCHAR},#{item.description,jdbcType=VARCHAR},#{item.name,jdbcType=VARCHAR},#{item.priority,jdbcType=INTEGER},#{item.url,jdbcType=VARCHAR},#{item.parentId,jdbcType=VARCHAR},#{item.permissionPrefixCode,jdbcType=VARCHAR} )
+       ( #{item.id,jdbcType=VARCHAR},#{item.description,jdbcType=VARCHAR},#{item.name,jdbcType=VARCHAR},#{item.priority,jdbcType=INTEGER},#{item.url,jdbcType=VARCHAR},#{item.parentId,jdbcType=VARCHAR},#{item.permissionPrefixCode,jdbcType=VARCHAR},#{item.createUserId,jdbcType=VARCHAR},#{item.createTs,jdbcType=TIMESTAMP},#{item.updateUserId,jdbcType=VARCHAR},#{item.updateTs,jdbcType=TIMESTAMP} )
     </foreach>
   </insert>
 </mapper>

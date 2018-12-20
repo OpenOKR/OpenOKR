@@ -4,17 +4,16 @@ import com.zzheng.framework.mybatis.entity.BaseEntity;
 import com.zzheng.framework.mybatis.entity.condition.BaseEntityCondition;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-public class MenuEntityCondition extends BaseEntityCondition implements Serializable {
+public class OrganizationEntityCondition extends BaseEntityCondition implements Serializable {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public MenuEntityCondition() {
+    public OrganizationEntityCondition() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -69,7 +68,7 @@ public class MenuEntityCondition extends BaseEntityCondition implements Serializ
 
     @Override
     public Class<? extends BaseEntity> getEntityClass() {
-        return MenuEntity.class;
+        return OrganizationEntity.class;
     }
 
     protected abstract static class GeneratedCriteria {
@@ -323,136 +322,6 @@ public class MenuEntityCondition extends BaseEntityCondition implements Serializ
             return (Criteria) this;
         }
 
-        public Criteria andPriorityIsNull() {
-            addCriterion("priority is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriorityIsNotNull() {
-            addCriterion("priority is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriorityEqualTo(Integer value) {
-            addCriterion("priority =", value, "priority");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriorityNotEqualTo(Integer value) {
-            addCriterion("priority <>", value, "priority");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriorityGreaterThan(Integer value) {
-            addCriterion("priority >", value, "priority");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriorityGreaterThanOrEqualTo(Integer value) {
-            addCriterion("priority >=", value, "priority");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriorityLessThan(Integer value) {
-            addCriterion("priority <", value, "priority");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriorityLessThanOrEqualTo(Integer value) {
-            addCriterion("priority <=", value, "priority");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriorityIn(List<Integer> values) {
-            addCriterion("priority in", values, "priority");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriorityNotIn(List<Integer> values) {
-            addCriterion("priority not in", values, "priority");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriorityBetween(Integer value1, Integer value2) {
-            addCriterion("priority between", value1, value2, "priority");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriorityNotBetween(Integer value1, Integer value2) {
-            addCriterion("priority not between", value1, value2, "priority");
-            return (Criteria) this;
-        }
-
-        public Criteria andUrlIsNull() {
-            addCriterion("url is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUrlIsNotNull() {
-            addCriterion("url is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUrlEqualTo(String value) {
-            addCriterion("url =", value, "url");
-            return (Criteria) this;
-        }
-
-        public Criteria andUrlNotEqualTo(String value) {
-            addCriterion("url <>", value, "url");
-            return (Criteria) this;
-        }
-
-        public Criteria andUrlGreaterThan(String value) {
-            addCriterion("url >", value, "url");
-            return (Criteria) this;
-        }
-
-        public Criteria andUrlGreaterThanOrEqualTo(String value) {
-            addCriterion("url >=", value, "url");
-            return (Criteria) this;
-        }
-
-        public Criteria andUrlLessThan(String value) {
-            addCriterion("url <", value, "url");
-            return (Criteria) this;
-        }
-
-        public Criteria andUrlLessThanOrEqualTo(String value) {
-            addCriterion("url <=", value, "url");
-            return (Criteria) this;
-        }
-
-        public Criteria andUrlLike(String value) {
-            addCriterion("url like", value, "url");
-            return (Criteria) this;
-        }
-
-        public Criteria andUrlNotLike(String value) {
-            addCriterion("url not like", value, "url");
-            return (Criteria) this;
-        }
-
-        public Criteria andUrlIn(List<String> values) {
-            addCriterion("url in", values, "url");
-            return (Criteria) this;
-        }
-
-        public Criteria andUrlNotIn(List<String> values) {
-            addCriterion("url not in", values, "url");
-            return (Criteria) this;
-        }
-
-        public Criteria andUrlBetween(String value1, String value2) {
-            addCriterion("url between", value1, value2, "url");
-            return (Criteria) this;
-        }
-
-        public Criteria andUrlNotBetween(String value1, String value2) {
-            addCriterion("url not between", value1, value2, "url");
-            return (Criteria) this;
-        }
-
         public Criteria andParentIdIsNull() {
             addCriterion("parent_id is null");
             return (Criteria) this;
@@ -523,333 +392,143 @@ public class MenuEntityCondition extends BaseEntityCondition implements Serializ
             return (Criteria) this;
         }
 
-        public Criteria andPermissionPrefixCodeIsNull() {
-            addCriterion("permission_prefix_code is null");
+        public Criteria andCompanyIdIsNull() {
+            addCriterion("company_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionPrefixCodeIsNotNull() {
-            addCriterion("permission_prefix_code is not null");
+        public Criteria andCompanyIdIsNotNull() {
+            addCriterion("company_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionPrefixCodeEqualTo(String value) {
-            addCriterion("permission_prefix_code =", value, "permissionPrefixCode");
+        public Criteria andCompanyIdEqualTo(String value) {
+            addCriterion("company_id =", value, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionPrefixCodeNotEqualTo(String value) {
-            addCriterion("permission_prefix_code <>", value, "permissionPrefixCode");
+        public Criteria andCompanyIdNotEqualTo(String value) {
+            addCriterion("company_id <>", value, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionPrefixCodeGreaterThan(String value) {
-            addCriterion("permission_prefix_code >", value, "permissionPrefixCode");
+        public Criteria andCompanyIdGreaterThan(String value) {
+            addCriterion("company_id >", value, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionPrefixCodeGreaterThanOrEqualTo(String value) {
-            addCriterion("permission_prefix_code >=", value, "permissionPrefixCode");
+        public Criteria andCompanyIdGreaterThanOrEqualTo(String value) {
+            addCriterion("company_id >=", value, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionPrefixCodeLessThan(String value) {
-            addCriterion("permission_prefix_code <", value, "permissionPrefixCode");
+        public Criteria andCompanyIdLessThan(String value) {
+            addCriterion("company_id <", value, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionPrefixCodeLessThanOrEqualTo(String value) {
-            addCriterion("permission_prefix_code <=", value, "permissionPrefixCode");
+        public Criteria andCompanyIdLessThanOrEqualTo(String value) {
+            addCriterion("company_id <=", value, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionPrefixCodeLike(String value) {
-            addCriterion("permission_prefix_code like", value, "permissionPrefixCode");
+        public Criteria andCompanyIdLike(String value) {
+            addCriterion("company_id like", value, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionPrefixCodeNotLike(String value) {
-            addCriterion("permission_prefix_code not like", value, "permissionPrefixCode");
+        public Criteria andCompanyIdNotLike(String value) {
+            addCriterion("company_id not like", value, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionPrefixCodeIn(List<String> values) {
-            addCriterion("permission_prefix_code in", values, "permissionPrefixCode");
+        public Criteria andCompanyIdIn(List<String> values) {
+            addCriterion("company_id in", values, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionPrefixCodeNotIn(List<String> values) {
-            addCriterion("permission_prefix_code not in", values, "permissionPrefixCode");
+        public Criteria andCompanyIdNotIn(List<String> values) {
+            addCriterion("company_id not in", values, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionPrefixCodeBetween(String value1, String value2) {
-            addCriterion("permission_prefix_code between", value1, value2, "permissionPrefixCode");
+        public Criteria andCompanyIdBetween(String value1, String value2) {
+            addCriterion("company_id between", value1, value2, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionPrefixCodeNotBetween(String value1, String value2) {
-            addCriterion("permission_prefix_code not between", value1, value2, "permissionPrefixCode");
+        public Criteria andCompanyIdNotBetween(String value1, String value2) {
+            addCriterion("company_id not between", value1, value2, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdIsNull() {
-            addCriterion("create_user_id is null");
+        public Criteria andCodeIsNull() {
+            addCriterion("code is null");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdIsNotNull() {
-            addCriterion("create_user_id is not null");
+        public Criteria andCodeIsNotNull() {
+            addCriterion("code is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdEqualTo(String value) {
-            addCriterion("create_user_id =", value, "createUserId");
+        public Criteria andCodeEqualTo(String value) {
+            addCriterion("code =", value, "code");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdNotEqualTo(String value) {
-            addCriterion("create_user_id <>", value, "createUserId");
+        public Criteria andCodeNotEqualTo(String value) {
+            addCriterion("code <>", value, "code");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdGreaterThan(String value) {
-            addCriterion("create_user_id >", value, "createUserId");
+        public Criteria andCodeGreaterThan(String value) {
+            addCriterion("code >", value, "code");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdGreaterThanOrEqualTo(String value) {
-            addCriterion("create_user_id >=", value, "createUserId");
+        public Criteria andCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("code >=", value, "code");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdLessThan(String value) {
-            addCriterion("create_user_id <", value, "createUserId");
+        public Criteria andCodeLessThan(String value) {
+            addCriterion("code <", value, "code");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdLessThanOrEqualTo(String value) {
-            addCriterion("create_user_id <=", value, "createUserId");
+        public Criteria andCodeLessThanOrEqualTo(String value) {
+            addCriterion("code <=", value, "code");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdLike(String value) {
-            addCriterion("create_user_id like", value, "createUserId");
+        public Criteria andCodeLike(String value) {
+            addCriterion("code like", value, "code");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdNotLike(String value) {
-            addCriterion("create_user_id not like", value, "createUserId");
+        public Criteria andCodeNotLike(String value) {
+            addCriterion("code not like", value, "code");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdIn(List<String> values) {
-            addCriterion("create_user_id in", values, "createUserId");
+        public Criteria andCodeIn(List<String> values) {
+            addCriterion("code in", values, "code");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdNotIn(List<String> values) {
-            addCriterion("create_user_id not in", values, "createUserId");
+        public Criteria andCodeNotIn(List<String> values) {
+            addCriterion("code not in", values, "code");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdBetween(String value1, String value2) {
-            addCriterion("create_user_id between", value1, value2, "createUserId");
+        public Criteria andCodeBetween(String value1, String value2) {
+            addCriterion("code between", value1, value2, "code");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdNotBetween(String value1, String value2) {
-            addCriterion("create_user_id not between", value1, value2, "createUserId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTsIsNull() {
-            addCriterion("create_ts is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTsIsNotNull() {
-            addCriterion("create_ts is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTsEqualTo(Date value) {
-            addCriterion("create_ts =", value, "createTs");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTsNotEqualTo(Date value) {
-            addCriterion("create_ts <>", value, "createTs");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTsGreaterThan(Date value) {
-            addCriterion("create_ts >", value, "createTs");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTsGreaterThanOrEqualTo(Date value) {
-            addCriterion("create_ts >=", value, "createTs");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTsLessThan(Date value) {
-            addCriterion("create_ts <", value, "createTs");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTsLessThanOrEqualTo(Date value) {
-            addCriterion("create_ts <=", value, "createTs");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTsIn(List<Date> values) {
-            addCriterion("create_ts in", values, "createTs");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTsNotIn(List<Date> values) {
-            addCriterion("create_ts not in", values, "createTs");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTsBetween(Date value1, Date value2) {
-            addCriterion("create_ts between", value1, value2, "createTs");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTsNotBetween(Date value1, Date value2) {
-            addCriterion("create_ts not between", value1, value2, "createTs");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserIdIsNull() {
-            addCriterion("update_user_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserIdIsNotNull() {
-            addCriterion("update_user_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserIdEqualTo(String value) {
-            addCriterion("update_user_id =", value, "updateUserId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserIdNotEqualTo(String value) {
-            addCriterion("update_user_id <>", value, "updateUserId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserIdGreaterThan(String value) {
-            addCriterion("update_user_id >", value, "updateUserId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserIdGreaterThanOrEqualTo(String value) {
-            addCriterion("update_user_id >=", value, "updateUserId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserIdLessThan(String value) {
-            addCriterion("update_user_id <", value, "updateUserId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserIdLessThanOrEqualTo(String value) {
-            addCriterion("update_user_id <=", value, "updateUserId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserIdLike(String value) {
-            addCriterion("update_user_id like", value, "updateUserId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserIdNotLike(String value) {
-            addCriterion("update_user_id not like", value, "updateUserId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserIdIn(List<String> values) {
-            addCriterion("update_user_id in", values, "updateUserId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserIdNotIn(List<String> values) {
-            addCriterion("update_user_id not in", values, "updateUserId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserIdBetween(String value1, String value2) {
-            addCriterion("update_user_id between", value1, value2, "updateUserId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserIdNotBetween(String value1, String value2) {
-            addCriterion("update_user_id not between", value1, value2, "updateUserId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTsIsNull() {
-            addCriterion("update_ts is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTsIsNotNull() {
-            addCriterion("update_ts is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTsEqualTo(Date value) {
-            addCriterion("update_ts =", value, "updateTs");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTsNotEqualTo(Date value) {
-            addCriterion("update_ts <>", value, "updateTs");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTsGreaterThan(Date value) {
-            addCriterion("update_ts >", value, "updateTs");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTsGreaterThanOrEqualTo(Date value) {
-            addCriterion("update_ts >=", value, "updateTs");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTsLessThan(Date value) {
-            addCriterion("update_ts <", value, "updateTs");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTsLessThanOrEqualTo(Date value) {
-            addCriterion("update_ts <=", value, "updateTs");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTsIn(List<Date> values) {
-            addCriterion("update_ts in", values, "updateTs");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTsNotIn(List<Date> values) {
-            addCriterion("update_ts not in", values, "updateTs");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTsBetween(Date value1, Date value2) {
-            addCriterion("update_ts between", value1, value2, "updateTs");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTsNotBetween(Date value1, Date value2) {
-            addCriterion("update_ts not between", value1, value2, "updateTs");
+        public Criteria andCodeNotBetween(String value1, String value2) {
+            addCriterion("code not between", value1, value2, "code");
             return (Criteria) this;
         }
 
@@ -868,28 +547,18 @@ public class MenuEntityCondition extends BaseEntityCondition implements Serializ
             return (Criteria) this;
         }
 
-        public Criteria andUrlLikeInsensitive(String value) {
-            addCriterion("upper(url) like", value.toUpperCase(), "url");
-            return (Criteria) this;
-        }
-
         public Criteria andParentIdLikeInsensitive(String value) {
             addCriterion("upper(parent_id) like", value.toUpperCase(), "parentId");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionPrefixCodeLikeInsensitive(String value) {
-            addCriterion("upper(permission_prefix_code) like", value.toUpperCase(), "permissionPrefixCode");
+        public Criteria andCompanyIdLikeInsensitive(String value) {
+            addCriterion("upper(company_id) like", value.toUpperCase(), "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdLikeInsensitive(String value) {
-            addCriterion("upper(create_user_id) like", value.toUpperCase(), "createUserId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserIdLikeInsensitive(String value) {
-            addCriterion("upper(update_user_id) like", value.toUpperCase(), "updateUserId");
+        public Criteria andCodeLikeInsensitive(String value) {
+            addCriterion("upper(code) like", value.toUpperCase(), "code");
             return (Criteria) this;
         }
 
@@ -948,21 +617,6 @@ public class MenuEntityCondition extends BaseEntityCondition implements Serializ
          *执行时SQL如下:
          *  where name like '%abc%' or name2 like '%abc' or name3 like 'abc%'
          */
-        public Criteria andUrlLikeIgnoreCase(String value) {
-            addCriterion("upper(url) like ", value.toUpperCase(), "url");
-            return (Criteria) this;
-        }
-
-        /**
-         *(扩展Mybatis原生like的不足)
-         *忽略字段大小写的模糊查询
-         *Java编码如下：
-         *  criteria.andNameLikeIgnoreCase("%Abc%"); 前后模糊,A字母大写
-         *  criteria.andName2LikeIgnoreCase("%aBc"); 前模糊,B字母大写
-         *  criteria.andName3LikeIgnoreCase("abC%"); 后模糊,C字母大写
-         *执行时SQL如下:
-         *  where name like '%abc%' or name2 like '%abc' or name3 like 'abc%'
-         */
         public Criteria andParentIdLikeIgnoreCase(String value) {
             addCriterion("upper(parent_id) like ", value.toUpperCase(), "parentId");
             return (Criteria) this;
@@ -978,8 +632,8 @@ public class MenuEntityCondition extends BaseEntityCondition implements Serializ
          *执行时SQL如下:
          *  where name like '%abc%' or name2 like '%abc' or name3 like 'abc%'
          */
-        public Criteria andPermissionPrefixCodeLikeIgnoreCase(String value) {
-            addCriterion("upper(permission_prefix_code) like ", value.toUpperCase(), "permissionPrefixCode");
+        public Criteria andCompanyIdLikeIgnoreCase(String value) {
+            addCriterion("upper(company_id) like ", value.toUpperCase(), "companyId");
             return (Criteria) this;
         }
 
@@ -993,23 +647,8 @@ public class MenuEntityCondition extends BaseEntityCondition implements Serializ
          *执行时SQL如下:
          *  where name like '%abc%' or name2 like '%abc' or name3 like 'abc%'
          */
-        public Criteria andCreateUserIdLikeIgnoreCase(String value) {
-            addCriterion("upper(create_user_id) like ", value.toUpperCase(), "createUserId");
-            return (Criteria) this;
-        }
-
-        /**
-         *(扩展Mybatis原生like的不足)
-         *忽略字段大小写的模糊查询
-         *Java编码如下：
-         *  criteria.andNameLikeIgnoreCase("%Abc%"); 前后模糊,A字母大写
-         *  criteria.andName2LikeIgnoreCase("%aBc"); 前模糊,B字母大写
-         *  criteria.andName3LikeIgnoreCase("abC%"); 后模糊,C字母大写
-         *执行时SQL如下:
-         *  where name like '%abc%' or name2 like '%abc' or name3 like 'abc%'
-         */
-        public Criteria andUpdateUserIdLikeIgnoreCase(String value) {
-            addCriterion("upper(update_user_id) like ", value.toUpperCase(), "updateUserId");
+        public Criteria andCodeLikeIgnoreCase(String value) {
+            addCriterion("upper(code) like ", value.toUpperCase(), "code");
             return (Criteria) this;
         }
     }

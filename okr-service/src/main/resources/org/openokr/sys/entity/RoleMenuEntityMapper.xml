@@ -2,12 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.openokr.sys.entity.RoleMenuEntityMapper">
   <resultMap id="BaseResultMap" type="org.openokr.sys.entity.RoleMenuEntity">
-    <id column="id" jdbcType="CHAR" property="id" />
-    <result column="role_id" jdbcType="CHAR" property="roleId" />
-    <result column="menu_id" jdbcType="CHAR" property="menuId" />
-    <result column="create_user_id" jdbcType="CHAR" property="createUserId" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="role_id" jdbcType="VARCHAR" property="roleId" />
+    <result column="menu_id" jdbcType="VARCHAR" property="menuId" />
+    <result column="create_user_id" jdbcType="VARCHAR" property="createUserId" />
     <result column="create_ts" jdbcType="TIMESTAMP" property="createTs" />
-    <result column="update_user_id" jdbcType="CHAR" property="updateUserId" />
+    <result column="update_user_id" jdbcType="VARCHAR" property="updateUserId" />
     <result column="update_ts" jdbcType="TIMESTAMP" property="updateTs" />
     <result column="tree_level" jdbcType="SMALLINT" property="treeLevel" />
   </resultMap>
@@ -103,22 +103,22 @@
     update t_okr_sys_role_menu
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=CHAR},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.roleId != null">
-        role_id = #{record.roleId,jdbcType=CHAR},
+        role_id = #{record.roleId,jdbcType=VARCHAR},
       </if>
       <if test="record.menuId != null">
-        menu_id = #{record.menuId,jdbcType=CHAR},
+        menu_id = #{record.menuId,jdbcType=VARCHAR},
       </if>
       <if test="record.createUserId != null">
-        create_user_id = #{record.createUserId,jdbcType=CHAR},
+        create_user_id = #{record.createUserId,jdbcType=VARCHAR},
       </if>
       <if test="record.createTs != null">
         create_ts = #{record.createTs,jdbcType=TIMESTAMP},
       </if>
       <if test="record.updateUserId != null">
-        update_user_id = #{record.updateUserId,jdbcType=CHAR},
+        update_user_id = #{record.updateUserId,jdbcType=VARCHAR},
       </if>
       <if test="record.updateTs != null">
         update_ts = #{record.updateTs,jdbcType=TIMESTAMP},
@@ -139,7 +139,7 @@
   <insert id="insertList" parameterType="java.util.List">
      insert into t_okr_sys_role_menu ( id,role_id,menu_id,create_user_id,create_ts,update_user_id,update_ts,tree_level ) values
     <foreach collection="list" index="index" item="item" separator=",">
-       ( #{item.id,jdbcType=CHAR},#{item.roleId,jdbcType=CHAR},#{item.menuId,jdbcType=CHAR},#{item.createUserId,jdbcType=CHAR},#{item.createTs,jdbcType=TIMESTAMP},#{item.updateUserId,jdbcType=CHAR},#{item.updateTs,jdbcType=TIMESTAMP},#{item.treeLevel,jdbcType=SMALLINT} )
+       ( #{item.id,jdbcType=VARCHAR},#{item.roleId,jdbcType=VARCHAR},#{item.menuId,jdbcType=VARCHAR},#{item.createUserId,jdbcType=VARCHAR},#{item.createTs,jdbcType=TIMESTAMP},#{item.updateUserId,jdbcType=VARCHAR},#{item.updateTs,jdbcType=TIMESTAMP},#{item.treeLevel,jdbcType=SMALLINT} )
     </foreach>
   </insert>
 </mapper>
