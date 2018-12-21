@@ -6,8 +6,16 @@
 		http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
 	default-lazy-init="true">
 
-
 	<!-- okr -->
 	<dubbo:service interface="org.openokr.personal.service.IPersonalOkrService" ref="personalOkrService"/>
+
+	<!-- sys -->
+	<dubbo:service interface="org.openokr.sys.service.IMenuService" ref="menuService"/>
+	<dubbo:service interface="org.openokr.sys.service.IPermissionService" ref="permissionService"/>
+	<dubbo:service interface="org.openokr.sys.service.IRolePermissionService" ref="rolePermissionService"/>
+	<dubbo:service interface="org.openokr.sys.service.IRoleService" ref="roleService"/>
+	<dubbo:service interface="org.openokr.sys.service.IShortcutMenuService" ref="shortcutMenuService"/>
+	<dubbo:service interface="org.openokr.sys.service.IUserRoleService" ref="userRoleService"/>
+	<dubbo:service interface="org.openokr.sys.service.IUserService" ref="userService"/>
 
 </beans>

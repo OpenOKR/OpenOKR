@@ -30,7 +30,7 @@ framework:
 
 logging:
   level:
-    root: debug
+    root: info
   file: /data/log/okr/okr-service-log/okr-service
 
 ---

@@ -1,4 +1,4 @@
-package org.openokr.base.shiro;
+package org.openokr.application.web;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;

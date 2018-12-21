@@ -23,20 +23,25 @@ spring:
       max-file-size: 10Mb
       max-request-size: 10Mb
   resources:
-    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:/data/file/
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/
 
 framework:
   dubbo:
     application:
       name: okr-web
     registry1:
-      address: zookeeper://zkserver1:2181;zookeeper://zkserver2:2181
+      address: zookeeper://127.0.0.1:2181;zookeeper://127.0.0.1:2182
       file: /data/log/okr/okr-web-log/okr-web-dubbo1.cache
 
 logging:
   level:
-    root: debug
+    root: info
   file: /data/log/okr/okr-web-log/okr-web
+
+app:
+  multiAccountLogin: true
+  jsDebug: false
+  staticResourceVersion: $[mvn.staticResourceVersion]
 
 ---
 server:
@@ -51,6 +56,10 @@ spring:
   profiles: local
 logging:
   file: ../log/okr-web
+
+app:
+  jsDebug: true
+  staticResourceVersion: dev
 
 ---
 spring:

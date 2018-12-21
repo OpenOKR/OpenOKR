@@ -5,9 +5,16 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd" default-lazy-init="true">
 
-
     <!-- okr -->
     <dubbo:reference interface="org.openokr.personal.service.IPersonalOkrService" id="personalOkrService"/>
 
+    <!-- sys -->
+    <dubbo:reference interface="org.openokr.sys.service.IMenuService" id="menuService"/>
+    <dubbo:reference interface="org.openokr.sys.service.IPermissionService" id="permissionService"/>
+    <dubbo:reference interface="org.openokr.sys.service.IRolePermissionService" id="rolePermissionService"/>
+    <dubbo:reference interface="org.openokr.sys.service.IRoleService" id="roleService"/>
+    <dubbo:reference interface="org.openokr.sys.service.IShortcutMenuService" id="shortcutMenuService"/>
+    <dubbo:reference interface="org.openokr.sys.service.IUserRoleService" id="userRoleService"/>
+    <dubbo:reference interface="org.openokr.sys.service.IUserService" id="userService"/>
 
 </beans>
