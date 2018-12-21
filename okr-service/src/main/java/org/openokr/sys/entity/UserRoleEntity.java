@@ -48,6 +48,7 @@ public class UserRoleEntity extends BaseEntity implements Serializable {
      */
     public void setRoleId(String roleId) {
         this.roleId = roleId;
+        addSettedField("roleId");
     }
 
     /**
@@ -65,6 +66,7 @@ public class UserRoleEntity extends BaseEntity implements Serializable {
      */
     public void setUserId(String userId) {
         this.userId = userId;
+        addSettedField("userId");
     }
 
     /**
@@ -82,6 +84,7 @@ public class UserRoleEntity extends BaseEntity implements Serializable {
      */
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
+        addSettedField("createUserId");
     }
 
     /**
@@ -99,6 +102,7 @@ public class UserRoleEntity extends BaseEntity implements Serializable {
      */
     public void setCreateTs(Date createTs) {
         this.createTs = createTs;
+        addSettedField("createTs");
     }
 
     /**
@@ -116,6 +120,7 @@ public class UserRoleEntity extends BaseEntity implements Serializable {
      */
     public void setUpdateUserId(String updateUserId) {
         this.updateUserId = updateUserId;
+        addSettedField("updateUserId");
     }
 
     /**
@@ -133,6 +138,7 @@ public class UserRoleEntity extends BaseEntity implements Serializable {
      */
     public void setUpdateTs(Date updateTs) {
         this.updateTs = updateTs;
+        addSettedField("updateTs");
     }
 
     /**

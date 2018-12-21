@@ -45,6 +45,7 @@ public class LabelEntity extends BaseEntity implements Serializable {
      */
     public void setName(String name) {
         this.name = name;
+        addSettedField("name");
     }
 
     /**
@@ -62,6 +63,7 @@ public class LabelEntity extends BaseEntity implements Serializable {
      */
     public void setCreateTs(Date createTs) {
         this.createTs = createTs;
+        addSettedField("createTs");
     }
 
     /**
@@ -79,6 +81,7 @@ public class LabelEntity extends BaseEntity implements Serializable {
      */
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
+        addSettedField("createUserId");
     }
 
     /**
@@ -96,6 +99,7 @@ public class LabelEntity extends BaseEntity implements Serializable {
      */
     public void setUpdateTs(Date updateTs) {
         this.updateTs = updateTs;
+        addSettedField("updateTs");
     }
 
     /**
@@ -113,6 +117,7 @@ public class LabelEntity extends BaseEntity implements Serializable {
      */
     public void setUpdateUserId(String updateUserId) {
         this.updateUserId = updateUserId;
+        addSettedField("updateUserId");
     }
 
     /**

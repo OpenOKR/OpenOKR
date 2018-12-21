@@ -44,6 +44,7 @@ public class OrganizationEntity extends BaseEntity implements Serializable {
      */
     public void setDescription(String description) {
         this.description = description;
+        addSettedField("description");
     }
 
     /**
@@ -61,6 +62,7 @@ public class OrganizationEntity extends BaseEntity implements Serializable {
      */
     public void setName(String name) {
         this.name = name;
+        addSettedField("name");
     }
 
     /**
@@ -78,6 +80,7 @@ public class OrganizationEntity extends BaseEntity implements Serializable {
      */
     public void setParentId(String parentId) {
         this.parentId = parentId;
+        addSettedField("parentId");
     }
 
     /**
@@ -95,6 +98,7 @@ public class OrganizationEntity extends BaseEntity implements Serializable {
      */
     public void setCompanyId(String companyId) {
         this.companyId = companyId;
+        addSettedField("companyId");
     }
 
     /**
@@ -112,6 +116,7 @@ public class OrganizationEntity extends BaseEntity implements Serializable {
      */
     public void setCode(String code) {
         this.code = code;
+        addSettedField("code");
     }
 
     /**

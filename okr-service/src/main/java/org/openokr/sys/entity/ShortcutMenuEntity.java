@@ -35,6 +35,7 @@ public class ShortcutMenuEntity extends BaseEntity implements Serializable {
      */
     public void setUserId(String userId) {
         this.userId = userId;
+        addSettedField("userId");
     }
 
     /**
@@ -52,6 +53,7 @@ public class ShortcutMenuEntity extends BaseEntity implements Serializable {
      */
     public void setMenuId(String menuId) {
         this.menuId = menuId;
+        addSettedField("menuId");
     }
 
     /**

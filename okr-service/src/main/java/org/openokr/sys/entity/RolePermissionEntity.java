@@ -35,6 +35,7 @@ public class RolePermissionEntity extends BaseEntity implements Serializable {
      */
     public void setRoleId(String roleId) {
         this.roleId = roleId;
+        addSettedField("roleId");
     }
 
     /**
@@ -52,6 +53,7 @@ public class RolePermissionEntity extends BaseEntity implements Serializable {
      */
     public void setPermissionId(String permissionId) {
         this.permissionId = permissionId;
+        addSettedField("permissionId");
     }
 
     /**

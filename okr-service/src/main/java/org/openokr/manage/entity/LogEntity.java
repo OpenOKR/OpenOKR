@@ -45,6 +45,7 @@ public class LogEntity extends BaseEntity implements Serializable {
      */
     public void setMessage(String message) {
         this.message = message;
+        addSettedField("message");
     }
 
     /**
@@ -62,6 +63,7 @@ public class LogEntity extends BaseEntity implements Serializable {
      */
     public void setBizType(String bizType) {
         this.bizType = bizType;
+        addSettedField("bizType");
     }
 
     /**
@@ -79,6 +81,7 @@ public class LogEntity extends BaseEntity implements Serializable {
      */
     public void setBizId(String bizId) {
         this.bizId = bizId;
+        addSettedField("bizId");
     }
 
     /**
@@ -96,6 +99,7 @@ public class LogEntity extends BaseEntity implements Serializable {
      */
     public void setCreateTs(Date createTs) {
         this.createTs = createTs;
+        addSettedField("createTs");
     }
 
     /**
@@ -113,6 +117,7 @@ public class LogEntity extends BaseEntity implements Serializable {
      */
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
+        addSettedField("createUserId");
     }
 
     /**

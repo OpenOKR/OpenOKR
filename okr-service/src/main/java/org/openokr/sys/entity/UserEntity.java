@@ -52,6 +52,9 @@ public class UserEntity extends BaseEntity implements Serializable {
     /** 更新日期 */
     private Date updateTs;
 
+    /** 个人头像URL地址 */
+    private String photoUrl;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -69,6 +72,7 @@ public class UserEntity extends BaseEntity implements Serializable {
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+        addSettedField("createTime");
     }
 
     /**
@@ -86,6 +90,7 @@ public class UserEntity extends BaseEntity implements Serializable {
      */
     public void setPassword(String password) {
         this.password = password;
+        addSettedField("password");
     }
 
     /**
@@ -103,6 +108,7 @@ public class UserEntity extends BaseEntity implements Serializable {
      */
     public void setSalt(String salt) {
         this.salt = salt;
+        addSettedField("salt");
     }
 
     /**
@@ -120,6 +126,7 @@ public class UserEntity extends BaseEntity implements Serializable {
      */
     public void setActive(Boolean active) {
         this.active = active;
+        addSettedField("active");
     }
 
     /**
@@ -137,6 +144,7 @@ public class UserEntity extends BaseEntity implements Serializable {
      */
     public void setUserName(String userName) {
         this.userName = userName;
+        addSettedField("userName");
     }
 
     /**
@@ -154,6 +162,7 @@ public class UserEntity extends BaseEntity implements Serializable {
      */
     public void setEmail(String email) {
         this.email = email;
+        addSettedField("email");
     }
 
     /**
@@ -171,6 +180,7 @@ public class UserEntity extends BaseEntity implements Serializable {
      */
     public void setRealName(String realName) {
         this.realName = realName;
+        addSettedField("realName");
     }
 
     /**
@@ -188,6 +198,7 @@ public class UserEntity extends BaseEntity implements Serializable {
      */
     public void setPhone(String phone) {
         this.phone = phone;
+        addSettedField("phone");
     }
 
     /**
@@ -205,6 +216,7 @@ public class UserEntity extends BaseEntity implements Serializable {
      */
     public void setOrganizationId(String organizationId) {
         this.organizationId = organizationId;
+        addSettedField("organizationId");
     }
 
     /**
@@ -222,6 +234,7 @@ public class UserEntity extends BaseEntity implements Serializable {
      */
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
+        addSettedField("createUserId");
     }
 
     /**
@@ -239,6 +252,7 @@ public class UserEntity extends BaseEntity implements Serializable {
      */
     public void setCreateTs(Date createTs) {
         this.createTs = createTs;
+        addSettedField("createTs");
     }
 
     /**
@@ -256,6 +270,7 @@ public class UserEntity extends BaseEntity implements Serializable {
      */
     public void setUpdateUserId(String updateUserId) {
         this.updateUserId = updateUserId;
+        addSettedField("updateUserId");
     }
 
     /**
@@ -273,6 +288,25 @@ public class UserEntity extends BaseEntity implements Serializable {
      */
     public void setUpdateTs(Date updateTs) {
         this.updateTs = updateTs;
+        addSettedField("updateTs");
+    }
+
+    /**
+     * 个人头像URL地址
+     * @return photoUrl
+     */
+    @Column(name = "photo_url")
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    /**
+     * 个人头像URL地址
+     * @param photoUrl
+     */
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+        addSettedField("photoUrl");
     }
 
     /**

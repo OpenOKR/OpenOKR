@@ -863,6 +863,76 @@ public class MessagesEntityCondition extends BaseEntityCondition implements Seri
             return (Criteria) this;
         }
 
+        public Criteria andIsReadIsNull() {
+            addCriterion("is_read is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsReadIsNotNull() {
+            addCriterion("is_read is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsReadEqualTo(String value) {
+            addCriterion("is_read =", value, "isRead");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsReadNotEqualTo(String value) {
+            addCriterion("is_read <>", value, "isRead");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsReadGreaterThan(String value) {
+            addCriterion("is_read >", value, "isRead");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsReadGreaterThanOrEqualTo(String value) {
+            addCriterion("is_read >=", value, "isRead");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsReadLessThan(String value) {
+            addCriterion("is_read <", value, "isRead");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsReadLessThanOrEqualTo(String value) {
+            addCriterion("is_read <=", value, "isRead");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsReadLike(String value) {
+            addCriterion("is_read like", value, "isRead");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsReadNotLike(String value) {
+            addCriterion("is_read not like", value, "isRead");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsReadIn(List<String> values) {
+            addCriterion("is_read in", values, "isRead");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsReadNotIn(List<String> values) {
+            addCriterion("is_read not in", values, "isRead");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsReadBetween(String value1, String value2) {
+            addCriterion("is_read between", value1, value2, "isRead");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsReadNotBetween(String value1, String value2) {
+            addCriterion("is_read not between", value1, value2, "isRead");
+            return (Criteria) this;
+        }
+
         public Criteria andIdLikeInsensitive(String value) {
             addCriterion("upper(id) like", value.toUpperCase(), "id");
             return (Criteria) this;
@@ -905,6 +975,11 @@ public class MessagesEntityCondition extends BaseEntityCondition implements Seri
 
         public Criteria andUpdateUserIdLikeInsensitive(String value) {
             addCriterion("upper(update_user_id) like", value.toUpperCase(), "updateUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsReadLikeInsensitive(String value) {
+            addCriterion("upper(is_read) like", value.toUpperCase(), "isRead");
             return (Criteria) this;
         }
 
@@ -1040,6 +1115,21 @@ public class MessagesEntityCondition extends BaseEntityCondition implements Seri
          */
         public Criteria andUpdateUserIdLikeIgnoreCase(String value) {
             addCriterion("upper(update_user_id) like ", value.toUpperCase(), "updateUserId");
+            return (Criteria) this;
+        }
+
+        /**
+         *(扩展Mybatis原生like的不足)
+         *忽略字段大小写的模糊查询
+         *Java编码如下：
+         *  criteria.andNameLikeIgnoreCase("%Abc%"); 前后模糊,A字母大写
+         *  criteria.andName2LikeIgnoreCase("%aBc"); 前模糊,B字母大写
+         *  criteria.andName3LikeIgnoreCase("abC%"); 后模糊,C字母大写
+         *执行时SQL如下:
+         *  where name like '%abc%' or name2 like '%abc' or name3 like 'abc%'
+         */
+        public Criteria andIsReadLikeIgnoreCase(String value) {
+            addCriterion("upper(is_read) like ", value.toUpperCase(), "isRead");
             return (Criteria) this;
         }
     }

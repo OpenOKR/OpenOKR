@@ -1080,6 +1080,76 @@ public class UserEntityCondition extends BaseEntityCondition implements Serializ
             return (Criteria) this;
         }
 
+        public Criteria andPhotoUrlIsNull() {
+            addCriterion("photo_url is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhotoUrlIsNotNull() {
+            addCriterion("photo_url is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhotoUrlEqualTo(String value) {
+            addCriterion("photo_url =", value, "photoUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhotoUrlNotEqualTo(String value) {
+            addCriterion("photo_url <>", value, "photoUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhotoUrlGreaterThan(String value) {
+            addCriterion("photo_url >", value, "photoUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhotoUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("photo_url >=", value, "photoUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhotoUrlLessThan(String value) {
+            addCriterion("photo_url <", value, "photoUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhotoUrlLessThanOrEqualTo(String value) {
+            addCriterion("photo_url <=", value, "photoUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhotoUrlLike(String value) {
+            addCriterion("photo_url like", value, "photoUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhotoUrlNotLike(String value) {
+            addCriterion("photo_url not like", value, "photoUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhotoUrlIn(List<String> values) {
+            addCriterion("photo_url in", values, "photoUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhotoUrlNotIn(List<String> values) {
+            addCriterion("photo_url not in", values, "photoUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhotoUrlBetween(String value1, String value2) {
+            addCriterion("photo_url between", value1, value2, "photoUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhotoUrlNotBetween(String value1, String value2) {
+            addCriterion("photo_url not between", value1, value2, "photoUrl");
+            return (Criteria) this;
+        }
+
         public Criteria andIdLikeInsensitive(String value) {
             addCriterion("upper(id) like", value.toUpperCase(), "id");
             return (Criteria) this;
@@ -1127,6 +1197,11 @@ public class UserEntityCondition extends BaseEntityCondition implements Serializ
 
         public Criteria andUpdateUserIdLikeInsensitive(String value) {
             addCriterion("upper(update_user_id) like", value.toUpperCase(), "updateUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhotoUrlLikeInsensitive(String value) {
+            addCriterion("upper(photo_url) like", value.toUpperCase(), "photoUrl");
             return (Criteria) this;
         }
 
@@ -1277,6 +1352,21 @@ public class UserEntityCondition extends BaseEntityCondition implements Serializ
          */
         public Criteria andUpdateUserIdLikeIgnoreCase(String value) {
             addCriterion("upper(update_user_id) like ", value.toUpperCase(), "updateUserId");
+            return (Criteria) this;
+        }
+
+        /**
+         *(扩展Mybatis原生like的不足)
+         *忽略字段大小写的模糊查询
+         *Java编码如下：
+         *  criteria.andNameLikeIgnoreCase("%Abc%"); 前后模糊,A字母大写
+         *  criteria.andName2LikeIgnoreCase("%aBc"); 前模糊,B字母大写
+         *  criteria.andName3LikeIgnoreCase("abC%"); 后模糊,C字母大写
+         *执行时SQL如下:
+         *  where name like '%abc%' or name2 like '%abc' or name3 like 'abc%'
+         */
+        public Criteria andPhotoUrlLikeIgnoreCase(String value) {
+            addCriterion("upper(photo_url) like ", value.toUpperCase(), "photoUrl");
             return (Criteria) this;
         }
     }

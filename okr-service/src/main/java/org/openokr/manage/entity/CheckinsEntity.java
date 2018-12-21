@@ -48,6 +48,7 @@ public class CheckinsEntity extends BaseEntity implements Serializable {
      */
     public void setResultId(String resultId) {
         this.resultId = resultId;
+        addSettedField("resultId");
     }
 
     /**
@@ -65,6 +66,7 @@ public class CheckinsEntity extends BaseEntity implements Serializable {
      */
     public void setCurrentValue(String currentValue) {
         this.currentValue = currentValue;
+        addSettedField("currentValue");
     }
 
     /**
@@ -82,6 +84,7 @@ public class CheckinsEntity extends BaseEntity implements Serializable {
      */
     public void setStatus(String status) {
         this.status = status;
+        addSettedField("status");
     }
 
     /**
@@ -99,6 +102,7 @@ public class CheckinsEntity extends BaseEntity implements Serializable {
      */
     public void setDescription(String description) {
         this.description = description;
+        addSettedField("description");
     }
 
     /**
@@ -116,6 +120,7 @@ public class CheckinsEntity extends BaseEntity implements Serializable {
      */
     public void setCreateTs(Date createTs) {
         this.createTs = createTs;
+        addSettedField("createTs");
     }
 
     /**
@@ -133,6 +138,7 @@ public class CheckinsEntity extends BaseEntity implements Serializable {
      */
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
+        addSettedField("createUserId");
     }
 
     /**

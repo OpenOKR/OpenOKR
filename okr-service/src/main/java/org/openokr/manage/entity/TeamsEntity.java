@@ -40,6 +40,9 @@ public class TeamsEntity extends BaseEntity implements Serializable {
     /** 更新者 */
     private String updateUserId;
 
+    /** 团队类型 1.公司团队 2.其他团队 */
+    private String type;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -57,6 +60,7 @@ public class TeamsEntity extends BaseEntity implements Serializable {
      */
     public void setName(String name) {
         this.name = name;
+        addSettedField("name");
     }
 
     /**
@@ -74,6 +78,7 @@ public class TeamsEntity extends BaseEntity implements Serializable {
      */
     public void setDescription(String description) {
         this.description = description;
+        addSettedField("description");
     }
 
     /**
@@ -91,6 +96,7 @@ public class TeamsEntity extends BaseEntity implements Serializable {
      */
     public void setIcon(String icon) {
         this.icon = icon;
+        addSettedField("icon");
     }
 
     /**
@@ -108,6 +114,7 @@ public class TeamsEntity extends BaseEntity implements Serializable {
      */
     public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
+        addSettedField("ownerId");
     }
 
     /**
@@ -125,6 +132,7 @@ public class TeamsEntity extends BaseEntity implements Serializable {
      */
     public void setParentId(String parentId) {
         this.parentId = parentId;
+        addSettedField("parentId");
     }
 
     /**
@@ -142,6 +150,7 @@ public class TeamsEntity extends BaseEntity implements Serializable {
      */
     public void setCreateTs(Date createTs) {
         this.createTs = createTs;
+        addSettedField("createTs");
     }
 
     /**
@@ -159,6 +168,7 @@ public class TeamsEntity extends BaseEntity implements Serializable {
      */
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
+        addSettedField("createUserId");
     }
 
     /**
@@ -176,6 +186,7 @@ public class TeamsEntity extends BaseEntity implements Serializable {
      */
     public void setUpdateTs(Date updateTs) {
         this.updateTs = updateTs;
+        addSettedField("updateTs");
     }
 
     /**
@@ -193,6 +204,25 @@ public class TeamsEntity extends BaseEntity implements Serializable {
      */
     public void setUpdateUserId(String updateUserId) {
         this.updateUserId = updateUserId;
+        addSettedField("updateUserId");
+    }
+
+    /**
+     * 团队类型 1.公司团队 2.其他团队
+     * @return type
+     */
+    @Column(name = "type")
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * 团队类型 1.公司团队 2.其他团队
+     * @param type
+     */
+    public void setType(String type) {
+        this.type = type;
+        addSettedField("type");
     }
 
     /**

@@ -60,6 +60,7 @@ public class MenuEntity extends BaseEntity implements Serializable {
      */
     public void setDescription(String description) {
         this.description = description;
+        addSettedField("description");
     }
 
     /**
@@ -77,6 +78,7 @@ public class MenuEntity extends BaseEntity implements Serializable {
      */
     public void setName(String name) {
         this.name = name;
+        addSettedField("name");
     }
 
     /**
@@ -94,6 +96,7 @@ public class MenuEntity extends BaseEntity implements Serializable {
      */
     public void setPriority(Integer priority) {
         this.priority = priority;
+        addSettedField("priority");
     }
 
     /**
@@ -111,6 +114,7 @@ public class MenuEntity extends BaseEntity implements Serializable {
      */
     public void setUrl(String url) {
         this.url = url;
+        addSettedField("url");
     }
 
     /**
@@ -128,6 +132,7 @@ public class MenuEntity extends BaseEntity implements Serializable {
      */
     public void setParentId(String parentId) {
         this.parentId = parentId;
+        addSettedField("parentId");
     }
 
     /**
@@ -145,6 +150,7 @@ public class MenuEntity extends BaseEntity implements Serializable {
      */
     public void setPermissionPrefixCode(String permissionPrefixCode) {
         this.permissionPrefixCode = permissionPrefixCode;
+        addSettedField("permissionPrefixCode");
     }
 
     /**
@@ -162,6 +168,7 @@ public class MenuEntity extends BaseEntity implements Serializable {
      */
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
+        addSettedField("createUserId");
     }
 
     /**
@@ -179,6 +186,7 @@ public class MenuEntity extends BaseEntity implements Serializable {
      */
     public void setCreateTs(Date createTs) {
         this.createTs = createTs;
+        addSettedField("createTs");
     }
 
     /**
@@ -196,6 +204,7 @@ public class MenuEntity extends BaseEntity implements Serializable {
      */
     public void setUpdateUserId(String updateUserId) {
         this.updateUserId = updateUserId;
+        addSettedField("updateUserId");
     }
 
     /**
@@ -213,6 +222,7 @@ public class MenuEntity extends BaseEntity implements Serializable {
      */
     public void setUpdateTs(Date updateTs) {
         this.updateTs = updateTs;
+        addSettedField("updateTs");
     }
 
     /**

@@ -1344,6 +1344,76 @@ public class ObjectivesEntityCondition extends BaseEntityCondition implements Se
             return (Criteria) this;
         }
 
+        public Criteria andTeamIdIsNull() {
+            addCriterion("team_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTeamIdIsNotNull() {
+            addCriterion("team_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTeamIdEqualTo(String value) {
+            addCriterion("team_id =", value, "teamId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTeamIdNotEqualTo(String value) {
+            addCriterion("team_id <>", value, "teamId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTeamIdGreaterThan(String value) {
+            addCriterion("team_id >", value, "teamId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTeamIdGreaterThanOrEqualTo(String value) {
+            addCriterion("team_id >=", value, "teamId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTeamIdLessThan(String value) {
+            addCriterion("team_id <", value, "teamId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTeamIdLessThanOrEqualTo(String value) {
+            addCriterion("team_id <=", value, "teamId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTeamIdLike(String value) {
+            addCriterion("team_id like", value, "teamId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTeamIdNotLike(String value) {
+            addCriterion("team_id not like", value, "teamId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTeamIdIn(List<String> values) {
+            addCriterion("team_id in", values, "teamId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTeamIdNotIn(List<String> values) {
+            addCriterion("team_id not in", values, "teamId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTeamIdBetween(String value1, String value2) {
+            addCriterion("team_id between", value1, value2, "teamId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTeamIdNotBetween(String value1, String value2) {
+            addCriterion("team_id not between", value1, value2, "teamId");
+            return (Criteria) this;
+        }
+
         public Criteria andIdLikeInsensitive(String value) {
             addCriterion("upper(id) like", value.toUpperCase(), "id");
             return (Criteria) this;
@@ -1416,6 +1486,11 @@ public class ObjectivesEntityCondition extends BaseEntityCondition implements Se
 
         public Criteria andUpdateUserIdLikeInsensitive(String value) {
             addCriterion("upper(update_user_id) like", value.toUpperCase(), "updateUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTeamIdLikeInsensitive(String value) {
+            addCriterion("upper(team_id) like", value.toUpperCase(), "teamId");
             return (Criteria) this;
         }
 
@@ -1641,6 +1716,21 @@ public class ObjectivesEntityCondition extends BaseEntityCondition implements Se
          */
         public Criteria andUpdateUserIdLikeIgnoreCase(String value) {
             addCriterion("upper(update_user_id) like ", value.toUpperCase(), "updateUserId");
+            return (Criteria) this;
+        }
+
+        /**
+         *(扩展Mybatis原生like的不足)
+         *忽略字段大小写的模糊查询
+         *Java编码如下：
+         *  criteria.andNameLikeIgnoreCase("%Abc%"); 前后模糊,A字母大写
+         *  criteria.andName2LikeIgnoreCase("%aBc"); 前模糊,B字母大写
+         *  criteria.andName3LikeIgnoreCase("abC%"); 后模糊,C字母大写
+         *执行时SQL如下:
+         *  where name like '%abc%' or name2 like '%abc' or name3 like 'abc%'
+         */
+        public Criteria andTeamIdLikeIgnoreCase(String value) {
+            addCriterion("upper(team_id) like ", value.toUpperCase(), "teamId");
             return (Criteria) this;
         }
     }

@@ -51,6 +51,7 @@ public class RoleMenuEntity extends BaseEntity implements Serializable {
      */
     public void setRoleId(String roleId) {
         this.roleId = roleId;
+        addSettedField("roleId");
     }
 
     /**
@@ -68,6 +69,7 @@ public class RoleMenuEntity extends BaseEntity implements Serializable {
      */
     public void setMenuId(String menuId) {
         this.menuId = menuId;
+        addSettedField("menuId");
     }
 
     /**
@@ -85,6 +87,7 @@ public class RoleMenuEntity extends BaseEntity implements Serializable {
      */
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
+        addSettedField("createUserId");
     }
 
     /**
@@ -102,6 +105,7 @@ public class RoleMenuEntity extends BaseEntity implements Serializable {
      */
     public void setCreateTs(Date createTs) {
         this.createTs = createTs;
+        addSettedField("createTs");
     }
 
     /**
@@ -119,6 +123,7 @@ public class RoleMenuEntity extends BaseEntity implements Serializable {
      */
     public void setUpdateUserId(String updateUserId) {
         this.updateUserId = updateUserId;
+        addSettedField("updateUserId");
     }
 
     /**
@@ -136,6 +141,7 @@ public class RoleMenuEntity extends BaseEntity implements Serializable {
      */
     public void setUpdateTs(Date updateTs) {
         this.updateTs = updateTs;
+        addSettedField("updateTs");
     }
 
     /**
@@ -153,6 +159,7 @@ public class RoleMenuEntity extends BaseEntity implements Serializable {
      */
     public void setTreeLevel(Short treeLevel) {
         this.treeLevel = treeLevel;
+        addSettedField("treeLevel");
     }
 
     /**

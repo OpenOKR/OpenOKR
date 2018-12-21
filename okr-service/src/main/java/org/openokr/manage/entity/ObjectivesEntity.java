@@ -44,7 +44,7 @@ public class ObjectivesEntity extends BaseEntity implements Serializable {
     /** 删除标识 0-否 1-是 */
     private String delFlag;
 
-    /** 当年进度（百分比) */
+    /** 当前进度（百分比) */
     private BigDecimal progress;
 
     /** 评分（季度结束的时候要对O的完成情况进行评分和自评） */
@@ -65,6 +65,9 @@ public class ObjectivesEntity extends BaseEntity implements Serializable {
     /** 更新者 */
     private String updateUserId;
 
+    /** 团队ID(type为团队和公司的时候才存储) */
+    private String teamId;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -82,6 +85,7 @@ public class ObjectivesEntity extends BaseEntity implements Serializable {
      */
     public void setTimeSessionId(String timeSessionId) {
         this.timeSessionId = timeSessionId;
+        addSettedField("timeSessionId");
     }
 
     /**
@@ -99,6 +103,7 @@ public class ObjectivesEntity extends BaseEntity implements Serializable {
      */
     public void setName(String name) {
         this.name = name;
+        addSettedField("name");
     }
 
     /**
@@ -116,6 +121,7 @@ public class ObjectivesEntity extends BaseEntity implements Serializable {
      */
     public void setDescription(String description) {
         this.description = description;
+        addSettedField("description");
     }
 
     /**
@@ -133,6 +139,7 @@ public class ObjectivesEntity extends BaseEntity implements Serializable {
      */
     public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
+        addSettedField("ownerId");
     }
 
     /**
@@ -150,6 +157,7 @@ public class ObjectivesEntity extends BaseEntity implements Serializable {
      */
     public void setParentId(String parentId) {
         this.parentId = parentId;
+        addSettedField("parentId");
     }
 
     /**
@@ -167,6 +175,7 @@ public class ObjectivesEntity extends BaseEntity implements Serializable {
      */
     public void setConfidenceLevel(String confidenceLevel) {
         this.confidenceLevel = confidenceLevel;
+        addSettedField("confidenceLevel");
     }
 
     /**
@@ -184,6 +193,7 @@ public class ObjectivesEntity extends BaseEntity implements Serializable {
      */
     public void setVisibility(String visibility) {
         this.visibility = visibility;
+        addSettedField("visibility");
     }
 
     /**
@@ -201,6 +211,7 @@ public class ObjectivesEntity extends BaseEntity implements Serializable {
      */
     public void setType(String type) {
         this.type = type;
+        addSettedField("type");
     }
 
     /**
@@ -218,6 +229,7 @@ public class ObjectivesEntity extends BaseEntity implements Serializable {
      */
     public void setStatus(String status) {
         this.status = status;
+        addSettedField("status");
     }
 
     /**
@@ -235,10 +247,11 @@ public class ObjectivesEntity extends BaseEntity implements Serializable {
      */
     public void setDelFlag(String delFlag) {
         this.delFlag = delFlag;
+        addSettedField("delFlag");
     }
 
     /**
-     * 当年进度（百分比)
+     * 当前进度（百分比)
      * @return progress
      */
     @Column(name = "progress")
@@ -247,11 +260,12 @@ public class ObjectivesEntity extends BaseEntity implements Serializable {
     }
 
     /**
-     * 当年进度（百分比)
+     * 当前进度（百分比)
      * @param progress
      */
     public void setProgress(BigDecimal progress) {
         this.progress = progress;
+        addSettedField("progress");
     }
 
     /**
@@ -269,6 +283,7 @@ public class ObjectivesEntity extends BaseEntity implements Serializable {
      */
     public void setScore(String score) {
         this.score = score;
+        addSettedField("score");
     }
 
     /**
@@ -286,6 +301,7 @@ public class ObjectivesEntity extends BaseEntity implements Serializable {
      */
     public void setAssessment(String assessment) {
         this.assessment = assessment;
+        addSettedField("assessment");
     }
 
     /**
@@ -303,6 +319,7 @@ public class ObjectivesEntity extends BaseEntity implements Serializable {
      */
     public void setCreateTs(Date createTs) {
         this.createTs = createTs;
+        addSettedField("createTs");
     }
 
     /**
@@ -320,6 +337,7 @@ public class ObjectivesEntity extends BaseEntity implements Serializable {
      */
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
+        addSettedField("createUserId");
     }
 
     /**
@@ -337,6 +355,7 @@ public class ObjectivesEntity extends BaseEntity implements Serializable {
      */
     public void setUpdateTs(Date updateTs) {
         this.updateTs = updateTs;
+        addSettedField("updateTs");
     }
 
     /**
@@ -354,6 +373,25 @@ public class ObjectivesEntity extends BaseEntity implements Serializable {
      */
     public void setUpdateUserId(String updateUserId) {
         this.updateUserId = updateUserId;
+        addSettedField("updateUserId");
+    }
+
+    /**
+     * 团队ID(type为团队和公司的时候才存储)
+     * @return teamId
+     */
+    @Column(name = "team_id")
+    public String getTeamId() {
+        return teamId;
+    }
+
+    /**
+     * 团队ID(type为团队和公司的时候才存储)
+     * @param teamId
+     */
+    public void setTeamId(String teamId) {
+        this.teamId = teamId;
+        addSettedField("teamId");
     }
 
     /**

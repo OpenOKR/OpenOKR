@@ -45,6 +45,7 @@ public class ResultUserRelaEntity extends BaseEntity implements Serializable {
      */
     public void setResultId(String resultId) {
         this.resultId = resultId;
+        addSettedField("resultId");
     }
 
     /**
@@ -62,6 +63,7 @@ public class ResultUserRelaEntity extends BaseEntity implements Serializable {
      */
     public void setUserId(String userId) {
         this.userId = userId;
+        addSettedField("userId");
     }
 
     /**
@@ -79,6 +81,7 @@ public class ResultUserRelaEntity extends BaseEntity implements Serializable {
      */
     public void setStatus(String status) {
         this.status = status;
+        addSettedField("status");
     }
 
     /**
@@ -96,6 +99,7 @@ public class ResultUserRelaEntity extends BaseEntity implements Serializable {
      */
     public void setCreateTs(Date createTs) {
         this.createTs = createTs;
+        addSettedField("createTs");
     }
 
     /**
@@ -113,6 +117,7 @@ public class ResultUserRelaEntity extends BaseEntity implements Serializable {
      */
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
+        addSettedField("createUserId");
     }
 
     /**

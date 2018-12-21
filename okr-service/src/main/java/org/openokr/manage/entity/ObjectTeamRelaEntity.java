@@ -42,6 +42,7 @@ public class ObjectTeamRelaEntity extends BaseEntity implements Serializable {
      */
     public void setObjectId(String objectId) {
         this.objectId = objectId;
+        addSettedField("objectId");
     }
 
     /**
@@ -59,6 +60,7 @@ public class ObjectTeamRelaEntity extends BaseEntity implements Serializable {
      */
     public void setTeamId(String teamId) {
         this.teamId = teamId;
+        addSettedField("teamId");
     }
 
     /**
@@ -76,6 +78,7 @@ public class ObjectTeamRelaEntity extends BaseEntity implements Serializable {
      */
     public void setCreateTs(Date createTs) {
         this.createTs = createTs;
+        addSettedField("createTs");
     }
 
     /**
@@ -93,6 +96,7 @@ public class ObjectTeamRelaEntity extends BaseEntity implements Serializable {
      */
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
+        addSettedField("createUserId");
     }
 
     /**

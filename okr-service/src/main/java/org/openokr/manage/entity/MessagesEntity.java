@@ -43,6 +43,9 @@ public class MessagesEntity extends BaseEntity implements Serializable {
     /** 更新者 */
     private String updateUserId;
 
+    /** 是否已读 0.未读 1.已读 */
+    private String isRead;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -60,6 +63,7 @@ public class MessagesEntity extends BaseEntity implements Serializable {
      */
     public void setUserId(String userId) {
         this.userId = userId;
+        addSettedField("userId");
     }
 
     /**
@@ -77,6 +81,7 @@ public class MessagesEntity extends BaseEntity implements Serializable {
      */
     public void setTitle(String title) {
         this.title = title;
+        addSettedField("title");
     }
 
     /**
@@ -94,6 +99,7 @@ public class MessagesEntity extends BaseEntity implements Serializable {
      */
     public void setContent(String content) {
         this.content = content;
+        addSettedField("content");
     }
 
     /**
@@ -111,6 +117,7 @@ public class MessagesEntity extends BaseEntity implements Serializable {
      */
     public void setType(String type) {
         this.type = type;
+        addSettedField("type");
     }
 
     /**
@@ -128,6 +135,7 @@ public class MessagesEntity extends BaseEntity implements Serializable {
      */
     public void setTargetId(String targetId) {
         this.targetId = targetId;
+        addSettedField("targetId");
     }
 
     /**
@@ -145,6 +153,7 @@ public class MessagesEntity extends BaseEntity implements Serializable {
      */
     public void setIsProcessed(String isProcessed) {
         this.isProcessed = isProcessed;
+        addSettedField("isProcessed");
     }
 
     /**
@@ -162,6 +171,7 @@ public class MessagesEntity extends BaseEntity implements Serializable {
      */
     public void setCreateTs(Date createTs) {
         this.createTs = createTs;
+        addSettedField("createTs");
     }
 
     /**
@@ -179,6 +189,7 @@ public class MessagesEntity extends BaseEntity implements Serializable {
      */
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
+        addSettedField("createUserId");
     }
 
     /**
@@ -196,6 +207,7 @@ public class MessagesEntity extends BaseEntity implements Serializable {
      */
     public void setUpdateTs(Date updateTs) {
         this.updateTs = updateTs;
+        addSettedField("updateTs");
     }
 
     /**
@@ -213,6 +225,25 @@ public class MessagesEntity extends BaseEntity implements Serializable {
      */
     public void setUpdateUserId(String updateUserId) {
         this.updateUserId = updateUserId;
+        addSettedField("updateUserId");
+    }
+
+    /**
+     * 是否已读 0.未读 1.已读
+     * @return isRead
+     */
+    @Column(name = "is_read")
+    public String getIsRead() {
+        return isRead;
+    }
+
+    /**
+     * 是否已读 0.未读 1.已读
+     * @param isRead
+     */
+    public void setIsRead(String isRead) {
+        this.isRead = isRead;
+        addSettedField("isRead");
     }
 
     /**

@@ -41,6 +41,7 @@ public class PermissionEntity extends BaseEntity implements Serializable {
      */
     public void setName(String name) {
         this.name = name;
+        addSettedField("name");
     }
 
     /**
@@ -58,6 +59,7 @@ public class PermissionEntity extends BaseEntity implements Serializable {
      */
     public void setMenuId(String menuId) {
         this.menuId = menuId;
+        addSettedField("menuId");
     }
 
     /**
@@ -75,6 +77,7 @@ public class PermissionEntity extends BaseEntity implements Serializable {
      */
     public void setDescription(String description) {
         this.description = description;
+        addSettedField("description");
     }
 
     /**
@@ -92,6 +95,7 @@ public class PermissionEntity extends BaseEntity implements Serializable {
      */
     public void setCode(String code) {
         this.code = code;
+        addSettedField("code");
     }
 
     /**

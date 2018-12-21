@@ -12,6 +12,7 @@
     <result column="create_user_id" jdbcType="VARCHAR" property="createUserId" />
     <result column="update_ts" jdbcType="TIMESTAMP" property="updateTs" />
     <result column="update_user_id" jdbcType="VARCHAR" property="updateUserId" />
+    <result column="type" jdbcType="CHAR" property="type" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -73,7 +74,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, name, description, icon, owner_id, parent_id, create_ts, create_user_id, update_ts, 
-    update_user_id
+    update_user_id, type
   </sql>
   <select id="selectByCondition" parameterType="org.openokr.manage.entity.TeamsEntityCondition" resultMap="BaseResultMap">
     select
@@ -135,6 +136,9 @@
       <if test="record.updateUserId != null">
         update_user_id = #{record.updateUserId,jdbcType=VARCHAR},
       </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=CHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -146,9 +150,9 @@
     </if>
   </sql>
   <insert id="insertList" parameterType="java.util.List">
-     insert into t_okr_teams ( id,name,description,icon,owner_id,parent_id,create_ts,create_user_id,update_ts,update_user_id ) values
+     insert into t_okr_teams ( id,name,description,icon,owner_id,parent_id,create_ts,create_user_id,update_ts,update_user_id,type ) values
     <foreach collection="list" index="index" item="item" separator=",">
-       ( #{item.id,jdbcType=VARCHAR},#{item.name,jdbcType=VARCHAR},#{item.description,jdbcType=VARCHAR},#{item.icon,jdbcType=VARCHAR},#{item.ownerId,jdbcType=VARCHAR},#{item.parentId,jdbcType=VARCHAR},#{item.createTs,jdbcType=TIMESTAMP},#{item.createUserId,jdbcType=VARCHAR},#{item.updateTs,jdbcType=TIMESTAMP},#{item.updateUserId,jdbcType=VARCHAR} )
+       ( #{item.id,jdbcType=VARCHAR},#{item.name,jdbcType=VARCHAR},#{item.description,jdbcType=VARCHAR},#{item.icon,jdbcType=VARCHAR},#{item.ownerId,jdbcType=VARCHAR},#{item.parentId,jdbcType=VARCHAR},#{item.createTs,jdbcType=TIMESTAMP},#{item.createUserId,jdbcType=VARCHAR},#{item.updateTs,jdbcType=TIMESTAMP},#{item.updateUserId,jdbcType=VARCHAR},#{item.type,jdbcType=CHAR} )
     </foreach>
   </insert>
 </mapper>

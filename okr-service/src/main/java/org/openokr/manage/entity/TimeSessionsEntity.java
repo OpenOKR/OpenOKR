@@ -54,6 +54,7 @@ public class TimeSessionsEntity extends BaseEntity implements Serializable {
      */
     public void setName(String name) {
         this.name = name;
+        addSettedField("name");
     }
 
     /**
@@ -71,6 +72,7 @@ public class TimeSessionsEntity extends BaseEntity implements Serializable {
      */
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
+        addSettedField("startDate");
     }
 
     /**
@@ -88,6 +90,7 @@ public class TimeSessionsEntity extends BaseEntity implements Serializable {
      */
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+        addSettedField("endDate");
     }
 
     /**
@@ -105,6 +108,7 @@ public class TimeSessionsEntity extends BaseEntity implements Serializable {
      */
     public void setIsActivate(String isActivate) {
         this.isActivate = isActivate;
+        addSettedField("isActivate");
     }
 
     /**
@@ -122,6 +126,7 @@ public class TimeSessionsEntity extends BaseEntity implements Serializable {
      */
     public void setCreateTs(Date createTs) {
         this.createTs = createTs;
+        addSettedField("createTs");
     }
 
     /**
@@ -139,6 +144,7 @@ public class TimeSessionsEntity extends BaseEntity implements Serializable {
      */
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
+        addSettedField("createUserId");
     }
 
     /**
@@ -156,6 +162,7 @@ public class TimeSessionsEntity extends BaseEntity implements Serializable {
      */
     public void setUpdateTs(Date updateTs) {
         this.updateTs = updateTs;
+        addSettedField("updateTs");
     }
 
     /**
@@ -173,6 +180,7 @@ public class TimeSessionsEntity extends BaseEntity implements Serializable {
      */
     public void setUpdateUserId(String updateUserId) {
         this.updateUserId = updateUserId;
+        addSettedField("updateUserId");
     }
 
     /**

@@ -50,7 +50,7 @@ public class ResultsEntity extends BaseEntity implements Serializable {
     /** 删除标识 0-否 1-是 */
     private String delFlag;
 
-    /** 当年进度（百分比) */
+    /** 当前进度（百分比) */
     private BigDecimal progress;
 
     /** 创建时间 */
@@ -82,6 +82,7 @@ public class ResultsEntity extends BaseEntity implements Serializable {
      */
     public void setObjectId(String objectId) {
         this.objectId = objectId;
+        addSettedField("objectId");
     }
 
     /**
@@ -99,6 +100,7 @@ public class ResultsEntity extends BaseEntity implements Serializable {
      */
     public void setName(String name) {
         this.name = name;
+        addSettedField("name");
     }
 
     /**
@@ -116,6 +118,7 @@ public class ResultsEntity extends BaseEntity implements Serializable {
      */
     public void setDescription(String description) {
         this.description = description;
+        addSettedField("description");
     }
 
     /**
@@ -133,6 +136,7 @@ public class ResultsEntity extends BaseEntity implements Serializable {
      */
     public void setMetricUnit(String metricUnit) {
         this.metricUnit = metricUnit;
+        addSettedField("metricUnit");
     }
 
     /**
@@ -150,6 +154,7 @@ public class ResultsEntity extends BaseEntity implements Serializable {
      */
     public void setTargetValue(String targetValue) {
         this.targetValue = targetValue;
+        addSettedField("targetValue");
     }
 
     /**
@@ -167,6 +172,7 @@ public class ResultsEntity extends BaseEntity implements Serializable {
      */
     public void setInitialValue(String initialValue) {
         this.initialValue = initialValue;
+        addSettedField("initialValue");
     }
 
     /**
@@ -184,6 +190,7 @@ public class ResultsEntity extends BaseEntity implements Serializable {
      */
     public void setCurrentValue(String currentValue) {
         this.currentValue = currentValue;
+        addSettedField("currentValue");
     }
 
     /**
@@ -201,6 +208,7 @@ public class ResultsEntity extends BaseEntity implements Serializable {
      */
     public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
+        addSettedField("ownerId");
     }
 
     /**
@@ -218,6 +226,7 @@ public class ResultsEntity extends BaseEntity implements Serializable {
      */
     public void setEndTs(Date endTs) {
         this.endTs = endTs;
+        addSettedField("endTs");
     }
 
     /**
@@ -235,6 +244,7 @@ public class ResultsEntity extends BaseEntity implements Serializable {
      */
     public void setPreviousName(String previousName) {
         this.previousName = previousName;
+        addSettedField("previousName");
     }
 
     /**
@@ -252,6 +262,7 @@ public class ResultsEntity extends BaseEntity implements Serializable {
      */
     public void setStatus(String status) {
         this.status = status;
+        addSettedField("status");
     }
 
     /**
@@ -269,10 +280,11 @@ public class ResultsEntity extends BaseEntity implements Serializable {
      */
     public void setDelFlag(String delFlag) {
         this.delFlag = delFlag;
+        addSettedField("delFlag");
     }
 
     /**
-     * 当年进度（百分比)
+     * 当前进度（百分比)
      * @return progress
      */
     @Column(name = "progress")
@@ -281,11 +293,12 @@ public class ResultsEntity extends BaseEntity implements Serializable {
     }
 
     /**
-     * 当年进度（百分比)
+     * 当前进度（百分比)
      * @param progress
      */
     public void setProgress(BigDecimal progress) {
         this.progress = progress;
+        addSettedField("progress");
     }
 
     /**
@@ -303,6 +316,7 @@ public class ResultsEntity extends BaseEntity implements Serializable {
      */
     public void setCreateTs(Date createTs) {
         this.createTs = createTs;
+        addSettedField("createTs");
     }
 
     /**
@@ -320,6 +334,7 @@ public class ResultsEntity extends BaseEntity implements Serializable {
      */
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
+        addSettedField("createUserId");
     }
 
     /**
@@ -337,6 +352,7 @@ public class ResultsEntity extends BaseEntity implements Serializable {
      */
     public void setUpdateTs(Date updateTs) {
         this.updateTs = updateTs;
+        addSettedField("updateTs");
     }
 
     /**
@@ -354,6 +370,7 @@ public class ResultsEntity extends BaseEntity implements Serializable {
      */
     public void setUpdateUserId(String updateUserId) {
         this.updateUserId = updateUserId;
+        addSettedField("updateUserId");
     }
 
     /**
