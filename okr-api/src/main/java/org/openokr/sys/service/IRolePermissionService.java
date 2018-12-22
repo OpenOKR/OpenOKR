@@ -9,7 +9,7 @@ public interface IRolePermissionService {
 
     int deleteByPermissionIds(List<String> permissionIdList);
 
-    int countByPermissionId(String permissionId);
+    long countByPermissionId(String permissionId);
 
     int deleteByRoleId(String roleId);
 

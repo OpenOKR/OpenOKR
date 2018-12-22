@@ -1,0 +1,170 @@
+
+.ui-widget-content {
+    color: #222;
+    background: #ffffff url(images/jqueryui_images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;
+    border: 0;
+    border-top: solid 1px #e5e5e5;
+}
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus {
+    font-weight: normal;
+    color: #212121;
+}
+.ui-icon,
+.ui-widget-content .ui-icon {
+    background-image: url(images/jqueryui_images/ui-icons_222222_256x240.png);
+}
+
+.ui-widget-header .ui-icon {
+    background-image: url(images/jqueryui_images/ui-icons_222222_256x240.png);
+}
+.ui-state-hover td {
+    background: none #F1F1F1
+}
+.ui-state-hover .ui-icon-seek-next {
+    overflow: hidden
+}
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+    border: 1px solid #e5e5e5;
+    background: url(images/th-bg.jpg) repeat-x #f7f7f7;
+    font-weight: normal;
+    color: #555555;
+}
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
+    border-width: 0 0 1px 0;
+    border-bottom-color:#008dff;
+    background: #e4efc9;
+}
+
+
+.ui-state-active,
+.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active {
+    border: 0 solid #999999;
+    font-weight: normal;
+    color: #212121;
+}
+
+/** 设置单元格选中 */
+.ui-state-hover td {
+    background: #e4efc9; /*米黄色*/
+}
+.ui-jqgrid tr.jqgrow td {
+    padding: 2px;
+}
+.ui-widget-content a{
+    text-decoration: underline;
+    color: #5a3bf9;
+}
+
+/* ui-datepicker modify 20160801 yy */
+
+.ui-datepicker {
+    padding: 0;
+    width: 18em;
+    font-family: "\5FAE\8F6F\96C5\9ED1","Helvetica Neue", Helvetica, STHeiTi,Arial,sans-serif;
+    font-size: 14px;
+    color: #666;
+    box-shadow: 0 4px 20px 0 rgba(0,0,0,.18);
+}
+.ui-datepicker.ui-widget-content .ui-state-default {
+    font-weight: normal;
+    border: 1px solid #fff;
+    background: none;
+}
+.ui-datepicker .ui-datepicker-header {
+    color: #fff;
+    background: #fff;
+    border: 0;
+    border-bottom: solid 1px #e5e5e5;
+    border-radius: 0;
+}
+.ui-datepicker .ui-datepicker-prev.ui-datepicker-prev-hover {
+    left: 2px;
+    top: 2px;
+}
+.ui-datepicker .ui-datepicker-next.ui-datepicker-next-hover {
+    right: 2px;
+    top: 2px;
+}
+.ui-datepicker .ui-datepicker-prev span.ui-icon {
+    background: url("images/extend/arrow.png") -5px -4px no-repeat ;
+}
+.ui-datepicker  .ui-datepicker-next span.ui-icon {
+    background: url("images/extend/arrow.png") -5px -26px no-repeat ;
+}
+.ui-datepicker  .ui-datepicker-prev-hover span.ui-icon {
+    background-position: -27px -4px;
+}
+.ui-datepicker .ui-datepicker-next-hover span.ui-icon {
+    background-position: -27px -26px;
+}
+.ui-datepicker .ui-datepicker-title {
+    color: #666;
+}
+.ui-datepicker .ui-datepicker-title select {
+    margin: 1px 2px;
+    min-width: 75px;
+    width: 80px;
+    border: none;
+    font-weight: normal;
+}
+.ui-datepicker .ui-datepicker-title .ui-datepicker-year {
+    font-family: 'Arail', 'Microsoft Yahei', sans-serif;
+    font-weight: normal;
+}
+.ui-datepicker tbody td {
+    font-family: 'Arail';
+    font-size: 12px;
+}
+.ui-datepicker td {
+    border-color: #fff;
+}
+.ui-datepicker td span,
+.ui-datepicker td a {
+    display: block;
+    padding: .2em;
+    color: #666;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 3px;
+}
+.ui-datepicker td a:hover {
+    text-decoration: none;
+    color: #fff;
+}
+.ui-datepicker.ui-widget-content .ui-state-active,
+.ui-datepicker.ui-widget-header .ui-state-active {
+    color: #fff;
+    background: none #3292ff !important;
+    border-color: #4779c7;
+}
+.ui-datepicker.ui-widget-content .ui-datepicker-calendar .ui-state-focus,
+.ui-datepicker.ui-widget-content .ui-datepicker-calendar .ui-state-hover {
+    color: #fff;
+    text-decoration: none;
+    background: none #3292ff;
+    border-color: #4779c7;
+}
+.ui-datepicker .ui-datepicker-buttonpane button {
+    font-family: "\5FAE\8F6F\96C5\9ED1","Helvetica Neue", Helvetica, STHeiTi,Arial,sans-serif;
+    color: #666;
+}
+
+
+.ui-datepicker.ui-widget-content .ui-datepicker-calendar .ui-state-hover,
+.ui-datepicker.ui-widget-content .ui-datepicker-calendar .ui-state-focus {
+    border: 1px solid #3292ff;
+    background: #3292ff !important;
+}
+
+.ui-datepicker.ui-widget-content .ui-slider-handle {
+    background: #e6e6e6 url(images/jqueryui_images/ui-bg_glass_75_e6e6e6_1x400.png) 50% 50%
+}
+.ui-datepicker.ui-widget-content .ui-slider-handle.ui-state-active {
+    border-color: #e6e6e6;
+}

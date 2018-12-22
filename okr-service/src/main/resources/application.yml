@@ -33,6 +33,9 @@ logging:
     root: info
   file: /data/log/okr/okr-service-log/okr-service
 
+app:
+  defaultPassword: 123456
+
 ---
 spring:
   profiles: local

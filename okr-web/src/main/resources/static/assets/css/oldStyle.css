@@ -1,0 +1,56 @@
+@charset "utf-8";
+
+/*相关文件*/
+.area-more-file {
+    display: inline-block;
+    vertical-align: top;
+}
+.area-more-file h4 {
+    margin-bottom: 2px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #000;
+}
+.area-more-file li a,
+.area-more-file li {
+    font-size: 12px;
+    color: #0090ff;
+}
+
+.new-list2 {
+    min-height: 192px;
+}
+.new-list2 li{
+    position: relative;
+    padding: 4px 0 4px 15px;
+    font-size: 12px;
+    line-height: 24px;
+    color: #666;
+}
+.new-list2 li:hover a {text-decoration: none}
+.new-list2 li:hover:before,
+.new-list2 li:hover p {
+    color: #008dff;
+}
+.new-list2 li:before{
+    position: absolute;
+    left: 0;
+    top: 5px;
+    content: "\e82f";
+    font-family: 'iconfont';
+    font-size: 12px;
+    color: #999
+}
+.new-list2 li p {
+    margin-right: 100px;
+    height: 24px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.new-list2 li .new-li-date {
+    float: right;
+    font-size: 12px;
+    font-weight: normal;
+    color: #999;
+}

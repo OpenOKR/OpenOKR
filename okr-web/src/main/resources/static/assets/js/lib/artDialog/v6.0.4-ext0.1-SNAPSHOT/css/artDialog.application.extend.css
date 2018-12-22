@@ -1,0 +1,165 @@
+
+.ui-popup .artDialog {
+    border: 0 none;
+    border-radius: 0;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, .18);
+    color: #666;
+    font: 14px '\5FAE\8F6F\96C5\9ED1', Verdana, Arial, Helvetica, sans-serif;
+}
+.artDialog-header {
+    position: relative;
+    padding: 7px 20px;
+    height: 30px;
+    border-bottom: solid 1px #e5e5e5;
+    background-color: #fff;
+    color: #333;
+    font-size: 18px;
+    line-height: 30px;
+}
+.artDialog-title {
+    padding: 0 30px 0 0;
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 30px;
+}
+.artDialog-close {
+    position: absolute;
+    top: 14px;
+    right: 20px;
+    width: 20px;
+    height: 20px;
+    background: url(images/extend/icon.png) no-repeat;
+    color: #f7f7f7;
+    font-size: 0;
+    opacity: 1;
+    filter: alpha(opacity=100);
+}
+.artDialog-close:hover {
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+}
+.artDialog-footer {
+    padding: 8px 16px;
+    border-top: solid 1px #e5e5e5;
+    text-align: center;
+}
+.artDialog-button {
+    float: right;
+}
+.artDialog-footer button {
+    padding: 9px 24px;
+    border-color: #c0cbd5;
+    border-radius: 3px;
+    background-color: #fff;
+    color: #212121;
+    font-family: '\5FAE\8F6F\96C5\9ED1', Verdana, Arial, Helvetica, sans-serif;
+    cursor: pointer;
+}
+.artDialog-footer button.artDialog-autofocus {
+    border-color: #456fba;
+    background-color: #456fba;
+    color: #fff;
+}
+.artDialog-footer button.artDialog-autofocus:hover,
+.artDialog-footer button.artDialog-autofocus:focus,
+.artDialog-footer button.artDialog-autofocus:active {
+    border-color: #007fe5;
+    background-color: #007fe5;
+    color: #fff;
+}
+.artDialog .artDialog-content[id="content:imageDialog"] {
+    overflow: hidden;
+}
+/*
+影像弹窗右侧列表*/
+.imageSmartBox {
+    position: absolute;
+    top: 0;
+    right: -186px;
+    z-index: 9999;
+    width: 186px;
+    height: 100%;
+    background: #e1e9f0;
+}
+.imageSmartBox.open {
+    right: 0;
+}
+.imageSmartBox .togglebar {
+    position: absolute;
+    top: 110px;
+    left: -28px;
+    padding: 12px 4px;
+    width: 20px;
+    height: 95px;
+    background: #5aadff;
+    color: #fff;
+    text-align: center;
+    font-size: 14px;
+    cursor: pointer;
+}
+.imageSmartBox .imageSmartList {
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 10px;
+    height: 100%;
+}
+.imageSmartBox .imageSmartList li {
+    margin-bottom: 10px;
+    width: 100%;
+}
+.imageSmartBox .imageSmartList li:last-child {
+    margin-bottom: 0;
+}
+.imageSmartBox .imageSmartList .img {
+    width: 166px;
+    height: 103px;
+}
+.imageSmartBox .imageSmartList .txt {
+    overflow: hidden;
+    padding: 2px;
+    color: #333;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    line-height: 26px;
+}
+.dialog-con-box {
+    text-align: center;
+}
+.dialog-con-box .dialog-con-text {
+    padding: 10px 0;
+}
+.dialog-con-box .dialog-con-text span {
+    display: inline-block;
+    vertical-align: top;
+    font-size: 16px;
+    line-height: 32px;
+}
+.dialog-con-box .icon-iconall124 {
+    margin-right: 3px;
+    color: #4779c7;
+    vertical-align: top;
+    font-size: 30px;
+}
+.dialog-con-box .m-tip-dropdown-menu {
+    background-color: #fffce1;
+    text-align: left;
+}
+.artDialog-footer button + button { margin-left: 8px; }
+/**/
+.modal-dialog .modal-box { position: relative; display: inline-block; margin: 10px auto; padding-left: 55px; min-height: 46px; width: auto; }
+.modal-dialog .modal-box .icon { position: absolute; top: 0; left: 0; display: inline-block; width: 40px; height: 40px; border-radius: 20px; color: #fff; text-align: center; font-size: 22px; /*background: url("../images/icon-popup.png") no-repeat;*/ line-height: 40px; }
+.modal-dialog .modal-box.warn .icon { background-color: #ffb503; }
+.modal-dialog .modal-box.ask .icon { background-color: #43cd4c; }
+.modal-dialog .modal-box.error .icon { background-color: #ff5213; }
+.modal-dialog .modal-box .title { color: #757575; text-align: left; font-weight: bold; font-size: 16px; }
+.modal-dialog .modal-box.no-content .title { margin-top: 8px; }
+.modal-dialog .modal-box .content { display: block; margin-top: 10px; font-weight: normal; font-size: 14px; line-height: 15px; }
+.modal-dialog .modal-box.warn .content { }
+.modal-dialog .modal-box.ask .content { }
+.modal-dialog .modal-box.error .content { }
+.modal-dialog .artDialog-footer { border: 0; }
+.modal-dialog .artDialog-body { padding: 32px 32px 22px; }

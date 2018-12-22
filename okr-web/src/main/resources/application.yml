@@ -39,6 +39,7 @@ logging:
   file: /data/log/okr/okr-web-log/okr-web
 
 app:
+  defaultPassword: 123456
   multiAccountLogin: true
   jsDebug: false
   staticResourceVersion: $[mvn.staticResourceVersion]

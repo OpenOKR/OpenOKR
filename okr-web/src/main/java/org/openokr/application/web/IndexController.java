@@ -14,7 +14,7 @@ public class IndexController extends BaseController {
 
     @GetMapping(value = "/index.htm")
     public String index(Model model) throws Exception {
-        String userName = UserUtils.getUser().getRealName();
+        String userName = getCurrentUser().getRealName();
         if (StringUtils.isEmpty(userName)) {
             userName = UserUtils.getUser().getUserName();
         }

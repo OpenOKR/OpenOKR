@@ -56,4 +56,11 @@ public class ShortcutMenuService extends BaseServiceImpl implements IShortcutMen
         condition.createCriteria().andMenuIdEqualTo(menuId);
         return this.deleteByCondition(condition);
     }
+
+    @Override
+    public int deleteByUserId(String userId) {
+        ShortcutMenuEntityCondition condition = new ShortcutMenuEntityCondition();
+        condition.createCriteria().andUserIdEqualTo(userId);
+        return this.deleteByCondition(condition);
+    }
 }

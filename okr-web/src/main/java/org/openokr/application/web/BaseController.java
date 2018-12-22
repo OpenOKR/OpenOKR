@@ -1,6 +1,7 @@
 package org.openokr.application.web;
 
 import com.zzheng.framework.base.utils.JSONUtils;
+import org.openokr.sys.vo.UserVOExt;
 import org.openokr.utils.UserUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +18,12 @@ public class BaseController {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
+    protected UserVOExt getCurrentUser() {
+        return UserUtils.getUser();
+    }
+
     protected String getCurrentUserId() {
-        return UserUtils.getUser().getId();
+        return getCurrentUser().getId();
     }
 
     /**

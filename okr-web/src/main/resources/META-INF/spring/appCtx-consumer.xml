@@ -16,5 +16,6 @@
     <dubbo:reference interface="org.openokr.sys.service.IShortcutMenuService" id="shortcutMenuService"/>
     <dubbo:reference interface="org.openokr.sys.service.IUserRoleService" id="userRoleService"/>
     <dubbo:reference interface="org.openokr.sys.service.IUserService" id="userService"/>
+    <dubbo:reference interface="org.openokr.sys.service.IOrganizationService" id="organizationService"/>
 
 </beans>

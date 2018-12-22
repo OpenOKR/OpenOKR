@@ -15,4 +15,6 @@ public interface IShortcutMenuService {
     List<ShortcutMenuVOExt> findByUserId(String userId);
 
     int deleteByMenuId(String menuId);
+
+    int deleteByUserId(String userId);
 }

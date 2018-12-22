@@ -5,19 +5,22 @@ import com.zzheng.framework.base.utils.MapUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.openokr.application.framework.annotation.JsonPathParam;
 import org.openokr.application.shiro.AuthRealm;
+import org.openokr.application.web.BaseController;
 import org.openokr.sys.service.IMenuService;
 import org.openokr.sys.vo.MenuVOExt;
 import org.openokr.sys.vo.PermissionVO;
+import org.openokr.utils.StringUtils;
 import org.openokr.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 @Controller
-public class MenuController {
+public class MenuController extends BaseController {
 
     @Autowired
     private IMenuService menuService;
@@ -36,7 +39,7 @@ public class MenuController {
     }
 
     @RequiresPermissions("Menu:view")
-    @GetMapping(value = "/sys/menu/findAll.json")
+    @PostMapping(value = "/sys/menu/findAll.json")
     @ResponseBody
     public List<MenuVOExt> findAll() {
         return menuService.findAll();
@@ -47,6 +50,13 @@ public class MenuController {
     @ResponseBody
     public ResponseResult save(@JsonPathParam("$.vo") MenuVOExt vo,
                                @JsonPathParam("$.permissionEntityMapList") List<Map<String, Object>> permissionEntityMapList) {
+        if (StringUtils.isBlank(vo.getId())) {
+            vo.setCreateUserId(getCurrentUserId());
+            vo.setCreateTs(new Date());
+        } else {
+            vo.setUpdateUserId(getCurrentUserId());
+            vo.setUpdateTs(new Date());
+        }
         if (permissionEntityMapList != null && !permissionEntityMapList.isEmpty()) {
             List<PermissionVO> permissionEntities = MapUtils.mapListToBeanList(permissionEntityMapList, PermissionVO.class);
             return menuService.addOrModify(vo, permissionEntities);

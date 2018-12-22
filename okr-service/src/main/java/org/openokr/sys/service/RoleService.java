@@ -54,7 +54,6 @@ public class RoleService extends BaseServiceImpl implements IRoleService {
         if (StringUtils.isNotEmpty(inputValue)) {
             condition.createCriteria().andNameLikeIgnoreCase("%" + inputValue + "%");
         }
-        condition.setOrderByClause("position_type");
         Page resultPage = this.selectPageByCondition(condition);
         resultPage.setRecords(toVOExtList(resultPage.getRecords()));
         return resultPage;
@@ -144,7 +143,7 @@ public class RoleService extends BaseServiceImpl implements IRoleService {
         return resultList;
     }
 
-    private int countByName(String id, String name) {
+    private long countByName(String id, String name) {
         RoleEntityCondition condition = new RoleEntityCondition();
         if (StringUtils.isNotBlank(id)) {
             condition.createCriteria().andIdNotEqualTo(id).andNameEqualTo(name);

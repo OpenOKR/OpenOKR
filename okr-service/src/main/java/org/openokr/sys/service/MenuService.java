@@ -257,7 +257,7 @@ public class MenuService extends BaseServiceImpl implements IMenuService {
      * @param name
      * @return
      */
-    private int countName(String id, String name) {
+    private long countName(String id, String name) {
         MenuEntityCondition condition = new MenuEntityCondition();
         if (StringUtils.isNotBlank(id)) {
             condition.createCriteria().andIdNotEqualTo(id).andNameEqualTo(name);
@@ -273,7 +273,7 @@ public class MenuService extends BaseServiceImpl implements IMenuService {
      * @param permissionPrefixCode
      * @return
      */
-    private int countByPermissionPrefixCode(String id, String permissionPrefixCode) {
+    private long countByPermissionPrefixCode(String id, String permissionPrefixCode) {
         MenuEntityCondition condition = new MenuEntityCondition();
         if (StringUtils.isNotBlank(id)) {
             condition.createCriteria().andIdNotEqualTo(id).andPermissionPrefixCodeEqualTo(permissionPrefixCode);
@@ -288,7 +288,7 @@ public class MenuService extends BaseServiceImpl implements IMenuService {
      * @param parentId
      * @return
      */
-    private int countChildrenByParentId(String parentId) {
+    private long countChildrenByParentId(String parentId) {
         MenuEntityCondition condition = new MenuEntityCondition();
         condition.createCriteria().andParentIdEqualTo(parentId);
         return this.countByCondition(condition);

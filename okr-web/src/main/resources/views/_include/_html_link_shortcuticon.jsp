@@ -1,0 +1,1 @@
+<link rel="shortcut icon" href="${staticContextPath}/assets/images/favicon.ico" type="image/x-icon"/>

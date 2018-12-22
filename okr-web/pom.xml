@@ -206,12 +206,6 @@
             <version>${ehcache.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk16</artifactId>
-            <version>${bcprov-jdk16.version}</version>
-        </dependency>
-
         <!-- JsonPathParam依赖 -->
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>

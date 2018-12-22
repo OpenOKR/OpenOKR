@@ -29,7 +29,7 @@ public class RolePermissionService extends BaseServiceImpl implements IRolePermi
     }
 
     @Override
-    public int countByPermissionId(String permissionId) {
+    public long countByPermissionId(String permissionId) {
         RolePermissionEntityCondition condition = new RolePermissionEntityCondition();
         condition.createCriteria().andPermissionIdEqualTo(permissionId);
         return this.countByCondition(condition);
