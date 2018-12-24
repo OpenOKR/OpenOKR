@@ -39,15 +39,18 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-7">
+            <div class="col-sm-7" id="message">
                 <div class="card-title ">
                     <div class="fl">
                         <span class="title">OKR提醒</span>
-                        <em class="em-radio2 red">10</em>
+                        <em class="em-radio2 red" id="messageCount"></em>
                     </div>
                     <div class="action">
                         <a href="" class="txt-all uir">查看全部<i class="iconfont icon-arrowDR"></i></a>
                     </div>
+                </div>
+                <div class="card-area4" style="height: 356px;" id="messageItem">
+
                 </div>
             </div>
         </div>

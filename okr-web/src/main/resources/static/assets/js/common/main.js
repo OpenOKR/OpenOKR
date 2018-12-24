@@ -130,6 +130,71 @@ require(["jQuery", "countUp"], function () {
                 var barEcharts = echarts.init(document.getElementById('OKRExecutionBarEcharts'));
                 barEcharts.setOption(option);
             });
+        },
+
+        loadMessage: function () {
+            var _this = this;
+            require(["jQueryBlockUI"], function () {
+                $("#message").block();
+                $.ajax({
+                    url: App["contextPath"] + "/getOkrMessage.json",
+                    type: "GET",
+                    dataType: "json"
+                }).done(function (res) {
+                    res && _this.buildMessage(res);
+                }).always(function () {
+                    $("#message").unblock();
+                });
+            });
+        },
+
+        buildMessage: function (res) {
+            require(["Underscore", "jQueryUtils"], function () {
+                $('#messageCount').html(res.info.length);
+                var $messageItem = $("#messageItem");
+                if (res.info.length > 0) {
+                    $.each(res.info, function (idx, item) {
+                        item.createTsStr = $.DateUtils.getDateTimeString(new Date(item.createTs));
+                    });
+                    var templateText =
+                        '<ul class="new-list">' +
+                        '   [%_.each(info, function(msg, idx){%]' +
+                        '       <li>' +
+                        '           <a class="new-item">' +
+                        '               [%if(msg.mark == 1){%]' +
+                        '                   <i class="iconfont icon-waring text-primary"></i>' +
+                        '               [%} else if (msg.mark == 2) {%]' +
+                        '                   <i class="iconfont icon-succ text-success"></i>' +
+                        '               [%} else if (msg.mark == 3) {%]' +
+                        '                   <i class="iconfont icon-waring text-warning"></i>' +
+                        '               [%} else {%]' +
+                        '                   <i class="iconfont icon-tip text-danger"></i>' +
+                        '               [%}%]' +
+                        '               <h4>[%=msg.title%]：[%=msg.content%]</h4>' +
+                        '               <p>[%=msg.createTsStr%]</p>' +
+                        '               <div class="action">' +
+                        '                   [%if(msg.isProcessed == 1 && msg.isRead == 1){%]' +
+                        '                       <i class="iconfont icon-dot text-muted"></i>' +
+                        '                   [%} else {%]' +
+                        '                       <i class="iconfont icon-dot text-warning"></i>' +
+                        '                   [%}%]' +
+                        '                   <i class="iconfont icon-arrowR"></i>' +
+                        '               </div>' +
+                        '           </a>' +
+                        '       </li>' +
+                        '   [%});%]' +
+                        '</ul>';
+                    var html = UnderscoreUtil.getHtmlByText(templateText, res);
+                    $messageItem.append(html);
+                } else {
+                    $messageItem.append("<div class='meg-outer'>" +
+                        "   <div class='meg-in'>" +
+                        "       <em class='icon none1'></em>" +
+                        "       <p class='meg-desc'>暂无新消息</p>" +
+                        "   </div>" +
+                        "</div>");
+                }
+            });
         }
     });
 
@@ -146,5 +211,6 @@ require(["jQuery", "countUp"], function () {
             $this.addClass("active").siblings("li").removeClass("active");
             pageObj.loadOKRExecution($this.data("type"));
         });
+        pageObj.loadMessage();
     });
 });

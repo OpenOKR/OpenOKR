@@ -91,6 +91,10 @@ App._echarts= App.scp
 
     +"/assets/js/lib/echarts/4.1.0/";
 
+App._jQueryUtils = App.scp
+
+    +"/assets/js/lib/jQueryUtils/1.1.1-SNAPSHOT/";
+
 var require = {
     map: {
         "*": {
@@ -353,6 +357,51 @@ var require = {
                     "css!" + App._jQueryUI + "css/jquery-ui-1.10.3.custom.application.extend"] :
                 ["jQuery",
                     "css!" + App._jQueryUI + "css/jquery-ui-1.10.3.custom.all.min"]
+        },
+
+        _jQueryUtils1: {
+            deps: ["jQuery"]
+        },
+        _jQueryUtils2: {
+            deps: ["jQuery"]
+        },
+        _jQueryUtils3: {
+            deps: ["jQuery"]
+        },
+        _jQueryUtils4: {
+            deps: ["_jQueryUtils8"]
+        },
+        _jQueryUtils5: {
+            deps: ["jQuery"]
+        },
+        _jQueryUtils6: {
+            deps: ["jQuery"]
+        },
+        _jQueryUtils7: {
+            deps: ["jQuery"]
+        },
+        _jQueryUtils8: {
+            deps: ["jQuery"]
+        },
+        _jQueryUtils9: {
+            deps: ["jQuery"]
+        },
+        _jQueryUtils10: {
+            deps: ["jQuery"]
+        },
+        jQueryUtils: {
+            deps: App.src ?
+                ["_jQueryUtils1",
+                    "_jQueryUtils2",
+                    "_jQueryUtils3",
+                    "_jQueryUtils4",
+                    "_jQueryUtils5",
+                    "_jQueryUtils6",
+                    "_jQueryUtils7",
+                    "_jQueryUtils8",
+                    "_jQueryUtils9",
+                    "_jQueryUtils10"] :
+                ["jQuery"]
         }
     },
     paths: {
@@ -440,6 +489,18 @@ var require = {
         _jQueryUI5: App._jQueryUI + "jquery.ui.datepicker-" + App.lang,
         jQueryUI: ((App.src) ? App._jQueryUI + "jquery.ui.ext-" + App.lang : App._jQueryUI + "jquery-ui-1.10.4.all.min." + App.lang + ".js?ver=" + App.ver),
 
-        echarts: App._echarts + "echarts.min"
+        echarts: App._echarts + "echarts.min",
+
+        _jQueryUtils1: App._jQueryUtils + "jquery.ui.position-utils",
+        _jQueryUtils2: App._jQueryUtils + "jquery-array-utils",
+        _jQueryUtils3: App._jQueryUtils + "jquery-bool-utils",
+        _jQueryUtils4: App._jQueryUtils + "jquery-date-utils",
+        _jQueryUtils5: App._jQueryUtils + "jquery-event-utils",
+        _jQueryUtils6: App._jQueryUtils + "jquery-html-utils",
+        _jQueryUtils7: App._jQueryUtils + "jquery-number-utils",
+        _jQueryUtils8: App._jQueryUtils + "jquery-object-util",
+        _jQueryUtils9: App._jQueryUtils + "jquery-string-utils",
+        _jQueryUtils10: App._jQueryUtils + "jquery-url-utils",
+        jQueryUtils: ((App.src) ? App._jQueryUtils + "utils-application.extend" : App._jQueryUtils + "jquery-utils.all.min.js?ver=" + App.ver)
     }
 };
