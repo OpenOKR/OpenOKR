@@ -14,7 +14,6 @@ import java.util.Map;
 @Transactional
 public class IndexService extends BaseServiceImpl implements IIndexService {
 
-
     private final static String MAPPER_NAMESPACE = "org.openokr.index.sqlmapper.IndexMapper";
 
     @Override
@@ -22,8 +21,6 @@ public class IndexService extends BaseServiceImpl implements IIndexService {
         Map<String, Object> params = new HashMap<>();
         params.put("ownerId", objectivesVO.getOwnerId());
         params.put("type", objectivesVO.getType());
-        ExecutionVO execution = this.getDao().selectOneBySql(MAPPER_NAMESPACE + ".findExecutionByOwnerId", params);
-        return execution;
+        return this.getMyBatisDao().selectOneBySql(MAPPER_NAMESPACE + ".findExecutionByOwnerId", params);
     }
-
 }

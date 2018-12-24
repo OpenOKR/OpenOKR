@@ -20,22 +20,22 @@
     </div>
     <div class="card-box mt20">
         <div class="row">
-            <div class="col-sm-5">
+            <div class="col-sm-5" id="OKRExecution">
                 <div class="card-title ">
                     <div class="fl">
-                        <span class="title">OKR列表</span>
+                        <span class="title">OKR执行情况</span>
                     </div>
                 </div>
                 <div class="card-area3" >
                     <div class="card-title uil">
                         <ul class="nav-tabs2 fr" id="nav-tabs2">
-                            <li data-nav="option_me" class="active">我的</li>
-                            <li data-nav="option_trim">团队</li>
-                            <li data-nav="option_company">公司</li>
+                            <li data-type="1" class="active">我的</li>
+                            <li data-type="2">团队</li>
+                            <li data-type="3">公司</li>
                         </ul>
                     </div>
                     <div class="card-area" style="height: 288px;">
-                        <div id="ech5" style="width:100%;height:288px;"></div>
+                        <div id="OKRExecutionBarEcharts" style="width:100%;height:288px;"></div>
                     </div>
                 </div>
             </div>

@@ -1,6 +1,10 @@
 var pageObj = pageObj || {};
-require(["jQuery"], function () {
+require(["jQuery", "countUp"], function () {
     $.extend(pageObj, {
+
+        options: {useEasing : true, useGrouping : true},
+        barOptions: [],
+
         /**
          * 加载OKR列表数据，成功后渲染OKR列表html结构
          */
@@ -83,11 +87,64 @@ require(["jQuery"], function () {
                 var myChart = echarts.init(document.getElementById(id));
                 myChart.setOption(option);
             });
+        },
+
+        loadOKRExecution: function (type) {
+            var _this = this;
+            require(["jQueryBlockUI"], function () {
+                $("#OKRExecution").block();
+                $.ajax({
+                    url: App["contextPath"] + "/execution.json?type=1",
+                    type: "GET",
+                    dataType: "json"
+                }).done(function (res) {
+                    res && _this.buildOKRExecution(type, res);
+                }).always(function () {
+                    $("#OKRExecution").unblock();
+                });
+            });
+        },
+
+        buildOKRExecution: function (type, res) {
+            require(["echarts"], function (echarts){
+                var color1 = '#4d7fff', color2 = '#82aefc', color3 = '#4d7ffe';
+                switch (type) {
+                    case 2: color1 = '#fdb44d'; color2 = '#fdb44d'; color3 = '#fdbe64'; break;
+                    case 3: color1 = '#f57677'; color2 = '#f78a8a'; color3 = '#f57677'; break;
+                }
+                var option = {
+                    tooltip : {trigger: 'axis', axisPointer : {type : 'shadow'}},
+                    grid: {left: '2%', right: '2%', bottom: '3%', top:'12%', containLabel: true},
+                    xAxis : [{type : 'category', data : ['未启动', '正常', '有风险', '暂停', '提前终止', '完成'], axisTick: {alignWithLabel: true}}],
+                    yAxis : [{type : 'value', axisLine: {lineStyle: {color: '#a8a8a8'}},
+                        splitLine: {show: true, lineStyle:{type:'dashed', color:'#ebebeb'}}}],
+                    series : [{name:'执行情况', type:'bar', smooth:false, barWidth: '45%', color: [color1], itemStyle: {
+                        normal: {barBorderRadius: 3,
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1,
+                                [{offset: 0, color: color2}, {offset: 1, color: color3}])
+                            }
+                        },
+                        data:[res.info.count0, res.info.count1, res.info.count2, res.info.count3, res.info.count4, res.info.count5]
+                    }]
+                };
+                var barEcharts = echarts.init(document.getElementById('OKRExecutionBarEcharts'));
+                barEcharts.setOption(option);
+            });
         }
     });
 
     $(window).ready(function () {
         window.pageObj = pageObj;
         pageObj.loadOKRList(); //初始化OKR列表
+        $(".charts-total .num").each(function(){
+            var countUp = new CountUp(this, 0, $(this).data("end"), 2, 1, pageObj.options);
+            countUp.start();
+        });
+        pageObj.loadOKRExecution('1'); //初始化OKR执行情况
+        $("#nav-tabs2 li").click(function(){
+            var $this=$(this);
+            $this.addClass("active").siblings("li").removeClass("active");
+            pageObj.loadOKRExecution($this.data("type"));
+        });
     });
 });
