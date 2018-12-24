@@ -16,31 +16,7 @@
                 <span class="title">OKR列表</span>
             </div>
         </div>
-        <div class="row card-area">
-            <div class="col-sm-3">
-                <div class="card-area2" >
-                    <strong class="cart-tag">公司</strong>
-                    <div class="area-report">
-                        <h3>Q4新客户数量增加50%</h3>
-                        <P>优化产品体验，第四季度新客户数量增加50%</P>
-                        <div class="participant">
-                            <span class="name">参与人员：</span>
-                            <ul class="participant-list">
-                                <li class="part-item"><span><img src="${staticContextPath}/assets/images/temp/pic.png"/></span></li>
-                                <li class="part-item"><span><img src="${staticContextPath}/assets/images/temp/pic.png"/></span></li>
-                                <li class="part-item"><a href=""><i class="iconfont icon-more"></i></a></li>
-                            </ul>
-                        </div>
-                        <div class="area-charts">
-                            <div id="ech1" style="width:100%;height:100%;"></div>
-                            <div class="charts-total"><span class="num" data-end="20">20</span><em>%</em></div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <!--第一个卡片-->
-        </div>
+        <div class="row card-area" id="OKRList"></div>
     </div>
     <div class="card-box mt20">
         <div class="row">

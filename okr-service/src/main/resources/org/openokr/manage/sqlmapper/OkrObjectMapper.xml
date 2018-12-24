@@ -5,7 +5,7 @@
     <!--获取所有的OKR信息(包括个人、团队、公司的OKR)-->
     <select id="getAllOkrList" parameterType="java.util.Map" resultType="org.openokr.manage.vo.ObjectivesExtVO">
         select t.* from (
-        select t1.*
+        select t1.*, '个人' as teamName
         from t_okr_manage_objectives t1
         where t1.del_flag='0'
         and t1.type = '1'

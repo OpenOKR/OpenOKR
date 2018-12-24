@@ -1,5 +1,6 @@
 package org.openokr.manage.vo;
 
+import org.openokr.manage.enumerate.ObjectivesTypeEnum;
 import org.openokr.sys.vo.UserVO;
 
 import java.io.Serializable;
@@ -9,6 +10,8 @@ public class ObjectivesExtVO extends ObjectivesVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private String typeName;
+
     // 团队名称
     private String teamName;
 
@@ -16,6 +19,14 @@ public class ObjectivesExtVO extends ObjectivesVO implements Serializable {
     private List<UserVO> joinUsers;
 
     private List<ResultsExtVO> resultsExtList;
+
+    public String getTypeName() {
+        return ObjectivesTypeEnum.getByCode(getType()).getName();
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
 
     public List<UserVO> getJoinUsers() {
         return joinUsers;

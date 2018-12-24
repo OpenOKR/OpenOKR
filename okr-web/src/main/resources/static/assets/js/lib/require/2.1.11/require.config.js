@@ -87,6 +87,10 @@ App._jQueryUI = App.scp
 
     +"/assets/js/lib/jQueryUI/1.10.4.ext.0.2-SNAPSHOT/";
 
+App._echarts= App.scp
+
+    +"/assets/js/lib/echarts/4.1.0/";
+
 var require = {
     map: {
         "*": {
@@ -434,6 +438,8 @@ var require = {
         _jQueryUI3: App._jQueryUI + "jquery-ui-1.10.4-extend",
         _jQueryUI4: App._jQueryUI + "jquery-ui-1.10.4.application.extend",
         _jQueryUI5: App._jQueryUI + "jquery.ui.datepicker-" + App.lang,
-        jQueryUI: ((App.src) ? App._jQueryUI + "jquery.ui.ext-" + App.lang : App._jQueryUI + "jquery-ui-1.10.4.all.min." + App.lang + ".js?ver=" + App.ver)
+        jQueryUI: ((App.src) ? App._jQueryUI + "jquery.ui.ext-" + App.lang : App._jQueryUI + "jquery-ui-1.10.4.all.min." + App.lang + ".js?ver=" + App.ver),
+
+        echarts: App._echarts + "echarts.min"
     }
 };
