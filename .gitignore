@@ -27,3 +27,8 @@ hs_err_pid*
 /log
 *.iml
 /ehcache
+
+# modules target path
+/okr-api/target
+/okr-service/target
+/okr-web/target
