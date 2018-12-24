@@ -64,6 +64,11 @@ public class MessagesVO extends BaseVO implements Serializable {
      */
     private String updateUserId;
 
+    /**
+     * 是否已读 0.未读 1.已读
+     */
+    private String isRead;
+
 
 
     /**
@@ -218,6 +223,20 @@ public class MessagesVO extends BaseVO implements Serializable {
      */
     public void setUpdateUserId(String updateUserId) {
         this.updateUserId = updateUserId;
+    }
+
+    /**
+     * 是否已读 0.未读 1.已读
+     */
+    public String getIsRead() {
+        return isRead;
+    }
+
+    /**
+     * 是否已读 0.未读 1.已读
+     */
+    public void setIsRead(String isRead) {
+        this.isRead = isRead;
     }
 
 }

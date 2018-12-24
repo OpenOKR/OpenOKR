@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.openokr.index.sqlmapper.IndexMapper">
+
+    <!--获取KR执行情况-->
+    <select id="findExecutionByOwnerId" parameterType="java.util.Map" resultType="org.openokr.index.vo.ExecutionVO">
+         select
+          sum(case when t2.status='0' then 1 else 0 end) as count_0,
+          sum(case when t2.status='1' then 1 else 0 end) as count_1,
+          sum(case when t2.status='2' then 1 else 0 end) as count_2,
+          sum(case when t2.status='3' then 1 else 0 end) as count_3,
+          sum(case when t2.status='4' then 1 else 0 end) as count_4,
+          sum(case when t2.status='5' then 1 else 0 end) as count_5
+          from t_okr_manage_objectives t1
+        left join t_okr_manage_results t2 on t1.id =t2.object_id
+        where t1.del_flag='0' and t2.del_flag='0'
+        <if test="ownerId != null and ownerId != ''">
+            AND t1.owner_id = #{ownerId}
+        </if>
+        <if test="type != null and type != ''">
+            AND t1.type = #{type}
+        </if>
+    </select>
+
+</mapper>

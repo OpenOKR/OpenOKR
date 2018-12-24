@@ -4,8 +4,8 @@
 
     <select id="getMenuByName" parameterType="java.util.Map" resultType="org.openokr.sys.vo.MenuVO">
         select t1.*
-        from t_pfm_ssm_menu t1
-        where t1.name = #{name}
+        from t_okr_sys_menu t1
+        where t1.name = #{name} and t1.create_user_id=#{createUserId}
     </select>
 
 </mapper>

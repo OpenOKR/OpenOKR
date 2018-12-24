@@ -6,7 +6,10 @@
        http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd" default-lazy-init="true">
 
     <!-- okr -->
-    <dubbo:reference interface="org.openokr.personal.service.IPersonalOkrService" id="personalOkrService"/>
+    <dubbo:reference interface="org.openokr.index.service.IIndexService" id="indexService"/>
+    <dubbo:reference interface="org.openokr.manage.service.IOkrResultService" id="okrResultService"/>
+    <dubbo:reference interface="org.openokr.manage.service.IOkrObjectService" id="okrObjectService"/>
+    <dubbo:reference interface="org.openokr.manage.service.IOkrMessageService" id="okrMessageService"/>
 
     <!-- sys -->
     <dubbo:reference interface="org.openokr.sys.service.IMenuService" id="menuService"/>

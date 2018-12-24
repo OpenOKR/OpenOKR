@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.openokr.manage.sqlmapper.OkrMessageMapper">
+
+    <!-- 查询我的消息提醒 start -->
+    <select id="countCenterReportAudit" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(t1.*)
+        from t_okr_messages t1
+        where 1=1
+    </select>
+
+    <select id="getMessageList" parameterType="java.util.Map" resultType="org.openokr.manage.vo.MessagesVO">
+        select t1.*
+        from t_okr_messages t1
+        where 1=1
+        order by t1.create_ts desc
+        <if test="page != null">
+            <![CDATA[ limit #{page.pageSize} offset (#{page.recordStart}-1) ]]>
+        </if>
+        <!--page与limitAmount不会同时传进来-->
+        <if test="limitAmount != null and limitAmount != ''">
+            limit #{limitAmount}
+        </if>
+    </select>
+    <!-- 查询我的消息提醒 end -->
+
+</mapper>

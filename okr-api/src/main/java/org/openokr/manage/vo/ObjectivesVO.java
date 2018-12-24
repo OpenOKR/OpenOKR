@@ -66,7 +66,7 @@ public class ObjectivesVO extends BaseVO implements Serializable {
     private String delFlag;
 
     /**
-     * 当年进度（百分比)
+     * 当前进度（百分比)
      */
     private BigDecimal progress;
 
@@ -99,6 +99,11 @@ public class ObjectivesVO extends BaseVO implements Serializable {
      * 更新者
      */
     private String updateUserId;
+
+    /**
+     * 团队ID(type为团队和公司的时候才存储)
+     */
+    private String teamId;
 
 
 
@@ -257,14 +262,14 @@ public class ObjectivesVO extends BaseVO implements Serializable {
     }
 
     /**
-     * 当年进度（百分比)
+     * 当前进度（百分比)
      */
     public BigDecimal getProgress() {
         return progress;
     }
 
     /**
-     * 当年进度（百分比)
+     * 当前进度（百分比)
      */
     public void setProgress(BigDecimal progress) {
         this.progress = progress;
@@ -352,6 +357,20 @@ public class ObjectivesVO extends BaseVO implements Serializable {
      */
     public void setUpdateUserId(String updateUserId) {
         this.updateUserId = updateUserId;
+    }
+
+    /**
+     * 团队ID(type为团队和公司的时候才存储)
+     */
+    public String getTeamId() {
+        return teamId;
+    }
+
+    /**
+     * 团队ID(type为团队和公司的时候才存储)
+     */
+    public void setTeamId(String teamId) {
+        this.teamId = teamId;
     }
 
 }

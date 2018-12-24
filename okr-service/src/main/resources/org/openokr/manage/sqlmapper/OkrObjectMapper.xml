@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.openokr.manage.sqlmapper.OkrObjectMapper">
+
+    <!--获取所有的OKR信息(包括个人、团队、公司的OKR)-->
+    <select id="getAllOkrList" parameterType="java.util.Map" resultType="org.openokr.manage.vo.ObjectivesExtVO">
+        select t.* from (
+        select t1.*
+        from t_okr_manage_objectives t1
+        where t1.del_flag='0'
+        and t1.type = '1'
+        and t1.owner_id = #{userId}
+
+        union all
+        select t1.*,t3.name as teamName
+        from t_okr_manage_objectives t1
+        left join t_okr_team_user_rela t2 on t2.team_id=t1.team_id
+        left join t_okr_teams t3 on t3.id=t2.team_id
+        where t1.del_flag='0'
+        and t1.type='2'
+        and t2.user_id= #{userId}
+
+        union all
+        select t1.*,t2.name as teamName
+        from t_okr_manage_objectives t1
+        left join t_okr_teams t2 on t2.id=t1.team_id
+        where t1.del_flag='0'
+        and t1.type='3'
+        and t2.type='1'
+        ) t
+        order by t.create_ts desc
+        <if test="limitAmount != null and limitAmount != ''">
+           limit #{limitAmount}
+        </if>
+    </select>
+
+    <select id="getJoinUsersByObjectId" parameterType="java.util.Map" resultType="org.openokr.sys.vo.UserVO">
+        select distinct t4.id ,t4.user_name
+        from t_okr_manage_objectives t1
+        left join t_okr_manage_results t2 on t2.object_id=t1.id
+        left join t_okr_manage_result_user_rela t3 on t3.result_id =t2.id
+        left join t_okr_sys_user t4 on t4.id = t3.user_id
+        where t1.id=#{objectId} and t2.del_flag='0'
+        order by t4.user_name
+        <if test="limitAmount != null and limitAmount != ''">
+            limit #{limitAmount}
+        </if>
+    </select>
+
+    <!--获取个人OKR-->
+    <select id="getPersonalOkrList" parameterType="java.util.Map" resultType="org.openokr.manage.vo.ObjectivesExtVO">
+        select t1.*
+        from t_okr_manage_objectives t1
+        left join t_okr_manage_results t2 on t2.object_id=t1.id and t2.del_flag='0'
+        where t1.del_flag='0'
+        and t1.type = '1'
+        and t1.owner_id = #{userId}
+        order by t1.create_ts desc
+        <if test="keyword != null and keyword != ''">
+            AND (
+               t1.name LIKE CONCAT('%', #{keyword}, '%')
+            or t1.description LIKE CONCAT('%', #{keyword}, '%')
+            or t2.name LIKE CONCAT('%', #{keyword}, '%')
+            or t2.description LIKE CONCAT('%', #{keyword}, '%')
+            )
+        </if>
+        <if test="executeStatus != null and !executeStatus.isEmpty()">
+            AND t2.status = #{executeStatus}
+        </if>
+    </select>
+
+    <!--获取KR的参与人员-->
+    <select id="getJoinUsersByResultId" parameterType="java.util.Map" resultType="org.openokr.sys.vo.UserVO">
+        select distinct t4.id ,t4.user_name
+        from t_okr_manage_results t2
+        left join t_okr_manage_result_user_rela t3 on t3.result_id =t2.id
+        left join t_okr_sys_user t4 on t4.id = t3.user_id
+        where t2.id=#{resultId} and t2.del_flag='0'
+        order by t4.user_name
+        <if test="limitAmount != null and limitAmount != ''">
+            limit #{limitAmount}
+        </if>
+    </select>
+
+
+</mapper>

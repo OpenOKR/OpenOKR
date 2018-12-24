@@ -7,7 +7,10 @@
 	default-lazy-init="true">
 
 	<!-- okr -->
-	<dubbo:service interface="org.openokr.personal.service.IPersonalOkrService" ref="personalOkrService"/>
+	<dubbo:service interface="org.openokr.index.service.IIndexService" ref="indexService"/>
+	<dubbo:service interface="org.openokr.manage.service.IOkrResultService" ref="okrResultService"/>
+	<dubbo:service interface="org.openokr.manage.service.IOkrObjectService" ref="okrObjectService"/>
+	<dubbo:service interface="org.openokr.manage.service.IOkrMessageService" ref="okrMessageService"/>
 
 	<!-- sys -->
 	<dubbo:service interface="org.openokr.sys.service.IMenuService" ref="menuService"/>

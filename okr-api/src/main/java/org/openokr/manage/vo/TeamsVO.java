@@ -59,6 +59,11 @@ public class TeamsVO extends BaseVO implements Serializable {
      */
     private String updateUserId;
 
+    /**
+     * 团队类型 1.公司团队 2.其他团队
+     */
+    private String type;
+
 
 
     /**
@@ -199,6 +204,20 @@ public class TeamsVO extends BaseVO implements Serializable {
      */
     public void setUpdateUserId(String updateUserId) {
         this.updateUserId = updateUserId;
+    }
+
+    /**
+     * 团队类型 1.公司团队 2.其他团队
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * 团队类型 1.公司团队 2.其他团队
+     */
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

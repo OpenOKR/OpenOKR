@@ -79,6 +79,11 @@ public class UserVO extends BaseVO implements Serializable {
      */
     private Date updateTs;
 
+    /**
+     * 个人头像URL地址
+     */
+    private String photoUrl;
+
 
 
     /**
@@ -275,6 +280,20 @@ public class UserVO extends BaseVO implements Serializable {
      */
     public void setUpdateTs(Date updateTs) {
         this.updateTs = updateTs;
+    }
+
+    /**
+     * 个人头像URL地址
+     */
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    /**
+     * 个人头像URL地址
+     */
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 
 }

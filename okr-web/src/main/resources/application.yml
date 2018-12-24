@@ -30,7 +30,7 @@ framework:
     application:
       name: okr-web
     registry1:
-      address: zookeeper://127.0.0.1:2181;zookeeper://127.0.0.1:2182
+      address: zookeeper://127.0.0.1:2181
       file: /data/log/okr/okr-web-log/okr-web-dubbo1.cache
 
 logging:

@@ -76,7 +76,7 @@ public class ResultsVO extends BaseVO implements Serializable {
     private String delFlag;
 
     /**
-     * 当年进度（百分比)
+     * 当前进度（百分比)
      */
     private BigDecimal progress;
 
@@ -285,14 +285,14 @@ public class ResultsVO extends BaseVO implements Serializable {
     }
 
     /**
-     * 当年进度（百分比)
+     * 当前进度（百分比)
      */
     public BigDecimal getProgress() {
         return progress;
     }
 
     /**
-     * 当年进度（百分比)
+     * 当前进度（百分比)
      */
     public void setProgress(BigDecimal progress) {
         this.progress = progress;
