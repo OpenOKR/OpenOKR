@@ -13,6 +13,11 @@
         select t1.*
         from t_okr_messages t1
         where 1=1
+        <!--page与limitAmount不会同时传进来-->
+        <if test="limitAmount != null and limitAmount != ''">
+            <!--只查询未处理或者未读的消息-->
+            and (t1.is_processed='0' or t1.is_read='0')
+        </if>
         order by t1.create_ts desc
         <if test="page != null">
             <![CDATA[ limit #{page.pageSize} offset (#{page.recordStart}-1) ]]>

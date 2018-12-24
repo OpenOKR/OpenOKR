@@ -6,11 +6,15 @@
 		http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
 	default-lazy-init="true">
 
+	<!-- base -->
+	<dubbo:service interface="org.openokr.application.framework.service.IOkrBaseService" ref="okrBaseService"/>
+
 	<!-- okr -->
 	<dubbo:service interface="org.openokr.index.service.IIndexService" ref="indexService"/>
 	<dubbo:service interface="org.openokr.manage.service.IOkrResultService" ref="okrResultService"/>
 	<dubbo:service interface="org.openokr.manage.service.IOkrObjectService" ref="okrObjectService"/>
 	<dubbo:service interface="org.openokr.manage.service.IOkrMessageService" ref="okrMessageService"/>
+	<dubbo:service interface="org.openokr.manage.service.IOkrTeamService" ref="okrTeamService"/>
 
 	<!-- sys -->
 	<dubbo:service interface="org.openokr.sys.service.IMenuService" ref="menuService"/>

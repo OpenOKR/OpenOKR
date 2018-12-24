@@ -85,6 +85,7 @@ public class IndexController extends BaseController {
 
     /**
      * 获取OKR消息提醒
+     * 只查询未处理或者未读的消息
      * @return
      */
     @RequestMapping(value = "/getOkrMessage.json")

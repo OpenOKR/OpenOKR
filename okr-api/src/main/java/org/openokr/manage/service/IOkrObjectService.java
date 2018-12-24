@@ -1,7 +1,9 @@
 package org.openokr.manage.service;
 
 
+import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.exception.BusinessException;
+import org.openokr.manage.vo.LogVO;
 import org.openokr.manage.vo.ObjectivesExtVO;
 import org.openokr.manage.vo.OkrObjectSearchVO;
 import org.openokr.sys.vo.UserVO;
@@ -29,6 +31,14 @@ public interface IOkrObjectService {
      * @return
      */
     List<UserVO> getJoinUsersByObjectId(String objectId, Integer limitAmount);
+
+    /**
+     * 根据类型或者OKR列表
+     * @param searchVO
+     * @return
+     * @throws BusinessException
+     */
+    List<ObjectivesExtVO> getOkrListByType(OkrObjectSearchVO searchVO) throws BusinessException;
 
     /**
      * 获取KR的参与人员
@@ -62,4 +72,33 @@ public interface IOkrObjectService {
      * @throws BusinessException
      */
     List<ObjectivesExtVO> getCompanyOkrList(OkrObjectSearchVO searchVO) throws BusinessException;
+
+    /**
+     * 获取OKR的历史操作记录
+     * @param objectId
+     * @param resultIds KR的所有ID
+     * @return
+     * @throws BusinessException
+     */
+    List<LogVO> getOperateRecordList(String objectId, List<String> resultIds) throws BusinessException;
+
+    /**
+     * 删除目标
+     * @param objectId 目标ID
+     * @param userId
+     * @return
+     * @throws BusinessException
+     */
+    ResponseResult deleteObject(String objectId, String userId) throws BusinessException;
+
+    /**
+     * 删除关键结果
+     * @param resultId 关键结果ID
+     * @param userId
+     * @return
+     * @throws BusinessException
+     */
+    ResponseResult deleteResult(String resultId, String userId) throws BusinessException;
+
+
 }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.openokr.manage.sqlmapper.OkrObjectMapper">
+
+    <!--获取个人OKR-->
+    <select id="getTeamByUserId" parameterType="java.util.Map" resultType="org.openokr.manage.vo.TeamsVO">
+        select t1.id, t1.name
+        from t_okr_teams t1
+        left join t_okr_team_user_rela t2 on t2.team_id=t1.id
+        and t1.type='2'
+        and t2.user_id= #{userId}
+    </select>
+
+
+</mapper>

@@ -10,6 +10,7 @@
     <dubbo:reference interface="org.openokr.manage.service.IOkrResultService" id="okrResultService"/>
     <dubbo:reference interface="org.openokr.manage.service.IOkrObjectService" id="okrObjectService"/>
     <dubbo:reference interface="org.openokr.manage.service.IOkrMessageService" id="okrMessageService"/>
+    <dubbo:reference interface="org.openokr.manage.service.IOkrTeamService" id="okrTeamService"/>
 
     <!-- sys -->
     <dubbo:reference interface="org.openokr.sys.service.IMenuService" id="menuService"/>
