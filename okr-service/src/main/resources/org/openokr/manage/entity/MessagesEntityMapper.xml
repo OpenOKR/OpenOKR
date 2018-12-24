@@ -14,6 +14,7 @@
     <result column="update_ts" jdbcType="TIMESTAMP" property="updateTs" />
     <result column="update_user_id" jdbcType="VARCHAR" property="updateUserId" />
     <result column="is_read" jdbcType="CHAR" property="isRead" />
+    <result column="mark" jdbcType="CHAR" property="mark" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -75,7 +76,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, user_id, title, content, type, target_id, is_processed, create_ts, create_user_id, 
-    update_ts, update_user_id, is_read
+    update_ts, update_user_id, is_read, mark
   </sql>
   <select id="selectByCondition" parameterType="org.openokr.manage.entity.MessagesEntityCondition" resultMap="BaseResultMap">
     select
@@ -143,6 +144,9 @@
       <if test="record.isRead != null">
         is_read = #{record.isRead,jdbcType=CHAR},
       </if>
+      <if test="record.mark != null">
+        mark = #{record.mark,jdbcType=CHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -154,9 +158,9 @@
     </if>
   </sql>
   <insert id="insertList" parameterType="java.util.List">
-     insert into t_okr_messages ( id,user_id,title,content,type,target_id,is_processed,create_ts,create_user_id,update_ts,update_user_id,is_read ) values
+     insert into t_okr_messages ( id,user_id,title,content,type,target_id,is_processed,create_ts,create_user_id,update_ts,update_user_id,is_read,mark ) values
     <foreach collection="list" index="index" item="item" separator=",">
-       ( #{item.id,jdbcType=VARCHAR},#{item.userId,jdbcType=VARCHAR},#{item.title,jdbcType=VARCHAR},#{item.content,jdbcType=VARCHAR},#{item.type,jdbcType=CHAR},#{item.targetId,jdbcType=VARCHAR},#{item.isProcessed,jdbcType=CHAR},#{item.createTs,jdbcType=TIMESTAMP},#{item.createUserId,jdbcType=VARCHAR},#{item.updateTs,jdbcType=TIMESTAMP},#{item.updateUserId,jdbcType=VARCHAR},#{item.isRead,jdbcType=CHAR} )
+       ( #{item.id,jdbcType=VARCHAR},#{item.userId,jdbcType=VARCHAR},#{item.title,jdbcType=VARCHAR},#{item.content,jdbcType=VARCHAR},#{item.type,jdbcType=CHAR},#{item.targetId,jdbcType=VARCHAR},#{item.isProcessed,jdbcType=CHAR},#{item.createTs,jdbcType=TIMESTAMP},#{item.createUserId,jdbcType=VARCHAR},#{item.updateTs,jdbcType=TIMESTAMP},#{item.updateUserId,jdbcType=VARCHAR},#{item.isRead,jdbcType=CHAR},#{item.mark,jdbcType=CHAR} )
     </foreach>
   </insert>
 </mapper>

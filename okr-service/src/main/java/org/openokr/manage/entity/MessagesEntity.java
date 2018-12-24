@@ -46,6 +46,9 @@ public class MessagesEntity extends BaseEntity implements Serializable {
     /** 是否已读 0.未读 1.已读 */
     private String isRead;
 
+    /** 消息类型标记 1.提交审核、修改KR等等 2、审核通过、同意等等 3、审核不通过、不同意 4、系统消息 */
+    private String mark;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -244,6 +247,24 @@ public class MessagesEntity extends BaseEntity implements Serializable {
     public void setIsRead(String isRead) {
         this.isRead = isRead;
         addSettedField("isRead");
+    }
+
+    /**
+     * 消息类型标记 1.提交审核、修改KR等等 2、审核通过、同意等等 3、审核不通过、不同意 4、系统消息
+     * @return mark
+     */
+    @Column(name = "mark")
+    public String getMark() {
+        return mark;
+    }
+
+    /**
+     * 消息类型标记 1.提交审核、修改KR等等 2、审核通过、同意等等 3、审核不通过、不同意 4、系统消息
+     * @param mark
+     */
+    public void setMark(String mark) {
+        this.mark = mark;
+        addSettedField("mark");
     }
 
     /**

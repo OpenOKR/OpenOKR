@@ -933,6 +933,76 @@ public class MessagesEntityCondition extends BaseEntityCondition implements Seri
             return (Criteria) this;
         }
 
+        public Criteria andMarkIsNull() {
+            addCriterion("mark is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMarkIsNotNull() {
+            addCriterion("mark is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMarkEqualTo(String value) {
+            addCriterion("mark =", value, "mark");
+            return (Criteria) this;
+        }
+
+        public Criteria andMarkNotEqualTo(String value) {
+            addCriterion("mark <>", value, "mark");
+            return (Criteria) this;
+        }
+
+        public Criteria andMarkGreaterThan(String value) {
+            addCriterion("mark >", value, "mark");
+            return (Criteria) this;
+        }
+
+        public Criteria andMarkGreaterThanOrEqualTo(String value) {
+            addCriterion("mark >=", value, "mark");
+            return (Criteria) this;
+        }
+
+        public Criteria andMarkLessThan(String value) {
+            addCriterion("mark <", value, "mark");
+            return (Criteria) this;
+        }
+
+        public Criteria andMarkLessThanOrEqualTo(String value) {
+            addCriterion("mark <=", value, "mark");
+            return (Criteria) this;
+        }
+
+        public Criteria andMarkLike(String value) {
+            addCriterion("mark like", value, "mark");
+            return (Criteria) this;
+        }
+
+        public Criteria andMarkNotLike(String value) {
+            addCriterion("mark not like", value, "mark");
+            return (Criteria) this;
+        }
+
+        public Criteria andMarkIn(List<String> values) {
+            addCriterion("mark in", values, "mark");
+            return (Criteria) this;
+        }
+
+        public Criteria andMarkNotIn(List<String> values) {
+            addCriterion("mark not in", values, "mark");
+            return (Criteria) this;
+        }
+
+        public Criteria andMarkBetween(String value1, String value2) {
+            addCriterion("mark between", value1, value2, "mark");
+            return (Criteria) this;
+        }
+
+        public Criteria andMarkNotBetween(String value1, String value2) {
+            addCriterion("mark not between", value1, value2, "mark");
+            return (Criteria) this;
+        }
+
         public Criteria andIdLikeInsensitive(String value) {
             addCriterion("upper(id) like", value.toUpperCase(), "id");
             return (Criteria) this;
@@ -980,6 +1050,11 @@ public class MessagesEntityCondition extends BaseEntityCondition implements Seri
 
         public Criteria andIsReadLikeInsensitive(String value) {
             addCriterion("upper(is_read) like", value.toUpperCase(), "isRead");
+            return (Criteria) this;
+        }
+
+        public Criteria andMarkLikeInsensitive(String value) {
+            addCriterion("upper(mark) like", value.toUpperCase(), "mark");
             return (Criteria) this;
         }
 
@@ -1130,6 +1205,21 @@ public class MessagesEntityCondition extends BaseEntityCondition implements Seri
          */
         public Criteria andIsReadLikeIgnoreCase(String value) {
             addCriterion("upper(is_read) like ", value.toUpperCase(), "isRead");
+            return (Criteria) this;
+        }
+
+        /**
+         *(扩展Mybatis原生like的不足)
+         *忽略字段大小写的模糊查询
+         *Java编码如下：
+         *  criteria.andNameLikeIgnoreCase("%Abc%"); 前后模糊,A字母大写
+         *  criteria.andName2LikeIgnoreCase("%aBc"); 前模糊,B字母大写
+         *  criteria.andName3LikeIgnoreCase("abC%"); 后模糊,C字母大写
+         *执行时SQL如下:
+         *  where name like '%abc%' or name2 like '%abc' or name3 like 'abc%'
+         */
+        public Criteria andMarkLikeIgnoreCase(String value) {
+            addCriterion("upper(mark) like ", value.toUpperCase(), "mark");
             return (Criteria) this;
         }
     }

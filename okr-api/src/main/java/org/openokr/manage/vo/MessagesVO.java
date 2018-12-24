@@ -69,6 +69,11 @@ public class MessagesVO extends BaseVO implements Serializable {
      */
     private String isRead;
 
+    /**
+     * 消息类型标记 1.提交审核、修改KR等等 2、审核通过、同意等等 3、审核不通过、不同意 4、系统消息
+     */
+    private String mark;
+
 
 
     /**
@@ -237,6 +242,20 @@ public class MessagesVO extends BaseVO implements Serializable {
      */
     public void setIsRead(String isRead) {
         this.isRead = isRead;
+    }
+
+    /**
+     * 消息类型标记 1.提交审核、修改KR等等 2、审核通过、同意等等 3、审核不通过、不同意 4、系统消息
+     */
+    public String getMark() {
+        return mark;
+    }
+
+    /**
+     * 消息类型标记 1.提交审核、修改KR等等 2、审核通过、同意等等 3、审核不通过、不同意 4、系统消息
+     */
+    public void setMark(String mark) {
+        this.mark = mark;
     }
 
 }
