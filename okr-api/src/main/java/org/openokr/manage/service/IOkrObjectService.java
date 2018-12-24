@@ -46,4 +46,20 @@ public interface IOkrObjectService {
      * @throws BusinessException
      */
     List<ObjectivesExtVO> getPersonalOkrList(OkrObjectSearchVO searchVO) throws BusinessException;
+
+    /**
+     * 获取团队OKR
+     * @param searchVO
+     * @return
+     * @throws BusinessException
+     */
+    List<ObjectivesExtVO> getTeamOkrList(OkrObjectSearchVO searchVO) throws BusinessException;
+
+    /**
+     * 获取公司OKR
+     * @param searchVO
+     * @return
+     * @throws BusinessException
+     */
+    List<ObjectivesExtVO> getCompanyOkrList(OkrObjectSearchVO searchVO) throws BusinessException;
 }

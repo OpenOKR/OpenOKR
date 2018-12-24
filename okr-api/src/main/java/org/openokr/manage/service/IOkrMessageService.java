@@ -22,4 +22,13 @@ public interface IOkrMessageService {
      * @throws BusinessException
      */
     List<MessagesVO> getMessageList(Page page, String userId, Integer limitAmount) throws BusinessException;
+
+    /**
+     * 分页获取消息列表
+     * @param page
+     * @param userId
+     * @return
+     * @throws BusinessException
+     */
+    Page getMessageByPage(Page page, String userId) throws BusinessException;
 }

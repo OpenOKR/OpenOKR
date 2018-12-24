@@ -1,5 +1,6 @@
 package org.openokr.manage.web;
 
+import org.openokr.application.web.BaseController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -10,6 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping("/result")
-public class OkrResultController {
+public class OkrResultController extends BaseController {
 
 }

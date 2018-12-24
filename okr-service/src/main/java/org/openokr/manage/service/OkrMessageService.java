@@ -31,6 +31,21 @@ public class OkrMessageService extends BaseServiceImpl implements IOkrMessageSer
         return  messageList;
     }
 
+    @Override
+    public Page getMessageByPage(Page page, String userId) throws BusinessException {
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", userId);
+        params.put("page", page);
+        // 查询总数
+        int count = this.getMyBatisDao().selectOneBySql(MAPPER_NAMESPACE + ".countMessageList", params);
+        page.setTotalRecord(count);
+        // 查询分页
+        List<MessagesVO> messageList = this.getMessageList(page, userId, null);
+        page.setRecords(messageList);
+
+        return  page;
+    }
+
     public ResponseResult dealMessage(String messageId, String userId) throws BusinessException {
         ResponseResult result = new ResponseResult();
         try {

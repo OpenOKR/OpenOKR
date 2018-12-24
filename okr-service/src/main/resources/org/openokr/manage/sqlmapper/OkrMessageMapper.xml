@@ -3,7 +3,7 @@
 <mapper namespace="org.openokr.manage.sqlmapper.OkrMessageMapper">
 
     <!-- 查询我的消息提醒 start -->
-    <select id="countCenterReportAudit" parameterType="java.util.Map" resultType="java.lang.Integer">
+    <select id="countMessageList" parameterType="java.util.Map" resultType="java.lang.Integer">
         select count(t1.*)
         from t_okr_messages t1
         where 1=1
