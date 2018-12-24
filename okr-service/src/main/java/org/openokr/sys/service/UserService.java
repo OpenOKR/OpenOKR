@@ -50,16 +50,6 @@ public class UserService extends BaseServiceImpl implements IUserService {
     }
 
     @Override
-    public Set<String> findPermissionById(String id) {
-        String sql = "SELECT t4.code FROM t_okr_sys_user t1, t_okr_sys_user_role t2, t_okr_sys_role_permission t3,t_okr_sys_permission t4" +
-                " WHERE t1.id = t2.user_id AND t2.role_id = t3.role_id AND t3.permission_id= t4.id AND t1.id = #{userId}";
-        Map<String, Object> parameterMap = new HashMap<>();
-        parameterMap.put("userId", id);
-        Map<String, String> permissionsMap = this.getDao().selectMapByDynamicSql(sql, parameterMap, "code");
-        return permissionsMap.keySet();
-    }
-
-    @Override
     public Page findByPageLikeInputValue(Page page, String inputValue, UserVOExt user) {
         Map<String, Object> parameterMap = new HashMap<>();
         if (StringUtils.isNotEmpty(inputValue)) {
@@ -195,6 +185,13 @@ public class UserService extends BaseServiceImpl implements IUserService {
         } else {
             return new ResponseResult("密码修改失败", false);
         }
+    }
+
+    @Override
+    public long countByOrganizationId(String organizationId) {
+        UserEntityCondition condition = new UserEntityCondition();
+        condition.createCriteria().andOrganizationIdEqualTo(organizationId);
+        return this.countByCondition(condition);
     }
 
     private long countByUsername(String id, String username) {

@@ -26,6 +26,10 @@ public class BaseController {
         return getCurrentUser().getId();
     }
 
+    protected String getCurrentOrganizationId() {
+        return getCurrentUser().getOrganizationId();
+    }
+
     /**
      * 客户端返回JSON字符串
      *

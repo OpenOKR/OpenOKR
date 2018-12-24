@@ -20,33 +20,34 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@RequestMapping("/sys")
 public class MenuController extends BaseController {
 
     @Autowired
     private IMenuService menuService;
 
     @RequiresPermissions("Menu:view")
-    @GetMapping(value = "/sys/menu.htm")
+    @GetMapping(value = "/menu.htm")
     public String index() {
         return "sys/menu";
     }
 
     @RequiresPermissions("Menu:view")
-    @GetMapping(value = "/sys/menu/findContainPermissionOfAll.json")
+    @GetMapping(value = "/menu/findContainPermissionOfAll.json")
     @ResponseBody
     public List<MenuVOExt> findContainPermissionOfAll() {
         return menuService.findContainPermissionOfAll();
     }
 
     @RequiresPermissions("Menu:view")
-    @PostMapping(value = "/sys/menu/findAll.json")
+    @PostMapping(value = "/menu/findAll.json")
     @ResponseBody
     public List<MenuVOExt> findAll() {
         return menuService.findAll();
     }
 
     @RequiresPermissions("Menu:edit")
-    @PostMapping(value = "/sys/menu/save.json")
+    @PostMapping(value = "/menu/save.json")
     @ResponseBody
     public ResponseResult save(@JsonPathParam("$.vo") MenuVOExt vo,
                                @JsonPathParam("$.permissionEntityMapList") List<Map<String, Object>> permissionEntityMapList) {
@@ -66,7 +67,7 @@ public class MenuController extends BaseController {
     }
 
     //@RequiresPermissions("Menu:view")这里不限制权限，SQL查询指定关联了用户
-    @GetMapping(value = "/sys/menu/findTreeOfView.json")
+    @GetMapping(value = "/menu/findTreeOfView.json")
     @ResponseBody
     public MenuVOExt findTreeOfView() {
         AuthRealm.Principal principal = UserUtils.getPrincipal();
@@ -74,7 +75,7 @@ public class MenuController extends BaseController {
     }
 
     @RequiresPermissions("Menu:view")
-    @GetMapping(value = "/sys/menu/findOfView.json")
+    @GetMapping(value = "/menu/findOfView.json")
     @ResponseBody
     public List<MenuVOExt> findOfView() {
         AuthRealm.Principal principal = UserUtils.getPrincipal();
@@ -82,7 +83,7 @@ public class MenuController extends BaseController {
     }
 
     @RequiresPermissions("Menu:delete")
-    @GetMapping(value = "/sys/menu/delete.json")
+    @GetMapping(value = "/menu/delete.json")
     @ResponseBody
     public ResponseResult delete(String id) {
         return menuService.delete(id);

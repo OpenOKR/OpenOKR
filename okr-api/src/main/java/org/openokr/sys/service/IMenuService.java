@@ -19,8 +19,6 @@ public interface IMenuService {
 
     List<MenuVOExt> findContainPermissionOfAll();
 
-    MenuVOExt getById(String id);
-
     List<MenuVOExt> findByUserId(String userId);
 
     MenuVOExt findTreeOfViewByUserId(String userId);

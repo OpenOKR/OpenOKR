@@ -21,3 +21,21 @@ require.shim["jQueryNiceScroll"] = {
 /** end Application plugin */
 
 /** ************************************************************ end 应用级别 */
+/** begin AppUtils */
+//
+App._j_a_u = App._j_a + "utils/";
+//
+require.paths["_enum-util"] = App._j_a_u + "enum-util";
+require.shim["_enum-util"] = {
+    "deps": ["jQuery"]
+};
+require.paths["AppUtils"] = ((App["jsDebug"])
+    ? App._j_a_u + "application-utils.debug"
+    : App._j_a_u + "application-utils.all.min.js?ver=" + App.ver);
+require.shim["AppUtils"] = {
+    "deps": App["jsDebug"]
+        ? [
+            "_enum-util"
+        ] : ["jQuery"]
+};
+/** end AppUtils */

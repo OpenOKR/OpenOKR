@@ -1,11 +1,19 @@
 package org.openokr.sys.service;
 
+import com.zzheng.framework.adapter.vo.ResponseResult;
+import com.zzheng.framework.base.utils.BeanUtils;
 import com.zzheng.framework.base.utils.MapUtils;
+import com.zzheng.framework.base.utils.StringUtils;
 import com.zzheng.framework.mybatis.service.impl.BaseServiceImpl;
+import org.openokr.sys.entity.OrganizationEntity;
+import org.openokr.sys.entity.OrganizationEntityCondition;
 import org.openokr.sys.vo.OrganizationVOExt;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +24,9 @@ import java.util.Map;
 @Transactional
 public class OrganizationService extends BaseServiceImpl implements IOrganizationService {
 
+    @Autowired
+    private IUserService userService;
+
     @Override
     public List<OrganizationVOExt> findAll() {
         String sql = "SELECT t.id,t.parent_id AS \"parentId\",t2.name AS \"parentName\",t.description,t.name,t.code" +
@@ -24,5 +35,115 @@ public class OrganizationService extends BaseServiceImpl implements IOrganizatio
                 " FROM t_okr_sys_organization t3 WHERE t3.id='1'";
         List<Map<String, Object>> maps = this.getDao().selectListByDynamicSql(sql);
         return MapUtils.mapListToBeanList(maps, OrganizationVOExt.class);
+    }
+
+    @Override
+    public ResponseResult addOrModify(OrganizationVOExt organization) {
+        OrganizationEntity saveEntity = null;
+        if (StringUtils.isEmpty(organization.getParentId())) {
+            return new ResponseResult("保存失败，上级机构不能为空", false);
+        }
+        if (countByName(organization.getId(), organization.getName()) > 0) {
+            return new ResponseResult("保存失败，" + organization.getName() + " 已经存在", false);
+        }
+        if (countByCode(organization.getId(), organization.getCode()) > 0) {
+            return new ResponseResult("保存失败，" + organization.getCode() + " 已经存在", false);
+        }
+        if (organization.getId() == null) {//新增
+            //保存
+            OrganizationEntity entity = BeanUtils.copyToNewBean(organization, OrganizationEntity.class);
+            saveEntity = this.saveWithQuery(entity);
+        } else if (organization.getId() != null) {//修改
+            if (organization.getId().equals(organization.getParentId())) {
+                return new ResponseResult("保存失败，当前机构的上级不能是自己", false);
+            }
+            //保存
+            OrganizationEntity entity = BeanUtils.copyToNewBean(organization, OrganizationEntity.class);
+            saveEntity = this.saveWithQuery(entity);
+        }
+        //
+        if (saveEntity != null) {
+            return new ResponseResult("保存成功");
+        } else {
+            return new ResponseResult("保存失败", false);
+        }
+    }
+
+    @Override
+    public ResponseResult delete(String id) {
+        if ("1".equals(id)) {
+            return new ResponseResult("删除失败，不允许删除根机构", false);
+        }
+        //判断子
+        if (countChildrenByParentId(id) > 0) {
+            return new ResponseResult("删除失败，存在子机构关联，不允许删除", false);
+        }
+        //判断用户
+        if (userService.countByOrganizationId(id) > 0) {
+            return new ResponseResult("删除失败，还有用户归属于该机构，不允许删除", false);
+        }
+        if (this.deleteByPrimaryKey(OrganizationEntity.class, id) > 0) {
+            return new ResponseResult("删除成功");
+        } else {
+            return new ResponseResult("删除失败");
+        }
+    }
+
+    @Override
+    public List<OrganizationVOExt> findCurrentAndChildren(String currentOrganizationId) {
+        if (StringUtils.isEmpty(currentOrganizationId)) {
+            return null;
+        }
+        String sql = "SELECT t.id,t.parent_id as parentId,t.description,t.name,t.code FROM t_pfm_ssm_organization t WHERE t.id= #{id}";
+        Map<String, Object> parameterMap = new HashMap<>();
+        parameterMap.put("id", currentOrganizationId);
+        Map<String, Object> map = this.getDao().selectOneByDynamicSql(sql, parameterMap);
+        OrganizationVOExt vo = MapUtils.mapToBean(map, OrganizationVOExt.class);
+        List<OrganizationVOExt> currentAndChildrenList = new ArrayList<>();
+        currentAndChildrenList.add(vo);
+        //查询子数据
+        findChildren(currentAndChildrenList, vo.getId());
+        return currentAndChildrenList;
+    }
+
+    private long countByCode(String id, String code) {
+        OrganizationEntityCondition condition = new OrganizationEntityCondition();
+        if (StringUtils.isNotBlank(id)) {
+            condition.createCriteria().andIdNotEqualTo(id).andCodeEqualTo(code);
+        } else {
+            condition.createCriteria().andCodeEqualTo(code);
+        }
+        return this.countByCondition(condition);
+    }
+
+    private long countByName(String id, String name) {
+        OrganizationEntityCondition condition = new OrganizationEntityCondition();
+        if (StringUtils.isNotBlank(id)) {
+            condition.createCriteria().andIdNotEqualTo(id).andNameEqualTo(name);
+        } else {
+            condition.createCriteria().andNameEqualTo(name);
+        }
+        return this.countByCondition(condition);
+    }
+
+    private long countChildrenByParentId(String parentId) {
+        OrganizationEntityCondition condition = new OrganizationEntityCondition();
+        condition.createCriteria().andParentIdEqualTo(parentId);
+        return this.countByCondition(condition);
+    }
+
+    /**
+     * 查找子数据
+     */
+    private void findChildren(List<OrganizationVOExt> organizationList, String parentId) {
+        String sql = "SELECT t.id,t.parent_id as \"parentId\",t.description,t.name,t.code FROM t_pfm_ssm_organization t where ( parent_id = #{id} ) ";
+        Map<String, Object> parameterMap = new HashMap<>();
+        parameterMap.put("id", parentId);
+        List<Map<String, Object>> map = this.getDao().selectListByDynamicSql(sql, parameterMap);
+        List<OrganizationVOExt> vos = MapUtils.mapListToBeanList(map, OrganizationVOExt.class);
+        organizationList.addAll(vos);
+        for (OrganizationVOExt childrenVo : vos) {
+            findChildren(organizationList, childrenVo.getId());
+        }
     }
 }

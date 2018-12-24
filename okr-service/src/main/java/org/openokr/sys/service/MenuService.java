@@ -131,18 +131,6 @@ public class MenuService extends BaseServiceImpl implements IMenuService {
     }
 
     @Override
-    public MenuVOExt getById(String id) {
-        String sql = "SELECT t.id,t.description,t.name,t.priority,t.url,t.parent_id as \"parentId\",t.permission_prefix_code as \"permissionPrefixCode\" FROM t_okr_sys_menu t where ( id = #{id} ) ";
-        Map<String, Object> parameterMap = new HashMap<>();
-        parameterMap.put("id", id);
-        Map<String, Object> map = this.getDao().selectOneByDynamicSql(sql, parameterMap);
-        MenuVOExt vo = MapUtils.mapToBean(map, MenuVOExt.class);
-        //组装子数据
-        buildChildren(vo);
-        return vo;
-    }
-
-    @Override
     public List<MenuVOExt> findByUserId(String userId) {
         String sql = "SELECT t.id,t.description,t.name,t.priority,t.url,t.parent_id as \"parentId\", t.permission_prefix_code as \"permissionPrefixCode\" " +
                 "FROM t_okr_sys_menu t,t_okr_sys_role_menu t1, t_okr_sys_user_role t2 " +

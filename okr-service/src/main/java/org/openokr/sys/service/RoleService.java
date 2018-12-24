@@ -33,7 +33,8 @@ public class RoleService extends BaseServiceImpl implements IRoleService {
 
     @Override
     public List<RoleVOExt> findByUserId(String userId, boolean loadPermissions) {
-        String sql = "SELECT t1.id,t1.name FROM t_okr_sys_role t1, t_okr_sys_user_role t2, t_okr_sys_user t3 WHERE t1.id = t2.role_id AND t3.id = t2.user_id AND t3.id = #{userId}";
+        String sql = "SELECT t1.id,t1.name FROM t_okr_sys_role t1, t_okr_sys_user_role t2, t_okr_sys_user t3 " +
+                "WHERE t1.id = t2.role_id AND t3.id = t2.user_id AND t3.id = #{userId}";
         Map<String, Object> params = new HashMap<>();
         params.put("userId", userId);
         List<Map<String, Object>> maps = this.getDao().selectListByDynamicSql(sql, params);
@@ -132,6 +133,12 @@ public class RoleService extends BaseServiceImpl implements IRoleService {
         }
         condition.setPage(page);
         return this.selectPageByCondition(condition);
+    }
+
+    @Override
+    public List<RoleVOExt> findAllList() {
+        List<Map<String, Object>> list = this.getMyBatisDao().selectListByDynamicSql("SELECT t1.id, t1.name FROM t_okr_sys_role t1");
+        return BeanUtils.copyToNewList(list, RoleVOExt.class);
     }
 
     private List<RoleVOExt> toVOExtList(List<Object> entityList) {

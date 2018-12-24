@@ -22,4 +22,7 @@ public interface IRoleService {
     ResponseResult delete(String id);
 
     Page findPageByLikeNameExcludeIds(Page page, String inputValue, List<String> excludeIds);
+
+    List<RoleVOExt> findAllList();
+
 }

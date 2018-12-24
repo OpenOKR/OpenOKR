@@ -82,7 +82,7 @@ require(["jQuery"], function () {
             return $('[name="roleName"]').AutoTree({
                 async: {
                     dataSourceType: "remote",
-                    url: App["contextPath"] + "/sys/role/findByCurrentUserId.json"
+                    url: App["contextPath"] + "/sys/role/findAllList.json"
                 },
                 view: {
                     inputFilterFieldNames: ["name"],

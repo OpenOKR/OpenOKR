@@ -31,8 +31,8 @@ public class UserUtils {
     public static final String USER_CACHE = "userCache";
     private static final String USER_CACHE_ID_ = "id_";
     private static final String USER_CACHE_LOGIN_NAME_ = "ln_";
-    private static final String USER_CACHE_MENU_LIST_ = "menuList_";
-    private static final String USER_CACHE_ROLE_LIST_ = "roleList_";
+    public static final String USER_CACHE_MENU_LIST_ = "menuList_";
+    public static final String USER_CACHE_ROLE_LIST_ = "roleList_";
     private static final String USER_CACHE_PERMISSION_LIST_ = "permissionList_";
     public static final String USER_CACHE_LOGIN_FAIL_COUNT_KEY = "loginFailCount_";
 
