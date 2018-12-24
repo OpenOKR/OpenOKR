@@ -12,7 +12,6 @@
 
 # Package Files #
 !resource/META-INF/lib
-*.jar
 *.war
 *.nar
 *.ear
