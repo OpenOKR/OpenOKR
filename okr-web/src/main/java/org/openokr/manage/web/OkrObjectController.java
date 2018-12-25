@@ -6,7 +6,7 @@ import org.openokr.manage.service.IOkrObjectService;
 import org.openokr.manage.service.IOkrTeamService;
 import org.openokr.manage.vo.ObjectivesExtVO;
 import org.openokr.manage.vo.OkrObjectSearchVO;
-import org.openokr.manage.vo.TeamsVO;
+import org.openokr.manage.vo.TeamsExtVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,7 +33,7 @@ public class OkrObjectController extends BaseController {
 
     @GetMapping(value = "/init.htm")
     public String index(Model model) throws Exception {
-        List<TeamsVO> teamList = okrTeamService.getTeamByUserId(getCurrentUserId());
+        List<TeamsExtVO> teamList = okrTeamService.getTeamByUserId(getCurrentUserId());
         model.addAttribute("teamList", teamList);
         return "manage/okrList";
     }
@@ -67,13 +67,37 @@ public class OkrObjectController extends BaseController {
     }
 
     /**
+     * 编辑目标
+     * @return
+     */
+    @RequestMapping(value = "/editObject.json")
+    @ResponseBody
+    public ResponseResult editObject(ObjectivesExtVO objectVO) {
+        objectVO.setCreateUserId(getCurrentUserId());
+        ResponseResult responseResult = okrObjectService.saveObject(objectVO);
+        return responseResult;
+    }
+
+    /**
+     * 保存目标
+     * @return
+     */
+    @RequestMapping(value = "/saveObject.json")
+    @ResponseBody
+    public ResponseResult saveObject(ObjectivesExtVO objectVO) {
+        objectVO.setCreateUserId(getCurrentUserId());
+        ResponseResult responseResult = okrObjectService.saveObject(objectVO);
+        return responseResult;
+    }
+
+    /**
      * 删除目标
      * @return
      */
     @RequestMapping(value = "/deleteObject.json")
     @ResponseBody
-    public ResponseResult deleteObject(OkrObjectSearchVO searchVO) {
-        ResponseResult responseResult = new ResponseResult();
+    public ResponseResult deleteObject(String objectId, String userId) {
+        ResponseResult responseResult = okrObjectService.deleteObject(objectId, userId);
         return responseResult;
     }
 
@@ -83,8 +107,8 @@ public class OkrObjectController extends BaseController {
      */
     @RequestMapping(value = "/deleteResult.json")
     @ResponseBody
-    public ResponseResult deleteResult(OkrObjectSearchVO searchVO) {
-        ResponseResult responseResult = new ResponseResult();
+    public ResponseResult deleteResult(String resultId, String userId) {
+        ResponseResult responseResult = okrObjectService.deleteResult(resultId, userId);
         return responseResult;
     }
 }

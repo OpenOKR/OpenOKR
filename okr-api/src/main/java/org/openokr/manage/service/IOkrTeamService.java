@@ -2,7 +2,7 @@ package org.openokr.manage.service;
 
 
 import com.zzheng.framework.exception.BusinessException;
-import org.openokr.manage.vo.TeamsVO;
+import org.openokr.manage.vo.TeamsExtVO;
 
 import java.util.List;
 
@@ -18,5 +18,5 @@ public interface IOkrTeamService {
      * @return
      * @throws BusinessException
      */
-    List<TeamsVO> getTeamByUserId(String userId) throws BusinessException;
+    List<TeamsExtVO> getTeamByUserId(String userId) throws BusinessException;
 }

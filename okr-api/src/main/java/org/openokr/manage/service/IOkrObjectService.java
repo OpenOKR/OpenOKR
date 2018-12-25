@@ -83,6 +83,14 @@ public interface IOkrObjectService {
     List<LogVO> getOperateRecordList(String objectId, List<String> resultIds) throws BusinessException;
 
     /**
+     * 保存目标
+     * @param objectVO
+     * @return
+     * @throws BusinessException
+     */
+    ResponseResult saveObject(ObjectivesExtVO objectVO) throws BusinessException;
+
+    /**
      * 删除目标
      * @param objectId 目标ID
      * @param userId

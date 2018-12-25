@@ -6,13 +6,21 @@ import org.apache.commons.lang3.StringUtils;
 import org.openokr.application.framework.service.OkrBaseService;
 import org.openokr.manage.entity.LogEntity;
 import org.openokr.manage.entity.LogEntityCondition;
+import org.openokr.manage.entity.ObjectLabelRelaEntity;
+import org.openokr.manage.entity.ObjectLabelRelaEntityCondition;
+import org.openokr.manage.entity.ObjectTeamRelaEntity;
+import org.openokr.manage.entity.ObjectTeamRelaEntityCondition;
+import org.openokr.manage.entity.ObjectivesEntity;
+import org.openokr.manage.entity.ObjectivesEntityCondition;
 import org.openokr.manage.entity.ResultsEntity;
 import org.openokr.manage.entity.ResultsEntityCondition;
 import org.openokr.manage.enumerate.ObjectivesTypeEnum;
+import org.openokr.manage.vo.LabelVO;
 import org.openokr.manage.vo.LogVO;
 import org.openokr.manage.vo.ObjectivesExtVO;
 import org.openokr.manage.vo.OkrObjectSearchVO;
 import org.openokr.manage.vo.ResultsExtVO;
+import org.openokr.manage.vo.TeamsVO;
 import org.openokr.sys.vo.UserVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -141,9 +149,94 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
     }
 
     @Override
+    public ResponseResult saveObject(ObjectivesExtVO objectVO) throws BusinessException {
+        ResponseResult responseResult = new ResponseResult();
+        String objectId = objectVO.getId();
+        String userId = objectVO.getCreateUserId();
+        if (StringUtils.isEmpty(objectId)) { //新增
+            ObjectivesEntity entity = new ObjectivesEntity();
+            BeanUtils.copyProperties(objectVO, entity);
+            entity.setVisibility("1");//默认公开
+            entity.setStatus("1");//未提交状态
+            entity.setDelFlag("0");//删除状态:否
+            entity.setCreateTs(new Date());
+            this.insert(entity);
+            objectId = entity.getId();
+        } else { //更新
+            ObjectivesEntity entity = new ObjectivesEntity();
+            BeanUtils.copyProperties(objectVO, entity);
+            entity.setUpdateTs(new Date());
+            entity.setUpdateUserId(userId);
+            this.update(entity);
+
+            // 更新影响团队
+            ObjectTeamRelaEntityCondition teamRelaCondition = new ObjectTeamRelaEntityCondition();
+            teamRelaCondition.createCriteria().andObjectIdEqualTo(objectId);
+            List<ObjectTeamRelaEntity> teamRelaList = this.selectByCondition(teamRelaCondition);
+            // 先删除旧数据
+            if (teamRelaList !=null && teamRelaList.size()>0) {
+                this.delete(teamRelaList);
+            }
+
+            // 更新目标关联标签
+            ObjectLabelRelaEntityCondition labelRelCondition = new ObjectLabelRelaEntityCondition();
+            labelRelCondition.createCriteria().andObjectIdEqualTo(objectId);
+            List<ObjectLabelRelaEntity> labelsRelList = this.selectByCondition(labelRelCondition);
+            // 先删除旧数据
+            if (labelsRelList !=null && labelsRelList.size()>0) {
+                this.delete(labelsRelList);
+            }
+        }
+        // 新增影响团队
+        if (objectVO.getRelTeams() != null && objectVO.getRelTeams().size()>0) {
+            List<ObjectTeamRelaEntity> teamsEntityList = new ArrayList<>();
+            for (TeamsVO teamsVO : objectVO.getRelTeams()) {
+                ObjectTeamRelaEntity relaEntity = new ObjectTeamRelaEntity();
+                relaEntity.setObjectId(objectId);
+                relaEntity.setTeamId(teamsVO.getId());
+                relaEntity.setCreateTs(new Date());
+                relaEntity.setCreateUserId(userId);
+                teamsEntityList.add(relaEntity);
+            }
+            this.insertList(teamsEntityList);
+        }
+
+        // 新增目标关联标签
+        if (objectVO.getRelLabels() != null && objectVO.getRelLabels().size()>0) {
+            List<ObjectLabelRelaEntity> labelsRelList = new ArrayList<>();
+            for (LabelVO labelVO : objectVO.getRelLabels()) {
+                ObjectLabelRelaEntity relaEntity = new ObjectLabelRelaEntity();
+                relaEntity.setObjectId(objectId);
+                relaEntity.setLabelId(labelVO.getId());
+                relaEntity.setCreateTs(new Date());
+                relaEntity.setCreateUserId(userId);
+                labelsRelList.add(relaEntity);
+            }
+            this.insertList(labelsRelList);
+        }
+
+        responseResult.setInfo("保存成功");
+        return responseResult;
+    }
+
+    @Override
     public ResponseResult deleteObject(String objectId, String userId) throws BusinessException {
         ResponseResult responseResult = new ResponseResult();
 
+        //1、如果该目标已经是别人的父目标,则无法删除改目标
+        ObjectivesEntityCondition parentCondition = new ObjectivesEntityCondition();
+        parentCondition.createCriteria().andParentIdEqualTo(objectId);
+        List<ObjectivesEntity> parentList = this.selectByCondition(parentCondition);
+        if (parentList !=null && parentList.size()>0) {
+            responseResult.setInfo("该目标还存在子目标,无法删除");
+            responseResult.setSuccess(false);
+            return responseResult;
+        }
+        ObjectivesEntity entity = this.selectByPrimaryKey(ObjectivesEntity.class, objectId);
+        entity.setDelFlag("1");//设为已删除状态
+        entity.setUpdateTs(new Date());
+        entity.setUpdateUserId(userId);
+        this.update(entity);
         responseResult.setInfo("删除成功");
         return responseResult;
     }
@@ -161,7 +254,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         LogVO logVO = new LogVO();
         logVO.setBizId(resultId);
         logVO.setBizType("2");
-        logVO.setMessage("");
+        logVO.setMessage("删除关键结果:"+ resultsEntity.getName() +"");
         logVO.setCreateTs(new Date());
         logVO.setCreateUserId(userId);
         this.saveOkrLog(logVO);
