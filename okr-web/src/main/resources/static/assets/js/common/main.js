@@ -149,28 +149,21 @@ require(["jQuery", "countUp"], function () {
         },
 
         buildOKRMessage: function (res) {
-            require(["Underscore", "jQueryUtils"], function () {
+            require(["Underscore", "jQueryUtils", "AppUtils"], function () {
                 $('#messageCount').html(res.info.length);
                 var $messageItem = $("#messageItem");
                 if (res.info.length > 0) {
                     $.each(res.info, function (idx, item) {
-                        item.href = App.contextPath + "/okrMessage/index.htm";
+                        item.href = App.contextPath + "/manage/okrMessage/index.htm";
                         item.createTsStr = $.DateUtils.getDateTimeString(new Date(item.createTs));
                     });
+                    var markList = enumUtil.getEnum("messageMarkList.json");
                     var templateText =
                         '<ul class="new-list">' +
-                        '   [%_.each(info, function(msg, idx){%]' +
+                        '   [%_.each(list, function(msg, idx){%]' +
                         '       <li>' +
                         '           <a class="new-item" onclick="top.mainObj.menuClick(null, \'[%=msg.href%]\');">' +
-                        '               [%if(msg.mark == 1){%]' +
-                        '                   <i class="iconfont icon-waring text-primary"></i>' +
-                        '               [%} else if (msg.mark == 2) {%]' +
-                        '                   <i class="iconfont icon-succ text-success"></i>' +
-                        '               [%} else if (msg.mark == 3) {%]' +
-                        '                   <i class="iconfont icon-waring text-warning"></i>' +
-                        '               [%} else {%]' +
-                        '                   <i class="iconfont icon-tip text-danger"></i>' +
-                        '               [%}%]' +
+                        '               <i class="[%=markList[msg.mark - 1].cssClass%]"></i>' +
                         '               <h4>[%=msg.title%]</h4>' +
                         '               <p>[%=msg.createTsStr%]</p>' +
                         '               <div class="action">' +
@@ -185,7 +178,7 @@ require(["jQuery", "countUp"], function () {
                         '       </li>' +
                         '   [%});%]' +
                         '</ul>';
-                    var html = UnderscoreUtil.getHtmlByText(templateText, res);
+                    var html = UnderscoreUtil.getHtmlByText(templateText, {list:res.info, markList: markList});
                     $messageItem.append(html);
                 } else {
                     $messageItem.append("<div class='meg-outer'>" +

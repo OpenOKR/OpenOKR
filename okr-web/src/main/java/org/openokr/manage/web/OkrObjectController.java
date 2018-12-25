@@ -1,6 +1,7 @@
 package org.openokr.manage.web;
 
 import com.zzheng.framework.adapter.vo.ResponseResult;
+import org.openokr.application.framework.annotation.JsonPathParam;
 import org.openokr.application.web.BaseController;
 import org.openokr.manage.service.IOkrObjectService;
 import org.openokr.manage.service.IOkrTeamService;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -22,7 +24,7 @@ import java.util.List;
  * @author hjh
  */
 @Controller
-@RequestMapping("/object")
+@RequestMapping("/manage/okrObject")
 public class OkrObjectController extends BaseController {
 
     @Autowired
@@ -35,7 +37,7 @@ public class OkrObjectController extends BaseController {
     public String index(Model model) throws Exception {
         List<TeamsExtVO> teamList = okrTeamService.getTeamByUserId(getCurrentUserId());
         model.addAttribute("teamList", teamList);
-        return "manage/okrList";
+        return "manage/okrObjectList";
     }
 
     /**
@@ -44,7 +46,7 @@ public class OkrObjectController extends BaseController {
      */
     @RequestMapping(value = "/getOkrListByType.json")
     @ResponseBody
-    public ResponseResult getOkrListByType(OkrObjectSearchVO searchVO) {
+    public ResponseResult getOkrListByType(@JsonPathParam("$.searchVO") OkrObjectSearchVO searchVO) {
         ResponseResult responseResult = new ResponseResult();
         searchVO.setUserId(getCurrentUserId());
         List<ObjectivesExtVO> objectivesExtList = okrObjectService.getOkrListByType(searchVO);
@@ -110,5 +112,16 @@ public class OkrObjectController extends BaseController {
     public ResponseResult deleteResult(String resultId, String userId) {
         ResponseResult responseResult = okrObjectService.deleteResult(resultId, userId);
         return responseResult;
+    }
+
+    @GetMapping("/form.htm")
+    public String form(String type) {
+        return "manage/okrObjectForm";
+    }
+
+    @PostMapping("/save.json")
+    @ResponseBody
+    public ResponseResult save() {
+        return null;
     }
 }

@@ -481,7 +481,7 @@
 .okr-list>li {
     position: relative;
     width: 100%;
-    padding: 7px 554px 7px 176px;
+    padding: 7px 554px 7px 108px;
     box-sizing: border-box;
     -webkit-transition: all .12s  ease-out;
     -moz-transition: all .12s  ease-out;
@@ -659,7 +659,7 @@
 }
 .area-process-em:before { content: "\e6e0"; }
 .area-process-con {
-    font-size: 12px
+    font-size: 12px;
     color: #545454;
 }
 

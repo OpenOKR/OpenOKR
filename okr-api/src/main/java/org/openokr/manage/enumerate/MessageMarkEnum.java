@@ -6,39 +6,32 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 执行状态枚举类
+ * message mark 类型枚举
+ * Created by zhengzheng on 2018/12/25.
  */
-public enum ExecuteStatusEnum {
+public enum MessageMarkEnum {
 
     /**
-     * 0-未开始
+     * 1-警告
      */
-    STATUS_0("0", "未开始", "text-muted"),
+    MARK_1("1", "警告", "iconfont icon-waring text-primary"),
 
     /**
-     * 1-正常执行
+     * 2-通过
      */
-    STATUS_1("1", "正常执行", "text-primary"),
+    MARK_2("2", "通过", "iconfont icon-succ text-success"),
 
     /**
-     * 2-执行有风险
+     * 3-拒绝
      */
-    STATUS_2("2", "执行有风险", "text-danger"),
+    MARK_3("3", "拒绝", "iconfont icon-waring text-warning"),
 
     /**
-     * 3-暂停执行
+     * 4-提醒
      */
-    STATUS_3("3", "暂停执行", "text-danger"),
+    MARK_4("4", "提醒", "iconfont icon-tip text-danger"),
 
-    /**
-     * 4-提前终止
-     */
-    STATUS_4("4", "提前终止", "text-warning"),
-
-    /**
-     * 5-完成
-     */
-    STATUS_5("5", "完成", "text-success");
+    DEFAULT("", "", "");
 
     private String name;
 
@@ -46,7 +39,7 @@ public enum ExecuteStatusEnum {
 
     private String cssClass;
 
-    ExecuteStatusEnum(String code, String name, String cssClass) {
+    MessageMarkEnum(String code, String name, String cssClass) {
         this.code = code;
         this.name = name;
         this.cssClass = cssClass;
@@ -86,7 +79,7 @@ public enum ExecuteStatusEnum {
      */
     public static List<Map<String, Object>> toList() {
         if (list.isEmpty()) {
-            for (ExecuteStatusEnum enumerate : ExecuteStatusEnum.values()) {
+            for (MessageMarkEnum enumerate : MessageMarkEnum.values()) {
                 Map<String, Object> map = new HashMap<>();
                 map.put("name", enumerate.getName());
                 map.put("code", enumerate.getCode());
@@ -104,11 +97,21 @@ public enum ExecuteStatusEnum {
      */
     public static Map<String, Object> toMap() {
         if (map.isEmpty()) {
-            for (ExecuteStatusEnum enumerate : ExecuteStatusEnum.values()) {
+            for (MessageMarkEnum enumerate : MessageMarkEnum.values()) {
                 map.put(enumerate.getCode(), enumerate.getName());
             }
         }
         return map;
     }
 
+    public static MessageMarkEnum getByCode(String code) {
+        MessageMarkEnum _enum = DEFAULT;
+        for (MessageMarkEnum enumerate : MessageMarkEnum.values()) {
+            if (enumerate.getCode().equals(code)) {
+                _enum = enumerate;
+                break;
+            }
+        }
+        return _enum;
+    }
 }

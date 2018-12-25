@@ -63,8 +63,7 @@ require(["jQuery"], function () {
 
         menuClick: function (dom, url) {
             var $iframe = $('#mainContent');
-            $(dom).parents('li').siblings().removeClass('active');
-            $(dom).parents('li').addClass('active');
+            $(dom).parents('li').addClass('active').siblings().removeClass('active');
             $iframe.attr('src', url);
             mainObj.changeFrameHeight();
         },

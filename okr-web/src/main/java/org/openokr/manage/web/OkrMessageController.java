@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author hjh
  */
 @Controller
-@RequestMapping("/okrMessage")
+@RequestMapping("/manage/okrMessage")
 public class OkrMessageController extends BaseController {
 
     @Autowired

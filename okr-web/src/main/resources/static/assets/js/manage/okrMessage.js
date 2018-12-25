@@ -7,7 +7,7 @@ require(["jQuery"], function () {
             require(["jQueryBlockUI"], function () {
                 $("#message").block();
                 $.ajax({
-                    url: App["contextPath"] + "/okrMessage/getAllMessage.json",
+                    url: App["contextPath"] + "/manage/okrMessage/getAllMessage.json",
                     type: "POST",
                     data: JSON.stringify({currentPage: curr, pageSize: 10, pageInfo: {currentPage: curr, pageSize: 10}}),
                     contentType: 'application/json;charset=utf-8'
@@ -32,25 +32,18 @@ require(["jQuery"], function () {
         },
 
         buildOKRMessage: function (res) {
-            require(["Underscore", "jQueryUtils"], function () {
+            require(["Underscore", "jQueryUtils", "AppUtils"], function () {
                 var $messageList = $("#messageList"); $messageList.empty();
                 $.each(res.records, function (idx, item) {
                     item.createTsStr = $.DateUtils.getDateTimeString(new Date(item.createTs));
                 });
+                var markList = enumUtil.getEnum("messageMarkList.json");
                 var templateText =
                     '<ul class="new-list ui-other">' +
-                    '   [%_.each(records, function(msg, idx){%]' +
+                    '   [%_.each(list, function(msg, idx){%]' +
                     '       <li id="[%=msg.id%]" data-isread="[%=msg.isRead%]">' +
                     '           <div class="new-item">' +
-                    '               [%if(msg.mark == 1){%]' +
-                    '                   <i class="iconfont icon-waring text-primary"></i>' +
-                    '               [%} else if (msg.mark == 2) {%]' +
-                    '                   <i class="iconfont icon-succ text-success"></i>' +
-                    '               [%} else if (msg.mark == 3) {%]' +
-                    '                   <i class="iconfont icon-waring text-warning"></i>' +
-                    '               [%} else {%]' +
-                    '                   <i class="iconfont icon-tip text-danger"></i>' +
-                    '               [%}%]' +
+                    '               <i class="[%=markList[msg.mark - 1].cssClass%]"></i>' +
                     '               <h4>[%=msg.title%]</h4>' +
                     '               <p>[%=msg.createTsStr%]</p>' +
                     '               <div class="action">' +
@@ -66,7 +59,7 @@ require(["jQuery"], function () {
                     '       </li>' +
                     '   [%});%]' +
                     '</ul>';
-                var html = UnderscoreUtil.getHtmlByText(templateText, res);
+                var html = UnderscoreUtil.getHtmlByText(templateText, {list: res.records, markList: markList});
                 $messageList.append(html);
                 $(".ui-other .icon-arrowR").click(function(){
                     $(this).parents("li").toggleClass("active").find(".new-other").slideToggle();
@@ -79,7 +72,7 @@ require(["jQuery"], function () {
             if (isRead === 0) {
                 $("#" + id).block();
                 $.ajax({
-                    url: App["contextPath"] + "/okrMessage/update.json",
+                    url: App["contextPath"] + "/manage/okrMessage/update.json",
                     type: "POST",
                     data: JSON.stringify({messageVO: {id: id, isRead: '1'}}),
                     contentType: 'application/json;charset=utf-8'
