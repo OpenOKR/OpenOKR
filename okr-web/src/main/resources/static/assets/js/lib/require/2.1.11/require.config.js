@@ -28,72 +28,58 @@ if (!App.hasOwnProperty("staticContextPathNative") || App["staticContextPathNati
 }
 
 App._jQuery = App.scp
-
     +"/assets/js/lib/jQuery/1.12.4/";
 
 App._require = App.scp
-
     +"/assets/js/lib/require/2.1.11/";
 
 App._validation = App.scp
-
     +"/assets/js/lib/jquery.validation/1.19.0/";
 
 App._RSA = App.scp
-
     +"/assets/js/lib/RSA/";
 
 App._jqGrid = App.scp
-
     +"/assets/js/lib/jqGrid/4.6.0.ext.0.2-SNAPSHOT/";
 
 App._jqForm = App.scp
-
     +"/assets/js/lib/jqForm/1.1.3-SNAPSHOT/";
 
 App._AutoTree = App.scp
-
     +"/assets/js/lib/AutoTree/1.2.1-SNAPSHOT/";
 
 App._AutoCombobox = App.scp
-
     +"/assets/js/lib/AutoCombobox/1.2.1-SNAPSHOT/";
 
 App._Tips = App.scp
-
     +"/assets/js/lib/Tips/1.1.2-SNAPSHOT/";
 
 App._artDialog = App.scp
-
     +"/assets/js/lib/artDialog/v6.0.4-ext0.1-SNAPSHOT/";
 
 App._zTree = App.scp
-
     +"/assets/js/lib/zTree/3.5.28-ext0.1-SNAPSHOT/";
 
 App._OUI = App.scp
-
     +"/assets/js/lib/OUI/1.1.2-SNAPSHOT/";
 
 App._jQueryBlockUI = App.scp
-
     +"/assets/js/lib/jQueryBlockUI/2.70-ext0.1-SNAPSHOT/";
 
 App._Underscore = App.scp
-
     +"/assets/js/application/Underscore/1.6.0-ext0.2-SNAPSHOT/";
 
 App._jQueryUI = App.scp
-
     +"/assets/js/lib/jQueryUI/1.10.4.ext.0.2-SNAPSHOT/";
 
 App._echarts= App.scp
-
     +"/assets/js/lib/echarts/4.1.0/";
 
 App._jQueryUtils = App.scp
-
     +"/assets/js/lib/jQueryUtils/1.1.1-SNAPSHOT/";
+
+App._laypage = App.scp
+    +"/assets/js/lib/laypage/1.2/";
 
 var require = {
     map: {
@@ -402,6 +388,10 @@ var require = {
                     "_jQueryUtils9",
                     "_jQueryUtils10"] :
                 ["jQuery"]
+        },
+
+        laypage: {
+            deps: ["css!" + App._laypage + "skin/laypage"]
         }
     },
     paths: {
@@ -501,6 +491,8 @@ var require = {
         _jQueryUtils8: App._jQueryUtils + "jquery-object-util",
         _jQueryUtils9: App._jQueryUtils + "jquery-string-utils",
         _jQueryUtils10: App._jQueryUtils + "jquery-url-utils",
-        jQueryUtils: ((App.src) ? App._jQueryUtils + "utils-application.extend" : App._jQueryUtils + "jquery-utils.all.min.js?ver=" + App.ver)
+        jQueryUtils: ((App.src) ? App._jQueryUtils + "utils-application.extend" : App._jQueryUtils + "jquery-utils.all.min.js?ver=" + App.ver),
+
+        laypage: ((App.src) ? App._laypage + "laypage" : App._laypage + "laypage.min.js?ver=" + App.ver)
     }
 };

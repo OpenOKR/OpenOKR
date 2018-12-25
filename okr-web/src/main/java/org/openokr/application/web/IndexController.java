@@ -36,11 +36,12 @@ public class IndexController extends BaseController {
     private IOkrMessageService okrMessageService;
 
     @GetMapping(value = "/index.htm")
-    public String index(Model model) throws Exception {
+    public String index(Model model, boolean flag) throws Exception {
         String userName = getCurrentUser().getRealName();
         if (StringUtils.isEmpty(userName)) {
             userName = UserUtils.getUser().getUserName();
         }
+        model.addAttribute("flag", flag);
         model.addAttribute("userName", userName);
         return "common/index";
     }

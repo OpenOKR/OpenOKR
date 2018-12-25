@@ -1,4 +1,4 @@
-package org.openokr.sys;
+package org.openokr.sys.web;
 
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.mybatis.dao.pojo.Page;
@@ -7,7 +7,6 @@ import org.openokr.application.framework.annotation.JsonPathParam;
 import org.openokr.application.web.BaseController;
 import org.openokr.sys.service.IRoleService;
 import org.openokr.sys.vo.RoleVOExt;
-import org.openokr.utils.CacheUtils;
 import org.openokr.utils.StringUtils;
 import org.openokr.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;

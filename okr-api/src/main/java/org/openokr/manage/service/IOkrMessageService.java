@@ -1,6 +1,7 @@
 package org.openokr.manage.service;
 
 
+import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.dao.pojo.Page;
 import org.openokr.manage.vo.MessagesVO;
@@ -31,4 +32,11 @@ public interface IOkrMessageService {
      * @throws BusinessException
      */
     Page getMessageByPage(Page page, String userId) throws BusinessException;
+
+    /**
+     * 更新消息
+     * @param vo
+     * @param currentUserId
+     */
+    ResponseResult update(MessagesVO vo, String currentUserId);
 }

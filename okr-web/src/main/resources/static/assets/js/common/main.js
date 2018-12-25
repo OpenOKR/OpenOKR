@@ -132,7 +132,7 @@ require(["jQuery", "countUp"], function () {
             });
         },
 
-        loadMessage: function () {
+        loadOKRMessage: function () {
             var _this = this;
             require(["jQueryBlockUI"], function () {
                 $("#message").block();
@@ -141,26 +141,27 @@ require(["jQuery", "countUp"], function () {
                     type: "GET",
                     dataType: "json"
                 }).done(function (res) {
-                    res && _this.buildMessage(res);
+                    res && _this.buildOKRMessage(res);
                 }).always(function () {
                     $("#message").unblock();
                 });
             });
         },
 
-        buildMessage: function (res) {
+        buildOKRMessage: function (res) {
             require(["Underscore", "jQueryUtils"], function () {
                 $('#messageCount').html(res.info.length);
                 var $messageItem = $("#messageItem");
                 if (res.info.length > 0) {
                     $.each(res.info, function (idx, item) {
+                        item.href = App.contextPath + "/okrMessage/index.htm";
                         item.createTsStr = $.DateUtils.getDateTimeString(new Date(item.createTs));
                     });
                     var templateText =
                         '<ul class="new-list">' +
                         '   [%_.each(info, function(msg, idx){%]' +
                         '       <li>' +
-                        '           <a class="new-item">' +
+                        '           <a class="new-item" onclick="top.mainObj.menuClick(null, \'[%=msg.href%]\');">' +
                         '               [%if(msg.mark == 1){%]' +
                         '                   <i class="iconfont icon-waring text-primary"></i>' +
                         '               [%} else if (msg.mark == 2) {%]' +
@@ -170,7 +171,7 @@ require(["jQuery", "countUp"], function () {
                         '               [%} else {%]' +
                         '                   <i class="iconfont icon-tip text-danger"></i>' +
                         '               [%}%]' +
-                        '               <h4>[%=msg.title%]：[%=msg.content%]</h4>' +
+                        '               <h4>[%=msg.title%]</h4>' +
                         '               <p>[%=msg.createTsStr%]</p>' +
                         '               <div class="action">' +
                         '                   [%if(msg.isProcessed == 1 && msg.isRead == 1){%]' +
@@ -211,6 +212,6 @@ require(["jQuery", "countUp"], function () {
             $this.addClass("active").siblings("li").removeClass("active");
             pageObj.loadOKRExecution($this.data("type"));
         });
-        pageObj.loadMessage();
+        pageObj.loadOKRMessage();
     });
 });

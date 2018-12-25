@@ -43,7 +43,7 @@ require(["jQuery"], function () {
                         '        </div>' +
                         '    </li>' +
                         '[%}else{%]' +
-                        '    <li><a href="[%=url%]">[%=name%]</a></li>' +
+                        '    <li><a onclick="mainObj.menuClick(this, \'[%=url%]\');">[%=name%]</a></li>' +
                         '[%}%]';
                 $.each(rootMenu.children, function (idx, obj) {
                     var html = UnderscoreUtil.getHtmlByText(templateText, obj);
@@ -59,7 +59,6 @@ require(["jQuery"], function () {
         },
 
         initEvent: function () {
-
         },
 
         menuClick: function (dom, url) {
@@ -67,20 +66,23 @@ require(["jQuery"], function () {
             $(dom).parents('li').siblings().removeClass('active');
             $(dom).parents('li').addClass('active');
             $iframe.attr('src', url);
+            mainObj.changeFrameHeight();
         },
 
         changeFrameHeight: function () {
             var $iframe = $('#mainContent');
-            $iframe.height = document.documentElement.clientHeight - 56;
+            $iframe.height(document.documentElement.clientHeight - 56);
         }
     });
 
     $(window).ready(function () {
         //为了让菜单打开的 <iframe> 里的top.mainObj 指向当前的 mainObj
         window.mainObj = mainObj;
-        mainObj.loadMenu(); //初始化菜单
-        //mainObj.initMenuScroll();//初始化菜单滚动插件
-        mainObj.initEvent();
+        if (!mainObj.flag) {
+            mainObj.loadMenu(); //初始化菜单
+            //mainObj.initMenuScroll();//初始化菜单滚动插件
+            mainObj.initEvent();
+        }
         window.onresize = function () {
             mainObj.changeFrameHeight();
         };

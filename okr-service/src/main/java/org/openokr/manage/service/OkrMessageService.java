@@ -1,6 +1,7 @@
 package org.openokr.manage.service;
 
 import com.zzheng.framework.adapter.vo.ResponseResult;
+import com.zzheng.framework.base.utils.BeanUtils;
 import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.dao.pojo.Page;
 import com.zzheng.framework.mybatis.service.impl.BaseServiceImpl;
@@ -44,6 +45,16 @@ public class OkrMessageService extends BaseServiceImpl implements IOkrMessageSer
         page.setRecords(messageList);
 
         return  page;
+    }
+
+    @Override
+    public ResponseResult update(MessagesVO vo, String currentUserId) {
+        MessagesEntity entity = this.getMyBatisDao().selectByPrimaryKey(MessagesEntity.class, vo.getId());
+        BeanUtils.copyBean(vo, entity);
+        entity.setUpdateUserId(currentUserId);
+        entity.setUpdateTs(new Date());
+        this.getMyBatisDao().update(entity);
+        return new ResponseResult(true, null, "更新成功！");
     }
 
     public ResponseResult dealMessage(String messageId, String userId) throws BusinessException {

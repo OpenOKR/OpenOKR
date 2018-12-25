@@ -1,4 +1,4 @@
-package org.openokr.sys;
+package org.openokr.sys.web;
 
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import org.openokr.application.web.BaseController;

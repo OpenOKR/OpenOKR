@@ -4,12 +4,6 @@
 <c:set var="pageTitle" value="菜单管理"/>
 <c:set var="pageJs" value="${staticContextPath}/assets/js/sys/menu.js"/>
 <%@ include file="/views/application/_include_top.jsp" %>
-<c:if test="${jsDebug}">
-    <link rel="stylesheet" type="text/css" href="${staticContextPath}/assets/css/oldGlobal.css"/>
-</c:if>
-<c:if test="${!jsDebug}">
-    <link rel="stylesheet" type="text/css" href="${staticContextPath}/assets/css/oldGlobal.min.css?ver=${staticResourceVersion}"/>
-</c:if>
 <div class="wrapper">
     <%-- 上部功能按钮区 --%>
     <div class="top-search">

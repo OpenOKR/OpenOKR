@@ -1,4 +1,4 @@
-package org.openokr.sys;
+package org.openokr.sys.web;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.openokr.application.web.BaseController;

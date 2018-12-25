@@ -4,12 +4,6 @@
 <c:set var="pageJs" value="${staticContextPath}/assets/js/sys/role.js"/>
 <c:set var="pageTitle" value="角色管理"/>
 <%@ include file="/views/application/_include_top.jsp" %>
-<c:if test="${jsDebug}">
-    <link rel="stylesheet" type="text/css" href="${staticContextPath}/assets/css/oldGlobal.css"/>
-</c:if>
-<c:if test="${!jsDebug}">
-    <link rel="stylesheet" type="text/css" href="${staticContextPath}/assets/css/oldGlobal.min.css?ver=${staticResourceVersion}"/>
-</c:if>
 <div class="wapper">
     <p class="crumbs-bar">
         <a href="${contextPath}/index.htm">OKR管理系统</a>

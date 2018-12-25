@@ -41,7 +41,7 @@ public class LoginController extends BaseController {
 
         //如果已登录,跳转到管理首页
         if (principal != null && !principal.isMobileLogin()) {
-            return "redirect:/";
+            return "redirect:/index.htm";
         }
         return "common/login";
     }

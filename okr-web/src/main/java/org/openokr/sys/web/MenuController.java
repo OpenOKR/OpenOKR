@@ -1,4 +1,4 @@
-package org.openokr.sys;
+package org.openokr.sys.web;
 
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.base.utils.MapUtils;

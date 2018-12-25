@@ -89,11 +89,40 @@
 }
 .card-area3 { padding: 18px 20px; }
 .card-area4 { padding: 0 20px; }
+.has-shadow {
+    box-shadow:  0 0 8px #f1f2f6 ;
+}
 .card-header {
     margin-bottom: 10px;
     border-bottom: 1px solid #f3f3f3;
 }
 .card-header.uil { padding: 22px 0; }
+.card-header.ui-st1 {
+    position: relative;
+    min-height: 65px;
+    padding: 22px 80px 0 65px ;
+    border-bottom: 1px dashed #f3f3f3;
+}
+.card-header.ui-st1 .em-radio {
+    position: absolute;
+    left: 0;
+    top: 22px;
+}
+.card-header.ui-st1 h4 {
+    font-size: 16px;
+    line-height: 30px;
+    color: #545454;
+}
+.card-header.ui-st1 p {
+    font-size: 12px;
+    line-height: 20px;
+    color: #a8a8a8;
+}
+.card-header.ui-st1 .action {
+    position: absolute;
+    right: 0;
+    top: 22px;
+}
 .card-con {
     min-height: 400px;
 }
@@ -136,33 +165,111 @@
     line-height: 20px;
     color: #999;
 }
-.participant {
-    margin-top: 18px;
-}
+.participant { margin-top: 18px; }
 .participant .name {
     display: block;
     font-size: 12px;
     line-height: 20px;
     color: #c4c4c4;
 }
+.part-item {
+    position: relative;
+}
 .participant-list .part-item {
     float: left;
     display: inline;
     margin: 4px 6px 0 0 ;
 }
-.participant-list .part-item>a,
-.participant-list .part-item>span {
+.operation .part-item .icon-close { display: block}
+.part-item .icon-close {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: -3px;
+    font-size: 14px;
+    color: #ff5213;
+    cursor: pointer;
+}
+.part-item>a,
+.part-item>span {
     display: block;
     width: 26px;
     height: 26px;
     overflow: hidden;
     line-height: 26px;
     text-align: center;
-    border-radius: 13px;
+    border-radius: 50%;
     color: #b4b5bb;
     background-color: #ebecf0;
 }
-.participant-list .part-item img { display: block; width: 100%; height: 100%}
+.part-item img { display: block; width: 100%; height: 100%}
+.participant.ui-l {
+    margin-bottom: 15px;
+    margin-top: 8px;
+}
+.participant.ui-l .participant-list {
+    position: relative;
+    height: 198px;
+    overflow: hidden;
+}
+
+.participant.ui-l .name {
+    font-size: 14px;
+    font-weight: bold;
+    color: #545454;
+}
+.participant.ui-l .part-item {
+    width: 51px;
+    height: 62px;
+    margin: 4px 1px 0 ;
+}
+.participant.ui-l .part-item>a,
+.participant.ui-l .part-item>span {
+    width: 36px;
+    height: 36px;
+    font-size: 12px;
+    line-height: 36px;
+    margin: 0 auto;
+    overflow: hidden;
+    color: #fff;
+    background-color: #4c84ff;
+}
+.participant.ui-l .part-item:last-child>a,
+.participant.ui-l .part-item:last-child>span {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 auto;
+    color: #4c84ff;
+    background-color: #e2ebff;
+}
+.participant.ui-l .part-item>strong {
+    display: block;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 26px;
+
+    text-align: center;
+    color: #707070;
+    text-overflow: ellipsis;white-space: nowrap;overflow: hidden;
+}
+
+.part-item.ui-mx {
+    width: 62px;
+    min-height: 62px;
+    margin: 4px 1px 0 ;
+}
+.part-item.ui-mx>a,
+.part-item.ui-mx>span {
+    width: 62px;
+    height: 62px;
+    font-size: 12px;
+    line-height: 62px;
+    margin: 0 auto;
+    overflow: hidden;
+    color: #fff;
+    background-color: #4c84ff;
+}
+
 .area-charts {
     position: absolute;
     right: 0;
@@ -621,7 +728,140 @@
     vertical-align: top;
     color: #4c84ff;
 }
+/*进度条*/
+/*步骤条*/
+.step-bar {
+    width: 500px;
+    margin: 25px auto 50px;
+}
+.step-col2 { width: 206px; }
+.step-bar li {
+    float: left;
+    position: relative;
+    width: 250px;
+    padding-top: 10px;
+    font-size: 12px;
+    line-height: 22px;
+    color: #bdbdbd;
+    border-bottom:2px solid #e5e5e5;
+}
+.step-bar li .step-radio {
+    position: absolute;
+    top: -1px;
+    left: -40px;
+    display: inline-block;
+    width: 80px;
+    text-align: center;
+}
+.step-bar li strong  {
+    display: block;
+    height: 24px;
+    margin-bottom: 3px;
+    color: #bdbdbd;
+}
+.step-bar li .iconfont {
+    display: block;
+    width: 24px;
+    height: 24px;
+    margin: 0 auto;
+    font-size: 24px;
+    line-height: 24px;
+    text-align: center;
+    vertical-align: middle;
+    color: #e5e5e5;
+    background-color: #f5f5f5;
+    border-radius: 50%;
+    box-shadow: 0 2px 3px #ecf4fb;
+}
+.step-bar li .iconfont:before{ content: "\e630"; }
+.step-bar li .txt {
+    display: block;
+    margin-top: 4px;
+    text-align: center;
+    font-size: 12px;
 
+}
+.step-bar li.last.active,
+.step-bar li.last {
+    width: 0;
+    border-bottom-color: transparent;
+}
+.step-bar li.past,
+.step-bar li.active {
+    color: #333;
+    border-color: #0090ff;
+    box-shadow: 0 4px 16px #ebf4fb;
+}
+.step-bar li.past .iconfont,
+.step-bar li.next .iconfont,
+.step-bar li.active .iconfont { box-shadow: 0 4px 16px #ebf4fb;}
+.step-bar li.first strong,
+.step-bar li.past strong,
+.step-bar li.past .iconfont,
+.step-bar li.next .iconfont,
+.step-bar li.active strong { color: #0090ff; }
+.step-bar li.next .iconfont:before { content: "\e6e0"}
+.step-bar li.first .iconfont:before,
+.step-bar li.active .iconfont:before,
+.step-bar li.past .iconfont:before { content: "\e610"; }
+.step-bar li.first { color: #333; }
+
+/*树操作节点*/
+.tree-info{position:relative; padding: 6px; }
+.tree-title{line-height:30px;height:30px;color:#000;font-size:14px;font-weight:bold;margin-bottom:5px;}
+.tree-info>.fl,
+.tree-info>.fr { width:228px; }
+.tree-info-item {
+    float: left;
+    width: 200px;
+    margin-right: 8px;
+}
+.tree-info-item.ui-off {
+    width: 46%;
+}
+.tree-btn+.tree-info-item { float: right}
+.tree-info-item:last-child { margin-right: 0; }
+.tree-box{
+    width:100%;
+    height:320px;
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    box-sizing: border-box;
+}
+.tree-box .search {
+    display: block;
+    width: auto;
+    margin: -1px -1px  0 -1px;
+    border-radius: 0;
+}
+.tree-box .tree-con{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+.tree-btn{
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:34px;
+    margin-left:-17px;
+    text-align:center;
+}
+.tree-btn .iconfont {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    margin-right: -3px;
+    font-size: 12px;
+    line-height: 25px;
+    text-align: center;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 50%;
+    background-color: #707070;
+}
+.tree-btn .iconfont:hover { background-color: #008dff }
 @-webkit-keyframes scaleForEver {
     0% {
         transform: scale(.6);
