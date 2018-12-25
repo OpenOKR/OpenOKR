@@ -11,6 +11,12 @@ public class OkrObjectSearchVO implements Serializable {
 
     private String userId;
 
+    //团队ID
+    private String teamId;
+
+    //目标ID
+    private String objectId;
+
     //OKR类型 1-个人 2-团队 3-公司
     private String type;
 
@@ -59,5 +65,21 @@ public class OkrObjectSearchVO implements Serializable {
 
     public void setExecuteStatus(String executeStatus) {
         this.executeStatus = executeStatus;
+    }
+
+    public String getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(String teamId) {
+        this.teamId = teamId;
+    }
+
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
     }
 }

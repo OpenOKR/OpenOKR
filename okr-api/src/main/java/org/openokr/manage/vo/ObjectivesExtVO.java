@@ -18,7 +18,11 @@ public class ObjectivesExtVO extends ObjectivesVO implements Serializable {
     // 参与人员
     private List<UserVO> joinUsers;
 
+    //关键结果
     private List<ResultsExtVO> resultsExtList;
+
+    // 历史操作记录
+    private List<LogVO> operateRecordList;
 
     public String getTypeName() {
         return ObjectivesTypeEnum.getByCode(getType()).getName();
@@ -50,5 +54,13 @@ public class ObjectivesExtVO extends ObjectivesVO implements Serializable {
 
     public void setResultsExtList(List<ResultsExtVO> resultsExtList) {
         this.resultsExtList = resultsExtList;
+    }
+
+    public List<LogVO> getOperateRecordList() {
+        return operateRecordList;
+    }
+
+    public void setOperateRecordList(List<LogVO> operateRecordList) {
+        this.operateRecordList = operateRecordList;
     }
 }

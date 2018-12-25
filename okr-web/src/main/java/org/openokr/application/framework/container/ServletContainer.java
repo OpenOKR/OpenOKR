@@ -1,4 +1,4 @@
-package org.openokr.framework;
+package org.openokr.application.framework.container;
 
 import io.undertow.jsp.HackInstanceManager;
 import io.undertow.jsp.JspServletBuilder;

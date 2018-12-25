@@ -67,6 +67,9 @@
         <if test="executeStatus != null and !executeStatus.isEmpty()">
             AND t2.status = #{executeStatus}
         </if>
+        <if test="objectId != null and !objectId.isEmpty()">
+            AND t1.id = #{objectId}
+        </if>
     </select>
 
     <!--获取团队OKR-->
@@ -79,6 +82,7 @@
         where t1.del_flag='0'
         and t1.type='2'
         and t2.user_id= #{userId}
+        and t1.team_id = #{teamId}
         order by t1.create_ts desc
         <if test="keyword != null and keyword != ''">
             AND (
@@ -90,6 +94,9 @@
         </if>
         <if test="executeStatus != null and !executeStatus.isEmpty()">
             AND t2.status = #{executeStatus}
+        </if>
+        <if test="objectId != null and !objectId.isEmpty()">
+            AND t1.id = #{objectId}
         </if>
     </select>
 
@@ -113,6 +120,9 @@
         </if>
         <if test="executeStatus != null and !executeStatus.isEmpty()">
             AND t2.status = #{executeStatus}
+        </if>
+        <if test="objectId != null and !objectId.isEmpty()">
+            AND t1.id = #{objectId}
         </if>
     </select>
 

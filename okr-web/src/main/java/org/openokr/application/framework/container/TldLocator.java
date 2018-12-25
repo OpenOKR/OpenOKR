@@ -1,4 +1,4 @@
-package org.openokr.framework;
+package org.openokr.application.framework.container;
 
 
 import org.apache.jasper.deploy.FunctionInfo;
