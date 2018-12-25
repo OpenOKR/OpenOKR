@@ -24,6 +24,7 @@ public class ObjectivesExtVO extends ObjectivesVO implements Serializable {
     // 目标影响团队
     private List<TeamsVO> relTeams;
 
+    // 目标关联标签
     private List<LabelVO> relLabels;
 
     // 历史操作记录

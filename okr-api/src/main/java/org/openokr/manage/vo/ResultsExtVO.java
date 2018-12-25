@@ -9,7 +9,7 @@ public class ResultsExtVO extends ResultsVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    // 参与人员
+    // 参与人员(协同者)
     private List<UserVO> joinUsers;
 
     public List<UserVO> getJoinUsers() {

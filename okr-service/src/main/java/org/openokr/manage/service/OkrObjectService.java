@@ -23,6 +23,7 @@ import org.openokr.manage.vo.ResultsExtVO;
 import org.openokr.manage.vo.TeamsVO;
 import org.openokr.sys.vo.UserVO;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +36,15 @@ import java.util.Map;
 @Service
 @Transactional
 public class OkrObjectService extends OkrBaseService implements IOkrObjectService {
+
+    @Autowired
+    private IOkrTeamService okrTeamService;
+
+    @Autowired
+    private IOkrLabelService okrLabelService;
+
+    @Autowired
+    private IOkrResultService okrResultService;
 
     private final static String MAPPER_NAMESPACE = "org.openokr.manage.sqlmapper.OkrObjectMapper";
 
@@ -76,15 +86,6 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
             objectivesExtList = this.getCompanyOkrList(searchVO);
         }
         return objectivesExtList;
-    }
-
-    @Override
-    public List<UserVO> getJoinUsersByResultId(String resultId, Integer limitAmount) throws BusinessException {
-        Map<String, Object> params = new HashMap<>();
-        params.put("resultId", resultId);
-        params.put("limitAmount", limitAmount);
-        List<UserVO> joinUsers = this.getDao().selectListBySql(MAPPER_NAMESPACE + ".getJoinUsersByResultId", params);
-        return joinUsers;
     }
 
     @Override
@@ -146,6 +147,23 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
             }
         }
         return operateRecordList;
+    }
+
+    @Override
+    public ObjectivesExtVO editObject(String objectId) throws BusinessException {
+        ObjectivesExtVO objectVO = new ObjectivesExtVO();
+        ObjectivesEntity entity = this.selectByPrimaryKey(ObjectivesEntity.class, objectId);
+        BeanUtils.copyProperties(entity, objectVO);
+
+        // 获取影响团队
+        List<TeamsVO> relTeams = okrTeamService.getObjectTeamRel(objectId);
+        objectVO.setRelTeams(relTeams);
+
+        // 获取目标关联标签
+        List<LabelVO> relLabels = okrLabelService.getObjectLabelRel(objectId);
+        objectVO.setRelLabels(relLabels);
+
+        return objectVO;
     }
 
     @Override
@@ -223,7 +241,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
     public ResponseResult deleteObject(String objectId, String userId) throws BusinessException {
         ResponseResult responseResult = new ResponseResult();
 
-        //1、如果该目标已经是别人的父目标,则无法删除改目标
+        //1、如果该目标已经是别人的父目标,则无法删除该目标
         ObjectivesEntityCondition parentCondition = new ObjectivesEntityCondition();
         parentCondition.createCriteria().andParentIdEqualTo(objectId);
         List<ObjectivesEntity> parentList = this.selectByCondition(parentCondition);
@@ -237,27 +255,6 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         entity.setUpdateTs(new Date());
         entity.setUpdateUserId(userId);
         this.update(entity);
-        responseResult.setInfo("删除成功");
-        return responseResult;
-    }
-
-    @Override
-    public ResponseResult deleteResult(String resultId, String userId) throws BusinessException {
-        ResponseResult responseResult = new ResponseResult();
-        ResultsEntity resultsEntity = this.selectByPrimaryKey(ResultsEntity.class, resultId);
-        resultsEntity.setDelFlag("1");//设为已删除状态
-        resultsEntity.setUpdateTs(new Date());
-        resultsEntity.setUpdateUserId(userId);
-        this.update(resultsEntity);
-
-        // 保存操作记录
-        LogVO logVO = new LogVO();
-        logVO.setBizId(resultId);
-        logVO.setBizType("2");
-        logVO.setMessage("删除关键结果:"+ resultsEntity.getName() +"");
-        logVO.setCreateTs(new Date());
-        logVO.setCreateUserId(userId);
-        this.saveOkrLog(logVO);
         responseResult.setInfo("删除成功");
         return responseResult;
     }
@@ -279,7 +276,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
                     for (ResultsEntity resultsEntity : resultsList) {
                         ResultsExtVO resultsExtVO = new ResultsExtVO();
                         BeanUtils.copyProperties(resultsEntity, resultsExtVO);
-                        List<UserVO> userList = this.getJoinUsersByResultId(resultsExtVO.getId(), searchVO.getLimitAmount());
+                        List<UserVO> userList = okrResultService.getJoinUsersByResultId(resultsExtVO.getId(), searchVO.getLimitAmount());
                         if (userList != null) {
                             resultsExtVO.setJoinUsers(userList);
                         }

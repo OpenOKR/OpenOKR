@@ -3,6 +3,7 @@ package org.openokr.manage.service;
 
 import com.zzheng.framework.exception.BusinessException;
 import org.openokr.manage.vo.TeamsExtVO;
+import org.openokr.manage.vo.TeamsVO;
 
 import java.util.List;
 
@@ -19,4 +20,12 @@ public interface IOkrTeamService {
      * @throws BusinessException
      */
     List<TeamsExtVO> getTeamByUserId(String userId) throws BusinessException;
+
+    /**
+     * 获取目标的影响团队
+     * @param objectId
+     * @return
+     * @throws BusinessException
+     */
+    List<TeamsVO> getObjectTeamRel(String objectId) throws BusinessException;
 }

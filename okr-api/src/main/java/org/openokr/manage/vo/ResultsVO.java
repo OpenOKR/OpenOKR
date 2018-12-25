@@ -100,6 +100,11 @@ public class ResultsVO extends BaseVO implements Serializable {
      */
     private String updateUserId;
 
+    /**
+     * 上一次的进度
+     */
+    private BigDecimal preProgress;
+
 
 
     /**
@@ -352,6 +357,20 @@ public class ResultsVO extends BaseVO implements Serializable {
      */
     public void setUpdateUserId(String updateUserId) {
         this.updateUserId = updateUserId;
+    }
+
+    /**
+     * 上一次的进度
+     */
+    public BigDecimal getPreProgress() {
+        return preProgress;
+    }
+
+    /**
+     * 上一次的进度
+     */
+    public void setPreProgress(BigDecimal preProgress) {
+        this.preProgress = preProgress;
     }
 
 }

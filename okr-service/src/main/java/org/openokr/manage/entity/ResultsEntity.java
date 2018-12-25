@@ -65,6 +65,9 @@ public class ResultsEntity extends BaseEntity implements Serializable {
     /** 更新者 */
     private String updateUserId;
 
+    /** 上一次的进度 */
+    private BigDecimal preProgress;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -371,6 +374,24 @@ public class ResultsEntity extends BaseEntity implements Serializable {
     public void setUpdateUserId(String updateUserId) {
         this.updateUserId = updateUserId;
         addSettedField("updateUserId");
+    }
+
+    /**
+     * 上一次的进度
+     * @return preProgress
+     */
+    @Column(name = "pre_progress")
+    public BigDecimal getPreProgress() {
+        return preProgress;
+    }
+
+    /**
+     * 上一次的进度
+     * @param preProgress
+     */
+    public void setPreProgress(BigDecimal preProgress) {
+        this.preProgress = preProgress;
+        addSettedField("preProgress");
     }
 
     /**

@@ -1334,6 +1334,66 @@ public class ResultsEntityCondition extends BaseEntityCondition implements Seria
             return (Criteria) this;
         }
 
+        public Criteria andPreProgressIsNull() {
+            addCriterion("pre_progress is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreProgressIsNotNull() {
+            addCriterion("pre_progress is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreProgressEqualTo(BigDecimal value) {
+            addCriterion("pre_progress =", value, "preProgress");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreProgressNotEqualTo(BigDecimal value) {
+            addCriterion("pre_progress <>", value, "preProgress");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreProgressGreaterThan(BigDecimal value) {
+            addCriterion("pre_progress >", value, "preProgress");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreProgressGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("pre_progress >=", value, "preProgress");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreProgressLessThan(BigDecimal value) {
+            addCriterion("pre_progress <", value, "preProgress");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreProgressLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("pre_progress <=", value, "preProgress");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreProgressIn(List<BigDecimal> values) {
+            addCriterion("pre_progress in", values, "preProgress");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreProgressNotIn(List<BigDecimal> values) {
+            addCriterion("pre_progress not in", values, "preProgress");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreProgressBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("pre_progress between", value1, value2, "preProgress");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreProgressNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("pre_progress not between", value1, value2, "preProgress");
+            return (Criteria) this;
+        }
+
         public Criteria andIdLikeInsensitive(String value) {
             addCriterion("upper(id) like", value.toUpperCase(), "id");
             return (Criteria) this;

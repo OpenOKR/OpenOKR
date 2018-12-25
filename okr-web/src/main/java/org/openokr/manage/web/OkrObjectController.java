@@ -11,8 +11,8 @@ import org.openokr.manage.vo.TeamsExtVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -69,15 +69,17 @@ public class OkrObjectController extends BaseController {
     }
 
     /**
-     * 编辑目标
+     * 新增或编辑目标页面
      * @return
      */
-    @RequestMapping(value = "/editObject.json")
+    @RequestMapping(value = "/okrObjectForm.htm")
     @ResponseBody
-    public ResponseResult editObject(ObjectivesExtVO objectVO) {
-        objectVO.setCreateUserId(getCurrentUserId());
-        ResponseResult responseResult = okrObjectService.saveObject(objectVO);
-        return responseResult;
+    public String okrObjectForm(Model model, String objectId) {
+        if(!StringUtils.isEmpty(objectId)) {
+            ObjectivesExtVO objectVO = okrObjectService.editObject(objectId);
+            model.addAttribute("objectVO", objectVO);
+        }
+        return "manage/okrObjectForm";
     }
 
     /**
@@ -103,25 +105,5 @@ public class OkrObjectController extends BaseController {
         return responseResult;
     }
 
-    /**
-     * 删除关键结果
-     * @return
-     */
-    @RequestMapping(value = "/deleteResult.json")
-    @ResponseBody
-    public ResponseResult deleteResult(String resultId, String userId) {
-        ResponseResult responseResult = okrObjectService.deleteResult(resultId, userId);
-        return responseResult;
-    }
 
-    @GetMapping("/form.htm")
-    public String form(String type) {
-        return "manage/okrObjectForm";
-    }
-
-    @PostMapping("/save.json")
-    @ResponseBody
-    public ResponseResult save() {
-        return null;
-    }
 }

@@ -41,15 +41,6 @@ public interface IOkrObjectService {
     List<ObjectivesExtVO> getOkrListByType(OkrObjectSearchVO searchVO) throws BusinessException;
 
     /**
-     * 获取KR的参与人员
-     * @param resultId
-     * @param limitAmount
-     * @return
-     * @throws BusinessException
-     */
-    List<UserVO> getJoinUsersByResultId(String resultId, Integer limitAmount) throws BusinessException;
-
-    /**
      * 获取个人OKR
      * @param searchVO
      * @return
@@ -83,6 +74,14 @@ public interface IOkrObjectService {
     List<LogVO> getOperateRecordList(String objectId, List<String> resultIds) throws BusinessException;
 
     /**
+     * 编辑目标
+     * @param objectId
+     * @return
+     * @throws BusinessException
+     */
+    ObjectivesExtVO editObject(String objectId) throws BusinessException;
+
+    /**
      * 保存目标
      * @param objectVO
      * @return
@@ -98,15 +97,6 @@ public interface IOkrObjectService {
      * @throws BusinessException
      */
     ResponseResult deleteObject(String objectId, String userId) throws BusinessException;
-
-    /**
-     * 删除关键结果
-     * @param resultId 关键结果ID
-     * @param userId
-     * @return
-     * @throws BusinessException
-     */
-    ResponseResult deleteResult(String resultId, String userId) throws BusinessException;
 
 
 }
