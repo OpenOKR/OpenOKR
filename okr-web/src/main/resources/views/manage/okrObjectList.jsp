@@ -6,9 +6,9 @@
 <%@ include file="/views/application/_include_top.jsp" %>
 <div class="wapper">
     <p class="crumbs-bar">
-        <a href="${contextPath}/index.htm">OKR管理系统</a>
+        <a href="${contextPath}/index.htm?flag=true">OKR管理系统</a>
         <i class="iconfont icon-arrowR"></i>
-        <a href="${contextPath}/object/init.htm">OKR</a>
+        <a href="${contextPath}/manage/okrObject/init.htm">OKR</a>
     </p>
     <div class="card-box">
         <div class="top-search uim tc">
@@ -16,7 +16,7 @@
                 <li class="active" onclick="pageObj.tabClick(this, '1', null);">我的OKR</li>
                 <c:if test="${teamList != null && teamList.size() > 0}">
                     <c:forEach items="${teamList}" var="team">
-                        <li onclick="pageObj.tabClick(this, '2', '${team.id}');">${team.name}</li>
+                        <li data-edit="${team.editFlag}" onclick="pageObj.tabClick(this, '2', '${team.id}');">${team.name}</li>
                     </c:forEach>
                 </c:if>
                 <li onclick="pageObj.tabClick(this, '3', null)">公司OKR</li>
@@ -33,7 +33,12 @@
                         <i class="icon"></i>
                     </div>
                     <a class="btn btn-primary waves-effect waves-light"><i class="icon-search"></i>搜索</a>
-                    <div class="action" onclick="pageObj.addObject();">
+                    <c:set var="companyEditFlag" value="0"/>
+                    <so:hasPermission name="company:edit">
+                        <c:set var="companyEditFlag" value="1"/>
+                    </so:hasPermission>
+                    <input id="companyEditFlag" type="hidden" value="${companyEditFlag}">
+                    <div class="action" id="addObject" onclick="pageObj.addOrUpdateObject(null);">
                         <a class="btn btn-primary waves-effect waves-light"><i class="icon-add"></i>新建OKR</a>
                     </div>
                 </div>

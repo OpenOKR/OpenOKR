@@ -153,6 +153,9 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
     public ObjectivesExtVO editObject(String objectId) throws BusinessException {
         ObjectivesExtVO objectVO = new ObjectivesExtVO();
         ObjectivesEntity entity = this.selectByPrimaryKey(ObjectivesEntity.class, objectId);
+        if (entity == null) {
+            return null;
+        }
         BeanUtils.copyProperties(entity, objectVO);
 
         // 获取影响团队

@@ -8,14 +8,15 @@ import org.openokr.manage.service.IOkrTeamService;
 import org.openokr.manage.vo.ObjectivesExtVO;
 import org.openokr.manage.vo.OkrObjectSearchVO;
 import org.openokr.manage.vo.TeamsExtVO;
+import org.openokr.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -73,12 +74,13 @@ public class OkrObjectController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/okrObjectForm.htm")
-    @ResponseBody
-    public String okrObjectForm(Model model, String objectId) {
-        if(!StringUtils.isEmpty(objectId)) {
-            ObjectivesExtVO objectVO = okrObjectService.editObject(objectId);
-            model.addAttribute("objectVO", objectVO);
+    public String okrObjectForm(Model model, String objectId, String type) {
+        ObjectivesExtVO objectVO = okrObjectService.editObject(objectId);
+        if (objectVO == null) {
+            objectVO = new ObjectivesExtVO();
+            objectVO.setType(type);
         }
+        model.addAttribute("objectVO", objectVO);
         return "manage/okrObjectForm";
     }
 
@@ -88,8 +90,14 @@ public class OkrObjectController extends BaseController {
      */
     @RequestMapping(value = "/saveObject.json")
     @ResponseBody
-    public ResponseResult saveObject(ObjectivesExtVO objectVO) {
-        objectVO.setCreateUserId(getCurrentUserId());
+    public ResponseResult saveObject(@JsonPathParam("$.objectVO") ObjectivesExtVO objectVO) {
+        if (StringUtils.isBlank(objectVO.getId())) {
+            objectVO.setCreateUserId(getCurrentUserId());
+            objectVO.setCreateTs(new Date());
+        } else {
+            objectVO.setUpdateUserId(getCurrentUserId());
+            objectVO.setUpdateTs(new Date());
+        }
         ResponseResult responseResult = okrObjectService.saveObject(objectVO);
         return responseResult;
     }

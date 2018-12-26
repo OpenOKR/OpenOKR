@@ -1,3 +1,7 @@
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5PFLZQK"
+                  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 <c:if test="${pageJs!=null}">
     <%@include file="/views/_include/_js_variable.jsp"%>
     <!--[if lt IE 9]>

@@ -100,6 +100,9 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
     public ResultsExtVO editResult(String resultId) throws BusinessException {
         ResultsExtVO resultVO = new ResultsExtVO();
         ResultsEntity entity = this.selectByPrimaryKey(ResultsEntity.class, resultId);
+        if (entity == null) {
+            return null;
+        }
         BeanUtils.copyProperties(entity, resultVO);
 
         // 获取协同人员

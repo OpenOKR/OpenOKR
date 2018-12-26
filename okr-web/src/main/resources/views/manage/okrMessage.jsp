@@ -6,9 +6,9 @@
 <%@ include file="/views/application/_include_top.jsp" %>
 <div class="wapper">
     <p class="crumbs-bar">
-        <a href="${contextPath}/index.htm">OKR管理系统</a>
+        <a href="${contextPath}/index.htm?flag=true">OKR管理系统</a>
         <i class="iconfont icon-arrowR"></i>
-        <a href="${contextPath}/okrMessage/index.htm">消息中心</a>
+        <a href="${contextPath}/manage/okrMessage/index.htm">消息中心</a>
     </p>
     <div class="card-box">
         <div class="card-title">

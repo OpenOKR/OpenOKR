@@ -590,7 +590,7 @@
 .okr-list>li:hover .participant { display: block;}
 .okr-list>li:hover { background-color: rgba(76,132,255,.05) ; }
 .okr-ohter {
-    padding: 10px 0 0 70px;
+    padding: 10px 0 0 0px;
 }
 
 /*历史操作记录*/

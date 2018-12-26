@@ -7,7 +7,6 @@ import org.openokr.manage.vo.ResultsExtVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author hjh
  */
 @Controller
-@RequestMapping("manage/okrResult")
+@RequestMapping("/manage/okrResult")
 public class OkrResultController extends BaseController {
 
     @Autowired
@@ -28,12 +27,13 @@ public class OkrResultController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/okrResultForm.htm")
-    @ResponseBody
-    public String okrResultForm(Model model, String resultId) {
-        if(!StringUtils.isEmpty(resultId)) {
-            ResultsExtVO resultVO = okrResultService.editResult(resultId);
-            model.addAttribute("resultVO", resultVO);
+    public String okrResultForm(Model model, String resultId, String objectId) {
+        ResultsExtVO resultVO = okrResultService.editResult(resultId);
+        if (resultVO == null) {
+            resultVO = new ResultsExtVO();
+            resultVO.setObjectId(objectId);
         }
+        model.addAttribute("resultVO", resultVO);
         return "manage/okrResultForm";
     }
 

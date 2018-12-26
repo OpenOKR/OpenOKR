@@ -4,6 +4,8 @@ require(["jQuery"], function () {
 
         options: {useEasing: true, useGrouping: true},
         currentType: '',
+        currentTeamId: '',
+        editFlag: '',
 
         loadOKRObjects: function (type, teamId) {
             var _this = this;
@@ -16,6 +18,7 @@ require(["jQuery"], function () {
                     contentType: 'application/json;charset=utf-8'
                 }).done(function (res) {
                     pageObj.currentType = type;
+                    pageObj.currentTeamId = teamId;
                     res && _this.buildOKRObjects(res);
                 }).always(function () {
                     $("#message").unblock();
@@ -33,20 +36,23 @@ require(["jQuery"], function () {
                         '<div class="okr-header">' +
                         '   <div class="area-charts">' +
                         '       <div id="[%=object.id%]" style="width: 100%;height: 100%;"></div>' +
-                        '       <div class="charts-total"><span class="num" data-end="[%=object.progress%]">[%=object.progress%]</span><em>%</em></div>' +
+                        '       <div class="charts-total">' +
+                        '           <span class="num" data-end="[%=object.progress%]" data-new="[%=object.progress%]">[%=object.progress%]</span>' +
+                        '           <em>%</em>' +
+                        '       </div>' +
                         '   </div>' +
                         '   <div class="okr-header-desc">' +
                         '       <h3 class="name">' +
                         '           [%=object.name%]' +
                         '           <div class="action">' +
                         '               <em class="em-start [%=statusList[object.status].cssClass%]">[%=statusList[object.status].name%]</em>' +
-                        '               <a class="btn-del text-primary"><i class="icon-del"></i>删除</a>' +
-                        '               <a class="btn-del text-primary"><i class="icon-edit"></i>编辑</a>' +
+                        '               <a class="btn-del text-primary" onclick="pageObj.deleteFunc([%=object.id%]);"><i class="icon-del"></i>删除</a>' +
+                        '               <a class="btn-del text-primary" onclick="pageObj.addOrUpdateObject([%=object.id%]);"><i class="icon-edit"></i>编辑</a>' +
                         '           </div>' +
                         '       </h3>' +
                         '       <p>[%=object.description%]</p>' +
                         '   </div>' +
-                        '   <div class="desc"><a class="btn btn-primary waves-effect waves-light">查看详情</a></div>' +
+                        '   <div class="desc"><a class="btn btn-primary waves-effect waves-light" onclick="">查看详情</a></div>' +
                         '</div>';
                     var okrCon = '<div class="okr-con">' +
                         '   <ul class="okr-list">' +
@@ -78,12 +84,14 @@ require(["jQuery"], function () {
                         '                       <p class="scroll-bar">' +
                         '                           <i class="complete"></i>' +
                         '                           <i class="new"></i>' +
-                        '                           <span class="vals"><em class="num" data-end="[%=item.progress%]">[%=item.progress%]</em>%</span>' +
+                        '                           <span class="vals">' +
+                        '                               <em class="num" data-end="[%=item.preProgress%]" data-new="[%=item.progress%]">[%=item.progress%]</em>%' +
+                        '                           </span>' +
                         '                       </p>' +
                         '                       <div class="action">' +
-                        '                           <a class="btn-del text-primary"><i class="icon-del"></i>删除</a>' +
-                        '                           <a class="btn-other text-primary"><i class="icon-refresh"></i>进度</a>' +
-                        '                           <a class="btn-del text-primary"><i class="icon-edit"></i>编辑</a>' +
+                        '                           <a class="btn-del text-primary" onclick="pageObj.deleteResultFunc([%=item.id%])"><i class="icon-del"></i>删除</a>' +
+                        '                           <a class="btn-other text-primary" onclick="pageObj.addCheckin([%=item.id%])"><i class="icon-refresh"></i>进度</a>' +
+                        '                           <a class="btn-del text-primary" onclick="pageObj.addOrUpdateResult([%=item.id%], [%=object.id%])"><i class="icon-edit"></i>编辑</a>' +
                         '                       </div>' +
                         '                   </div>' +
                         '               </li>' +
@@ -95,9 +103,36 @@ require(["jQuery"], function () {
                     $okrObjectList.append(header);
                     var con = UnderscoreUtil.getHtmlByText(okrCon, {object: object, executeList: executeList});
                     $okrObjectList.append(con);
+
+                    pageObj.showHideOperationButton();
                     pageObj.pieEchartsFunc(object.id, object.progress);
                 });
             });
+        },
+
+        // 操作按钮显示隐藏处理
+        showHideOperationButton: function () {
+            switch (pageObj.currentType) {
+                case '1':
+                    $('#addObject').show();
+                    break;
+                case '2':
+                    if (pageObj.editFlag === '1') {
+                        $('#addObject').show();
+                    } else {
+                        $('#addObject').hide();
+                        $('.btn-del').hide();
+                    }
+                    break;
+                case '3':
+                    if ($('#companyEditFlag').val() === '1') {
+                        $('#addObject').show();
+                    } else {
+                        $('#addObject').hide();
+                        $('.btn-del').hide();
+                    }
+                    break;
+            }
         },
 
         pieEchartsFunc: function (id, progress) {
@@ -119,7 +154,7 @@ require(["jQuery"], function () {
             });
             require(["countUp"], function (CountUp) {
                 $(".charts-total .num,.vals .num").each(function () {
-                    var countUp = new CountUp(this, 0, $(this).data("end"), 0, 1, pageObj.options);
+                    var countUp = new CountUp(this, 0, $(this).data("new"), 0, 1, pageObj.options);
                     countUp.start();
                 });
                 $(".vals .num").each(function () {
@@ -131,14 +166,17 @@ require(["jQuery"], function () {
         },
 
         tabClick: function (dom, type, teamId) {
+            if (type === '2') {
+                pageObj.editFlag = $(dom).data('editFlag');
+            }
             $(dom).addClass('active').siblings().removeClass('active');
             pageObj.loadOKRObjects(type, teamId);
         },
 
-        addObject: function () {
+        addOrUpdateObject: function (id) {
             require(["artDialog"], function () {
                 var dialogObj = dialog({
-                    url: App["contextPath"] + "/base/report/applyBill.htm?applyId=" + applyId + "&bizTypeNo=" + bizTypeNo,
+                    url: App["contextPath"] + "/manage/okrObject/okrObjectForm.htm?objectId=" + id + "&type=" + pageObj.currentType,
                     title: '新增/编辑Object',
                     quickClose: false,
                     cancelValue: "关闭",
@@ -156,11 +194,67 @@ require(["jQuery"], function () {
                 });
                 dialogObj.showModal();
             });
+        },
+
+        addOrUpdateResult: function (id, objectId) {
+            require(["artDialog"], function () {
+                var dialogObj = dialog({
+                    url: App["contextPath"] + "/manage/okrResult/okrResultForm.htm?resultId=" + id + "&objectId=" + objectId,
+                    title: '新增/编辑Result',
+                    quickClose: false,
+                    cancelValue: "关闭",
+                    cancel: function () {
+                        //关闭对话框
+                        dialogObj.close();
+                        return false;
+                    },
+                    button: [{
+                        value: '保存',
+                        callback: function () {
+                            return false;
+                        }
+                    }]
+                });
+                dialogObj.showModal();
+            });
+        },
+
+        deleteFunc: function (id) {
+            require(["artDialog"], function () {
+                artDialogUtil.confirm("确认删除该Object吗？", function () {
+                    $.ajax({
+                        url: App["contextPath"] + "/manage/okrObject/deleteObject.json?objectId=" + id,
+                        dataType: "json",
+                        success: function (data) {
+                            require(["Tips"], function () {
+                                if (data.success) {
+                                    TipsUtil.info(data.message);
+                                    pageObj.loadOKRObjects(pageObj.currentType, pageObj.currentTeamId);
+                                } else {
+                                    TipsUtil.warn(data.message);
+                                }
+                            });
+                        },
+                        error: function (res) {
+                            alert(JSON.stringify(res));
+                        }
+                    });
+                });
+            });
+        },
+
+        deleteResultFunc: function (id) {
+
+        },
+
+        addCheckin: function (id) {
+
         }
     });
 
     $(window).ready(function () {
         window.pageObj = pageObj;
         pageObj.loadOKRObjects('1', null);
+        pageObj.editFlag = '1';
     });
 });

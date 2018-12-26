@@ -62,6 +62,7 @@ require(["jQuery"], function () {
                 var html = UnderscoreUtil.getHtmlByText(templateText, {list: res.records, markList: markList});
                 $messageList.append(html);
                 $(".ui-other .icon-arrowR").click(function(){
+                    $(this).parents('li').siblings().find(".new-other").slideUp();
                     $(this).parents("li").toggleClass("active").find(".new-other").slideToggle();
                     pageObj.updateOKRMessage($(this), $(this).parents('li').attr('id'), $(this).parents('li').data('isread'));
                 });

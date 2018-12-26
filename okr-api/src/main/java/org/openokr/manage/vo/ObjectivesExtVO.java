@@ -10,6 +10,11 @@ public class ObjectivesExtVO extends ObjectivesVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public ObjectivesExtVO() {
+        super();
+        this.setConfidenceLevel("5");
+    }
+
     private String typeName;
 
     // 团队名称

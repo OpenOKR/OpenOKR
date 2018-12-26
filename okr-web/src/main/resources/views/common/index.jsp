@@ -43,5 +43,4 @@
         var mainObj = {flag:${flag}};
     </script>
 </body>
-
 <%@ include file="/views/application/_include_bottom.jsp" %>
