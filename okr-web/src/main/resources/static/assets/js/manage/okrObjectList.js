@@ -46,13 +46,13 @@ require(["jQuery"], function () {
                         '           [%=object.name%]' +
                         '           <div class="action">' +
                         '               <em class="em-start [%=statusList[object.status].cssClass%]">[%=statusList[object.status].name%]</em>' +
-                        '               <a class="btn-del text-primary" onclick="pageObj.deleteFunc([%=object.id%]);"><i class="icon-del"></i>删除</a>' +
-                        '               <a class="btn-del text-primary" onclick="pageObj.addOrUpdateObject([%=object.id%]);"><i class="icon-edit"></i>编辑</a>' +
+                        '               <a id="object-del-[%=object.id%]" class="btn-del text-primary" onclick="pageObj.deleteFunc([%=object.id%]);"><i class="icon-del"></i>删除</a>' +
+                        '               <a id="object-edit-[%=object.id%]" class="btn-del text-primary" onclick="pageObj.addOrUpdateObject([%=object.id%]);"><i class="icon-edit"></i>编辑</a>' +
                         '           </div>' +
                         '       </h3>' +
                         '       <p>[%=object.description%]</p>' +
                         '   </div>' +
-                        '   <div class="desc"><a class="btn btn-primary waves-effect waves-light" onclick="">查看详情</a></div>' +
+                        '   <div class="desc"><a id="object-detail-[%=object.id%]" class="btn btn-primary waves-effect waves-light" onclick="">查看详情</a></div>' +
                         '</div>';
                     var okrCon = '<div class="okr-con">' +
                         '   <ul class="okr-list">' +
@@ -89,9 +89,9 @@ require(["jQuery"], function () {
                         '                           </span>' +
                         '                       </p>' +
                         '                       <div class="action">' +
-                        '                           <a class="btn-del text-primary" onclick="pageObj.deleteResultFunc([%=item.id%])"><i class="icon-del"></i>删除</a>' +
-                        '                           <a class="btn-other text-primary" onclick="pageObj.addCheckin([%=item.id%])"><i class="icon-refresh"></i>进度</a>' +
-                        '                           <a class="btn-del text-primary" onclick="pageObj.addOrUpdateResult([%=item.id%], [%=object.id%])"><i class="icon-edit"></i>编辑</a>' +
+                        '                           <a id="result-del-[%=item.id%]" class="btn-del text-primary" onclick="pageObj.deleteResultFunc([%=item.id%])"><i class="icon-del"></i>删除</a>' +
+                        '                           <a id="result-checkin-[%item.id%]" class="btn-other text-primary" onclick="pageObj.addCheckin([%=item.id%])"><i class="icon-refresh"></i>进度</a>' +
+                        '                           <a id="result-edit-[%item.id%]" class="btn-del text-primary" onclick="pageObj.editResult([%=item.id%], [%=object.id%])"><i class="icon-edit"></i>编辑</a>' +
                         '                       </div>' +
                         '                   </div>' +
                         '               </li>' +
@@ -173,7 +173,7 @@ require(["jQuery"], function () {
             pageObj.loadOKRObjects(type, teamId);
         },
 
-        addOrUpdateObject: function (id) {
+        editObject: function (id) {
             require(["artDialog"], function () {
                 var dialogObj = dialog({
                     url: App["contextPath"] + "/manage/okrObject/okrObjectForm.htm?objectId=" + id + "&type=" + pageObj.currentType,
@@ -196,7 +196,7 @@ require(["jQuery"], function () {
             });
         },
 
-        addOrUpdateResult: function (id, objectId) {
+        editResult: function (id, objectId) {
             require(["artDialog"], function () {
                 var dialogObj = dialog({
                     url: App["contextPath"] + "/manage/okrResult/okrResultForm.htm?resultId=" + id + "&objectId=" + objectId,

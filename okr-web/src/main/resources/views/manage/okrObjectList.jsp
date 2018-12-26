@@ -32,13 +32,13 @@
                         <input type="text" class=" " placeholder="请选择" />
                         <i class="icon"></i>
                     </div>
-                    <a class="btn btn-primary waves-effect waves-light"><i class="icon-search"></i>搜索</a>
+                    <a id="search" class="btn btn-primary waves-effect waves-light"><i class="icon-search"></i>搜索</a>
                     <c:set var="companyEditFlag" value="0"/>
                     <so:hasPermission name="company:edit">
                         <c:set var="companyEditFlag" value="1"/>
                     </so:hasPermission>
                     <input id="companyEditFlag" type="hidden" value="${companyEditFlag}">
-                    <div class="action" id="addObject" onclick="pageObj.addOrUpdateObject(null);">
+                    <div class="action" id="editObject" onclick="pageObj.editObject(null);">
                         <a class="btn btn-primary waves-effect waves-light"><i class="icon-add"></i>新建OKR</a>
                     </div>
                 </div>
