@@ -347,6 +347,7 @@ img {
 .icon-edit:before { content: "\e652"}
 .icon-refresh:before { content: "\e61b"}
 .icon-add:before { content: "\e614"}
+.icon-add2:before { content: "\e64a"}
 .icon-search:before { content: "\e666"}
 .icon-close:before { content: "\e625"}
 
@@ -354,7 +355,7 @@ img {
 .text-muted { color: #ccc!important; }
 .text-primary { color: #4c84ff!important;; }
 a.text-primary:hover,
-a.text-primary:focus { color: #333!important;; }
+a.text-primary:focus { color: #007fe5!important;; }
 .text-success { color: #3abf7c!important;; }
 a.text-success:hover,
 a.text-success:focus { color: #66c33a!important;; }
@@ -741,8 +742,64 @@ span.mes-area { display: inline-block; }
 }
 .meg-tip {
     position: relative;
+    text-align: left;
     padding: 22px 10px 20px 78px;
 }
+.meg-tip.want-anima-b {
+    width: 420px;
+    margin: 0 auto;
+    -webkit-transform: translate(0px, 100%);
+    -moz-transform: translate(0px, 100%);
+    -ms-transform: translate(0px, 100%);
+    -o-transform: translate(0px, 100%);
+    transform: translate(0px, 100%);
+    opacity: 0;
+    -webkit-transition: all .3s  ease-out;
+    -moz-transition: all .3s  ease-out;
+    -ms-transition: all .3s  ease-out;
+    -o-transition: all .3s  ease-out;
+    transition: all .3s  ease-out;
+}
+.meg-tip.want-anima-b .box-btn,
+.meg-tip.want-anima-b .meg-tip-desc2,
+.meg-tip.want-anima-b .iconfont {
+    opacity: 1;
+    -webkit-transform: translate(0px, 0);
+    -moz-transform: translate(0px, 0);
+    -ms-transform: translate(0px, 0);
+    -o-transform: translate(0px, 0);
+    transform: translate(0px, 0);
+    -webkit-transition: all .3s  ease-out;
+    -moz-transition: all .3s  ease-out;
+    -ms-transition: all .3s  ease-out;
+    -o-transition: all .3s  ease-out;
+    transition: all .3s  ease-out;
+}
+.meg-tip.want-anima-b .meg-tip-desc2 {
+    -webkit-transition-delay: .3s;
+    -moz-transition-delay: .3s;
+    -ms-transition-delay: .3s;
+    -o-transition-delay: .3s;
+    transition-delay: .3s;
+}
+.meg-tip.want-anima-b .box-btn {
+    -webkit-transition-delay: .6s;
+    -moz-transition-delay:  .6s;
+    -ms-transition-delay:  .6s;
+    -o-transition-delay:  .6s;
+    transition-delay: .6s;
+}
+.meg-tip.want-totop .box-btn,
+.meg-tip.want-totop .meg-tip-desc2,
+.meg-tip.want-totop .iconfont {
+    opacity: 0;
+    -webkit-transform: translate(0px, 100%);
+    -moz-transform: translate(0px, 100%);
+    -ms-transform: translate(0px, 100%);
+    -o-transform: translate(0px, 100%);
+    transform: translate(0px, 100%);
+}
+
 .meg-tip .iconfont {
     position: absolute;
     left: 23px;
@@ -751,6 +808,11 @@ span.mes-area { display: inline-block; }
     height: 40px;
     line-height: 40px;
     font-size: 40px;
+    -webkit-transition: all .3s  ease-out;
+    -moz-transition: all .3s  ease-out;
+    -ms-transition: all .3s  ease-out;
+    -o-transition: all .3s  ease-out;
+    transition: all .3s  ease-out;
 }
 .meg-tip .meg-tip-header{
     margin-bottom: 5px;
@@ -758,9 +820,15 @@ span.mes-area { display: inline-block; }
     line-height: 24px;
     font-weight: bold;
 }
+
 .meg-tip .meg-tip-desc{
     font-size: 12px;
     line-height: 18px;
+    color: #707070;
+}
+.meg-tip .meg-tip-desc2{
+    font-size: 14px;
+    line-height: 26px;
     color: #707070;
 }
 .ui-addFile {
@@ -930,7 +998,7 @@ span.mes-area { display: inline-block; }
 }
 .hearder-menu li .menu-list {
     position: absolute;
-    top: 60px;
+    top: 0;
     left: 0;
     z-index: 1;
     display: none;
@@ -1038,7 +1106,7 @@ span.mes-area { display: inline-block; }
     height: 36px;
     overflow: hidden;
     vertical-align: middle;
-    border-radius: 3px;
+    border-radius: 50%;
 }
 .header .most-set .user-set input {
     position: absolute;
@@ -1987,6 +2055,12 @@ button.btn {
     padding: 10px 16px;
     border-radius: 6px;
     font-size: 18px;
+    line-height: 1.3333333;
+}
+.btn-m {
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
     line-height: 1.3333333;
 }
 .btn-s {

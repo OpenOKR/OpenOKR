@@ -71,6 +71,7 @@ public class LoginController extends BaseController {
         boolean mobile = WebUtils.isTrue(request, FormAuthenticationFilter.DEFAULT_MOBILE_PARAM);
         String exception = (String) request.getAttribute(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME);
         String message = (String) request.getAttribute(FormAuthenticationFilter.DEFAULT_MESSAGE_PARAM);
+        Integer loginFailCount = (Integer) request.getAttribute(FormAuthenticationFilter.DEFAULT_LOGIN_FAIL_COUNT);
 
         if (StringUtils.isBlank(message) || StringUtils.equals(message, "null")) {
             message = "用户或密码错误, 请重试.";
@@ -81,6 +82,7 @@ public class LoginController extends BaseController {
         modelMap.addAttribute(FormAuthenticationFilter.DEFAULT_MOBILE_PARAM, mobile);
         modelMap.addAttribute(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME, exception);
         modelMap.addAttribute(FormAuthenticationFilter.DEFAULT_MESSAGE_PARAM, message);
+        modelMap.addAttribute(FormAuthenticationFilter.DEFAULT_LOGIN_FAIL_COUNT, loginFailCount);
 
         // 验证失败清空验证码
         request.getSession().setAttribute(ValidateCodeServlet.VALIDATE_CODE, IdGen.uuid());

@@ -26,14 +26,16 @@ import javax.servlet.http.HttpServletResponse;
 @Service
 public class FormAuthenticationFilter extends org.apache.shiro.web.filter.authc.FormAuthenticationFilter {
 
-    public static final String DEFAULT_CAPTCHA_PARAM = "validateCode";
+    private static final String DEFAULT_CAPTCHA_PARAM = "validateCode";
     public static final String DEFAULT_MOBILE_PARAM = "mobileLogin";
     public static final String DEFAULT_MESSAGE_PARAM = "message";
+    public static final String DEFAULT_LOGIN_FAIL_COUNT = "loginFailCount";
     public static final Logger log = LoggerFactory.getLogger(FormAuthenticationFilter.class);
 
     private String captchaParam = DEFAULT_CAPTCHA_PARAM;
     private String mobileLoginParam = DEFAULT_MOBILE_PARAM;
     private String messageParam = DEFAULT_MESSAGE_PARAM;
+    private String loginFailCount = DEFAULT_LOGIN_FAIL_COUNT;
 
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
@@ -100,6 +102,10 @@ public class FormAuthenticationFilter extends org.apache.shiro.web.filter.authc.
         return messageParam;
     }
 
+    public String getLoginFailCount() {
+        return loginFailCount;
+    }
+
     /**
      * 登录成功之后跳转URL
      */
@@ -134,10 +140,12 @@ public class FormAuthenticationFilter extends org.apache.shiro.web.filter.authc.
         if (failCountObj == null) {
             CacheUtils.put(UserUtils.USER_CACHE, UserUtils.USER_CACHE_LOGIN_FAIL_COUNT_KEY + userName, 1);
         } else {
-            CacheUtils.put(UserUtils.USER_CACHE, UserUtils.USER_CACHE_LOGIN_FAIL_COUNT_KEY + userName, Integer.parseInt(failCountObj.toString()) + 1);
+            Integer failCount = Integer.parseInt(failCountObj.toString()) + 1;
+            CacheUtils.put(UserUtils.USER_CACHE, UserUtils.USER_CACHE_LOGIN_FAIL_COUNT_KEY + userName, failCount);
         }
         request.setAttribute(getFailureKeyAttribute(), className);
         request.setAttribute(getMessageParam(), message);
+        request.setAttribute(getLoginFailCount(), failCountObj);
         return true;
     }
 }

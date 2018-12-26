@@ -2,6 +2,7 @@ package org.openokr.manage.web;
 
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import org.openokr.application.web.BaseController;
+import org.openokr.manage.enumerate.ResultMetricUnitEnum;
 import org.openokr.manage.service.IOkrResultService;
 import org.openokr.manage.vo.ResultsExtVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,7 @@ public class OkrResultController extends BaseController {
             resultVO = new ResultsExtVO();
             resultVO.setObjectId(objectId);
         }
+        model.addAttribute("metricUnitEnumList", ResultMetricUnitEnum.toList());
         model.addAttribute("resultVO", resultVO);
         return "manage/okrResultForm";
     }
@@ -59,5 +61,4 @@ public class OkrResultController extends BaseController {
         ResponseResult responseResult = okrResultService.deleteResult(resultId, userId);
         return responseResult;
     }
-
 }

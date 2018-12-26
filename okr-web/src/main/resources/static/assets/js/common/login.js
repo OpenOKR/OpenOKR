@@ -28,6 +28,38 @@ require(["jQuery"], function () {
                     }
                 });
             });
+        },
+
+        initEvent:function () {
+            $(".item input").focus(function(){
+                var $parent=$(this).parents(".item");
+                $parent.addClass("item-focus");
+                if($(this).val().length>0){
+                    $parent.addClass("item-change");
+                }
+            }).blur(function(){
+                var $parent=$(this).parents(".item");
+                if($(this).val().length==0){
+                    $parent.removeClass("item-focus");
+                }
+                $parent.removeClass("item-change");
+            }).keyup(function(){
+                var $parent=$(this).parents(".item");
+                if($(this).val().length>0){
+                    $parent.addClass("item-change");
+                }else {
+                    $parent.removeClass("item-change");
+                }
+            });
+            //登录验证码请求
+            if (parseInt(pageObj.loginFailCount) >= 3) {
+                $('#validateCodeDiv').show();
+                $('#validateCodeDiv').append("<img id='validateCodeImg' src='" + App.contextPath + "/validateCodeServlet'/>");
+            }
+            //登录错误消息
+            if (pageObj.message !== '') {
+                $(".item").addClass("item-error");
+            }
         }
     });
 
@@ -36,6 +68,7 @@ require(["jQuery"], function () {
             top.window.location.href = App["contextPath"];
         }
         pageObj.init();
+        pageObj.initEvent();
     });
 });
 

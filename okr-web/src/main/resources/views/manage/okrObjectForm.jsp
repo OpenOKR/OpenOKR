@@ -5,7 +5,7 @@
 <c:set var="pageJs" value="${staticContextPath}/assets/js/manage/okrObjectForm.js"/>
 <%@ include file="/views/application/_include_top.jsp" %>
 <div style="width: 680px; border-radius: 5px; background-color: #fff; margin: 20px auto">
-    <div class="ui-form inner3">
+    <form class="ui-form inner3" id="objectForm">
         <ul class="form-grid font4">
             <input id="teamId" name="teamId" type="hidden" value="${objectVO.teamId}"/>
             <input id="type" name="type" type="hidden" value="${objectVO.type}"/>
@@ -45,14 +45,14 @@
                 <label class="form-lab">影响团队：</label>
                 <div class="form-control">
                     <div class="search">
-                        <input id="teams" name="teams" type="text" placeholder="请选择影响团队"/><em class="icon"></em>
+                        <input id="teamNames" name="teamNames" type="text" placeholder="请选择影响团队，可多选"/><em class="icon"></em>
                     </div>
                 </div>
             </li>
             <li class="col-sm-11 ">
                 <label class="form-lab">标签：</label>
                 <div class="form-control">
-                    <input id="labels" name="labels" type="text" class="inp" placeholder="请输入"/>
+                    <input id="labelNames" name="labelNames" type="text" class="inp" placeholder="请输入标签，可多选"/>
                 </div>
             </li>
             <li class="col-sm-11">
@@ -68,7 +68,7 @@
                 </div>
             </li>
         </ul>
-    </div>
+    </form>
 </div>
 <script type="text/javascript">
     var pageObj = {type: '${objectVO.type}'};

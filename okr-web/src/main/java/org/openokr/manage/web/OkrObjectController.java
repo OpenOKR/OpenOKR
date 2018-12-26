@@ -56,13 +56,23 @@ public class OkrObjectController extends BaseController {
     }
 
     /**
+     * OKR详情页面
+     */
+    @GetMapping(value = "/okrDetail.htm")
+    public String okrDetail(String id, String type, Model model) {
+        model.addAttribute("id", id);
+        model.addAttribute("type", type);
+        return "manage/okrObjectDetail";
+    }
+
+    /**
      * OKR详情展示
      * @return
      */
     @RequestMapping(value = "/getOkrDetail.json")
     @ResponseBody
-    public ResponseResult getOkrDetail(OkrObjectSearchVO searchVO) {
-        ResponseResult responseResult = new ResponseResult();
+    public ResponseResult getOkrDetail(@JsonPathParam("$.searchVO") OkrObjectSearchVO searchVO) {
+        ResponseResult responseResult = new ResponseResult(true, null);
         searchVO.setUserId(getCurrentUserId());
         ObjectivesExtVO object = okrObjectService.getOkrListByType(searchVO).get(0);
         responseResult.setInfo(object);
@@ -112,6 +122,4 @@ public class OkrObjectController extends BaseController {
         ResponseResult responseResult = okrObjectService.deleteObject(objectId, userId);
         return responseResult;
     }
-
-
 }

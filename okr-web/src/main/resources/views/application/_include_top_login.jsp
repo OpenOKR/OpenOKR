@@ -13,9 +13,11 @@
     <%@include file="/views/_include/_html_title.jsp"%>
     <%@include file="/views/_include/_html_link_shortcuticon.jsp"%>
     <c:if test="${jsDebug}">
-        <link rel="stylesheet" type="text/css" href="${staticContextPath}/assets/css/login.css"/>
+        <link rel="stylesheet" type="text/css" href="${staticContextPath}/assets/css/global.css"/>
+        <link rel="stylesheet" type="text/css" href="${staticContextPath}/assets/css/style.css"/>
     </c:if>
     <c:if test="${!jsDebug}">
-        <link rel="stylesheet" type="text/css" href="${staticContextPath}/assets/css/login.min.css?ver=${staticResourceVersion}"/>
+        <link rel="stylesheet" type="text/css" href="${staticContextPath}/assets/css/global.min.css?ver=${staticResourceVersion}"/>
+        <link rel="stylesheet" type="text/css" href="${staticContextPath}/assets/css/style.min.css?ver=${staticResourceVersion}"/>
     </c:if>
 </head>

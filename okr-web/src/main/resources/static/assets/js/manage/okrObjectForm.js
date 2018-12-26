@@ -2,15 +2,19 @@ var pageObj = pageObj || {};
 require(["jQuery"], function () {
     $.extend(pageObj, {
 
-        options: {useEasing: true, useGrouping: true},
+        validateRule: function () {
+            return {
+                name: {label: '目标', required: false, minLength:2,maxLength:32}
+            };
+        },
 
         init: function () {
             require(["AutoCombobox"], function () {
-                // pageObj.getParentCombo();
+                pageObj.getParentCombo();
             });
             require(["AutoTree"], function () {
-                // pageObj.getTeamsTree();
-                // pageObj.getLabelsTree();
+                pageObj.getTeamsTree();
+                pageObj.getLabelsTree();
             });
             pageObj.initDrag();
         },
@@ -44,11 +48,71 @@ require(["jQuery"], function () {
         },
 
         getTeamsTree: function () {
-
+            return $('#teamNames').AutoTree({
+                async: {
+                    dataSourceType: "onceRemote",
+                    url: App["contextPath"] + "/team/getSports.json"
+                },
+                view: {
+                    inputFilterFieldNames: ["name"],
+                    viewUniqueFieldName: "name",
+                    widthRefer: function () {
+                        return $(this).width() + 14;//引用当前自己输入框
+                    }
+                },
+                callback: {
+                    beforeAjaxSuccess: function (treeData) {
+                        //设置为全部展开
+                        for (var i = 0; i < treeData.length; i++) {
+                            treeData[i].open = true;
+                        }
+                    },
+                    afterLoad: function (dataStore) {
+                        if ($('#teamNames').val() !== '') {
+                            $(this).AutoTree('setCheckedNodes', $('#teamNames').val());
+                        }
+                    }
+                },
+                treeConfig: {
+                    check: {
+                        enable: true
+                    }
+                }
+            });
         },
 
         getLabelsTree: function () {
-
+            return $('#labelNames').AutoTree({
+                async: {
+                    dataSourceType: "onceRemote",
+                    url: App["contextPath"] + "/label/getSports.json"
+                },
+                view: {
+                    inputFilterFieldNames: ["name"],
+                    viewUniqueFieldName: "name",
+                    widthRefer: function () {
+                        return $(this).width() + 14;//引用当前自己输入框
+                    }
+                },
+                callback: {
+                    beforeAjaxSuccess: function (treeData) {
+                        //设置为全部展开
+                        for (var i = 0; i < treeData.length; i++) {
+                            treeData[i].open = true;
+                        }
+                    },
+                    afterLoad: function (dataStore) {
+                        if ($('#labelNames').val() !== '') {
+                            $(this).AutoTree('setCheckedNodes', $('#labelNames').val());
+                        }
+                    }
+                },
+                treeConfig: {
+                    check: {
+                        enable: true
+                    }
+                }
+            });
         },
 
         initDrag: function () {
@@ -83,6 +147,10 @@ require(["jQuery"], function () {
             document.onmouseup = function(){
                 document.onmousemove = null; //弹起鼠标不做任何操作
             }
+        },
+
+        getForm: function () {
+            return $("#objectForm").jqForm();
         }
     });
 

@@ -32,6 +32,7 @@ require(["jQuery"], function () {
                 var statusList = enumUtil.getEnum("objectivesStatusList.json");
                 var executeList = enumUtil.getEnum("executeStatusList.json");
                 $.each(res.info, function (idx, object) {
+                    object.href = App.contextPath + "/manage/okrObject/okrDetail.htm?id=" + object.id + "&type=" + object.type;
                     var okrHeader =
                         '<div class="okr-header">' +
                         '   <div class="area-charts">' +
@@ -47,18 +48,18 @@ require(["jQuery"], function () {
                         '           <div class="action">' +
                         '               <em class="em-start [%=statusList[object.status].cssClass%]">[%=statusList[object.status].name%]</em>' +
                         '               <a id="object-del-[%=object.id%]" class="btn-del text-primary" onclick="pageObj.deleteFunc([%=object.id%]);"><i class="icon-del"></i>删除</a>' +
-                        '               <a id="object-edit-[%=object.id%]" class="btn-del text-primary" onclick="pageObj.addOrUpdateObject([%=object.id%]);"><i class="icon-edit"></i>编辑</a>' +
+                        '               <a id="object-edit-[%=object.id%]" class="btn-del text-primary" onclick="pageObj.editObject([%=object.id%]);"><i class="icon-edit"></i>编辑</a>' +
                         '           </div>' +
                         '       </h3>' +
                         '       <p>[%=object.description%]</p>' +
                         '   </div>' +
-                        '   <div class="desc"><a id="object-detail-[%=object.id%]" class="btn btn-primary waves-effect waves-light" onclick="">查看详情</a></div>' +
+                        '   <div class="desc"><a id="object-detail-[%=object.id%]" class="btn btn-primary waves-effect waves-light" onclick="top.mainObj.menuClick(null, \'[%=object.href%]\')">查看详情</a></div>' +
                         '</div>';
                     var okrCon = '<div class="okr-con">' +
                         '   <ul class="okr-list">' +
                         '       [%if(!_.isNull(object.resultsExtList) && object.resultsExtList.length>0){%]' +
                         '           [%_.each(object.resultsExtList, function(item){%]' +
-                        '               <li>' +
+                        '               <li onmouseover="$(this).siblings().find(\'.participant\').hide(\'slow\');$(this).find(\'.participant\').show(\'slow\');">' +
                         '                   <div class="okr-list-in">' +
                         '                       <h4>' +
                         '                           K1：[%=item.name%]' +
@@ -177,20 +178,70 @@ require(["jQuery"], function () {
             require(["artDialog"], function () {
                 var dialogObj = dialog({
                     url: App["contextPath"] + "/manage/okrObject/okrObjectForm.htm?objectId=" + id + "&type=" + pageObj.currentType,
-                    title: '新增/编辑Object',
+                    title: '新增/编辑目标',
                     quickClose: false,
+                    okValue: "保存",
                     cancelValue: "关闭",
+                    ok: function () {
+                        var _this = this,
+                            $form = pageObj.getForm(),
+                            formData = $form.jqForm("getValue"),
+                            checkedTeams, checkedLabels;
+                        //验证
+                        var validateMsgObj = validateUtil.validateDatas(formData, pageObj.validateRule());
+                        if (!$.isEmptyObject(validateMsgObj)) {
+                            require(["Tips"], function () {
+                                //提示 拼接的验证信息
+                                TipsUtil.warn(validateUtil.concatValidateMsg(validateMsgObj));
+                                //焦点定位到 第一个 验证不通过的控件
+                                $form.jqForm("focusToElement", validateUtil.getFirstNoPassName(validateMsgObj));
+                            });
+                            return;
+                        }
+                        //赋值 teams
+                        checkedTeams = _this.getTeamsTree().AutoTree("getCheckedNodes");
+                        formData.relTeams = checkedTeams;
+                        //赋值 teams
+                        checkedLabels = _this.getLabelsTree().AutoTree("getCheckedNodes");
+                        formData.relLabels = checkedLabels;
+                        //
+                        //判断表单是否被修改( isDirty 是根据 setDefaultValue 设置的默认数据进行判断)
+                        require(["Tips"], function () {
+                            //表格单元格 如果处于编辑状态，需要回复成不可编辑，才可取到单元格数据。
+                            //if ($form.jqForm("isDirty") || $roleGrid.jqGrid("isDirty")) {
+                            //被删除的角色
+                            var _saveFunc = function () {
+                                //保存
+                                $.ajax({
+                                    type: "post",
+                                    url: App["contextPath"] + "/manage/okrObject/saveObject.json",
+                                    data: JSON.stringify({searchVO: formData}),//将对象序列化成JSON字符串
+                                    dataType: "json",
+                                    contentType: 'application/json;charset=utf-8', //设置请求头信息
+                                    success: function (data) {
+                                        if (data.success) {
+                                            TipsUtil.info(data.message);
+                                        } else {
+                                            TipsUtil.warn(data.message);
+                                        }
+                                    },
+                                    error: function (res) {
+                                        alert(JSON.stringify(res));
+                                    }
+                                });
+                            };
+                            //
+                            _saveFunc();
+                        });
+                        dialogObj.close();
+                        pageObj.loadOKRObjects(pageObj.currentType, pageObj.currentTeamId);
+                        return false;
+                    },
                     cancel: function () {
                         //关闭对话框
                         dialogObj.close();
                         return false;
-                    },
-                    button: [{
-                        value: '保存',
-                        callback: function () {
-                            return false;
-                        }
-                    }]
+                    }
                 });
                 dialogObj.showModal();
             });
@@ -200,20 +251,39 @@ require(["jQuery"], function () {
             require(["artDialog"], function () {
                 var dialogObj = dialog({
                     url: App["contextPath"] + "/manage/okrResult/okrResultForm.htm?resultId=" + id + "&objectId=" + objectId,
-                    title: '新增/编辑Result',
+                    title: '新增/编辑关键结果',
                     quickClose: false,
+                    okValue: "保存",
                     cancelValue: "关闭",
+                    ok: function () {
+                        return false;
+                    },
                     cancel: function () {
                         //关闭对话框
                         dialogObj.close();
                         return false;
+                    }
+                });
+                dialogObj.showModal();
+            });
+        },
+
+        addCheckin: function (id) {
+            require(["artDialog"], function () {
+                var dialogObj = dialog({
+                    url: App["contextPath"] + "/manage/okrCheckin/okrCheckinForm.htm?resultId=" + id,
+                    title: '每周更新关键结果',
+                    quickClose: false,
+                    okValue: "保存",
+                    cancelValue: "关闭",
+                    ok: function () {
+                        return false;
                     },
-                    button: [{
-                        value: '保存',
-                        callback: function () {
-                            return false;
-                        }
-                    }]
+                    cancel: function () {
+                        //关闭对话框
+                        dialogObj.close();
+                        return false;
+                    }
                 });
                 dialogObj.showModal();
             });
@@ -221,7 +291,7 @@ require(["jQuery"], function () {
 
         deleteFunc: function (id) {
             require(["artDialog"], function () {
-                artDialogUtil.confirm("确认删除该Object吗？", function () {
+                artDialogUtil.confirm("确认删除该目标吗？", function () {
                     $.ajax({
                         url: App["contextPath"] + "/manage/okrObject/deleteObject.json?objectId=" + id,
                         dataType: "json",
@@ -244,11 +314,27 @@ require(["jQuery"], function () {
         },
 
         deleteResultFunc: function (id) {
-
-        },
-
-        addCheckin: function (id) {
-
+            require(["artDialog"], function () {
+                artDialogUtil.confirm("确认删除该关键结果吗？", function () {
+                    $.ajax({
+                        url: App["contextPath"] + "/manage/okrResult/deleteResult.json?resultId=" + id,
+                        dataType: "json",
+                        success: function (data) {
+                            require(["Tips"], function () {
+                                if (data.success) {
+                                    TipsUtil.info(data.message);
+                                    pageObj.loadOKRObjects(pageObj.currentType, pageObj.currentTeamId);
+                                } else {
+                                    TipsUtil.warn(data.message);
+                                }
+                            });
+                        },
+                        error: function (res) {
+                            alert(JSON.stringify(res));
+                        }
+                    });
+                });
+            });
         }
     });
 

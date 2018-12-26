@@ -50,11 +50,10 @@ public class AuthRealm extends AuthorizingRealm {
         }
         //校验登录验证码
         String code = (String) session.getAttribute(ValidateCodeServlet.VALIDATE_CODE);
-        if (failCount > 5) {
-            if (token.getCaptcha() == null || !token.getCaptcha().toUpperCase().equals(code.toUpperCase())) {
-
+        if (failCount >= 3) {
+            if ((token.getCaptcha() == null || !token.getCaptcha().toUpperCase().equals(code.toUpperCase()))) {
+                throw new AuthenticationException("msg:验证码错误,请重试.");
             }
-            throw new AuthenticationException("msg:验证码错误,请重试.");
         }
 
         //校验用户名密码

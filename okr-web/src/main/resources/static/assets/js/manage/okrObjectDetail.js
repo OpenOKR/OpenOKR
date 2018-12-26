@@ -49,7 +49,7 @@ require(["jQuery"], function () {
                     '   </div>' +
                     '   <div class="desc">' +
                     '       <span class="txt-item text-muted">把握度：</span>' +
-                    '       <span class="txt-item">把握</span>' +
+                    '       <span id="confidenceLevel" class="txt-item" data-value="[%=object.confidenceLevel%]">把握</span>' +
                     '   </div>' +
                     '</div>';
                 var okrCon = '<div class="okr-con">' +
@@ -111,6 +111,8 @@ require(["jQuery"], function () {
                     '</div>';
                 var header = UnderscoreUtil.getHtmlByText(okrHeader, {object: object, statusList: statusList});
                 $okrObjectDetail.append(header);
+                $('#confidenceLevel').html(pageObj.sectionToChinese($('#confidenceLevel').data('value')) + $('#confidenceLevel').html());
+
                 var con = UnderscoreUtil.getHtmlByText(okrCon, {object: object, executeList: executeList});
                 $okrObjectDetail.append(con);
                 pageObj.pieEchartsFunc(object.id, object.progress);
@@ -188,25 +190,7 @@ require(["jQuery"], function () {
 
         chnNumChar: ["零成","一成","二成","三成","四成","五成","六成","七成","八成","九成"],
         sectionToChinese: function (section) {
-            var strIns = '', chnStr = '';
-            var unitPos = 0;
-            var zero = true;
-            while(section > 0){
-                var v = section % 10;
-                if (v === 0) {
-                    if(!zero){
-                        zero = true;
-                        chnStr = pageObj.chnNumChar[v] + chnStr;
-                    }
-                } else {
-                    zero = false;
-                    strIns = pageObj.chnNumChar[v];
-                    chnStr = strIns + chnStr;
-                }
-                unitPos++;
-                section = Math.floor(section / 10);
-            }
-            return chnStr;
+            return pageObj.chnNumChar[section];
         }
     });
 
