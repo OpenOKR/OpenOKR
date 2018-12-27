@@ -262,6 +262,21 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         return responseResult;
     }
 
+    @Override
+    public List<ObjectivesExtVO> getParentObject(String userId, String type) throws BusinessException {
+        OkrObjectSearchVO searchVO = new OkrObjectSearchVO();
+        searchVO.setUserId(userId);
+        List<ObjectivesExtVO> objectivesExtList = new ArrayList<>();
+
+        if (ObjectivesTypeEnum.TYPE_2.getCode().equals(type)) {//获取团队目标
+            objectivesExtList = this.getTeamOkrList(searchVO);
+        } else if (ObjectivesTypeEnum.TYPE_3.getCode().equals(type)) {//获取公司目标
+
+        }
+
+        return objectivesExtList;
+    }
+
     /**
      * 设置KR信息
      */

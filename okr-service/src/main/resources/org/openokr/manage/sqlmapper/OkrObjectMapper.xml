@@ -82,7 +82,9 @@
         where t1.del_flag='0'
         and t1.type='2'
         and t2.user_id= #{userId}
-        and t1.team_id = #{teamId}
+        <if test="teamId != null and !teamId.isEmpty()">
+            AND t1.team_id = #{teamId}
+        </if>
         <if test="keyword != null and keyword != ''">
             AND (
                t1.name LIKE CONCAT('%', #{keyword}, '%')

@@ -98,5 +98,14 @@ public interface IOkrObjectService {
      */
     ResponseResult deleteObject(String objectId, String userId) throws BusinessException;
 
+    /**
+     * 获取父目标下拉数据
+     * @param userId
+     * @param type
+     * @return
+     * @throws BusinessException
+     */
+    List<ObjectivesExtVO> getParentObject(String userId, String type) throws BusinessException;
+
 
 }

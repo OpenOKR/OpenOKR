@@ -58,8 +58,8 @@ public class OkrResultController extends BaseController {
      */
     @RequestMapping(value = "/deleteResult.json")
     @ResponseBody
-    public ResponseResult deleteResult(String resultId, String userId) {
-        ResponseResult responseResult = okrResultService.deleteResult(resultId, userId);
+    public ResponseResult deleteResult(String resultId) {
+        ResponseResult responseResult = okrResultService.deleteResult(resultId, getCurrentUserId());
         return responseResult;
     }
 

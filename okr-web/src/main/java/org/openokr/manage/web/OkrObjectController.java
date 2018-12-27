@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -118,8 +119,20 @@ public class OkrObjectController extends BaseController {
      */
     @RequestMapping(value = "/deleteObject.json")
     @ResponseBody
-    public ResponseResult deleteObject(String objectId, String userId) {
-        ResponseResult responseResult = okrObjectService.deleteObject(objectId, userId);
+    public ResponseResult deleteObject(String objectId) {
+        ResponseResult responseResult = okrObjectService.deleteObject(objectId, getCurrentUserId());
         return responseResult;
+    }
+
+    /**
+     * 获取父目标下拉数据
+     * @return
+     */
+    @RequestMapping(value = "/getParentObject.json")
+    @ResponseBody
+    public List<ObjectivesExtVO> getParentObject() {
+        List<ObjectivesExtVO> objectivesList = new ArrayList<>();
+
+        return objectivesList;
     }
 }
