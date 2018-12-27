@@ -14,7 +14,7 @@ import java.util.List;
 public interface IOkrTeamService {
 
     /**
-     * 获取用户的所有团队信息(不包括公司团队)
+     * 获取用户的所有团队信息
      * @param userId
      * @return
      * @throws BusinessException

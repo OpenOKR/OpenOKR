@@ -236,7 +236,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
             this.insertList(labelsRelList);
         }
 
-        responseResult.setInfo("保存成功");
+        responseResult.setMessage("保存成功");
         return responseResult;
     }
 
@@ -249,7 +249,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         parentCondition.createCriteria().andParentIdEqualTo(objectId);
         List<ObjectivesEntity> parentList = this.selectByCondition(parentCondition);
         if (parentList !=null && parentList.size()>0) {
-            responseResult.setInfo("该目标还存在子目标,无法删除");
+            responseResult.setMessage("该目标还存在子目标,无法删除");
             responseResult.setSuccess(false);
             return responseResult;
         }
@@ -258,7 +258,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         entity.setUpdateTs(new Date());
         entity.setUpdateUserId(userId);
         this.update(entity);
-        responseResult.setInfo("删除成功");
+        responseResult.setMessage("删除成功");
         return responseResult;
     }
 
@@ -267,13 +267,11 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         OkrObjectSearchVO searchVO = new OkrObjectSearchVO();
         searchVO.setUserId(userId);
         List<ObjectivesExtVO> objectivesExtList = new ArrayList<>();
-
         if (ObjectivesTypeEnum.TYPE_2.getCode().equals(type)) {//获取团队目标
             objectivesExtList = this.getTeamOkrList(searchVO);
         } else if (ObjectivesTypeEnum.TYPE_3.getCode().equals(type)) {//获取公司目标
-
+            objectivesExtList = this.getCompanyOkrList(searchVO);
         }
-
         return objectivesExtList;
     }
 

@@ -46,7 +46,7 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
         logVO.setCreateTs(new Date());
         logVO.setCreateUserId(userId);
         this.saveOkrLog(logVO);
-        responseResult.setInfo("删除成功");
+        responseResult.setMessage("删除成功");
         return responseResult;
     }
 
@@ -101,7 +101,7 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
             this.insertList(resultUserRelList);
         }
 
-        responseResult.setInfo("保存成功");
+        responseResult.setMessage("保存成功");
         return responseResult;
     }
 
@@ -141,7 +141,7 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
         String resultId = checkinsVO.getResultId();
         if (StringUtils.isEmpty(resultId)) {
             responseResult.setSuccess(false);
-            responseResult.setInfo("关键结果ID不能为空");
+            responseResult.setMessage("关键结果ID不能为空");
             return responseResult;
         }
         //KR进度每次都是新增,不改旧数据
@@ -149,7 +149,7 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
         BeanUtils.copyProperties(checkinsVO, entity);
         entity.setCreateTs(new Date());
         this.insert(entity);
-        responseResult.setInfo("保存成功");
+        responseResult.setMessage("保存成功");
         return responseResult;
     }
 

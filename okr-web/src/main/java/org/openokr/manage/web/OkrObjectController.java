@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -130,9 +129,7 @@ public class OkrObjectController extends BaseController {
      */
     @RequestMapping(value = "/getParentObject.json")
     @ResponseBody
-    public List<ObjectivesExtVO> getParentObject() {
-        List<ObjectivesExtVO> objectivesList = new ArrayList<>();
-
-        return objectivesList;
+    public List<ObjectivesExtVO> getParentObject(String type) {
+        return okrObjectService.getParentObject(getCurrentUserId(), type);
     }
 }

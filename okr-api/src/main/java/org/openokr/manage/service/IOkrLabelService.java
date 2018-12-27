@@ -19,4 +19,11 @@ public interface IOkrLabelService {
      * @throws BusinessException
      */
     List<LabelVO> getObjectLabelRel(String objectId) throws BusinessException;
+
+    /**
+     * 获取所有标签数据
+     * @return
+     * @throws BusinessException
+     */
+    List<LabelVO> getAllLabel() throws BusinessException;
 }
