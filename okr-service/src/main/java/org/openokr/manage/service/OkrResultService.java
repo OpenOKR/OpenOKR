@@ -4,9 +4,12 @@ import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.exception.BusinessException;
 import org.apache.commons.lang3.StringUtils;
 import org.openokr.application.framework.service.OkrBaseService;
+import org.openokr.manage.entity.CheckinsEntity;
 import org.openokr.manage.entity.ResultUserRelaEntity;
 import org.openokr.manage.entity.ResultUserRelaEntityCondition;
 import org.openokr.manage.entity.ResultsEntity;
+import org.openokr.manage.enumerate.ResultMetricUnitEnum;
+import org.openokr.manage.vo.CheckinsExtVO;
 import org.openokr.manage.vo.LogVO;
 import org.openokr.manage.vo.ResultsExtVO;
 import org.openokr.sys.vo.UserVO;
@@ -58,6 +61,12 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
             entity.setStatus("1");//未开始状态
             entity.setDelFlag("0");//删除状态:否
             entity.setCreateTs(new Date());
+
+            //如果评价单位是"是否",要设置一下默认的目标值和起始值
+            if(ResultMetricUnitEnum.TYPE_1.getCode().equals(entity.getMetricUnit())) {
+                entity.setTargetValue("完成");
+                entity.setInitialValue("未完成");
+            }
             this.insert(entity);
             resultId = entity.getId();
         } else { //更新
@@ -120,5 +129,28 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
         return joinUsers;
     }
 
+    @Override
+    public CheckinsExtVO editCheckins(String resultId) throws BusinessException {
+        CheckinsExtVO checkinsVO = new CheckinsExtVO();
+        return checkinsVO;
+    }
+
+    @Override
+    public ResponseResult saveCheckins(CheckinsExtVO checkinsVO) throws BusinessException {
+        ResponseResult responseResult = new ResponseResult();
+        String resultId = checkinsVO.getResultId();
+        if (StringUtils.isEmpty(resultId)) {
+            responseResult.setSuccess(false);
+            responseResult.setInfo("关键结果ID不能为空");
+            return responseResult;
+        }
+        //KR进度每次都是新增,不改旧数据
+        CheckinsEntity entity = new CheckinsEntity();
+        BeanUtils.copyProperties(checkinsVO, entity);
+        entity.setCreateTs(new Date());
+        this.insert(entity);
+        responseResult.setInfo("保存成功");
+        return responseResult;
+    }
 
 }

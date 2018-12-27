@@ -3,6 +3,7 @@ package org.openokr.manage.service;
 
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.exception.BusinessException;
+import org.openokr.manage.vo.CheckinsExtVO;
 import org.openokr.manage.vo.ResultsExtVO;
 import org.openokr.sys.vo.UserVO;
 
@@ -48,5 +49,20 @@ public interface IOkrResultService {
      */
     List<UserVO> getJoinUsersByResultId(String resultId, Integer limitAmount) throws BusinessException;
 
+    /**
+     * 编辑KR进度
+     * @param resultId 关键结果ID
+     * @return
+     * @throws BusinessException
+     */
+    CheckinsExtVO editCheckins(String resultId) throws BusinessException;
+
+    /**
+     * 保存KR进度
+     * @param checkinsVO
+     * @return
+     * @throws BusinessException
+     */
+    ResponseResult saveCheckins(CheckinsExtVO checkinsVO) throws BusinessException;
 
 }

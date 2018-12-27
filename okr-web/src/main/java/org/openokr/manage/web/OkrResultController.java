@@ -4,6 +4,7 @@ import com.zzheng.framework.adapter.vo.ResponseResult;
 import org.openokr.application.web.BaseController;
 import org.openokr.manage.enumerate.ResultMetricUnitEnum;
 import org.openokr.manage.service.IOkrResultService;
+import org.openokr.manage.vo.CheckinsExtVO;
 import org.openokr.manage.vo.ResultsExtVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -61,4 +62,27 @@ public class OkrResultController extends BaseController {
         ResponseResult responseResult = okrResultService.deleteResult(resultId, userId);
         return responseResult;
     }
+
+    /**
+     * 编辑KR进度页面
+     * @return
+     */
+    @RequestMapping(value = "/checkinsForm.htm")
+    public String checkinsForm(Model model) {
+        return "manage/checkinsForm";
+    }
+
+    /**
+     * 保存KR进度
+     * @return
+     */
+    @RequestMapping(value = "/saveCheckins.json")
+    @ResponseBody
+    public ResponseResult saveCheckins(CheckinsExtVO checkinsVO) {
+        checkinsVO.setCreateUserId(getCurrentUserId());
+        ResponseResult responseResult = okrResultService.saveCheckins(checkinsVO);
+        return responseResult;
+    }
+
+
 }
