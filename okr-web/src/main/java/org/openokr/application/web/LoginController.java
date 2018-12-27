@@ -2,12 +2,11 @@ package org.openokr.application.web;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.shiro.web.util.WebUtils;
+import org.openokr.application.shiro.ShiroConfiguration;
 import org.openokr.application.shiro.filter.FormAuthenticationFilter;
 import org.openokr.application.shiro.AuthRealm;
 import org.openokr.application.shiro.RSAService;
-import org.openokr.utils.IdGen;
-import org.openokr.utils.StringUtils;
-import org.openokr.utils.UserUtils;
+import org.openokr.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,11 +42,17 @@ public class LoginController extends BaseController {
         if (principal != null && !principal.isMobileLogin()) {
             return "redirect:/index.htm";
         }
+        Object failCountObj = CacheUtils.get(UserUtils.USER_CACHE,
+                UserUtils.USER_CACHE_LOGIN_FAIL_COUNT_KEY + CookieUtils.getCookie(request, ShiroConfiguration.COOKIE_NAME));
+        model.addAttribute(FormAuthenticationFilter.DEFAULT_LOGIN_FAIL_COUNT, failCountObj);
         return "common/login";
     }
 
     @GetMapping(value = "/login.htm")
     public String login(HttpServletRequest request, Model model) {
+        Object failCountObj = CacheUtils.get(UserUtils.USER_CACHE,
+                UserUtils.USER_CACHE_LOGIN_FAIL_COUNT_KEY + CookieUtils.getCookie(request, ShiroConfiguration.COOKIE_NAME));
+        model.addAttribute(FormAuthenticationFilter.DEFAULT_LOGIN_FAIL_COUNT, failCountObj);
         return "common/login";
     }
 
@@ -63,7 +68,7 @@ public class LoginController extends BaseController {
 
         // 如果已经登录，则跳转到管理首页
         if (principal != null) {
-            return "redirect:/";
+            return "redirect:/index.htm";
         }
 
         String username = WebUtils.getCleanParam(request, FormAuthenticationFilter.DEFAULT_USERNAME_PARAM);

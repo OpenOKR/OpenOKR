@@ -88,8 +88,12 @@ var require = {
         }
     },
     shim: {
-        jQuery: {
+        _jQuery1: {
             deps: []
+        },
+
+        jQuery: {
+            deps: ((App.src) ? ["_jQuery"] : [])
         },
 
         validation: {
@@ -397,7 +401,7 @@ var require = {
     paths: {
         _jQuery: App._jQuery + "jquery",
 
-        jQuery: ((App.scp) ? App._jQuery + "jquery-application-ext" : App._jQuery + "jquery.min.js?ver=" + App.ver),
+        jQuery: ((App.src) ? App._jQuery + "jquery-application-ext" : App._jQuery + "jquery.min.js?ver=" + App.ver),
 
         validation: ((App.src) ? App._validation + "jquery.validate" : App._validation + "jquery.validate.min.js?ver=" + App.ver),
 

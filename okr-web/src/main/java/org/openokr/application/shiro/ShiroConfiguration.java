@@ -35,6 +35,7 @@ import java.util.Map;
 public class ShiroConfiguration {
 
     private final static Logger log = LoggerFactory.getLogger(ShiroConfiguration.class);
+    public final static String COOKIE_NAME = "okr.session.id";
 
     @Bean(name = "shiroFilter")
     public ShiroFilterFactoryBean shiroFilter(@Qualifier("securityManager") SecurityManager manager) {
@@ -54,14 +55,11 @@ public class ShiroConfiguration {
         //配置访问权限
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
 
-        filterChainDefinitionMap.put("/assets/**", "anon");
+        filterChainDefinitionMap.put("/static/**", "anon");
 
         filterChainDefinitionMap.put("/validateCodeServlet", "anon");
         filterChainDefinitionMap.put("/pkey.json", "anon");
         filterChainDefinitionMap.put("/error/*", "anon");
-
-        //接口 任何人可调用
-        filterChainDefinitionMap.put("/uploadFile/*", "anon");
 
         filterChainDefinitionMap.put("/login.htm", "authc");
         filterChainDefinitionMap.put("/logout.htm", "logout");
@@ -114,7 +112,7 @@ public class ShiroConfiguration {
     @Bean
     public Cookie sessionIdCookie() {
         SimpleCookie cookie = new SimpleCookie();
-        cookie.setName("cxl.session.id");
+        cookie.setName(COOKIE_NAME);
         return cookie;
     }
 

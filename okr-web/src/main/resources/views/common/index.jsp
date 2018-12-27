@@ -2,7 +2,7 @@
 <%@ include file="/views/_include/_jsp_tags.jsp" %>
 <%@ include file="/views/_include/_jsp_variable.jsp" %>
 <c:set var="pageJs" value="${staticContextPath}/assets/js/common/index.js"/>
-<c:set var="pageTitle" value="首页"/>
+<c:set var="pageTitle" value="OKR目标管理系统"/>
 <%@ include file="/views/application/_include_top_main.jsp" %>
 <body class="page-body" style="overflow: hidden;">
     <c:if test="${!flag}">
