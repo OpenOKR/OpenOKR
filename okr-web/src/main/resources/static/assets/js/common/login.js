@@ -1,7 +1,7 @@
 var pageObj = pageObj || {};
 require(["jQuery"], function () {
     $.extend(pageObj, {
-        init: function () {
+        initForm: function () {
             require(["validation", "RSA"], function () {
                 $("#loginForm").validate({
                     rules: {
@@ -15,6 +15,7 @@ require(["jQuery"], function () {
                     },
                     submitHandler: function (form) {
                         $.ajax({
+                            type: 'get',
                             url: App.contextPath + "pkey.json?_t=" + Math.random(),
                             success: function (rs) {
                                 var rsaKey = new RSAKey();
@@ -31,6 +32,7 @@ require(["jQuery"], function () {
         },
 
         initEvent:function () {
+            //登录页效果
             $(".item input").focus(function(){
                 var $parent=$(this).parents(".item");
                 $parent.addClass("item-focus");
@@ -51,15 +53,6 @@ require(["jQuery"], function () {
                     $parent.removeClass("item-change");
                 }
             });
-            //登录验证码请求
-            if (parseInt(pageObj.loginFailCount) >= 3) {
-                $('#validateCodeDiv').show();
-                $('#validateCodeDiv').append("<img id='validateCodeImg' src='" + App.contextPath + "/validateCodeServlet'/>");
-            }
-            //登录错误消息
-            if (pageObj.message !== '') {
-                $(".item").addClass("item-error");
-            }
         }
     });
 
@@ -67,8 +60,18 @@ require(["jQuery"], function () {
         if (window.self !== window.top) {
             top.window.location.href = App["contextPath"];
         }
-        pageObj.init();
+        pageObj.initForm();
         pageObj.initEvent();
+
+        //登录验证码请求
+        if (parseInt(pageObj.loginFailCount) > 3) {
+            $('#validateCodeDiv').show();
+            $('#validateCodeDiv').append("<img id='validateCodeImg' src='" + App.contextPath + "/validateCodeServlet'/>");
+        }
+        //登录错误消息
+        if (pageObj.message !== '') {
+            $(".item").addClass("item-error");
+        }
     });
 });
 

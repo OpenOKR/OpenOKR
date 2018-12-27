@@ -7,8 +7,10 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.web.util.WebUtils;
 import org.openokr.application.shiro.RSAService;
+import org.openokr.application.shiro.ShiroConfiguration;
 import org.openokr.application.shiro.UsernamePasswordToken;
 import org.openokr.utils.CacheUtils;
+import org.openokr.utils.CookieUtils;
 import org.openokr.utils.StringUtils;
 import org.openokr.utils.UserUtils;
 import org.slf4j.Logger;
@@ -135,13 +137,13 @@ public class FormAuthenticationFilter extends org.apache.shiro.web.filter.authc.
             message = "系统出现点问题，请稍后再试！";
             e.printStackTrace(); // 输出到控制台
         }
-        String userName = getUsername(request);
-        Object failCountObj = CacheUtils.get(UserUtils.USER_CACHE, UserUtils.USER_CACHE_LOGIN_FAIL_COUNT_KEY + userName);
+        String key = UserUtils.USER_CACHE_LOGIN_FAIL_COUNT_KEY + CookieUtils.getCookie((HttpServletRequest) request, ShiroConfiguration.COOKIE_NAME);
+        Object failCountObj = CacheUtils.get(UserUtils.USER_CACHE, key);
         if (failCountObj == null) {
-            CacheUtils.put(UserUtils.USER_CACHE, UserUtils.USER_CACHE_LOGIN_FAIL_COUNT_KEY + userName, 1);
+            CacheUtils.put(UserUtils.USER_CACHE, key, 1);
         } else {
             Integer failCount = Integer.parseInt(failCountObj.toString()) + 1;
-            CacheUtils.put(UserUtils.USER_CACHE, UserUtils.USER_CACHE_LOGIN_FAIL_COUNT_KEY + userName, failCount);
+            CacheUtils.put(UserUtils.USER_CACHE, key, failCount);
         }
         request.setAttribute(getFailureKeyAttribute(), className);
         request.setAttribute(getMessageParam(), message);

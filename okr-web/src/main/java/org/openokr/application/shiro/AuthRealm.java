@@ -11,10 +11,7 @@ import org.apache.shiro.util.ByteSource;
 import org.openokr.application.web.ValidateCodeServlet;
 import org.openokr.sys.service.IUserService;
 import org.openokr.sys.vo.*;
-import org.openokr.utils.CacheUtils;
-import org.openokr.utils.Encodes;
-import org.openokr.utils.StringUtils;
-import org.openokr.utils.UserUtils;
+import org.openokr.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -43,14 +40,13 @@ public class AuthRealm extends AuthorizingRealm {
         Session session = UserUtils.getSession();
 
         //失败次数校验，当用户连续输错3次之后显示验证码输入框
-        int failCount = 0;
-        CacheUtils.get(UserUtils.USER_CACHE_LOGIN_FAIL_COUNT_KEY + token.getUsername());
-        if (CacheUtils.get(UserUtils.USER_CACHE, UserUtils.USER_CACHE_LOGIN_FAIL_COUNT_KEY + token.getUsername()) != null) {
-            failCount = Integer.parseInt(CacheUtils.get(UserUtils.USER_CACHE, UserUtils.USER_CACHE_LOGIN_FAIL_COUNT_KEY + token.getUsername()).toString());
+        int failCount = 0; String key = UserUtils.USER_CACHE_LOGIN_FAIL_COUNT_KEY + CookieUtils.getCookie(Servlets.getRequest(), ShiroConfiguration.COOKIE_NAME);
+        if (CacheUtils.get(UserUtils.USER_CACHE, key) != null) {
+            failCount = Integer.parseInt(CacheUtils.get(UserUtils.USER_CACHE, key).toString());
         }
         //校验登录验证码
         String code = (String) session.getAttribute(ValidateCodeServlet.VALIDATE_CODE);
-        if (failCount >= 3) {
+        if (failCount > 3) {
             if ((token.getCaptcha() == null || !token.getCaptcha().toUpperCase().equals(code.toUpperCase()))) {
                 throw new AuthenticationException("msg:验证码错误,请重试.");
             }
