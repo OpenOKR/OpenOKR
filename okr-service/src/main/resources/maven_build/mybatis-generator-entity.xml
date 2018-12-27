@@ -121,9 +121,9 @@
             <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
             <property name="domainVOName" value="manage.vo.MessagesVO"/>
         </table>
-        <table tableName="t_okr_team_user_rela" domainObjectName="manage.entity.UserRelaEntity">
+        <table tableName="t_okr_team_user_rela" domainObjectName="manage.entity.TeamUserRelaEntity">
             <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
-            <property name="domainVOName" value="manage.vo.UserRelaVO"/>
+            <property name="domainVOName" value="manage.vo.TeamUserRelaVO"/>
         </table>
         <table tableName="t_okr_teams" domainObjectName="manage.entity.TeamsEntity">
             <property name="VOPath" value="${mybatisVOJavaFileDir}"/>

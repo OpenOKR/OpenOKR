@@ -13,7 +13,7 @@ import org.openokr.manage.vo.CheckinsExtVO;
 import org.openokr.manage.vo.LogVO;
 import org.openokr.manage.vo.ResultsExtVO;
 import org.openokr.sys.vo.UserVO;
-import org.springframework.beans.BeanUtils;
+import com.zzheng.framework.base.utils.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,7 +57,7 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
         String userId = resultVO.getCreateUserId();
         if (StringUtils.isEmpty(resultId)) { //新增
             ResultsEntity entity = new ResultsEntity();
-            BeanUtils.copyProperties(resultVO, entity);
+            BeanUtils.copyBean(resultVO, entity);
             entity.setStatus("1");//未开始状态
             entity.setDelFlag("0");//删除状态:否
             entity.setCreateTs(new Date());
@@ -74,7 +74,7 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
             resultVO.setStatus(entity.getStatus());//状态不能修改
             resultVO.setUpdateTs(new Date());
             resultVO.setUpdateUserId(userId);
-            BeanUtils.copyProperties(resultVO, entity);
+            BeanUtils.copyBean(resultVO, entity);
             this.update(entity);
 
             // 更新关键结果协同人员
@@ -112,7 +112,7 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
         if (entity == null) {
             return null;
         }
-        BeanUtils.copyProperties(entity, resultVO);
+        BeanUtils.copyBean(entity, resultVO);
 
         // 获取协同人员
         List<UserVO> joinUsers = this.getJoinUsersByResultId(resultId, null);
@@ -146,7 +146,7 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
         }
         //KR进度每次都是新增,不改旧数据
         CheckinsEntity entity = new CheckinsEntity();
-        BeanUtils.copyProperties(checkinsVO, entity);
+        BeanUtils.copyBean(checkinsVO, entity);
         entity.setCreateTs(new Date());
         this.insert(entity);
         responseResult.setMessage("保存成功");

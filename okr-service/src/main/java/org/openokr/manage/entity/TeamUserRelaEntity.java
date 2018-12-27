@@ -12,7 +12,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "t_okr_team_user_rela")
-public class UserRelaEntity extends BaseEntity implements Serializable {
+public class TeamUserRelaEntity extends BaseEntity implements Serializable {
     /** 团队id */
     private String teamId;
 
@@ -105,6 +105,6 @@ public class UserRelaEntity extends BaseEntity implements Serializable {
      */
     @Override
     public Class<?> obtainEntityMapperClass() {
-        return UserRelaEntityMapper.class;
+        return TeamUserRelaEntityMapper.class;
     }
 }

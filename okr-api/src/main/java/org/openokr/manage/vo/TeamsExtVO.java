@@ -1,6 +1,9 @@
 package org.openokr.manage.vo;
 
+import org.openokr.sys.vo.UserVO;
+
 import java.io.Serializable;
+import java.util.List;
 
 public class TeamsExtVO extends TeamsVO implements Serializable {
 
@@ -13,6 +16,9 @@ public class TeamsExtVO extends TeamsVO implements Serializable {
      * 0-不可编辑 1-可编辑
      */
     private String editFlag;
+
+    // 团队成员
+    private List<UserVO> teamRelUsers;
 
     public String getUserId() {
         return userId;
@@ -28,5 +34,13 @@ public class TeamsExtVO extends TeamsVO implements Serializable {
 
     public void setEditFlag(String editFlag) {
         this.editFlag = editFlag;
+    }
+
+    public List<UserVO> getTeamRelUsers() {
+        return teamRelUsers;
+    }
+
+    public void setTeamRelUsers(List<UserVO> teamRelUsers) {
+        this.teamRelUsers = teamRelUsers;
     }
 }

@@ -1,6 +1,7 @@
 package org.openokr.manage.service;
 
 import com.zzheng.framework.adapter.vo.ResponseResult;
+import com.zzheng.framework.base.utils.BeanUtils;
 import com.zzheng.framework.exception.BusinessException;
 import org.apache.commons.lang3.StringUtils;
 import org.openokr.application.framework.service.OkrBaseService;
@@ -22,7 +23,6 @@ import org.openokr.manage.vo.OkrObjectSearchVO;
 import org.openokr.manage.vo.ResultsExtVO;
 import org.openokr.manage.vo.TeamsVO;
 import org.openokr.sys.vo.UserVO;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -142,7 +142,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         if (logEntityList != null && logEntityList.size()>0) {
             for(LogEntity logEntity : logEntityList) {
                 LogVO logVO = new LogVO();
-                BeanUtils.copyProperties(logEntity, logVO);
+                BeanUtils.copyBean(logEntity, logVO);
                 operateRecordList.add(logVO);
             }
         }
@@ -156,7 +156,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         if (entity == null) {
             return null;
         }
-        BeanUtils.copyProperties(entity, objectVO);
+        BeanUtils.copyBean(entity, objectVO);
 
         // 获取影响团队
         List<TeamsVO> relTeams = okrTeamService.getObjectTeamRel(objectId);
@@ -176,7 +176,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         String userId = objectVO.getCreateUserId();
         if (StringUtils.isEmpty(objectId)) { //新增
             ObjectivesEntity entity = new ObjectivesEntity();
-            BeanUtils.copyProperties(objectVO, entity);
+            BeanUtils.copyBean(objectVO, entity);
             entity.setVisibility("1");//默认公开
             entity.setStatus("1");//未提交状态
             entity.setDelFlag("0");//删除状态:否
@@ -185,7 +185,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
             objectId = entity.getId();
         } else { //更新
             ObjectivesEntity entity = new ObjectivesEntity();
-            BeanUtils.copyProperties(objectVO, entity);
+            BeanUtils.copyBean(objectVO, entity);
             entity.setUpdateTs(new Date());
             entity.setUpdateUserId(userId);
             this.update(entity);
@@ -291,7 +291,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
                 if (resultsList !=null) {
                     for (ResultsEntity resultsEntity : resultsList) {
                         ResultsExtVO resultsExtVO = new ResultsExtVO();
-                        BeanUtils.copyProperties(resultsEntity, resultsExtVO);
+                        BeanUtils.copyBean(resultsEntity, resultsExtVO);
                         List<UserVO> userList = okrResultService.getJoinUsersByResultId(resultsExtVO.getId(), searchVO.getLimitAmount());
                         if (userList != null) {
                             resultsExtVO.setJoinUsers(userList);

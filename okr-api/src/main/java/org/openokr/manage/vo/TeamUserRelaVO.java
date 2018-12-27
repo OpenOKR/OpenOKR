@@ -4,7 +4,7 @@ import com.zzheng.framework.base.vo.BaseVO;
 import java.io.Serializable;
 import java.util.Date;
 
-public class UserRelaVO extends BaseVO implements Serializable {
+public class TeamUserRelaVO extends BaseVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

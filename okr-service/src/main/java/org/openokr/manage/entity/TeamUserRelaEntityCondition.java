@@ -7,14 +7,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class UserRelaEntityCondition extends BaseEntityCondition implements Serializable {
+public class TeamUserRelaEntityCondition extends BaseEntityCondition implements Serializable {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public UserRelaEntityCondition() {
+    public TeamUserRelaEntityCondition() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -69,7 +69,7 @@ public class UserRelaEntityCondition extends BaseEntityCondition implements Seri
 
     @Override
     public Class<? extends BaseEntity> getEntityClass() {
-        return UserRelaEntity.class;
+        return TeamUserRelaEntity.class;
     }
 
     protected abstract static class GeneratedCriteria {
