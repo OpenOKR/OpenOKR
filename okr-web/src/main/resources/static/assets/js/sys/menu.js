@@ -254,6 +254,7 @@ require(["jQuery"], function () {
             require(["jqGrid"], function () {
                 var $grid = pageObj.getPermissionGrid();
                 $.ajax({
+                    type: 'GET',
                     url: App["contextPath"] + "/sys/permission/findByMenuId.json?menuId=" + menuId,
                     success: function (response) {
                         //正在编辑的单元格到不可编辑状态

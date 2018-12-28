@@ -8,7 +8,6 @@ import org.openokr.manage.service.IOkrTeamService;
 import org.openokr.manage.vo.ObjectivesExtVO;
 import org.openokr.manage.vo.OkrObjectSearchVO;
 import org.openokr.manage.vo.TeamsExtVO;
-import org.openokr.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -101,13 +99,7 @@ public class OkrObjectController extends BaseController {
     @RequestMapping(value = "/saveObject.json")
     @ResponseBody
     public ResponseResult saveObject(@JsonPathParam("$.objectVO") ObjectivesExtVO objectVO) {
-        if (StringUtils.isBlank(objectVO.getId())) {
-            objectVO.setCreateUserId(getCurrentUserId());
-            objectVO.setCreateTs(new Date());
-        } else {
-            objectVO.setUpdateUserId(getCurrentUserId());
-            objectVO.setUpdateTs(new Date());
-        }
+        objectVO.setCreateUserId(getCurrentUserId());
         ResponseResult responseResult = okrObjectService.saveObject(objectVO);
         return responseResult;
     }

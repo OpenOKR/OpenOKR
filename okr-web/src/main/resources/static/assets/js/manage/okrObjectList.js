@@ -175,7 +175,57 @@ require(["jQuery"], function () {
         },
 
         editObject: function (id) {
-            require(["artDialog"], function () {
+            require(["artDialog", "jqForm", "AutoTree"], function () {
+                var _func = function (dialogObj) {
+                    var $form = $(window.frames[dialogObj.id].window.pageObj.getForm()),
+                        formData = $form.jqForm("getValue"),
+                        checkedTeams, checkedLabels;
+                    //验证
+                    var validateMsgObj = validateUtil.validateDatas(formData, $(window.frames[dialogObj.id].window.pageObj.validateRule())[0]);
+                    if (!$.isEmptyObject(validateMsgObj)) {
+                        require(["Tips"], function () {
+                            //提示 拼接的验证信息
+                            TipsUtil.warn(validateUtil.concatValidateMsg(validateMsgObj));
+                            //焦点定位到 第一个 验证不通过的控件
+                            $form.jqForm("focusToElement", validateUtil.getFirstNoPassName(validateMsgObj));
+                        });
+                        return;
+                    }
+                    //赋值 teams
+                    checkedTeams = $(window.frames[dialogObj.id].window.pageObj.getTeamsTree()).AutoTree("getCheckedNodes");
+                    formData.relTeams = checkedTeams;
+                    //赋值 labels
+                    checkedLabels = $(window.frames[dialogObj.id].window.pageObj.getLabelsTree()).AutoTree("getCheckedNodes");
+                    formData.relLabels = checkedLabels;
+                    //
+                    //判断表单是否被修改( isDirty 是根据 setDefaultValue 设置的默认数据进行判断)
+                    require(["Tips"], function () {
+                        //表格单元格 如果处于编辑状态，需要回复成不可编辑，才可取到单元格数据。
+                        //if ($form.jqForm("isDirty") || $roleGrid.jqGrid("isDirty")) {
+                        //被删除的角色
+                        var _saveFunc = function () {
+                            //保存
+                            ajaxUtil.ajaxWithBlock({
+                                url: App["contextPath"] + "/manage/okrObject/saveObject.json",
+                                type: "post",
+                                data: JSON.stringify({objectVO: formData}),
+                                contentType: 'application/json;charset=utf-8' //设置请求头信息
+                            }, function (data) {
+                                require(["Tips"], function () {
+                                    if (data.success) {
+                                        TipsUtil.info(data.message);
+                                        dialogObj.close();
+                                        pageObj.loadOKRObjects(pageObj.currentType, pageObj.currentTeamId);
+                                    } else {
+                                        TipsUtil.warn(data.message);
+                                    }
+                                });
+                            });
+                        };
+                        //
+                        _saveFunc();
+                    });
+                };
                 var dialogObj = dialog({
                     url: App["contextPath"] + "/manage/okrObject/okrObjectForm.htm?objectId=" + id + "&type=" + pageObj.currentType,
                     title: '新增/编辑目标',
@@ -183,58 +233,7 @@ require(["jQuery"], function () {
                     okValue: "保存",
                     cancelValue: "关闭",
                     ok: function () {
-                        var _this = this,
-                            $form = pageObj.getForm(),
-                            formData = $form.jqForm("getValue"),
-                            checkedTeams, checkedLabels;
-                        //验证
-                        var validateMsgObj = validateUtil.validateDatas(formData, pageObj.validateRule());
-                        if (!$.isEmptyObject(validateMsgObj)) {
-                            require(["Tips"], function () {
-                                //提示 拼接的验证信息
-                                TipsUtil.warn(validateUtil.concatValidateMsg(validateMsgObj));
-                                //焦点定位到 第一个 验证不通过的控件
-                                $form.jqForm("focusToElement", validateUtil.getFirstNoPassName(validateMsgObj));
-                            });
-                            return;
-                        }
-                        //赋值 teams
-                        checkedTeams = _this.getTeamsTree().AutoTree("getCheckedNodes");
-                        formData.relTeams = checkedTeams;
-                        //赋值 teams
-                        checkedLabels = _this.getLabelsTree().AutoTree("getCheckedNodes");
-                        formData.relLabels = checkedLabels;
-                        //
-                        //判断表单是否被修改( isDirty 是根据 setDefaultValue 设置的默认数据进行判断)
-                        require(["Tips"], function () {
-                            //表格单元格 如果处于编辑状态，需要回复成不可编辑，才可取到单元格数据。
-                            //if ($form.jqForm("isDirty") || $roleGrid.jqGrid("isDirty")) {
-                            //被删除的角色
-                            var _saveFunc = function () {
-                                //保存
-                                $.ajax({
-                                    type: "post",
-                                    url: App["contextPath"] + "/manage/okrObject/saveObject.json",
-                                    data: JSON.stringify({searchVO: formData}),//将对象序列化成JSON字符串
-                                    dataType: "json",
-                                    contentType: 'application/json;charset=utf-8', //设置请求头信息
-                                    success: function (data) {
-                                        if (data.success) {
-                                            TipsUtil.info(data.message);
-                                        } else {
-                                            TipsUtil.warn(data.message);
-                                        }
-                                    },
-                                    error: function (res) {
-                                        alert(JSON.stringify(res));
-                                    }
-                                });
-                            };
-                            //
-                            _saveFunc();
-                        });
-                        dialogObj.close();
-                        pageObj.loadOKRObjects(pageObj.currentType, pageObj.currentTeamId);
+                        _func(dialogObj);
                         return false;
                     },
                     cancel: function () {
@@ -270,13 +269,36 @@ require(["jQuery"], function () {
 
         addCheckin: function (id) {
             require(["artDialog"], function () {
+                var _func = function (dialogObj) {
+                    var resultId = $(window.frames[dialogObj.id].document).find("#resultId").val(),
+                        currentValue = $(window.frames[dialogObj.id].document).find("#currentValue").val(),
+                        status = $(window.frames[dialogObj.id].document).find("input[name='metricUnit']:checked").val(),
+                        description = $(window.frames[dialogObj.id].document).find("#description").val();
+                    ajaxUtil.ajaxWithBlock({
+                        url: App["contextPath"] + "/manage/okrResult/saveCheckins.json",
+                        type: "post",
+                        data: JSON.stringify({checkinVO:{resultId: resultId, currentValue: currentValue, status: status, description: description}}),
+                        contentType: 'application/json;charset=utf-8' //设置请求头信息
+                    }, function (data) {
+                        require(["Tips"], function () {
+                            if (data.success) {
+                                TipsUtil.info(data.info);
+                                dialogObj.close();
+                                pageObj.loadOKRObjects(pageObj.currentType, pageObj.currentTeamId);
+                            } else {
+                                TipsUtil.warn(data.info);
+                            }
+                        });
+                    });
+                };
                 var dialogObj = dialog({
-                    url: App["contextPath"] + "/manage/okrCheckin/okrCheckinForm.htm?resultId=" + id,
+                    url: App["contextPath"] + "/manage/okrResult/checkinsForm.htm?resultId=" + id,
                     title: '每周更新关键结果',
                     quickClose: false,
                     okValue: "保存",
                     cancelValue: "关闭",
                     ok: function () {
+                        _func(dialogObj);
                         return false;
                     },
                     cancel: function () {

@@ -1,7 +1,9 @@
 package org.openokr.manage.web;
 
 import com.zzheng.framework.adapter.vo.ResponseResult;
+import org.openokr.application.framework.annotation.JsonPathParam;
 import org.openokr.application.web.BaseController;
+import org.openokr.manage.enumerate.ExecuteStatusEnum;
 import org.openokr.manage.enumerate.ResultMetricUnitEnum;
 import org.openokr.manage.service.IOkrResultService;
 import org.openokr.manage.vo.CheckinsExtVO;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.Date;
 
 /**
  * OKR关键结果
@@ -68,7 +72,11 @@ public class OkrResultController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/checkinsForm.htm")
-    public String checkinsForm(Model model) {
+    public String checkinsForm(Model model, String resultId) {
+        model.addAttribute("resultId", resultId);
+        model.addAttribute("executeStatusEnum", ExecuteStatusEnum.toList());
+        ResultsExtVO resultsExtVO = okrResultService.editResult(resultId);
+        model.addAttribute("resultVO", resultsExtVO);
         return "manage/checkinsForm";
     }
 
@@ -78,11 +86,10 @@ public class OkrResultController extends BaseController {
      */
     @RequestMapping(value = "/saveCheckins.json")
     @ResponseBody
-    public ResponseResult saveCheckins(CheckinsExtVO checkinsVO) {
+    public ResponseResult saveCheckins(@JsonPathParam("$.checkinVO") CheckinsExtVO checkinsVO) {
         checkinsVO.setCreateUserId(getCurrentUserId());
+        checkinsVO.setCreateTs(new Date());
         ResponseResult responseResult = okrResultService.saveCheckins(checkinsVO);
         return responseResult;
     }
-
-
 }

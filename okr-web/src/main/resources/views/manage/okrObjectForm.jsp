@@ -7,7 +7,7 @@
 <div style="width: 680px; border-radius: 5px; background-color: #fff; margin: 20px auto">
     <form class="ui-form inner3" id="objectForm">
         <ul class="form-grid font4">
-            <input id="teamId" name="teamId" type="hidden" value="${objectVO.teamId}"/>
+            <input id="id" name="id" type="hidden" value="${objectVO.id}">
             <input id="type" name="type" type="hidden" value="${objectVO.type}"/>
             <li class="col-sm-11">
                 <label class="form-lab">目标：</label>
@@ -36,8 +36,8 @@
                 <label class="form-lab">父目标：</label>
                 <div class="form-control">
                     <div class="select">
-                        <input id="parentName" name="parentName" type="text" placeholder="请选择负责人名称"/><em class="icon"></em>
-                        <input id="parentId" name="parentId" type="hidden"/>
+                        <input id="parentName" name="parentName" type="text" placeholder="请选择父目标，可以不选择"/><em class="icon"></em>
+                        <input id="parentId" name="parentId" type="hidden" value="${objectVO.parentId}"/>
                     </div>
                 </div>
             </li>
@@ -49,7 +49,7 @@
                     </div>
                 </div>
             </li>
-            <li class="col-sm-11 ">
+            <li class="col-sm-11">
                 <label class="form-lab">标签：</label>
                 <div class="form-control">
                     <input id="labelNames" name="labelNames" type="text" class="inp" placeholder="请输入标签，可多选"/>
@@ -60,7 +60,8 @@
                 <div class="form-control ">
                     <div class="of-h">
                         <div id="drag-bar" class="drag-bar " >
-                            <strong class="drag-num"><span class="num" id="confidenceLevel">${objectVO.confidenceLevel}</span>成</strong>
+                            <strong class="drag-num"><span class="num" id="confidenceLevelSpan">${objectVO.confidenceLevel}</span>成</strong>
+                            <input id="confidenceLevel" name="confidenceLevel" type="hidden" value="${objectVO.confidenceLevel}">
                             <div id="drag-hand" class="drag-hand" ></div>
                             <div id="drag-past" class="drag-past"></div>
                         </div>

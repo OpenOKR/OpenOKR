@@ -4,45 +4,42 @@ require(["jQuery"], function () {
 
         validateRule: function () {
             return {
-                name: {label: '目标', required: false, minLength:2,maxLength:32}
+                name: {label: '目标', required: true, minLength:2,maxLength:32}
             };
         },
 
         init: function () {
+            var _this = this;
             require(["AutoCombobox"], function () {
-                pageObj.getParentCombo();
+                _this.getParentCombo();
             });
             require(["AutoTree"], function () {
-                pageObj.getTeamsTree();
-                pageObj.getLabelsTree();
+                _this.getTeamsTree();
+                _this.getLabelsTree();
             });
-            pageObj.initDrag();
+            require(["jqForm"], function () {
+                _this.getForm();
+            });
+            _this.initDrag();
         },
 
         getParentCombo: function () {
             //渲染控件
             return $("#parentName").AutoCombobox({
                 async: {
-                    url: App["contextPath"] + "/manage/okrObject/getOkrListByType.json",
-                    dataSourceType: "onceRemote",
-                    contentType: 'application/json;charset=utf-8',
-                    requestData: {searchVO: {teamId: $('#teamId').val(), type: $('#type').val()}}
+                    url: App["contextPath"] + "/manage/okrObject/getParentObject.json?type=" + (parseInt($('#type').val()) + 1),
+                    dataSourceType: "onceRemote"
                 },
                 view: {
                     singleColumnNotHead: true,
-                    showPager: false,
-                    isAllowEmpty: false,
-                    isSelectedFirstRow: false,
-                    dropDownContainer: "#parentName",
                     widthRefer: function () {
                         return $(this).width() + 16;//引用当前自己输入框
                     },
-                    autoHeightPadding: 30,
                     colModels: [
                         {name: "id", label: "id", isHide: true},
                         {name: "name", label: "目标名"}
                     ],
-                    bindFill: {"#parentName": "name", "parentId": "id"}
+                    bindFill: {"#parentName": "name", "#parentId": "id"}
                 }
             });
         },
@@ -51,7 +48,7 @@ require(["jQuery"], function () {
             return $('#teamNames').AutoTree({
                 async: {
                     dataSourceType: "onceRemote",
-                    url: App["contextPath"] + "/team/getSports.json"
+                    url: App["contextPath"] + "/manage/okrTeam/getTeamList.json"
                 },
                 view: {
                     inputFilterFieldNames: ["name"],
@@ -85,7 +82,7 @@ require(["jQuery"], function () {
             return $('#labelNames').AutoTree({
                 async: {
                     dataSourceType: "onceRemote",
-                    url: App["contextPath"] + "/label/getSports.json"
+                    url: App["contextPath"] + "/manage/okrLabel/getAllLabel.json"
                 },
                 view: {
                     inputFilterFieldNames: ["name"],
@@ -117,13 +114,14 @@ require(["jQuery"], function () {
 
         initDrag: function () {
             //拖拽的一个插件开始
-            var scroll = document.getElementById('drag-bar');
-            var bar = document.getElementById('drag-hand');
-            var mask = document.getElementById('drag-past');
-            var ptxt = document.getElementById('confidenceLevel');
-            var barleft = 0;
-            bar.style.left = $('#confidenceLevel').html()* 10 + '%';
-            mask.style.width = $('#confidenceLevel').html()* 10 + '%';
+            var scroll = document.getElementById('drag-bar'),
+                bar = document.getElementById('drag-hand'),
+                mask = document.getElementById('drag-past'),
+                confidenceLevelSpan = document.getElementById('confidenceLevelSpan'),
+                confidenceLevel = $('#confidenceLevel'),
+                barleft = 0;
+            bar.style.left = $('#confidenceLevelSpan').html()* 10 + '%';
+            mask.style.width = $('#confidenceLevelSpan').html()* 10 + '%';
             bar.onmousedown = function(event){
                 var event = event || window.event;
                 var leftVal = event.clientX - this.offsetLeft;
@@ -138,8 +136,8 @@ require(["jQuery"], function () {
                         barleft = scroll.offsetWidth - bar.offsetWidth;
                     mask.style.width = barleft +'px' ;
                     that.style.left = barleft + "px";
-                    ptxt.innerHTML =  parseInt(barleft/(scroll.offsetWidth-bar.offsetWidth) * 10) ;
-
+                    confidenceLevelSpan.innerHTML =  parseInt(barleft/(scroll.offsetWidth-bar.offsetWidth) * 10) ;
+                    confidenceLevel.val(confidenceLevelSpan.innerHTML);
                     //防止选择内容--当拖动鼠标过快时候，弹起鼠标，bar也会移动，修复bug
                     window.getSelection ? window.getSelection().removeAllRanges() : document.selection.empty();
                 }
@@ -150,7 +148,7 @@ require(["jQuery"], function () {
         },
 
         getForm: function () {
-            return $("#objectForm").jqForm();
+            return $("#objectForm").jqForm({});
         }
     });
 

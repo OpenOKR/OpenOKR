@@ -15,6 +15,7 @@ require(["jQuery"], function () {
                     },
                     submitHandler: function (form) {
                         $.ajax({
+                            async: false,
                             type: 'get',
                             url: App.contextPath + "pkey.json?_t=" + Math.random(),
                             success: function (rs) {
@@ -74,11 +75,3 @@ require(["jQuery"], function () {
         }
     });
 });
-
-var submitFrom = function(event) {
-    var  e = event ? event :(window.event ? window.event : null);
-    if (e.keyCode === 13) {
-        $("#loginBtn").click();
-        return false;
-    }
-};

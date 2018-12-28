@@ -8,6 +8,8 @@ import org.openokr.manage.service.IOkrTeamService;
 import org.openokr.manage.vo.TeamsExtVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -24,6 +26,28 @@ public class OkrTeamController extends BaseController {
 
     @Autowired
     private IOkrTeamService okrTeamService;
+
+    @GetMapping(value = "/init.htm")
+    public String init() {
+        return "manage/okrTeamList";
+    }
+
+    @GetMapping(value = "editTeam1.htm")
+    public String editTeam1(String id, Model model) {
+        TeamsExtVO teamsExtVO = okrTeamService.getByTeamId(id);
+        model.addAttribute("teams", teamsExtVO);
+        return "manage/okrTeamForm1";
+    }
+
+    @GetMapping(value = "editTeam2.htm")
+    public String editTeam2() {
+        return "manage/okrTeamForm2";
+    }
+
+    @GetMapping(value = "editTeam3.htm")
+    public String editTeam3() {
+        return "manage/okrTeamForm3";
+    }
 
     /**
      * 获取用户关联的团队(影响团队或者参与的团队)

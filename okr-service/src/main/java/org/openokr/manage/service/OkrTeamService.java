@@ -133,4 +133,8 @@ public class OkrTeamService extends BaseServiceImpl implements IOkrTeamService {
         return responseResult;
     }
 
+    @Override
+    public TeamsExtVO getByTeamId(String id) {
+        return null;
+    }
 }

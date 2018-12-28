@@ -21,7 +21,7 @@
                         </div>
                         <div class="item">
                             <label class="lab-sub"> 密码 </label>
-                            <input id="password" name="password" type="password" onkeydown="submitFrom(this.event)"/>
+                            <input id="password" name="password" type="password"/>
                             <div class="msg-box error"><i class="iconfont icon-waring"></i>${message}</div>
                         </div>
                         <!-- 输错三次出现验证码 -->

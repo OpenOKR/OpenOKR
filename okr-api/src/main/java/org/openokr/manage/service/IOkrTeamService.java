@@ -69,4 +69,10 @@ public interface IOkrTeamService {
      */
     ResponseResult disbandTeam(String teamId) throws BusinessException;
 
+    /**
+     * 获取团队数据
+     * @param id
+     * @return
+     */
+    TeamsExtVO getByTeamId(String id);
 }
