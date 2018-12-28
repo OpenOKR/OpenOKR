@@ -73,6 +73,10 @@ app:
 spring:
   profiles: test
 
+app:
+  jsDebug: true
+  staticResourceVersion: dev
+
 ---
 spring:
   profiles: uat
