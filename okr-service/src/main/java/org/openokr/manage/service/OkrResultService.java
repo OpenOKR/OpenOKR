@@ -58,6 +58,7 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
         if (StringUtils.isEmpty(resultId)) { //新增
             ResultsEntity entity = new ResultsEntity();
             BeanUtils.copyBean(resultVO, entity);
+            entity.setOwnerId(userId);
             entity.setStatus("1");//未开始状态
             entity.setDelFlag("0");//删除状态:否
             entity.setCreateTs(new Date());

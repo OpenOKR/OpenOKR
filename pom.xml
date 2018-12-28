@@ -28,6 +28,25 @@
         <!-- end -->
     </properties>
 
+    <repositories>
+        <repository>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>onlyou-repositories</id>
+            <url>http://172.16.11.54:8888/content/groups/onlyou-repositories-group/</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>onlyou-repositories</id>
+            <url>http://172.16.11.54:8888/content/groups/onlyou-repositories-group/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
     <!-- 依赖预配置 -->
     <dependencyManagement>
         <dependencies>

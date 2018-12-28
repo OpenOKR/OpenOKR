@@ -2,9 +2,10 @@ package org.openokr.manage.service;
 
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.base.utils.BeanUtils;
+import com.zzheng.framework.base.utils.StringUtils;
 import com.zzheng.framework.exception.BusinessException;
-import org.apache.commons.lang3.StringUtils;
 import org.openokr.application.framework.service.OkrBaseService;
+import org.openokr.application.utils.GetChangeDateUtil;
 import org.openokr.manage.entity.LogEntity;
 import org.openokr.manage.entity.LogEntityCondition;
 import org.openokr.manage.entity.ObjectLabelRelaEntity;
@@ -177,6 +178,8 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         if (StringUtils.isEmpty(objectId)) { //新增
             ObjectivesEntity entity = new ObjectivesEntity();
             BeanUtils.copyBean(objectVO, entity);
+            entity.setTimeSessionId(getCurrentTimeSessionId());
+            entity.setOwnerId(userId);
             entity.setVisibility("1");//默认公开
             entity.setStatus("1");//未提交状态
             entity.setDelFlag("0");//删除状态:否
@@ -184,7 +187,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
             this.insert(entity);
             objectId = entity.getId();
         } else { //更新
-            ObjectivesEntity entity = new ObjectivesEntity();
+            ObjectivesEntity entity = this.selectByPrimaryKey(ObjectivesEntity.class, objectId);
             BeanUtils.copyBean(objectVO, entity);
             entity.setUpdateTs(new Date());
             entity.setUpdateUserId(userId);
@@ -308,6 +311,40 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
                     objectivesExtVO.setOperateRecordList(operateRecordList);
                 }
             }
+        }
+    }
+
+    /**
+     *
+     * @param originalEntity 原始的实体
+     * @param targetEntity 页面修改后的实体
+     */
+    private void setObjectLogInfo(ObjectivesEntity originalEntity, ObjectivesEntity targetEntity) {
+        Map<String ,Object> compareMap = GetChangeDateUtil.compareFields(originalEntity, targetEntity, null);
+        String message = "";
+        for (String key : compareMap.keySet()) {
+            if (key.equals("name")){
+                message += "目标名称修改为:" + compareMap.get(key) + ",";
+                continue;
+            }
+            if (key.equals("name")){
+                message += "目标描述修改为:" + compareMap.get(key) + ",";
+                continue;
+            }
+            if (key.equals("name")){
+                message += "目标把握修改为:" + compareMap.get(key) + "成,";
+                continue;
+            }
+        }
+        if (StringUtils.isNotEmpty(message)) {
+            // 保存操作记录
+            LogVO logVO = new LogVO();
+            logVO.setBizId(targetEntity.getId());
+            logVO.setBizType("1");
+            logVO.setMessage(message);
+            logVO.setCreateTs(new Date());
+            logVO.setCreateUserId(targetEntity.getUpdateUserId());
+            this.saveOkrLog(logVO);
         }
     }
 

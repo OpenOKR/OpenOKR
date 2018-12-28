@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.zzheng</groupId>
-            <artifactId>framework-boot-starter-dubbo</artifactId>
+            <artifactId>okr-framework-boot-starter-dubbo</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
 

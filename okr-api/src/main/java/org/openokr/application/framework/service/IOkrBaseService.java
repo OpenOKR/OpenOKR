@@ -17,5 +17,12 @@ public interface IOkrBaseService {
 	 * @throws BusinessException
      */
 	void saveOkrLog(LogVO logVO) throws BusinessException;
+
+	/**
+	 * 当前时间段ID
+	 * @return
+	 * @throws BusinessException
+     */
+	String getCurrentTimeSessionId() throws BusinessException;
 	
 }
