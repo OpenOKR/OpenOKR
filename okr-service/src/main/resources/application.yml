@@ -65,9 +65,9 @@ spring:
 spring:
   profiles: test
   datasource:
-    url: jdbc:postgresql://172.16.11.35:5433/okr_test
-    username: okr_test
-    password: okr_test
+    url: jdbc:postgresql://172.16.11.35:5433/okr_dev
+    username: okr_dev
+    password: okr_dev
 
 ---
 spring:

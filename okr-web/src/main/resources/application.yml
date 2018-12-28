@@ -69,6 +69,10 @@ spring:
 app:
   jsDebug: true
 
+app:
+  jsDebug: true
+  staticResourceVersion: dev
+
 ---
 spring:
   profiles: test
