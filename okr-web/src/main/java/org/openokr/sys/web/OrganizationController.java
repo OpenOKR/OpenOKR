@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/sys")
@@ -53,5 +54,12 @@ public class OrganizationController extends BaseController {
     @ResponseBody
     public List<OrganizationVOExt> findCurrentAndChildren() {
         return organizationService.findCurrentAndChildren(this.getCurrentOrganizationId());
+    }
+
+    @RequiresPermissions("user")
+    @PostMapping(value = "/organization/findContainUserOfAll.json")
+    @ResponseBody
+    public List<Map<String, Object>> findContainUserOfAll() {
+        return organizationService.findContainUserOfAll(getCurrentUserId());
     }
 }

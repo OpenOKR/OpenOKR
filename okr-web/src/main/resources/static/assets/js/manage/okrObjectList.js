@@ -200,9 +200,6 @@ require(["jQuery"], function () {
                     //
                     //判断表单是否被修改( isDirty 是根据 setDefaultValue 设置的默认数据进行判断)
                     require(["Tips"], function () {
-                        //表格单元格 如果处于编辑状态，需要回复成不可编辑，才可取到单元格数据。
-                        //if ($form.jqForm("isDirty") || $roleGrid.jqGrid("isDirty")) {
-                        //被删除的角色
                         var _saveFunc = function () {
                             //保存
                             ajaxUtil.ajaxWithBlock({

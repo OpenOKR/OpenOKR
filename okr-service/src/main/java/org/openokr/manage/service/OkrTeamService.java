@@ -2,9 +2,9 @@ package org.openokr.manage.service;
 
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.base.utils.BeanUtils;
+import com.zzheng.framework.base.utils.StringUtils;
 import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.service.impl.BaseServiceImpl;
-import org.apache.commons.lang3.StringUtils;
 import org.openokr.manage.entity.TeamUserRelaEntity;
 import org.openokr.manage.entity.TeamUserRelaEntityCondition;
 import org.openokr.manage.entity.TeamsEntity;
@@ -129,12 +129,40 @@ public class OkrTeamService extends BaseServiceImpl implements IOkrTeamService {
         TeamUserRelaEntityCondition userRelCondition = new TeamUserRelaEntityCondition();
         userRelCondition.createCriteria().andTeamIdEqualTo(teamId);
         this.deleteByCondition(userRelCondition);
-        responseResult.setMessage("团队已解散");
+        responseResult.setMessage("团队解散成功！");
         return responseResult;
     }
 
     @Override
     public TeamsExtVO getByTeamId(String id) {
-        return null;
+        TeamsEntity entity = this.getMyBatisDao().selectByPrimaryKey(TeamsEntity.class, id);
+        if (entity == null) {
+            return new TeamsExtVO();
+        }
+        TeamsExtVO teamsExtVO = BeanUtils.copyToNewBean(entity, TeamsExtVO.class);
+        if (!teamsExtVO.getId().equals(teamsExtVO.getParentId())) {
+            TeamsEntity parent = this.getMyBatisDao().selectByPrimaryKey(TeamsEntity.class, teamsExtVO.getParentId());
+            teamsExtVO.setParentName(parent.getName());
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("teamId", teamsExtVO.getId());
+        List<UserVO> userVOList = this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE + ".findUserListByTeamId", params);
+        List<String> userVOIds = new ArrayList<>();
+        for (UserVO userVO : userVOList) {
+            userVOIds.add(userVO.getId());
+        }
+        teamsExtVO.setTeamRelUsers(userVOList);
+        teamsExtVO.setTeamRelUserIds(userVOIds);
+        return teamsExtVO;
+    }
+
+    @Override
+    public List<UserVO> getUsersByTeamId(String teamId) {
+        if (StringUtils.isBlank(teamId)) {
+            return null;
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("teamId", teamId);
+        return this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE + ".findUserListByTeamId", params);
     }
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.openokr.sys.sqlmapper.OrganizationMapper">
+
+    <resultMap id="mapList" type="java.util.Map">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="parent_id" property="parentId"/>
+        <collection property="children" ofType="java.util.Map"
+                    column="{organizationId=id,currentUserId=currentUserId}"
+                    select="org.openokr.sys.sqlmapper.OrganizationMapper.findUserListByOrganizationId" >
+        </collection>
+    </resultMap>
+
+    <select id="findContainUserOfAll" parameterType="java.util.Map" resultMap="mapList">
+        select t1.id, t1.name, t1.parent_id, '1' as "type", #{currentUserId} as "currentUserId" from t_okr_sys_organization t1
+    </select>
+
+    <select id="findUserListByOrganizationId" parameterType="java.util.Map" resultType="java.util.Map">
+        select t1.id as "id", t1.real_name as "name", t1.organization_id as "pid", '2' as "type" from t_okr_sys_user t1
+        join t_okr_sys_organization t2 on t2.id = t1.organization_id
+        where t2.id = #{organizationId} and t1.id != #{currentUserId}
+    </select>
+
+</mapper>

@@ -24,6 +24,8 @@ import java.util.Map;
 @Transactional
 public class OrganizationService extends BaseServiceImpl implements IOrganizationService {
 
+    private static final String MAPPER_NAMESPACE = "org.openokr.sys.sqlmapper.OrganizationMapper";
+
     @Autowired
     private IUserService userService;
 
@@ -104,6 +106,13 @@ public class OrganizationService extends BaseServiceImpl implements IOrganizatio
         //查询子数据
         findChildren(currentAndChildrenList, vo.getId());
         return currentAndChildrenList;
+    }
+
+    @Override
+    public List<Map<String, Object>> findContainUserOfAll(String currentUserId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("currentUserId", currentUserId);
+        return this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE + ".findContainUserOfAll", params);
     }
 
     private long countByCode(String id, String code) {

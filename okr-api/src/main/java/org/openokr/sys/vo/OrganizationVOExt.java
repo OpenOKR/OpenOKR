@@ -10,6 +10,8 @@ public class OrganizationVOExt extends OrganizationVO {
 
     private String parentName;
 
+    private List<UserVO> userVOList;
+
     private List<OrganizationVOExt> children = new ArrayList<>();
 
     public String getParentName() {
@@ -18,6 +20,14 @@ public class OrganizationVOExt extends OrganizationVO {
 
     public void setParentName(String parentName) {
         this.parentName = parentName;
+    }
+
+    public List<UserVO> getUserVOList() {
+        return userVOList;
+    }
+
+    public void setUserVOList(List<UserVO> userVOList) {
+        this.userVOList = userVOList;
     }
 
     public List<OrganizationVOExt> getChildren() {

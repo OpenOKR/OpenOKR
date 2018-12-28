@@ -6,11 +6,13 @@ import org.openokr.application.framework.annotation.JsonPathParam;
 import org.openokr.application.web.BaseController;
 import org.openokr.manage.service.IOkrTeamService;
 import org.openokr.manage.vo.TeamsExtVO;
+import org.openokr.sys.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -32,21 +34,11 @@ public class OkrTeamController extends BaseController {
         return "manage/okrTeamList";
     }
 
-    @GetMapping(value = "editTeam1.htm")
+    @GetMapping(value = "/teamForm.htm")
     public String editTeam1(String id, Model model) {
         TeamsExtVO teamsExtVO = okrTeamService.getByTeamId(id);
-        model.addAttribute("teams", teamsExtVO);
-        return "manage/okrTeamForm1";
-    }
-
-    @GetMapping(value = "editTeam2.htm")
-    public String editTeam2() {
-        return "manage/okrTeamForm2";
-    }
-
-    @GetMapping(value = "editTeam3.htm")
-    public String editTeam3() {
-        return "manage/okrTeamForm3";
+        model.addAttribute("teamsExtVO", teamsExtVO);
+        return "manage/okrTeamForm";
     }
 
     /**
@@ -86,34 +78,36 @@ public class OkrTeamController extends BaseController {
      */
     @RequestMapping(value = "/saveTeams.json")
     @ResponseBody
-    public ResponseResult saveTeams(@JsonPathParam("$.teamsVO") TeamsExtVO teamsVO) {
-        ResponseResult responseResult = okrTeamService.saveTeams(teamsVO);
-        return responseResult;
+    public ResponseResult saveTeams(@JsonPathParam("$.teamExtVO") TeamsExtVO teamsVO) {
+        teamsVO.setUserId(getCurrentUserId());
+        return okrTeamService.saveTeams(teamsVO);
     }
 
     /**
-     * 保存团队
+     * 删除团队成员
      * @return
      */
-    @RequestMapping(value = "/deleteTeamUser.json")
+    @RequestMapping(value = "/deleteTeamUser.json", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseResult deleteTeamUser(String teamId,
+    public ResponseResult deleteTeamUser(@JsonPathParam("$.teamId") String teamId,
                                          @JsonPathParam("$.userIdList") Object userIdList) {
         List<String> userIds = JSONUtils.objectToList(userIdList, String.class);
-        ResponseResult responseResult = okrTeamService.deleteTeamUser(teamId, userIds);
-        return responseResult;
+        return okrTeamService.deleteTeamUser(teamId, userIds);
     }
 
     /**
-     * 保存团队
+     * 解散团队
      * @return
      */
     @RequestMapping(value = "/disbandTeam.json")
     @ResponseBody
     public ResponseResult disbandTeam(String teamId) {
-        ResponseResult responseResult = okrTeamService.disbandTeam(teamId);
-        return responseResult;
+        return okrTeamService.disbandTeam(teamId);
     }
 
-
+    @GetMapping(value = "/getUsersByTeamId.json")
+    @ResponseBody
+    public List<UserVO> getUsersByTeamId(String teamId) {
+        return okrTeamService.getUsersByTeamId(teamId);
+    }
 }

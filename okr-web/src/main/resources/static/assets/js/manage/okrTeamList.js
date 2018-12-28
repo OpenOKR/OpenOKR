@@ -38,6 +38,7 @@ require(["jQuery"], function () {
                         '                       编辑<i class="iconfont icon-arrowB"></i>' +
                         '                       <div class="dropdown-menu">' +
                         '                           <ul class="dropdown-content">' +
+                        '                               <li onclick="pageObj.editTeam(\'[%=team.id%]\')">编辑</li>' +
                         '                               <li onclick="pageObj.deleteUser(\'[%=team.id%]\')">删减人员</li>' +
                         '                               <li onclick="pageObj.deleteFunc(\'[%=team.id%]\')">解散团队</li>' +
                         '                           </ul>' +
@@ -48,11 +49,13 @@ require(["jQuery"], function () {
                         '       </div>' +
                         '       <div class="participant ui-l">' +
                         '           <span class="name">参与人员：</span>' +
-                        '           <ul id="teamUsers-[%=team.id%]" data-edit="0" class="participant-list nicescroll participant-list">' +
+                        '           <ul id="teamUsers-[%=team.id%]" data-edit="0" class="participant-list nicescroll">' +
                         '               [%if(!_.isNull(team.teamRelUsers) && team.teamRelUsers.length>0){%]' +
                         '                   [%_.each(team.teamRelUsers, function (user){%]' +
                         '                       <li class="part-item">' +
-                        '                           <i data-id="[%=user.id%]" class="iconfont icon-close"></i>' +
+                        '                           [%if(user.id != team.ownerId){%]' +
+                        '                               <i data-id="[%=user.id%]" class="iconfont icon-close"></i>' +
+                        '                           [%};%]' +
                         '                           <span><img src="[%=user.photoUrl%]">头像</span>' +
                         '                           <strong>[%=user.realName%]</strong>' +
                         '                       </li>' +
@@ -65,7 +68,7 @@ require(["jQuery"], function () {
                         '</div>' +
                         '[%if(type === \'1\'){%]' +
                         '   <div class="col-sm-4 mb15">' +
-                        '       <div class="meg-outer ui-addFile">' +
+                        '       <div class="meg-outer ui-addFile" onclick="pageObj.editTeam(\'\');">' +
                         '           <div class="meg-in">' +
                         '               <i class="icon icon-add"></i>' +
                         '               <h4 class="meg-h4">新建团队</h4>' +
@@ -86,18 +89,19 @@ require(["jQuery"], function () {
 
         deleteUser: function (id) {
             $('#operation-' + id).find('span').hide();
-            $('#teamUsers-' + id).removeClass('participant-list').addClass('operation');
+            $('#teamUsers-' + id).addClass('operation');
             if ($('#teamUsersAdd-' + id).length > 0) {
                 $('#teamUsersAdd-' + id).parent().hide();
             }
-            $('#operation-' + id).append('<a name="save" class="btn btn-primary waves-effect waves-light" onclick="pageObj.saveTeamUsers(' + id + ')">保存</a>');
-            $('#operation-' + id).append('<a name="cancel" class="btn btn-default waves-effect waves-light" onclick="pageObj.resetTeamUsers(' + id + ')">取消</a>');
+            $('#operation-' + id).append('<a name="save" class="btn btn-primary waves-effect waves-light" onclick="pageObj.saveTeamUsers(\'' + id + '\')">保存</a>');
+            $('#operation-' + id).append('<a name="cancel" class="btn btn-default waves-effect waves-light" onclick="pageObj.resetTeamUsers(\'' + id + '\')">取消</a>');
             $('#teamUsers-' + id).find('.icon-close').click(function () {
                 $(this).parent().hide();
             });
         },
 
         resetTeamUsers: function (id) {
+            //相关节点隐藏，显示
             $("#operation-" + id).find('span').show();
             $('#operation-' + id).find("a").remove();
             $('#teamUsers-' + id).find('.icon-close').parent().show();
@@ -106,13 +110,114 @@ require(["jQuery"], function () {
         },
 
         saveTeamUsers: function (id) {
-            var teamUsers = [];
+            var deleteTeamUsers = [], oldTeamUsers = [];
             $.each($('#teamUsers-' + id).find('.icon-close'), function (idx, obj) {
-                if ($(obj).is(':visible')) {
-                    teamUsers.push($(obj).data('id'));
+                oldTeamUsers.push($(obj).data('id'));
+                if ($(obj).is(':hidden')) {
+                    deleteTeamUsers.push($(obj).data('id'));
                 }
             });
-            //保存数据，删除hide的li元素
+
+            //保存数据，删除hide的li元素，保存成功需要删除对应li；失败不进行操作，等待用户取消或重新保存
+            if (deleteTeamUsers.length > 0) {
+                $.ajax({
+                    type: "post",
+                    url: App["contextPath"] + "/manage/okrTeam/deleteTeamUser.json",
+                    data: JSON.stringify({
+                        teamId: id, userIdList: deleteTeamUsers
+                    }),//将对象序列化成JSON字符串
+                    dataType: "json",
+                    contentType: 'application/json;charset=utf-8', //设置请求头信息
+                    success: function (data) {
+                        if (data.success) {
+                            //相关节点隐藏，显示
+                            $("#operation-" + id).find('span').show();
+                            $('#operation-' + id).find("a").remove();
+                            $('#teamUsersAdd-' + id).parent().show();
+                            $('#teamUsers-' + id).removeClass('operation').addClass('participant-list');
+                            TipsUtil.info(data.message);
+                        } else {
+                            TipsUtil.error(data.message);
+                        }
+                    },
+                    error: function (res) {
+                        alert(JSON.stringify(res));
+                    }
+                });
+            } else {
+                TipsUtil.warn('未删除任意成员！！');
+            }
+        },
+
+        editTeam: function (id) {
+            require(["artDialog", "jqForm", "AutoTree"], function () {
+                var _editTeamFunc = function (dialogObj) {
+                    var $form = $(window.frames[dialogObj.id].window.pageObj.getForm()),
+                        formData = $form.jqForm("getValue"),
+                        checkedAll, checkedUsers = [];
+                    //验证
+                    var validateMsgObj = validateUtil.validateDatas(formData, $(window.frames[dialogObj.id].window.pageObj.validateRule())[0]);
+                    if (!$.isEmptyObject(validateMsgObj)) {
+                        require(["Tips"], function () {
+                            //提示 拼接的验证信息
+                            TipsUtil.warn(validateUtil.concatValidateMsg(validateMsgObj));
+                            //焦点定位到 第一个 验证不通过的控件
+                            $form.jqForm("focusToElement", validateUtil.getFirstNoPassName(validateMsgObj));
+                        });
+                        return;
+                    }
+                    //赋值 users
+                    checkedAll = $(window.frames[dialogObj.id].window.pageObj.getUserTree().getCheckedNodes());
+                    $.each(checkedAll, function (idx, item) {
+                        if (item.type === '2') {
+                            checkedUsers.push(item);
+                        }
+                    });
+                    formData.teamRelUsers = checkedUsers;
+                    //
+                    //判断表单是否被修改( isDirty 是根据 setDefaultValue 设置的默认数据进行判断)
+                    require(["Tips"], function () {
+                        var _saveFunc = function () {
+                            //保存
+                            ajaxUtil.ajaxWithBlock({
+                                url: App["contextPath"] + "/manage/okrTeam/saveTeams.json",
+                                type: "post",
+                                data: JSON.stringify({teamExtVO: formData}),
+                                contentType: 'application/json;charset=utf-8' //设置请求头信息
+                            }, function (data) {
+                                require(["Tips"], function () {
+                                    if (data.success) {
+                                        TipsUtil.info(data.message);
+                                        dialogObj.close();
+                                        pageObj.loadOKRTeams('1');
+                                    } else {
+                                        TipsUtil.warn(data.message);
+                                    }
+                                });
+                            });
+                        };
+                        //
+                        _saveFunc();
+                    });
+                };
+                var dialogObj = dialog({
+                    url: App["contextPath"] + "/manage/okrTeam/teamForm.htm?id=" + id,
+                    title: '新增/编辑团队',
+                    quickClose: false,
+                    okValue: "保存",
+                    cancelValue: "关闭",
+                    ok: function () {
+                        _editTeamFunc(dialogObj);
+                        return false;
+                    },
+                    cancel: function () {
+                        //关闭对话框
+                        dialogObj.close();
+                        return false;
+                    }
+                });
+                dialogObj.showModal();
+            });
         },
 
         deleteFunc: function (id) {

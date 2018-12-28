@@ -5,6 +5,7 @@ import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.exception.BusinessException;
 import org.openokr.manage.vo.TeamsExtVO;
 import org.openokr.manage.vo.TeamsVO;
+import org.openokr.sys.vo.UserVO;
 
 import java.util.List;
 
@@ -75,4 +76,6 @@ public interface IOkrTeamService {
      * @return
      */
     TeamsExtVO getByTeamId(String id);
+
+    List<UserVO> getUsersByTeamId(String teamId);
 }

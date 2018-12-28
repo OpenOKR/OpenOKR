@@ -17,7 +17,10 @@ public class TeamsExtVO extends TeamsVO implements Serializable {
      */
     private String editFlag;
 
+    private String parentName;
+
     // 团队成员
+    private List<String> teamRelUserIds;
     private List<UserVO> teamRelUsers;
 
     public String getUserId() {
@@ -34,6 +37,22 @@ public class TeamsExtVO extends TeamsVO implements Serializable {
 
     public void setEditFlag(String editFlag) {
         this.editFlag = editFlag;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
+    }
+
+    public List<String> getTeamRelUserIds() {
+        return teamRelUserIds;
+    }
+
+    public void setTeamRelUserIds(List<String> teamRelUserIds) {
+        this.teamRelUserIds = teamRelUserIds;
     }
 
     public List<UserVO> getTeamRelUsers() {
