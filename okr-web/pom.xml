@@ -284,10 +284,10 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <plugin>
+                    <!--<plugin>
                         <groupId>com.github.eirslett</groupId>
                         <artifactId>frontend-maven-plugin</artifactId>
-                        <!-- 压缩js&css静态资源 -->
+                        &lt;!&ndash; 压缩js&css静态资源 &ndash;&gt;
                         <executions>
                             <execution>
                                 <id>install_node_and_npm</id>
@@ -313,11 +313,11 @@
                                     <goal>gulp</goal>
                                 </goals>
                                 <configuration>
-                                    <arguments>compressJsCss --gulpfile gulp-compress.js</arguments>
+                                    <arguments>compressJsCss &#45;&#45;gulpfile gulp-compress.js</arguments>
                                 </configuration>
                             </execution>
                         </executions>
-                    </plugin>
+                    </plugin>-->
                 </plugins>
             </build>
         </profile>
