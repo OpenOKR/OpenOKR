@@ -6,9 +6,9 @@
     <select id="countFindByPageLikeInputValue" parameterType="java.util.Map" resultType="java.lang.Integer">
         SELECT count(1)
         FROM t_okr_sys_user t1
-        join t_okr_sys_organization t2 on t2.id = t1.organization_id
-        join t_okr_sys_user_role t3 on t3.user_id = t1.id
-        join t_okr_sys_role t4 on t4.id = t3.role_id
+        left join t_okr_sys_organization t2 on t2.id = t1.organization_id
+        left join t_okr_sys_user_role t3 on t3.user_id = t1.id
+        left join t_okr_sys_role t4 on t4.id = t3.role_id
         where 1 = 1
         <if test="inputValue != null and !inputValue.isEmpty() ">
             AND (t1.user_name LIKE #{inputValue} or t1.real_name LIKE #{inputValue} or t1.phone LIKE #{inputValue})
@@ -32,9 +32,9 @@
         t4.id as "roleId",
         t4.name as "roleName"
         FROM t_okr_sys_user t1
-        join t_okr_sys_organization t2 on t2.id = t1.organization_id
-        join t_okr_sys_user_role t3 on t3.user_id = t1.id
-        join t_okr_sys_role t4 on t4.id = t3.role_id
+        left join t_okr_sys_organization t2 on t2.id = t1.organization_id
+        left join t_okr_sys_user_role t3 on t3.user_id = t1.id
+        left join t_okr_sys_role t4 on t4.id = t3.role_id
         where 1 = 1
         <if test="inputValue != null and !inputValue.isEmpty() ">
             AND (t1.user_name LIKE #{inputValue} or t1.real_name LIKE #{inputValue} or t1.phone LIKE #{inputValue})

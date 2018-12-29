@@ -29,8 +29,9 @@ framework:
       file: /data/log/okr/okr-service-log/okr-service-dubbo1.cache
 
 logging:
+  config: classpath:logback.xml
   level:
-    root: info
+    root: debug
   file: /data/log/okr/okr-service-log/okr-service
 
 app:
@@ -45,7 +46,7 @@ spring:
     password: okr_dev
 
 logging:
-  file: ./log/es_performance_service
+  file: ../log/okr_service
 
 framework:
   dubbo:
