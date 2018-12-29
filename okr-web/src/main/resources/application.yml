@@ -30,7 +30,7 @@ framework:
     application:
       name: okr-web
     registry1:
-      address: zookeeper://127.0.0.1:2181
+      address: zookeeper://zkserver1:2181
       file: /data/log/okr/okr-web-log/okr-web-dubbo1.cache
 
 logging:
@@ -59,6 +59,10 @@ spring:
 logging:
   file: ../log/okr-web
 
+framework:
+  dubbo:
+    registry1:
+      address: zookeeper://localhost:2181;
 app:
   jsDebug: true
   staticResourceVersion: dev
