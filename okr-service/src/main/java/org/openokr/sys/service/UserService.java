@@ -92,16 +92,19 @@ public class UserService extends BaseServiceImpl implements IUserService {
         if (this.countByUsername(userVOExt.getId(), userVOExt.getUserName()) > 0) {
             ResponseResult result = new ResponseResult("保存失败，" + userVOExt.getUserName() + " 已经存在", false);
             result.setCode("1");
+            result.setSuccess(false);
             return result;
         }
         if (this.countByEmail(userVOExt.getId(), userVOExt.getEmail()) > 0) {
             ResponseResult result = new ResponseResult("保存失败，Email：" + userVOExt.getEmail() + " 已经存在", false);
             result.setCode("1");
+            result.setSuccess(false);
             return result;
         }
         if (this.countByPhone(userVOExt.getId(), userVOExt.getPhone()) > 0) {
             ResponseResult result = new ResponseResult("保存失败，手机号：" + userVOExt.getPhone() + " 已经存在", false);
             result.setCode("2");
+            result.setSuccess(false);
             return result;
         }
         if (userVOExt.getId() == null) {//新增

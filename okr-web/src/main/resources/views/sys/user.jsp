@@ -64,16 +64,16 @@
                                 <input name="realName" maxlength="20"  type="text" class="inp inp-royal mr20" value="" placeholder="真实姓名">
                             </div>
                         </li>
-                        <li class="col-sm-12 " style="display: none;">
-                            <label class="form-lab">E-Mail<span class="required"><i class="iconfont icon-xinghao"></i></span></label>
-                            <div class="form-control">
-                                <input name="email" type="text" class="inp inp-royal mr20" value="" placeholder="E-Mail">
-                            </div>
-                        </li>
                         <li class="col-sm-12 ">
                             <label class="form-lab">手机号码</label>
                             <div class="form-control">
                                 <input name="phone" minlength="11" maxlength="11"  onkeypress = "return event.keyCode>=48&&event.keyCode<=57||event.keyCode==46" type="text" class="inp inp-royal mr20" value="" placeholder="请输入11位手机号码">
+                            </div>
+                        </li>
+                        <li class="col-sm-12 ">
+                            <label class="form-lab">E-Mail<span class="required"><i class="iconfont icon-xinghao"></i></span></label>
+                            <div class="form-control">
+                                <input name="email" type="text" class="inp inp-royal mr20" value="" placeholder="E-Mail">
                             </div>
                         </li>
                         <li class="col-sm-12">
