@@ -7,7 +7,7 @@ require(["jQuery"], function () {
                 pageObj.getParentCombo();
             });
             require(["zTree"], function (){
-                pageObj.getUserTree();
+                pageObj.getUsersTree();
             });
             require(["jqForm"], function () {
                 pageObj.getForm();
@@ -49,10 +49,10 @@ require(["jQuery"], function () {
          * 用户树
          * @returns {*}
          */
-        getUserTree: function () {
+        getUsersTree: function () {
             //渲染树
-            var treeId = 'ulUserTree', $tree = $('#' + treeId);
-            if (pageObj._initUserTree !== true) {//防重复
+            var treeId = 'ulUsersTree', $tree = $('#' + treeId);
+            if (pageObj._initUsersTree !== true) {//防重复
                 $.fn.zTree.init($tree, {
                     check: {
                         enable: true,
@@ -74,18 +74,18 @@ require(["jQuery"], function () {
                         //添加数据
                         var intervalTimeObj = window.setInterval(function () {
                             //判断菜单树已经完成数据装载
-                            if (pageObj._userTreeCheckLoaded) {
-                                pageObj.getUserTree().addNodes(null, data);
+                            if (pageObj._usersTreeCheckLoaded) {
+                                pageObj.getUsersTree().addNodes(null, data);
                                 window.clearInterval(intervalTimeObj);
                             }
                         }, 100);
-                        fuzzySearch('ulUserTree','#searchKey', null, true); //初始化模糊搜索方法
+                        fuzzySearch('ulUsersTree','#searchKey', null, true); //初始化模糊搜索方法
                     },
                     error: function (res) {
 
                     }
                 });
-                pageObj._initUserTree = true;
+                pageObj._initUsersTree = true;
             }
             return $.fn.zTree.getZTreeObj(treeId);
         },
@@ -120,9 +120,9 @@ require(["jQuery"], function () {
                                 }
                             };
                             checkFunc(nodes, null, nodes.length);
-                            pageObj._userTreeCheckLoaded = true;
+                            pageObj._usersTreeCheckLoaded = true;
                         } else {
-                            pageObj._userTreeCheckLoaded = true;
+                            pageObj._usersTreeCheckLoaded = true;
                         }
                     },
                     error: function (res) {
@@ -130,7 +130,7 @@ require(["jQuery"], function () {
                     }
                 });
             } else {
-                pageObj._userTreeCheckLoaded = true;
+                pageObj._usersTreeCheckLoaded = true;
             }
         }
     });

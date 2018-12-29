@@ -167,7 +167,7 @@ require(["jQuery"], function () {
                         return;
                     }
                     //赋值 users
-                    checkedAll = $(window.frames[dialogObj.id].window.pageObj.getUserTree().getCheckedNodes());
+                    checkedAll = $(window.frames[dialogObj.id].window.pageObj.getUsersTree().getCheckedNodes());
                     $.each(checkedAll, function (idx, item) {
                         if (item.type === '2') {
                             checkedUsers.push(item);

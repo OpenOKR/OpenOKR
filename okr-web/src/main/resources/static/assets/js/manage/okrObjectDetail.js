@@ -42,7 +42,7 @@ require(["jQuery"], function () {
                     '           <div class="action">' +
                     '               <em class="em-start [%=statusList[object.status].cssClass%]">[%=statusList[object.status].name%]</em>' +
                     '               <a class="btn-del text-primary" onclick="pageObj.deleteFunc([%=object.id%]);"><i class="icon-del"></i>删除</a>' +
-                    '               <a class="btn-del text-primary"><i class="icon-edit"></i>编辑</a>' +
+                    '               <a class="btn-del text-primary" onclick="pageObj.editObject([%=object.id%])"><i class="icon-edit"></i>编辑</a>' +
                     '           </div>' +
                     '       </h3>' +
                     '       <p>[%=object.description%]</p>' +
@@ -87,9 +87,9 @@ require(["jQuery"], function () {
                     '                           </span>' +
                     '                       </p>' +
                     '                       <div class="action">' +
-                    '                           <a class="btn-del text-primary"><i class="icon-del"></i>删除</a>' +
-                    '                           <a class="btn-other text-primary"><i class="icon-refresh"></i>进度</a>' +
-                    '                           <a class="btn-del text-primary"><i class="icon-edit"></i>编辑</a>' +
+                    '                           <a class="btn-del text-primary" onclick="pageObj.deleteResultFunc([%=item.id%])"><i class="icon-del"></i>删除</a>' +
+                    '                           <a class="btn-other text-primary" onclick="pageObj.addCheckin([%=item.id%], [%=object.id%])"><i class="icon-refresh"></i>进度</a>' +
+                    '                           <a class="btn-del text-primary" onclick="pageObj.editResult([%=item.id%], [%=object.id%])"><i class="icon-edit"></i>编辑</a>' +
                     '                       </div>' +
                     '                   </div>' +
                     '               </li>' +
@@ -97,7 +97,7 @@ require(["jQuery"], function () {
                     '       [%}%]' +
                     '   </ul>' +
                     '   <div class="okr-ohter">' +
-                    '       <a href="" class="txt-all text-primary"><i class="iconfont icon-add"></i>新增KR</a>' +
+                    '       <a onclick="pageObj.editResult(\'[%=object.id%]\', \'\')" class="txt-all text-primary"><i class="iconfont icon-add"></i>新增KR</a>' +
                     '   </div>' +
                     '</div>' +
                     '<div class="card-footer">' +
@@ -132,12 +132,18 @@ require(["jQuery"], function () {
 
         pieEchartsFunc: function (id, progress) {
             require(["echarts"], function (echarts){
+                var color = '#f57677';
+                if (progress >= 40 && progress < 80) {
+                    color = '#fdb44d';
+                } else if (progress >= 80) {
+                    color = '#83affc';
+                }
                 var option = {
                     title: {text: '', x: 'center', y:"80%", textStyle: {fontSize: '12px', color:"#545454"}},
                     tooltip: {trigger: 'item', formatter: "{b} {d}%"},
                     legend: {orient: 'vertical', x: 'left', y:"-20%", data:['已完成','']},
                     series: [
-                        {name:'', type:'pie', radius: ['60%', '75%'], avoidLabelOverlap: false, color:['#f57677','#dedede'],
+                        {name:'', type:'pie', radius: ['60%', '75%'], avoidLabelOverlap: false, color:[color,'#dedede'],
                             label: {normal: {show: false, position: 'center'}, emphasis: {show: true, textStyle: {fontSize: '22px'}}},
                             labelLine: {normal: {show: false}},
                             data:[{value:progress, name: '已完成'}, {value: (100 - progress), name: '未完成'}]
@@ -160,11 +166,6 @@ require(["jQuery"], function () {
             });
         },
 
-        tabClick: function (dom, type, teamId) {
-            $(dom).addClass('active').siblings().removeClass('active');
-            pageObj.loadOKRObjects(type, teamId);
-        },
-
         deleteFunc: function (id) {
             require(["artDialog"], function () {
                 artDialogUtil.confirm("确认删除该Object吗？", function () {
@@ -185,6 +186,164 @@ require(["jQuery"], function () {
                         }
                     });
                 });
+            });
+        },
+
+        editObject: function (id) {
+            require(["artDialog", "jqForm", "AutoTree"], function () {
+                var _func = function (dialogObj) {
+                    var $form = $(window.frames[dialogObj.id].window.pageObj.getForm()),
+                        formData = $form.jqForm("getValue"),
+                        checkedTeams, checkedLabels;
+                    //验证
+                    var validateMsgObj = validateUtil.validateDatas(formData, $(window.frames[dialogObj.id].window.pageObj.validateRule())[0]);
+                    if (!$.isEmptyObject(validateMsgObj)) {
+                        require(["Tips"], function () {
+                            //提示 拼接的验证信息
+                            TipsUtil.warn(validateUtil.concatValidateMsg(validateMsgObj));
+                            //焦点定位到 第一个 验证不通过的控件
+                            $form.jqForm("focusToElement", validateUtil.getFirstNoPassName(validateMsgObj));
+                        });
+                        return;
+                    }
+                    //赋值 teams
+                    checkedTeams = $(window.frames[dialogObj.id].window.pageObj.getTeamsTree()).AutoTree("getCheckedNodes");
+                    formData.relTeams = checkedTeams;
+                    //赋值 labels
+                    checkedLabels = $(window.frames[dialogObj.id].window.pageObj.getLabelsTree()).AutoTree("getCheckedNodes");
+                    formData.relLabels = checkedLabels;
+                    //
+                    //判断表单是否被修改( isDirty 是根据 setDefaultValue 设置的默认数据进行判断)
+                    require(["Tips"], function () {
+                        var _saveFunc = function () {
+                            //保存
+                            ajaxUtil.ajaxWithBlock({
+                                url: App["contextPath"] + "/manage/okrObject/saveObject.json",
+                                type: "post",
+                                data: JSON.stringify({objectVO: formData}),
+                                contentType: 'application/json;charset=utf-8' //设置请求头信息
+                            }, function (data) {
+                                require(["Tips"], function () {
+                                    if (data.success) {
+                                        TipsUtil.info(data.message);
+                                        dialogObj.close();
+                                        pageObj.loadOKRObjects(pageObj.currentType, pageObj.currentTeamId);
+                                    } else {
+                                        TipsUtil.warn(data.message);
+                                    }
+                                });
+                            });
+                        };
+                        //
+                        _saveFunc();
+                    });
+                };
+                var dialogObj = dialog({
+                    url: App["contextPath"] + "/manage/okrObject/okrObjectForm.htm?objectId=" + id + "&type=" + pageObj.currentType,
+                    title: '新增/编辑目标',
+                    quickClose: false,
+                    okValue: "保存",
+                    cancelValue: "关闭",
+                    ok: function () {
+                        _func(dialogObj);
+                        return false;
+                    },
+                    cancel: function () {
+                        //关闭对话框
+                        dialogObj.close();
+                        return false;
+                    }
+                });
+                dialogObj.showModal();
+            });
+        },
+
+        editResult: function (objectId, resultId) {
+            require(["artDialog", "jqForm", "AutoTree"], function () {
+                var dialogObj = dialog({
+                    url: App["contextPath"] + "/manage/okrResult/okrResultForm.htm?objectId=" + objectId + "&resultId=" + resultId,
+                    title: '新增/编辑关键结果',
+                    quickClose: false,
+                    okValue: "保存",
+                    cancelValue: "关闭",
+                    ok: function () {
+                        return false;
+                    },
+                    cancel: function () {
+                        //关闭对话框
+                        dialogObj.close();
+                        return false;
+                    }
+                });
+                dialogObj.showModal();
+            });
+        },
+
+        deleteResultFunc: function (id) {
+            require(["artDialog"], function () {
+                artDialogUtil.confirm("确认删除该关键结果吗？", function () {
+                    $.ajax({
+                        url: App["contextPath"] + "/manage/okrResult/deleteResult.json?resultId=" + id,
+                        dataType: "json",
+                        success: function (data) {
+                            require(["Tips"], function () {
+                                if (data.success) {
+                                    TipsUtil.info(data.message);
+                                    pageObj.loadOKRObjects(pageObj.currentType, pageObj.currentTeamId);
+                                } else {
+                                    TipsUtil.warn(data.message);
+                                }
+                            });
+                        },
+                        error: function (res) {
+                            alert(JSON.stringify(res));
+                        }
+                    });
+                });
+            });
+        },
+
+        addCheckin: function (id, objectId) {
+            require(["artDialog"], function () {
+                var _func = function (dialogObj) {
+                    var resultId = $(window.frames[dialogObj.id].document).find("#resultId").val(),
+                        currentValue = $(window.frames[dialogObj.id].document).find("#currentValue").val(),
+                        status = $(window.frames[dialogObj.id].document).find("input[name='metricUnit']:checked").val(),
+                        description = $(window.frames[dialogObj.id].document).find("#description").val();
+                    ajaxUtil.ajaxWithBlock({
+                        url: App["contextPath"] + "/manage/okrResult/saveCheckins.json",
+                        type: "post",
+                        data: JSON.stringify({checkinVO:{resultId: resultId, currentValue: currentValue, status: status, description: description}}),
+                        contentType: 'application/json;charset=utf-8' //设置请求头信息
+                    }, function (data) {
+                        require(["Tips"], function () {
+                            if (data.success) {
+                                TipsUtil.info(data.info);
+                                dialogObj.close();
+                                pageObj.loadOKRObjects(pageObj.currentType, pageObj.currentTeamId);
+                            } else {
+                                TipsUtil.warn(data.info);
+                            }
+                        });
+                    });
+                };
+                var dialogObj = dialog({
+                    url: App["contextPath"] + "/manage/okrResult/checkinsForm.htm?resultId=" + id + "&objectId=" + objectId,
+                    title: '每周更新关键结果',
+                    quickClose: false,
+                    okValue: "保存",
+                    cancelValue: "关闭",
+                    ok: function () {
+                        _func(dialogObj);
+                        return false;
+                    },
+                    cancel: function () {
+                        //关闭对话框
+                        dialogObj.close();
+                        return false;
+                    }
+                });
+                dialogObj.showModal();
             });
         },
 

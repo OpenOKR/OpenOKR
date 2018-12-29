@@ -48,7 +48,7 @@
                 </label>
                 <div class="tree-box">
                     <div class="tree-con" style="height: 320px;" id="tree-box5">
-                        <ul id="ulUserTree" class="ztree"></ul>
+                        <ul id="ulUsersTree" class="ztree"></ul>
                     </div>
                 </div>
             </div>

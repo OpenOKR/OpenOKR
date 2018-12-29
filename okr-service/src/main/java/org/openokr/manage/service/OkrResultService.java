@@ -4,16 +4,15 @@ import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.exception.BusinessException;
 import org.apache.commons.lang3.StringUtils;
 import org.openokr.application.framework.service.OkrBaseService;
-import org.openokr.manage.entity.CheckinsEntity;
-import org.openokr.manage.entity.ResultUserRelaEntity;
-import org.openokr.manage.entity.ResultUserRelaEntityCondition;
-import org.openokr.manage.entity.ResultsEntity;
+import org.openokr.manage.entity.*;
 import org.openokr.manage.enumerate.ResultMetricUnitEnum;
 import org.openokr.manage.vo.CheckinsExtVO;
 import org.openokr.manage.vo.LogVO;
+import org.openokr.manage.vo.ObjectivesExtVO;
 import org.openokr.manage.vo.ResultsExtVO;
 import org.openokr.sys.vo.UserVO;
 import com.zzheng.framework.base.utils.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +27,9 @@ import java.util.Map;
 public class OkrResultService extends OkrBaseService implements IOkrResultService {
 
     private final static String MAPPER_NAMESPACE = "org.openokr.manage.sqlmapper.OkrResultMapper";
+
+    @Autowired
+    private IOkrObjectService okrObjectService;
 
     @Override
     public ResponseResult deleteResult(String resultId, String userId) throws BusinessException {
@@ -107,13 +109,17 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
     }
 
     @Override
-    public ResultsExtVO editResult(String resultId) throws BusinessException {
+    public ResultsExtVO editResult(String resultId, String objectId) throws BusinessException {
         ResultsExtVO resultVO = new ResultsExtVO();
         ResultsEntity entity = this.selectByPrimaryKey(ResultsEntity.class, resultId);
         if (entity == null) {
             return null;
         }
         BeanUtils.copyBean(entity, resultVO);
+        //获取该关键结果目标
+        ObjectivesEntity objectivesEntity = this.selectByPrimaryKey(ObjectivesEntity.class, objectId);
+        resultVO.setObjectId(objectivesEntity.getId());
+        resultVO.setObjectName(objectivesEntity.getName());
 
         // 获取协同人员
         List<UserVO> joinUsers = this.getJoinUsersByResultId(resultId, null);

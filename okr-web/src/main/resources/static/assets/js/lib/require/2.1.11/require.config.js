@@ -81,6 +81,9 @@ App._jQueryUtils = App.scp
 App._laypage = App.scp
     +"/assets/js/lib/laypage/1.2/";
 
+App._laydate = App.scp
+    +"/assets/js/lib/laydate/v5.0.85-SNAPSHOT/";
+
 var require = {
     map: {
         "*": {
@@ -396,6 +399,15 @@ var require = {
 
         laypage: {
             deps: ["css!" + App._laypage + "skin/laypage"]
+        },
+
+        laydate: {
+            deps: App.src ?
+                ["_laydate",
+                    "css!" + App._laydate + "theme/default/laydate.css",
+                    "css!" + App._laydate + "theme/default/laydate.ext.css"] :
+                ["jQuery",
+                    "css!" + App._laydate + "theme/default/laydate.all.min.css"]
         }
     },
     paths: {
@@ -497,6 +509,9 @@ var require = {
         _jQueryUtils10: App._jQueryUtils + "jquery-url-utils",
         jQueryUtils: ((App.src) ? App._jQueryUtils + "utils-application.extend" : App._jQueryUtils + "jquery-utils.all.min.js?ver=" + App.ver),
 
-        laypage: ((App.src) ? App._laypage + "laypage" : App._laypage + "laypage.min.js?ver=" + App.ver)
+        laypage: ((App.src) ? App._laypage + "laypage" : App._laypage + "laypage.min.js?ver=" + App.ver),
+
+        _laydate: App._laydate + "laydate",
+        laydate: ((App.src) ? App._laydate + "laydate.ext" : App._laydate + "laydate.all.min.js?ver=" + App.ver)
     }
 };

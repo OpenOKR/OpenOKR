@@ -1,14 +1,14 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/views/_include/_jsp_tags.jsp" %>
 <%@ include file="/views/_include/_jsp_variable.jsp" %>
-<c:set var="pageTitle" value="OKR视图"/>
+<c:set var="pageTitle" value="OKR列表视图"/>
 <c:set var="pageJs" value="${staticContextPath}/assets/js/manage/okrObjectList.js"/>
 <%@ include file="/views/application/_include_top.jsp" %>
 <div class="wapper">
     <p class="crumbs-bar">
         <a href="${contextPath}/index.htm?flag=true">OKR管理系统</a>
         <i class="iconfont icon-arrowR"></i>
-        <a href="${contextPath}/manage/okrObject/init.htm">OKR</a>
+        <a href="${contextPath}/manage/okrObject/init.htm">OKR列表</a>
     </p>
     <div class="card-box">
         <div class="top-search uim tc">

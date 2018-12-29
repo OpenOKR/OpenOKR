@@ -106,7 +106,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
     public List<ObjectivesExtVO> getTeamOkrList(OkrObjectSearchVO searchVO) throws BusinessException {
         Map<String, Object> params = new HashMap<>();
         params.put("userId", searchVO.getUserId());
-        params.put("teamId", searchVO.getUserId());
+        params.put("teamId", searchVO.getTeamId());
         params.put("objectId", searchVO.getObjectId());//查看OKR的详情时才需要传该参数
         params.put("keyword", searchVO.getKeyword());
         params.put("executeStatus", searchVO.getExecuteStatus());
@@ -137,7 +137,10 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         criteria.andBizTypeEqualTo("1").andBizIdEqualTo(objectId);
         //2、关键结果
         LogEntityCondition.Criteria criteria2 = logCondition.or();
-        criteria2.andBizTypeEqualTo("2").andBizIdIn(resultIds);
+        criteria2.andBizTypeEqualTo("2");
+        if (resultIds != null && resultIds.size() > 0) {
+            criteria2.andBizIdIn(resultIds);
+        }
         logCondition.setOrderByClause("create_ts desc");
         List<LogEntity> logEntityList = this.selectByCondition(logCondition);
         if (logEntityList != null && logEntityList.size()>0) {
@@ -289,6 +292,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
                 ResultsEntityCondition resultsCondition = new ResultsEntityCondition();
                 resultsCondition.createCriteria().andObjectIdEqualTo(objectivesExtVO.getId())
                         .andDelFlagEqualTo("0");
+                resultsCondition.setOrderByClause("create_ts desc");
                 List<ResultsEntity> resultsList = this.selectByCondition(resultsCondition);
                 List<ResultsExtVO> resultsExtList = new ArrayList<>();
                 if (resultsList !=null) {

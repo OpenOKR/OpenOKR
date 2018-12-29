@@ -67,11 +67,14 @@ require(["jQuery", "countUp"], function () {
 
         pieEchartsFunc: function (id, type, progress) {
             require(["echarts"], function (echarts){
-                var color = '#83affc';
-                switch (type) {
-                    case '2': color = '#fdb44d'; break;
-                    case '3': color = '#f57677'; break;
+                var color = '#f57677';
+                if (progress >= 40 && progress < 80) {
+                    color = '#fdb44d';
+                } else if (progress >= 80) {
+                    color = '#83affc';
                 }
+
+                //0-40 #f57677,40-80 #fdb44d,80-100 #83affc
                 var option = {
                     title: {text: '当前进度', x: 'center', y:"80%", textStyle: {fontSize: '12px', color:"#545454"}},
                     tooltip: {trigger: 'item', formatter: "{b} {d}%"},
@@ -108,10 +111,6 @@ require(["jQuery", "countUp"], function () {
         buildOKRExecution: function (type, res) {
             require(["echarts"], function (echarts){
                 var color1 = '#4d7fff', color2 = '#82aefc', color3 = '#4d7ffe';
-                switch (type) {
-                    case 2: color1 = '#fdb44d'; color2 = '#fdb44d'; color3 = '#fdbe64'; break;
-                    case 3: color1 = '#f57677'; color2 = '#f78a8a'; color3 = '#f57677'; break;
-                }
                 var option = {
                     tooltip : {trigger: 'axis', axisPointer : {type : 'shadow'}},
                     grid: {left: '2%', right: '2%', bottom: '3%', top:'12%', containLabel: true},

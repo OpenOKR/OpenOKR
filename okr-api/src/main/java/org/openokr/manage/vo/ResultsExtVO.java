@@ -29,4 +29,5 @@ public class ResultsExtVO extends ResultsVO implements Serializable {
     public void setJoinUsers(List<UserVO> joinUsers) {
         this.joinUsers = joinUsers;
     }
+
 }

@@ -4,7 +4,7 @@
 
     <!--获取KR的参与人员-->
     <select id="getJoinUsersByResultId" parameterType="java.util.Map" resultType="org.openokr.sys.vo.UserVO">
-        select distinct t4.id ,t4.user_name
+        select distinct t4.id ,t4.user_name, t4.real_name
         from t_okr_manage_results t2
         left join t_okr_manage_result_user_rela t3 on t3.result_id =t2.id
         left join t_okr_sys_user t4 on t4.id = t3.user_id

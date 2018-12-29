@@ -21,7 +21,7 @@ public interface IOkrResultService {
      * @return
      * @throws BusinessException
      */
-    ResultsExtVO editResult(String resultId) throws BusinessException;
+    ResultsExtVO editResult(String resultId, String objectId) throws BusinessException;
 
     /**
      * 保存关键结果

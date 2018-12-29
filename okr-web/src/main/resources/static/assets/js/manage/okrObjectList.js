@@ -58,11 +58,11 @@ require(["jQuery"], function () {
                     var okrCon = '<div class="okr-con">' +
                         '   <ul class="okr-list">' +
                         '       [%if(!_.isNull(object.resultsExtList) && object.resultsExtList.length>0){%]' +
-                        '           [%_.each(object.resultsExtList, function(item){%]' +
+                        '           [%_.each(object.resultsExtList, function(item, idx){%]' +
                         '               <li onmouseover="$(this).siblings().find(\'.participant\').hide(\'slow\');$(this).find(\'.participant\').show(\'slow\');">' +
                         '                   <div class="okr-list-in">' +
                         '                       <h4>' +
-                        '                           K1：[%=item.name%]' +
+                        '                           K[%=idx+1%]：[%=item.name%]' +
                         '                           <div class="action">' +
                         '                               <span class="txt-all [%=executeList[item.status].cssClass%]">' +
                         '                                   <i class="iconfont icon-dot"></i>[%=executeList[item.status].name%]' +
@@ -90,9 +90,9 @@ require(["jQuery"], function () {
                         '                           </span>' +
                         '                       </p>' +
                         '                       <div class="action">' +
-                        '                           <a id="result-del-[%=item.id%]" class="btn-del text-primary" onclick="pageObj.deleteResultFunc([%=item.id%])"><i class="icon-del"></i>删除</a>' +
-                        '                           <a id="result-checkin-[%item.id%]" class="btn-other text-primary" onclick="pageObj.addCheckin([%=item.id%])"><i class="icon-refresh"></i>进度</a>' +
-                        '                           <a id="result-edit-[%item.id%]" class="btn-del text-primary" onclick="pageObj.editResult([%=item.id%], [%=object.id%])"><i class="icon-edit"></i>编辑</a>' +
+                        '                           <a id="result-del-[%=item.id%]" class="btn-del text-primary" onclick="pageObj.deleteResultFunc(\'[%=item.id%]\')"><i class="icon-del"></i>删除</a>' +
+                        '                           <a id="result-checkin-[%item.id%]" class="btn-other text-primary" onclick="pageObj.addCheckin(\'[%=item.id%]\', \'[%=object.id%]\')"><i class="icon-refresh"></i>进度</a>' +
+                        '                           <a id="result-edit-[%item.id%]" class="btn-del text-primary" onclick="pageObj.editResult(\'[%=item.id%]\', \'[%=object.id%]\')"><i class="icon-edit"></i>编辑</a>' +
                         '                       </div>' +
                         '                   </div>' +
                         '               </li>' +
@@ -138,12 +138,18 @@ require(["jQuery"], function () {
 
         pieEchartsFunc: function (id, progress) {
             require(["echarts"], function (echarts){
+                var color = '#f57677';
+                if (progress >= 40 && progress < 80) {
+                    color = '#fdb44d';
+                } else if (progress >= 80) {
+                    color = '#83affc';
+                }
                 var option = {
                     title: {text: '', x: 'center', y:"80%", textStyle: {fontSize: '12px', color:"#545454"}},
                     tooltip: {trigger: 'item', formatter: "{b} {d}%"},
                     legend: {orient: 'vertical', x: 'left', y:"-20%", data:['已完成','']},
                     series: [
-                        {name:'', type:'pie', radius: ['60%', '75%'], avoidLabelOverlap: false, color:['#f57677','#dedede'],
+                        {name:'', type:'pie', radius: ['60%', '75%'], avoidLabelOverlap: false, color:[color,'#dedede'],
                             label: {normal: {show: false, position: 'center'}, emphasis: {show: true, textStyle: {fontSize: '22px'}}},
                             labelLine: {normal: {show: false}},
                             data:[{value:progress, name: '已完成'}, {value: (100 - progress), name: '未完成'}]
@@ -244,7 +250,54 @@ require(["jQuery"], function () {
         },
 
         editResult: function (id, objectId) {
-            require(["artDialog"], function () {
+            require(["artDialog", "jqForm", "zTree"], function () {
+                var _func = function (dialogObj) {
+                    var $form = $(window.frames[dialogObj.id].window.pageObj.getForm()),
+                        formData = $form.jqForm("getValue"),
+                        checkedAll, checkedUsers = [];
+                    //验证
+                    var validateMsgObj = validateUtil.validateDatas(formData, $(window.frames[dialogObj.id].window.pageObj.validateRule())[0]);
+                    if (!$.isEmptyObject(validateMsgObj)) {
+                        require(["Tips"], function () {
+                            //提示 拼接的验证信息
+                            TipsUtil.warn(validateUtil.concatValidateMsg(validateMsgObj));
+                            //焦点定位到 第一个 验证不通过的控件
+                            $form.jqForm("focusToElement", validateUtil.getFirstNoPassName(validateMsgObj));
+                        });
+                        return;
+                    }
+                    //赋值 users
+                    checkedAll = $(window.frames[dialogObj.id].window.pageObj.getUsersTree().getCheckedNodes());
+                    $.each(checkedAll, function (idx, item) {
+                        checkedUsers.push(item);
+                    });
+                    formData.joinUsers = checkedUsers;
+                    //
+                    //判断表单是否被修改( isDirty 是根据 setDefaultValue 设置的默认数据进行判断)
+                    require(["Tips"], function () {
+                        var _saveFunc = function () {
+                            //保存
+                            ajaxUtil.ajaxWithBlock({
+                                url: App["contextPath"] + "/manage/okrResult/saveResult.json",
+                                type: "post",
+                                data: JSON.stringify({resultVO: formData}),
+                                contentType: 'application/json;charset=utf-8' //设置请求头信息
+                            }, function (data) {
+                                require(["Tips"], function () {
+                                    if (data.success) {
+                                        TipsUtil.info(data.message);
+                                        dialogObj.close();
+                                        pageObj.loadOKRObjects(pageObj.currentType, pageObj.currentTeamId);
+                                    } else {
+                                        TipsUtil.warn(data.message);
+                                    }
+                                });
+                            });
+                        };
+                        //
+                        _saveFunc();
+                    });
+                };
                 var dialogObj = dialog({
                     url: App["contextPath"] + "/manage/okrResult/okrResultForm.htm?resultId=" + id + "&objectId=" + objectId,
                     title: '新增/编辑关键结果',
@@ -252,6 +305,7 @@ require(["jQuery"], function () {
                     okValue: "保存",
                     cancelValue: "关闭",
                     ok: function () {
+                        _func(dialogObj);
                         return false;
                     },
                     cancel: function () {
@@ -264,7 +318,7 @@ require(["jQuery"], function () {
             });
         },
 
-        addCheckin: function (id) {
+        addCheckin: function (id, objectId) {
             require(["artDialog"], function () {
                 var _func = function (dialogObj) {
                     var resultId = $(window.frames[dialogObj.id].document).find("#resultId").val(),
@@ -289,7 +343,7 @@ require(["jQuery"], function () {
                     });
                 };
                 var dialogObj = dialog({
-                    url: App["contextPath"] + "/manage/okrResult/checkinsForm.htm?resultId=" + id,
+                    url: App["contextPath"] + "/manage/okrResult/checkinsForm.htm?resultId=" + id + "&objectId=" + objectId,
                     title: '每周更新关键结果',
                     quickClose: false,
                     okValue: "保存",

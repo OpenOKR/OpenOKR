@@ -8,6 +8,7 @@ import org.openokr.manage.enumerate.ResultMetricUnitEnum;
 import org.openokr.manage.service.IOkrResultService;
 import org.openokr.manage.vo.CheckinsExtVO;
 import org.openokr.manage.vo.ResultsExtVO;
+import org.openokr.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,13 +35,15 @@ public class OkrResultController extends BaseController {
      */
     @RequestMapping(value = "/okrResultForm.htm")
     public String okrResultForm(Model model, String resultId, String objectId) {
-        ResultsExtVO resultVO = okrResultService.editResult(resultId);
+        ResultsExtVO resultVO = okrResultService.editResult(resultId, objectId);
         if (resultVO == null) {
             resultVO = new ResultsExtVO();
             resultVO.setObjectId(objectId);
         }
         model.addAttribute("metricUnitEnumList", ResultMetricUnitEnum.toList());
         model.addAttribute("resultVO", resultVO);
+        model.addAttribute("endTs", resultVO.getEndTs() == null ? "" : DateUtils.formatDate(resultVO.getEndTs(),
+                com.zzheng.framework.base.utils.DateUtils.yyyy_MM_dd));
         return "manage/okrResultForm";
     }
 
@@ -50,7 +53,7 @@ public class OkrResultController extends BaseController {
      */
     @RequestMapping(value = "/saveResult.json")
     @ResponseBody
-    public ResponseResult saveResult(ResultsExtVO resultVO) {
+    public ResponseResult saveResult(@JsonPathParam("$.resultVO") ResultsExtVO resultVO) {
         resultVO.setCreateUserId(getCurrentUserId());
         ResponseResult responseResult = okrResultService.saveResult(resultVO);
         return responseResult;
@@ -72,10 +75,10 @@ public class OkrResultController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/checkinsForm.htm")
-    public String checkinsForm(Model model, String resultId) {
+    public String checkinsForm(Model model, String resultId, String objectId) {
         model.addAttribute("resultId", resultId);
         model.addAttribute("executeStatusEnum", ExecuteStatusEnum.toList());
-        ResultsExtVO resultsExtVO = okrResultService.editResult(resultId);
+        ResultsExtVO resultsExtVO = okrResultService.editResult(resultId, objectId);
         model.addAttribute("resultVO", resultsExtVO);
         return "manage/checkinsForm";
     }
