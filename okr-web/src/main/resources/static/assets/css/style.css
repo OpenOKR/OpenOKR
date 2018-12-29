@@ -1087,7 +1087,6 @@
     margin-bottom: 20px;
     white-space: nowrap;
     border-bottom: none;
-    visibility: hidden;
 }
 .login-form .item-code > input {
     width: 224px;
