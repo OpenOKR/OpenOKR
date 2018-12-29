@@ -34,8 +34,9 @@ framework:
       file: /data/log/okr/okr-web-log/okr-web-dubbo1.cache
 
 logging:
+  config: classpath:logback.xml
   level:
-    root: info
+    root: debug
   file: /data/log/okr/okr-web-log/okr-web
 
 app:
