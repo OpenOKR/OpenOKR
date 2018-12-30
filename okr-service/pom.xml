@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>okr</artifactId>
+        <groupId>org.springframework.boot</groupId>
+        <version>dev-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>okr-service</artifactId>
+
+    <properties>
+        <!-- 数据库配置 -->
+        <mybatisGeneratorDbConfigFile>maven_build/mybatis-generator-entity.properties</mybatisGeneratorDbConfigFile>
+        <!-- java代码目录 -->
+        <mybatisGeneratorJavaFileDir>../okr-service/src/main/java</mybatisGeneratorJavaFileDir>
+        <!-- 资源文件目录 -->
+        <mybatisGeneratorResourcesFileDir>${basedir}/src/main/resources</mybatisGeneratorResourcesFileDir>
+        <!-- 实体生成配置文件 -->
+        <mybatisGeneratorConfigFile>${basedir}/src/main/resources/maven_build/mybatis-generator-entity.xml
+        </mybatisGeneratorConfigFile>
+        <!-- 包名 -->
+        <mybatisGeneratorPackagePath>org.openokr</mybatisGeneratorPackagePath>
+        <!--VO生成目录-->
+        <mybatisVOJavaFileDir>../okr-api/src/main/java</mybatisVOJavaFileDir>
+        <i18nJavaScriptTargetDir>../okr-api/src/main/webapp/assets/js/application/i18n</i18nJavaScriptTargetDir>
+        <start-class>org.openokr.ApplicationOkrService</start-class>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>okr-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.zzheng</groupId>
+            <artifactId>okr-framework-boot-starter-dao</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>4.3.3.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jdbc</artifactId>
+            <version>8.5.32</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <excludes>
+                    <exclude>maven_build/**/*</exclude>
+                </excludes>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <fork>true</fork>
+                </configuration>
+            </plugin>
+
+            <!-- mvn mybatis-generator:generate -->
+            <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <version>1.3.7</version>
+                <configuration>
+                    <verbose>true</verbose>
+                    <overwrite>true</overwrite>
+                    <configurationFile>${mybatisGeneratorConfigFile}</configurationFile>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.jh</groupId>
+                        <artifactId>jh-mybatis-generator</artifactId>
+                        <version>1.0.0-SNAPSHOT</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.postgresql</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <version>${postgresql.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+</project>

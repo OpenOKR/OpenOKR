@@ -1,0 +1,103 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.4.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <artifactId>okr</artifactId>
+    <version>dev-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <properties>
+        <!-- begin 全局设置,被子工程继承 -->
+        <skipRequireRelease>true</skipRequireRelease><!-- 是否跳过 必须依赖正式版本的检查 -->
+        <!-- end -->
+        <!-- begin 框架版本 -->
+        <!-- end -->
+        <!-- begin 外部api -->
+        <!-- end -->
+        <!-- begin 其它第三方开源版本定义 -->
+        <postgresql.version>9.2-1004-jdbc4</postgresql.version>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.compilerVersion>1.7</maven.compiler.compilerVersion>
+        <!-- end -->
+    </properties>
+
+    <repositories>
+        <repository>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>onlyou-repositories</id>
+            <url>http://172.16.11.54:8888/content/groups/onlyou-repositories-group/</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>onlyou-repositories</id>
+            <url>http://172.16.11.54:8888/content/groups/onlyou-repositories-group/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <!-- 依赖预配置 -->
+    <dependencyManagement>
+        <dependencies>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+
+            </plugins>
+        </pluginManagement>
+
+    </build>
+
+    <profiles>
+        <profile>
+            <id>api</id>
+            <modules>
+                <module>okr-api</module>
+            </modules>
+        </profile>
+        <profile>
+            <!-- 开发环境为windows系统将生效 -->
+            <id>dev-windows</id>
+            <modules>
+                <module>okr-api</module>
+                <module>okr-service</module>
+                <module>okr-web</module>
+            </modules>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+        </profile>
+        <profile>
+            <!-- 开发环境为mac系统将生效 -->
+            <id>dev-mac</id>
+            <modules>
+                <module>okr-api</module>
+                <module>okr-service</module>
+                <module>okr-web</module>
+            </modules>
+            <activation>
+                <os>
+                    <family>mac</family>
+                </os>
+            </activation>
+        </profile>
+
+    </profiles>
+</project>

@@ -1,0 +1,53 @@
+.ui-tips {
+    padding: 10px 28px 10px 36px;
+    max-width: 386px;
+    font-size: 14px;
+    font-family: "\5FAE\8F6F\96C5\9ED1";
+    word-wrap: break-word;
+    background: #fff;
+    box-shadow: 0 0 5px rgba(0,0,0,.18);
+    border: 1px solid #cdcdcd;
+    border-radius: 3px;
+}
+.ui-tips .close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 12px;
+    height: 12px;
+    overflow: hidden;
+    font-size: 0;
+    cursor: pointer;
+    background: url("extend/images/icon.png") 2px -74px;
+}
+.ui-tips .close:hover {
+    background-position: 2px -87px;
+}
+.ui-tips i {
+    position: absolute;
+    left: 14px;
+    top: 12px;
+    width: 16px;
+    height: 16px;
+    background: url("extend/images/icon.png");
+}
+.ui-tips-success {
+    color: #6EC644;
+}
+.ui-tips-success i {
+    background-position: -2px -25px;
+}
+.ui-tips-error {
+    color: #DD2323;
+}
+.ui-tips-error i {
+    background-position: -2px -47px;
+}
+.ui-tips-warning {
+    color: #DD2323;
+}
+.ui-tips-warning i {
+    background-position: -2px -47px;
+}
+
+

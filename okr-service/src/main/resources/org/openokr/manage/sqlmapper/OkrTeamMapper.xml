@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.openokr.manage.sqlmapper.OkrTeamMapper">
+
+    <resultMap id="TeamsExtVO" type="org.openokr.manage.vo.TeamsExtVO">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+        <result column="icon" property="icon"/>
+        <result column="owner_id" property="ownerId"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="create_user_id" property="createUserId"/>
+        <result column="create_ts" property="createTs"/>
+        <result column="update_user_id" property="updateUserId"/>
+        <result column="update_ts" property="updateTs"/>
+        <result column="type" property="type"/>
+        <collection property="teamRelUsers" ofType="org.openokr.sys.vo.UserVO"
+                    column="id" select="org.openokr.manage.sqlmapper.OkrTeamMapper.collectionUserListByTeamId" >
+        </collection>
+    </resultMap>
+
+    <!--获取用户的所有团队信息(不包括公司团队)-->
+    <select id="getTeamByUserId" parameterType="java.util.Map" resultMap="TeamsExtVO">
+        select t1.id, t1.name, t1.owner_id, t1.create_ts, (case when t1.owner_id = #{userId} then 1 else 0 end) as editFlag
+        from t_okr_teams t1
+        left join t_okr_team_user_rela t2 on t2.team_id=t1.id
+        where t1.type='2'
+        and t2.user_id= #{userId}
+    </select>
+
+    <!--复杂查询 根据团队id查找团队内所有成员-->
+    <select id="collectionUserListByTeamId" parameterType="java.lang.String" resultType="org.openokr.sys.vo.UserVO">
+        select t1.id, t1.user_name, t1.real_name, t1.photo_url from t_okr_sys_user t1
+        join t_okr_team_user_rela t2 on t2.user_id = t1.id
+        where t2.team_id = #{teamId} and t1.id != (select owner_id from t_okr_teams where id = #{teamId})
+    </select>
+
+    <!--简单查询 根据团队id查找团队内所有成员-->
+    <select id="findUserListByTeamId" parameterType="java.util.Map" resultType="org.openokr.sys.vo.UserVO">
+        select t1.id, t1.user_name, t1.real_name, t1.photo_url from t_okr_sys_user t1
+        join t_okr_team_user_rela t2 on t2.user_id = t1.id
+        where t2.team_id = #{teamId} and t1.id != (select owner_id from t_okr_teams where id = #{teamId})
+    </select>
+
+    <!--获取目标的影响团队信息-->
+    <select id="getObjectTeamRel" parameterType="java.util.Map" resultType="org.openokr.manage.vo.TeamsVO">
+        select t1.id, t1.name
+        from t_okr_teams t1
+        left join t_okr_manage_object_team_rela t2 on t2.team_id=t1.id
+        where t2.object_id= #{objectId}
+    </select>
+
+    <!--获取用户关联的团队-->
+    <select id="getRelTeams" parameterType="java.util.Map" resultType="org.openokr.manage.vo.TeamsExtVO">
+        select t1.id, t1.name,t1.type
+        from t_okr_teams t1
+        left join t_okr_team_user_rela t2 on t2.team_id=t1.id
+        where 1=1
+        <if test="userId != null and !userId.isEmpty()">
+            AND t2.user_id = #{userId}
+        </if>
+        <if test="type != null and !type.isEmpty()">
+            AND t1.type = #{type}
+        </if>
+    </select>
+
+    <!--获取我创建的团队列表(排除公司团队)-->
+    <select id="getCreatedTeam" parameterType="java.util.Map" resultMap="TeamsExtVO">
+        select t1.id, t1.name, t1.owner_id, t1.create_ts from t_okr_teams t1
+        where t1.type='2'
+        <if test="userId != null and !userId.isEmpty()">
+            AND t1.owner_id = #{userId}
+        </if>
+    </select>
+
+</mapper>

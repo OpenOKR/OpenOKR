@@ -1,0 +1,127 @@
+/****************************** begin 框架扩展部分 ******************************/
+.ui-jqgrid .loading {
+    border-width: 0px !important;
+    background: none;
+}
+
+.ui-jqgrid-loading-img {
+    background: url(images/loadingbar.gif) no-repeat;
+    width: 32px;
+    height: 32px;
+}
+
+.ui-state-default .ui-icon.sj-operate-s,
+.ui-state-default .sj-operate-s {
+    background-image: url(images/operate2-icons.png);
+}
+
+.ui-jqgrid .ui-jqgrid-toppager .ui-pg-div span.sj-operate-s {
+    margin-top: 2px;
+    margin-left: 5px
+}
+
+/*针对Safari & Chrome*/
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    .ui-jqgrid .ui-jqgrid-toppager .ui-pg-div span.sj-operate-s {
+        margin-top: 1px;
+    }
+}
+
+.ui-state-hover .sj-operate {
+    background-image: url(images/operate-icons-a.png);
+}
+
+.sj-operate {
+    width: 24px;
+    height: 24px;
+    overflow: hidden;
+    display: inline-block;
+    background-image: url(images/operate-icons.png);
+    cursor: pointer;
+    margin: 0 2px
+}
+
+.sj-icon-recite {
+    background-position: 0 0;
+}
+
+.sj-icon-delete {
+    background-position: -24px 0;
+}
+
+.ui-state-hover .sj-operate-s,
+.ui-state-hover .ui-icon.sj-operate-s {
+    background-image: url(images/operate2-icons-a.png);
+}
+
+.ui-icon.sj-operate-s,
+.sj-operate-s {
+    width: 15px;
+    height: 15px;
+    overflow: hidden;
+    display: inline-block;
+    background-image: url(images/operate2-icons.png);
+    cursor: pointer;
+    margin: 0 2px
+}
+
+/** 用于动作列的新增样式 */
+.ui-icon.sj-icon-add,
+.sj-icon-add {
+    background-position: 0 0;
+}
+
+/** 用于动作列的删除样式 */
+.sj-icon-minus,
+.ui-icon.sj-icon-minus {
+    background-position: -15px 0;
+}
+
+/** 用于动作列的删除样式 */
+.sj-icon-delete,
+.ui-icon.sj-icon-delete {
+    background-position: -15px 0;
+}
+
+/** 用于动作列的编辑样式 */
+.sj-icon-edit {
+    background-position: -30px 0;
+}
+
+/** 控制表头 标题居中*/
+.ui-jqgrid th {
+    text-align: center;
+}
+
+/** 表格可编辑单元格，自定义成<input>元素*/
+.ui-jqgrid .custom-input {
+    width: 98%;
+    border: 1px solid #ccc;
+    height: 26px;
+    line-height: 26px;
+    border-radius: 3px;
+}
+
+/** 单元格负数时样式 */
+.ui-jqgrid .negative-cell {
+    color: red !important;
+}
+
+/* 以下是表格跨行的样式 */
+.ui-jqgrid tr.jqgrow td.grid-td-inline{
+    padding: 0;
+}
+
+.grid-td-inline .grid-entry {
+    display: block;
+    border-bottom: 1px solid #E0E0E0;
+    padding: 5px;
+    line-height: 20px;
+    height: 20px;
+}
+
+.grid-td-inline .grid-entry.grid-entry-last {
+    border-bottom: none;
+}
+
+/****************************** end 框架扩展部分 ******************************/

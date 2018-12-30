@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.openokr.manage.entity.ResultsEntityMapper">
+  <resultMap id="BaseResultMap" type="org.openokr.manage.entity.ResultsEntity">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="object_id" jdbcType="VARCHAR" property="objectId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="metric_unit" jdbcType="CHAR" property="metricUnit" />
+    <result column="target_value" jdbcType="VARCHAR" property="targetValue" />
+    <result column="initial_value" jdbcType="VARCHAR" property="initialValue" />
+    <result column="current_value" jdbcType="VARCHAR" property="currentValue" />
+    <result column="owner_id" jdbcType="VARCHAR" property="ownerId" />
+    <result column="end_ts" jdbcType="TIMESTAMP" property="endTs" />
+    <result column="previous_name" jdbcType="VARCHAR" property="previousName" />
+    <result column="status" jdbcType="CHAR" property="status" />
+    <result column="del_flag" jdbcType="CHAR" property="delFlag" />
+    <result column="progress" jdbcType="NUMERIC" property="progress" />
+    <result column="create_ts" jdbcType="TIMESTAMP" property="createTs" />
+    <result column="create_user_id" jdbcType="VARCHAR" property="createUserId" />
+    <result column="update_ts" jdbcType="TIMESTAMP" property="updateTs" />
+    <result column="update_user_id" jdbcType="VARCHAR" property="updateUserId" />
+    <result column="pre_progress" jdbcType="NUMERIC" property="preProgress" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, object_id, name, description, metric_unit, target_value, initial_value, current_value, 
+    owner_id, end_ts, previous_name, status, del_flag, progress, create_ts, create_user_id, 
+    update_ts, update_user_id, pre_progress
+  </sql>
+  <select id="selectByCondition" parameterType="org.openokr.manage.entity.ResultsEntityCondition" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_okr_manage_results
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <include refid="PostgreSqlPaginationSuffix" />
+  </select>
+  <delete id="deleteByCondition" parameterType="org.openokr.manage.entity.ResultsEntityCondition">
+    delete from t_okr_manage_results
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <select id="countByCondition" parameterType="org.openokr.manage.entity.ResultsEntityCondition" resultType="java.lang.Long">
+    select count(*) from t_okr_manage_results
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByCondition" parameterType="map">
+    update t_okr_manage_results
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.objectId != null">
+        object_id = #{record.objectId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.description != null">
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.metricUnit != null">
+        metric_unit = #{record.metricUnit,jdbcType=CHAR},
+      </if>
+      <if test="record.targetValue != null">
+        target_value = #{record.targetValue,jdbcType=VARCHAR},
+      </if>
+      <if test="record.initialValue != null">
+        initial_value = #{record.initialValue,jdbcType=VARCHAR},
+      </if>
+      <if test="record.currentValue != null">
+        current_value = #{record.currentValue,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ownerId != null">
+        owner_id = #{record.ownerId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.endTs != null">
+        end_ts = #{record.endTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.previousName != null">
+        previous_name = #{record.previousName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=CHAR},
+      </if>
+      <if test="record.delFlag != null">
+        del_flag = #{record.delFlag,jdbcType=CHAR},
+      </if>
+      <if test="record.progress != null">
+        progress = #{record.progress,jdbcType=NUMERIC},
+      </if>
+      <if test="record.createTs != null">
+        create_ts = #{record.createTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTs != null">
+        update_ts = #{record.updateTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateUserId != null">
+        update_user_id = #{record.updateUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.preProgress != null">
+        pre_progress = #{record.preProgress,jdbcType=NUMERIC},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <sql id="PostgreSqlPaginationSuffix">
+    <if test="page != null">
+      <![CDATA[ limit #{page.pageSize} offset #{page.recordStartPrev} ]]>
+    </if>
+  </sql>
+  <insert id="insertList" parameterType="java.util.List">
+     insert into t_okr_manage_results ( id,object_id,name,description,metric_unit,target_value,initial_value,current_value,owner_id,end_ts,previous_name,status,del_flag,progress,create_ts,create_user_id,update_ts,update_user_id,pre_progress ) values
+    <foreach collection="list" index="index" item="item" separator=",">
+       ( #{item.id,jdbcType=VARCHAR},#{item.objectId,jdbcType=VARCHAR},#{item.name,jdbcType=VARCHAR},#{item.description,jdbcType=VARCHAR},#{item.metricUnit,jdbcType=CHAR},#{item.targetValue,jdbcType=VARCHAR},#{item.initialValue,jdbcType=VARCHAR},#{item.currentValue,jdbcType=VARCHAR},#{item.ownerId,jdbcType=VARCHAR},#{item.endTs,jdbcType=TIMESTAMP},#{item.previousName,jdbcType=VARCHAR},#{item.status,jdbcType=CHAR},#{item.delFlag,jdbcType=CHAR},#{item.progress,jdbcType=NUMERIC},#{item.createTs,jdbcType=TIMESTAMP},#{item.createUserId,jdbcType=VARCHAR},#{item.updateTs,jdbcType=TIMESTAMP},#{item.updateUserId,jdbcType=VARCHAR},#{item.preProgress,jdbcType=NUMERIC} )
+    </foreach>
+  </insert>
+</mapper>

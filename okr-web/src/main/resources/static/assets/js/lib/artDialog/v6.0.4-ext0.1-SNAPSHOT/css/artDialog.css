@@ -1,0 +1,425 @@
+/*!
+ * artDialog.css
+ * Date: 2014-07-03
+ * https://github.com/aui/artDialog
+ * (c) 2009-2014 TangBin, http://www.planeArt.cn
+ *
+ * This is licensed under the GNU LGPL, version 2.1 or later.
+ * For details, see: http://www.gnu.org/licenses/lgpl-2.1.html
+ */
+.artDialog {
+    *zoom:1;
+    _float: left;
+    position: relative;
+    background-color: #FFF;
+    border: 1px solid #999;
+    border-radius: 6px;
+    outline: 0;
+    background-clip: padding-box;
+    font-family: Helvetica, arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.428571429;
+    color: #333;
+    opacity: 0;
+    -webkit-transform: scale(0);
+    transform: scale(0);
+    -webkit-transition: -webkit-transform .15s ease-in-out, opacity .15s ease-in-out;
+    transition: transform .15s ease-in-out, opacity .15s ease-in-out;
+}
+.ui-popup-show .artDialog {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+}
+.ui-popup-focus .artDialog {
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+.ui-popup-modal .artDialog {
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1), 0 0 256px rgba(255, 255, 255, .3);
+}
+.artDialog-grid {
+    width: auto;
+    margin: 0;
+    border: 0 none;
+    border-collapse:collapse;
+    border-spacing: 0;
+    background: transparent;
+}
+.artDialog-header,
+.artDialog-body,
+.artDialog-footer {
+    padding: 0;
+    border: 0 none;
+    text-align: left;
+    background: transparent;
+}
+.artDialog-header {
+    white-space: nowrap;
+    border-bottom: 1px solid #E5E5E5;
+}
+.artDialog-close {
+    position: relative;
+    _position: absolute;
+    float: right;
+    top: 13px;
+    right: 13px;
+    _height: 26px;
+    padding: 0 4px;
+    font-size: 21px;
+    font-weight: bold;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #FFF;
+    opacity: .2;
+    filter: alpha(opacity=20);
+    cursor: pointer;
+    background: transparent;
+    _background: #FFF;
+    border: 0;
+    -webkit-appearance: none;
+}
+.artDialog-close:hover,
+.artDialog-close:focus {
+    color: #000000;
+    text-decoration: none;
+    cursor: pointer;
+    outline: 0;
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+.artDialog-title {
+    margin: 0;
+    line-height: 1.428571429;
+    min-height: 16.428571429px;
+    padding: 15px;
+    overflow:hidden; 
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-weight: bold;
+    cursor: default;
+}
+.artDialog-body {
+    padding: 20px;
+    text-align: center;
+}
+.artDialog-content {
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    *zoom: 1;
+    *display: inline;
+    text-align: left;
+}
+.artDialog-footer {
+    padding: 0 20px 20px 20px;
+}
+.artDialog-statusbar {
+    float: left;
+    margin-right: 20px;
+    padding: 6px 0;
+    line-height: 1.428571429;
+    font-size: 14px;
+    color: #888;
+    white-space: nowrap;
+}
+.artDialog-statusbar label:hover {
+    color: #333;
+}
+.artDialog-statusbar input,
+.artDialog-statusbar .label {
+    vertical-align: middle;
+}
+.artDialog-button {
+    float: right;
+    white-space: nowrap;
+}
+.artDialog-footer button+button {
+    margin-bottom: 0;
+    margin-left: 5px;
+}
+.artDialog-footer button {
+    width:auto;
+    overflow:visible;
+    display: inline-block;
+    padding: 6px 12px;
+    _margin-left: 5px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.428571429;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+       -o-user-select: none;
+          user-select: none;
+}
+
+.artDialog-footer button:focus {
+  outline: thin dotted #333;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+
+.artDialog-footer button:hover,
+.artDialog-footer button:focus {
+  color: #333333;
+  text-decoration: none;
+}
+
+.artDialog-footer button:active {
+  background-image: none;
+  outline: 0;
+  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+          box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+.artDialog-footer button[disabled] {
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: 0.65;
+  filter: alpha(opacity=65);
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+.artDialog-footer button {
+  color: #333333;
+  background-color: #ffffff;
+  border-color: #cccccc;
+}
+
+.artDialog-footer button:hover,
+.artDialog-footer button:focus,
+.artDialog-footer button:active {
+  color: #333333;
+  background-color: #ebebeb;
+  border-color: #adadad;
+}
+
+.artDialog-footer button:active{
+  background-image: none;
+}
+
+.artDialog-footer button[disabled],
+.artDialog-footer button[disabled]:hover,
+.artDialog-footer button[disabled]:focus,
+.artDialog-footer button[disabled]:active {
+  background-color: #ffffff;
+  border-color: #cccccc;
+}
+
+.artDialog-footer button.artDialog-autofocus {
+  color: #ffffff;
+  background-color: #428bca;
+  border-color: #357ebd;
+}
+
+.artDialog-footer button.artDialog-autofocus:hover,
+.artDialog-footer button.artDialog-autofocus:focus,
+.artDialog-footer button.artDialog-autofocus:active {
+  color: #ffffff;
+  background-color: #3276b1;
+  border-color: #285e8e;
+}
+
+.artDialog-footer button.artDialog-autofocus:active {
+  background-image: none;
+}
+.ui-popup-top-left .artDialog,
+.ui-popup-top .artDialog,
+.ui-popup-top-right .artDialog {
+    top: -8px;
+}
+.ui-popup-bottom-left .artDialog,
+.ui-popup-bottom .artDialog,
+.ui-popup-bottom-right .artDialog {
+    top: 8px;
+}
+.ui-popup-left-top .artDialog,
+.ui-popup-left .artDialog,
+.ui-popup-left-bottom .artDialog {
+    left: -8px;
+}
+.ui-popup-right-top .artDialog,
+.ui-popup-right .artDialog,
+.ui-popup-right-bottom .artDialog {
+    left: 8px;
+}
+
+.artDialog-arrow-a,
+.artDialog-arrow-b {
+    position: absolute;
+    display: none;
+    width: 0;
+    height: 0;
+    overflow:hidden;
+    _color:#FF3FFF;
+    _filter:chroma(color=#FF3FFF);
+    border:8px dashed transparent;
+}
+.ui-popup-follow .artDialog-arrow-a,
+.ui-popup-follow .artDialog-arrow-b{
+    display: block;
+}
+.ui-popup-top-left .artDialog-arrow-a,
+.ui-popup-top .artDialog-arrow-a,
+.ui-popup-top-right .artDialog-arrow-a {
+    bottom: -16px;
+    border-top:8px solid #7C7C7C;
+}
+.ui-popup-top-left .artDialog-arrow-b,
+.ui-popup-top .artDialog-arrow-b,
+.ui-popup-top-right .artDialog-arrow-b {
+    bottom: -15px;
+    border-top:8px solid #fff;
+}
+.ui-popup-top-left .artDialog-arrow-a,
+.ui-popup-top-left .artDialog-arrow-b  {
+    left: 15px;
+}
+.ui-popup-top .artDialog-arrow-a,
+.ui-popup-top .artDialog-arrow-b  {
+    left: 50%;
+    margin-left: -8px;
+}
+.ui-popup-top-right .artDialog-arrow-a,
+.ui-popup-top-right .artDialog-arrow-b {
+    right: 15px;
+}
+.ui-popup-bottom-left .artDialog-arrow-a,
+.ui-popup-bottom .artDialog-arrow-a,
+.ui-popup-bottom-right .artDialog-arrow-a {
+    top: -16px;
+    border-bottom:8px solid #7C7C7C;
+}
+.ui-popup-bottom-left .artDialog-arrow-b,
+.ui-popup-bottom .artDialog-arrow-b,
+.ui-popup-bottom-right .artDialog-arrow-b {
+    top: -15px;
+    border-bottom:8px solid #fff;
+}
+.ui-popup-bottom-left .artDialog-arrow-a,
+.ui-popup-bottom-left .artDialog-arrow-b {
+    left: 15px;
+}
+.ui-popup-bottom .artDialog-arrow-a,
+.ui-popup-bottom .artDialog-arrow-b {
+    margin-left: -8px;
+    left: 50%;
+}
+.ui-popup-bottom-right .artDialog-arrow-a,
+.ui-popup-bottom-right .artDialog-arrow-b {
+    right: 15px;
+}
+.ui-popup-left-top .artDialog-arrow-a,
+.ui-popup-left .artDialog-arrow-a,
+.ui-popup-left-bottom .artDialog-arrow-a {
+    right: -16px;
+    border-left:8px solid #7C7C7C;
+}
+.ui-popup-left-top .artDialog-arrow-b,
+.ui-popup-left .artDialog-arrow-b,
+.ui-popup-left-bottom .artDialog-arrow-b {
+    right: -15px;
+    border-left:8px solid #fff;
+}
+.ui-popup-left-top .artDialog-arrow-a,
+.ui-popup-left-top .artDialog-arrow-b {
+    top: 15px;
+}
+.ui-popup-left .artDialog-arrow-a,
+.ui-popup-left .artDialog-arrow-b {
+    margin-top: -8px;
+    top: 50%;
+}
+.ui-popup-left-bottom .artDialog-arrow-a,
+.ui-popup-left-bottom .artDialog-arrow-b {
+    bottom: 15px;
+}
+.ui-popup-right-top .artDialog-arrow-a,
+.ui-popup-right .artDialog-arrow-a,
+.ui-popup-right-bottom .artDialog-arrow-a {
+    left: -16px;
+    border-right:8px solid #7C7C7C;
+}
+.ui-popup-right-top .artDialog-arrow-b,
+.ui-popup-right .artDialog-arrow-b,
+.ui-popup-right-bottom .artDialog-arrow-b {
+    left: -15px;
+    border-right:8px solid #fff;
+}
+.ui-popup-right-top .artDialog-arrow-a,
+.ui-popup-right-top .artDialog-arrow-b {
+    top: 15px;
+}
+.ui-popup-right .artDialog-arrow-a,
+.ui-popup-right .artDialog-arrow-b {
+    margin-top: -8px;
+    top: 50%;
+}
+.ui-popup-right-bottom .artDialog-arrow-a,
+.ui-popup-right-bottom .artDialog-arrow-b {
+    bottom: 15px;
+}
+
+
+@-webkit-keyframes artDialog-loading {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+@keyframes artDialog-loading {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.artDialog-loading {
+    vertical-align: middle;
+    position: relative;
+    display: block;
+    *zoom: 1;
+    *display: inline;
+    overflow: hidden;
+    width: 32px;
+    height: 32px;
+    top: 50%;
+    margin: -16px auto 0 auto;
+    font-size: 0;
+    text-indent: -999em;
+    color: #666;
+}
+.artDialog-loading {
+    width: 100%\9;
+    text-indent: 0\9;
+    line-height: 32px\9;
+    text-align: center\9;
+    font-size: 12px\9;
+}
+
+.artDialog-loading::after {
+    position: absolute;
+    content: '';
+    width: 3px;
+    height: 3px;
+    margin: 14.5px 0 0 14.5px;
+    border-radius: 100%;
+    box-shadow: 0 -10px 0 1px #ccc, 10px 0px #ccc, 0 10px #ccc, -10px 0 #ccc, -7px -7px 0 0.5px #ccc, 7px -7px 0 1.5px #ccc, 7px 7px #ccc, -7px 7px #ccc;
+    -webkit-transform: rotate(360deg);
+    -webkit-animation: artDialog-loading 1.5s infinite linear;
+    transform: rotate(360deg);
+    animation: artDialog-loading 1.5s infinite linear;
+    display: none\9;
+}

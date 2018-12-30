@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.openokr.sys.sqlmapper.UserMapper">
+
+    <!-- 查询数量 -->
+    <select id="countFindByPageLikeInputValue" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM t_okr_sys_user t1
+        left join t_okr_sys_organization t2 on t2.id = t1.organization_id
+        left join t_okr_sys_user_role t3 on t3.user_id = t1.id
+        left join t_okr_sys_role t4 on t4.id = t3.role_id
+        where 1 = 1
+        <if test="inputValue != null and !inputValue.isEmpty() ">
+            AND (t1.user_name LIKE #{inputValue} or t1.real_name LIKE #{inputValue} or t1.phone LIKE #{inputValue})
+        </if>
+    </select>
+
+    <!-- 分页查询 -->
+    <select id="findByPageLikeInputValue" parameterType="java.util.Map" resultType="org.openokr.sys.vo.UserVOExt">
+        SELECT t1.id,
+        t1.create_time,
+        t1.password,
+        t1.salt,
+        t1.active,
+        t1.user_name,
+        t1.email,
+        t1.real_name,
+        t1.phone,
+        t1.organization_id,
+        t2.name as "organizationName",
+        t2.code as "organizationCode",
+        t4.id as "roleId",
+        t4.name as "roleName"
+        FROM t_okr_sys_user t1
+        left join t_okr_sys_organization t2 on t2.id = t1.organization_id
+        left join t_okr_sys_user_role t3 on t3.user_id = t1.id
+        left join t_okr_sys_role t4 on t4.id = t3.role_id
+        where 1 = 1
+        <if test="inputValue != null and !inputValue.isEmpty() ">
+            AND (t1.user_name LIKE #{inputValue} or t1.real_name LIKE #{inputValue} or t1.phone LIKE #{inputValue})
+        </if>
+        order by t1.user_name
+        <if test="page != null">
+            limit #{page.pageSize} offset (#{page.recordStart}-1)
+        </if>
+    </select>
+
+</mapper>

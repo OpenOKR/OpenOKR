@@ -1,0 +1,30 @@
+.ztree li span.button.ico_docu,
+.ztree li span.button.ico_open,
+.ztree li span.button.ico_close {
+    position: relative;
+    z-index: 1;
+    margin-top: -1px;
+    width: 18px;
+    height: 18px;
+    font-size:14px;
+    font-style: normal;
+    font-family: "iconfont" !important;
+    line-height: 18px;
+    text-align: center;
+    color: #707070;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: none;
+}
+.ztree li a.curSelectedNode {
+    background-color: rgba(0,114,255,.05);
+    color: #0072ff;
+    border: 1px #0072ff solid;
+    border-radius: 2px;
+}
+.ztree li a.curSelectedNode span.button{ color: #0072ff; }
+.ztree li a.level0 span.button.ico_open:before,
+.ztree li a.level0 span.button.ico_close:before { content: "\e67a";}
+.ztree li span.button.ico_open:before,
+.ztree li span.button.ico_close:before { content: "\e61d"; }
+.ztree li span.button.ico_docu:before { content: "\e67c"; }

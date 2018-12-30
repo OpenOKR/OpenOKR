@@ -1,0 +1,94 @@
+## default config
+server:
+  port: 8892
+  session:
+    timeout: 1800
+  context-path: /
+  undertow:
+    accesslog:
+      enabled: true
+      dir: /data/log/okr/okr-web-log/
+      prefix: okr-web-access.
+  error:
+      path: /error
+spring:
+  profiles:
+    active: local
+  mvc:
+    view:
+      prefix: /views/
+      suffix: .jsp
+  http:
+    multipart:
+      max-file-size: 10Mb
+      max-request-size: 10Mb
+  resources:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/
+
+framework:
+  dubbo:
+    application:
+      name: okr-web
+    registry1:
+      address: zookeeper://zkserver1:2181
+      file: /data/log/okr/okr-web-log/okr-web-dubbo1.cache
+
+logging:
+  config: classpath:logback.xml
+  level:
+    root: debug
+  file: /data/log/okr/okr-web-log/okr-web
+
+app:
+  defaultPassword: 123456
+  multiAccountLogin: true
+  jsDebug: false
+  staticResourceVersion: $[mvn.staticResourceVersion]
+
+---
+server:
+  undertow:
+    accesslog:
+      dir: ../log
+      prefix: ../log/okr-web-access.
+  session:
+    timeout: 10800
+
+spring:
+  profiles: local
+logging:
+  file: ../log/okr-web
+
+framework:
+  dubbo:
+    registry1:
+      address: zookeeper://localhost:2181;
+app:
+  jsDebug: true
+  staticResourceVersion: dev
+
+---
+spring:
+  profiles: dev
+
+app:
+  jsDebug: true
+
+---
+spring:
+  profiles: test
+
+app:
+  jsDebug: true
+  staticResourceVersion: dev
+
+---
+spring:
+  profiles: uat
+
+---
+spring:
+  profiles: prd
+
+app:
+  jsDebug: true

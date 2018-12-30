@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+    <properties resource="${mybatisGeneratorDbConfigFile}"/>
+    <context id="admin.sys" targetRuntime="MyBatis3">
+        <!-- 国际化JS资源目标目录 -->
+        <property name="i18nJavaScriptTargetDir" value="${i18nJavaScriptTargetDir}"/>
+        <!-- -->
+        <plugin type="org.mybatis.generator.plugins.CaseInsensitiveLikePlugin"/>
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+        <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+            <property name="searchString" value="Example"/>
+            <property name="replaceString" value="Condition"/>
+        </plugin>
+        <plugin type="com.jh.framework.mybatis.generator.plugins.PostgreSqlPaginationPlugin"/>
+        <plugin type="com.jh.framework.mybatis.generator.plugins.EntityCommentPlugin"/>
+        <plugin type="com.jh.framework.mybatis.generator.plugins.EntityConditionPlugin"/>
+        <plugin type="com.jh.framework.mybatis.generator.plugins.EntityAnnotationPlugin"/>
+        <plugin type="com.jh.framework.mybatis.generator.plugins.EntityExtraMethodPlugin"/>
+        <plugin type="com.jh.framework.mybatis.generator.plugins.MapperAndSqlMapGeneratorPlugin"/>
+        <plugin type="com.jh.framework.mybatis.generator.plugins.LikeConditionExtendPlugin"/>
+        <plugin type="com.jh.framework.mybatis.generator.plugins.EntityI18nPlugin"/>
+        <plugin type="com.jh.framework.mybatis.generator.plugins.EntityVOPlugin"/>
+        <!-- 缓存配置参数 cache_eviction,cache_flushInterval,cache_size,cache_readOnly,cache_type,cache_group -->
+        <plugin type="com.jh.framework.mybatis.generator.plugins.CachePlugin"/>
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"></plugin>
+
+        <!-- 取消注释 -->
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!-- 配置连接数据信息 -->
+        <jdbcConnection driverClass="${mvn.jdbc.driver}" connectionURL="${mvn.jdbc.url}" userId="${mvn.jdbc.username}" password="${mvn.jdbc.password}"/>
+        <!-- 配置自动生成的Model的保存路径与其它参数 -->
+        <javaModelGenerator targetPackage="${mybatisGeneratorPackagePath}" targetProject="${mybatisGeneratorJavaFileDir}">
+            <property name="rootClass" value="com.zzheng.framework.mybatis.entity.BaseEntity"/>
+            <property name="javaFileEncoding" value="UTF-8"/>
+        </javaModelGenerator>
+        <!-- 配置自动生成的Mappper.xml映射的保存路径与其它参数 -->
+        <sqlMapGenerator targetPackage="${mybatisGeneratorPackagePath}" targetProject="${mybatisGeneratorResourcesFileDir}"/>
+        <!-- 配置自动生成的Mappper.java接口的保存路径与其它参数 -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="${mybatisGeneratorPackagePath}" targetProject="${mybatisGeneratorJavaFileDir}">
+            <property name="rootInterface" value="com.zzheng.framework.mybatis.mapper.BaseMapper"/>
+        </javaClientGenerator>
+
+        <!-- sys -->
+        <table tableName="t_okr_sys_menu" domainObjectName="sys.entity.MenuEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="sys.vo.MenuVO"/>
+        </table>
+        <table tableName="t_okr_sys_permission" domainObjectName="sys.entity.PermissionEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="sys.vo.PermissionVO"/>
+        </table>
+        <table tableName="t_okr_sys_role" domainObjectName="sys.entity.RoleEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="sys.vo.RoleVO"/>
+        </table>
+        <table tableName="t_okr_sys_role_menu" domainObjectName="sys.entity.RoleMenuEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="sys.vo.RoleMenuVO"/>
+        </table>
+        <table tableName="t_okr_sys_role_permission" domainObjectName="sys.entity.RolePermissionEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="sys.vo.RolePermissionVO"/>
+        </table>
+        <table tableName="t_okr_sys_shortcut_menu" domainObjectName="sys.entity.ShortcutMenuEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="sys.vo.ShortcutMenuVO"/>
+        </table>
+        <table tableName="t_okr_sys_user" domainObjectName="sys.entity.UserEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="sys.vo.UserVO"/>
+        </table>
+        <table tableName="t_okr_sys_user_role" domainObjectName="sys.entity.UserRoleEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="sys.vo.UserRoleVO"/>
+        </table>
+        <table tableName="t_okr_sys_organization" domainObjectName="sys.entity.OrganizationEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="sys.vo.OrganizationVO"/>
+        </table>
+
+        <!-- okr -->
+        <table tableName="t_okr_manage_checkins" domainObjectName="manage.entity.CheckinsEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="manage.vo.CheckinsVO"/>
+        </table>
+        <table tableName="t_okr_manage_log" domainObjectName="manage.entity.LogEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="manage.vo.LogVO"/>
+        </table>
+        <table tableName="t_okr_manage_object_label_rela" domainObjectName="manage.entity.ObjectLabelRelaEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="manage.vo.ObjectLabelRelaVO"/>
+        </table>
+        <table tableName="t_okr_label" domainObjectName="manage.entity.LabelEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="manage.vo.LabelVO"/>
+        </table>
+        <table tableName="t_okr_manage_object_team_rela" domainObjectName="manage.entity.ObjectTeamRelaEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="manage.vo.ObjectTeamRelaVO"/>
+        </table>
+        <table tableName="t_okr_manage_objectives" domainObjectName="manage.entity.ObjectivesEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="manage.vo.ObjectivesVO"/>
+        </table>
+        <table tableName="t_okr_manage_result_user_rela" domainObjectName="manage.entity.ResultUserRelaEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="manage.vo.ResultUserRelaVO"/>
+        </table>
+        <table tableName="t_okr_manage_results" domainObjectName="manage.entity.ResultsEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="manage.vo.ResultsVO"/>
+        </table>
+        <table tableName="t_okr_messages" domainObjectName="manage.entity.MessagesEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="manage.vo.MessagesVO"/>
+        </table>
+        <table tableName="t_okr_team_user_rela" domainObjectName="manage.entity.TeamUserRelaEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="manage.vo.TeamUserRelaVO"/>
+        </table>
+        <table tableName="t_okr_teams" domainObjectName="manage.entity.TeamsEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="manage.vo.TeamsVO"/>
+        </table>
+        <table tableName="t_okr_time_sessions" domainObjectName="manage.entity.TimeSessionsEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="manage.vo.TimeSessionsVO"/>
+        </table>
+
+
+    </context>
+</generatorConfiguration>
