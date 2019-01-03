@@ -97,7 +97,7 @@ require(["jQuery", "countUp"], function () {
             require(["jQueryBlockUI"], function () {
                 $("#OKRExecution").block();
                 $.ajax({
-                    url: App["contextPath"] + "/execution.json?type=1",
+                    url: App["contextPath"] + "/execution.json?type=" +type,
                     type: "GET",
                     dataType: "json"
                 }).done(function (res) {
