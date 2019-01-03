@@ -51,8 +51,8 @@
     </select>
 
     <!--获取用户关联的团队-->
-    <select id="getRelTeams" parameterType="java.util.Map" resultType="org.openokr.manage.vo.TeamsExtVO">
-        select t1.id, t1.name,t1.type
+    <select id="getRelTeams" parameterType="java.util.Map" resultMap="TeamsExtVO">
+        select t1.id, t1.name,t1.type,t1.create_ts
         from t_okr_teams t1
         left join t_okr_team_user_rela t2 on t2.team_id=t1.id
         where 1=1

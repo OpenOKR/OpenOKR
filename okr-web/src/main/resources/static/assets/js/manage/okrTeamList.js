@@ -61,7 +61,8 @@ require(["jQuery"], function () {
                         '                       </li>' +
                         '                   [%});%]' +
                         '               [%};%]' +
-                        '               [%if(type === \'1\'){%]<li class="part-item"><a href="" id="teamUsersAdd-[%=team.id%]"><i class="iconfont icon-add"></i></a></li>[%};%]' +
+                        '               [%if(type === \'1\'){%]<li class="part-item"><a onclick="pageObj.editTeam(\'[%=team.id%]\')">' +
+                        '<i class="iconfont icon-add"></i></a></li>[%};%]' +
                         '           </ul>' +
                         '       </div>' +
                         '   </div>' +

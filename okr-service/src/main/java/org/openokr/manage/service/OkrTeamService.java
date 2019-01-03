@@ -3,6 +3,7 @@ package org.openokr.manage.service;
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.base.utils.BeanUtils;
 import com.zzheng.framework.base.utils.StringUtils;
+import com.zzheng.framework.base.utils.UUIDUtils;
 import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.service.impl.BaseServiceImpl;
 import org.openokr.manage.entity.TeamUserRelaEntity;
@@ -67,6 +68,7 @@ public class OkrTeamService extends BaseServiceImpl implements IOkrTeamService {
         if (StringUtils.isEmpty(teamId)) { //新增
             TeamsEntity entity = new TeamsEntity();
             BeanUtils.copyBean(teamsVO, entity);
+            entity.setId(UUIDUtils.getStringValue());
             entity.setOwnerId(userId);
             entity.setType("2");//其他团队
             entity.setCreateUserId(userId);
@@ -103,6 +105,13 @@ public class OkrTeamService extends BaseServiceImpl implements IOkrTeamService {
                 relEntity.setCreateUserId(userId);
                 userRelList.add(relEntity);
             }
+            // 当前用户也要作为团队成员添加进去
+            TeamUserRelaEntity currentTeamUser = new TeamUserRelaEntity();
+            currentTeamUser.setTeamId(teamId);
+            currentTeamUser.setUserId(userId);
+            currentTeamUser.setCreateTs(new Date());
+            currentTeamUser.setCreateUserId(userId);
+            userRelList.add(currentTeamUser);
             this.insertList(userRelList);
         }
         responseResult.setMessage("保存成功");
@@ -142,7 +151,9 @@ public class OkrTeamService extends BaseServiceImpl implements IOkrTeamService {
         TeamsExtVO teamsExtVO = BeanUtils.copyToNewBean(entity, TeamsExtVO.class);
         if (!teamsExtVO.getId().equals(teamsExtVO.getParentId())) {
             TeamsEntity parent = this.getMyBatisDao().selectByPrimaryKey(TeamsEntity.class, teamsExtVO.getParentId());
-            teamsExtVO.setParentName(parent.getName());
+            if (parent !=null) {
+                teamsExtVO.setParentName(parent.getName());
+            }
         }
         Map<String, Object> params = new HashMap<>();
         params.put("teamId", teamsExtVO.getId());
