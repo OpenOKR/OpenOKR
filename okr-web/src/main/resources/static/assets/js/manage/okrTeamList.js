@@ -25,7 +25,7 @@ require(["jQuery"], function () {
                 var $okrTeamList = $("#teamList"); $okrTeamList.empty();
                 $.each(teamList, function (idx, team) {
                     team.createTsStr = $.DateUtils.getDateString(new Date(team.createTs));
-                    var teamList =
+                    var html =
                         '<div class="col-sm-4 mb15">' +
                         '   <div class="card-area4 has-shadow">' +
                         '       <div class="card-header ui-st1">' +
@@ -62,24 +62,26 @@ require(["jQuery"], function () {
                         '                   [%});%]' +
                         '               [%};%]' +
                         '               [%if(type === \'1\'){%]<li class="part-item"><a onclick="pageObj.editTeam(\'[%=team.id%]\')">' +
-                        '<i class="iconfont icon-add"></i></a></li>[%};%]' +
+                        '                   <i class="iconfont icon-add"></i></a></li>[%};%]' +
                         '           </ul>' +
                         '       </div>' +
                         '   </div>' +
-                        '</div>' +
-                        '[%if(type === \'1\'){%]' +
-                        '   <div class="col-sm-4 mb15">' +
-                        '       <div class="meg-outer ui-addFile" onclick="pageObj.editTeam(\'\');">' +
-                        '           <div class="meg-in">' +
-                        '               <i class="icon icon-add"></i>' +
-                        '               <h4 class="meg-h4">新建团队</h4>' +
-                        '           </div>' +
-                        '       </div>' +
-                        '   </div>' +
-                        '[%};%]';
-                    var header = UnderscoreUtil.getHtmlByText(teamList, {team: team, type: type});
+                        '</div>';
+                    if (idx === (teamList.length -1)) {
+                        html +=
+                            '<div class="col-sm-4 mb15">' +
+                            '   <div class="meg-outer ui-addFile" onclick="pageObj.editTeam(\'\');">' +
+                            '       <div class="meg-in">' +
+                            '           <i class="icon icon-add"></i>' +
+                            '           <h4 class="meg-h4">新建团队</h4>' +
+                            '       </div>' +
+                            '   </div>' +
+                            '</div>';
+                    }
+                    var header = UnderscoreUtil.getHtmlByText(html, {team: team, type: type});
                     $okrTeamList.append(header);
                 });
+
             });
         },
 
@@ -168,6 +170,7 @@ require(["jQuery"], function () {
                         return;
                     }
                     //赋值 users
+                    $(window.frames[dialogObj.id].window.pageObj.getUsersTree().showNodes($(window.frames[dialogObj.id].window.pageObj.hideNodes)));
                     checkedAll = $(window.frames[dialogObj.id].window.pageObj.getUsersTree().getCheckedNodes());
                     $.each(checkedAll, function (idx, item) {
                         if (item.type === '2') {

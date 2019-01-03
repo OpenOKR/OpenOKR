@@ -71,6 +71,7 @@
         <if test="userId != null and !userId.isEmpty()">
             AND t1.owner_id = #{userId}
         </if>
+        order by t1.create_ts desc
     </select>
 
 </mapper>

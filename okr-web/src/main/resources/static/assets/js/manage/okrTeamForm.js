@@ -79,7 +79,8 @@ require(["jQuery"], function () {
                                 window.clearInterval(intervalTimeObj);
                             }
                         }, 100);
-                        fuzzySearch('ulUsersTree','#searchKey', null, true); //初始化模糊搜索方法
+                        pageObj.hideNodes = [];
+                        fuzzySearch('ulUsersTree','#searchKey', null, true, pageObj.hideNodes); //初始化模糊搜索方法
                     },
                     error: function (res) {
 

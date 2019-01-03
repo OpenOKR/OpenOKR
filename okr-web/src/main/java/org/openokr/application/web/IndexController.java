@@ -43,6 +43,7 @@ public class IndexController extends BaseController {
         }
         model.addAttribute("flag", flag);
         model.addAttribute("userName", userName);
+        model.addAttribute("photoUrl", getCurrentUser().getPhotoUrl());
         return "common/index";
     }
 

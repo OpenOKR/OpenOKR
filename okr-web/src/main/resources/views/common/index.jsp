@@ -23,7 +23,7 @@
                 </ul>
                 <div class="most-set">
                     <div class="user-set">
-                        <img src="${staticContextPath}/assets/images/temp/pic.png" class="user-img" alt="">
+                        <img src="${photoUrl}" class="user-img">
                         <input type="file"/>
                         <i class="iconfont icon-upload"></i>
                     </div>
