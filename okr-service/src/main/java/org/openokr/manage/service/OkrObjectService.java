@@ -161,6 +161,11 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
             return null;
         }
         BeanUtils.copyBean(entity, objectVO);
+        // 父目标
+        if (StringUtils.isNotEmpty(objectVO.getParentId())) {
+            ObjectivesEntity parentEntity = this.selectByPrimaryKey(ObjectivesEntity.class, objectVO.getParentId());
+            objectVO.setParentName(parentEntity.getName());
+        }
 
         // 获取影响团队
         List<TeamsVO> relTeams = okrTeamService.getObjectTeamRel(objectId);

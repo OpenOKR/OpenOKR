@@ -49,9 +49,10 @@
 
     <!--获取个人OKR-->
     <select id="getPersonalOkrList" parameterType="java.util.Map" resultType="org.openokr.manage.vo.ObjectivesExtVO">
-        select distinct t1.*
+        select distinct t1.*, p.name as "parentName"
         from t_okr_manage_objectives t1
         left join t_okr_manage_results t2 on t2.object_id=t1.id and t2.del_flag='0'
+        left join t_okr_manage_objectives p on p.id = t1.parent_id
         where t1.del_flag='0'
         and t1.type = '1'
         and t1.owner_id = #{userId}
@@ -74,11 +75,12 @@
 
     <!--获取团队OKR-->
     <select id="getTeamOkrList" parameterType="java.util.Map" resultType="org.openokr.manage.vo.ObjectivesExtVO">
-        select distinct t1.*,t3.name as teamName
+        select distinct t1.*,t3.name as "teamName", p.name as "parentName"
         from t_okr_manage_objectives t1
         left join t_okr_team_user_rela t2 on t2.team_id=t1.team_id
         left join t_okr_teams t3 on t3.id=t2.team_id
         left join t_okr_manage_results t4 on t4.object_id=t1.id and t4.del_flag='0'
+        left join t_okr_manage_objectives p on p.id = t1.parent_id
         where t1.del_flag='0'
         and t1.type='2'
         and t2.user_id= #{userId}
@@ -104,10 +106,11 @@
 
     <!--获取公司OKR-->
     <select id="getCompanyOkrList" parameterType="java.util.Map" resultType="org.openokr.manage.vo.ObjectivesExtVO">
-        select distinct t1.*,t2.name as teamName
+        select distinct t1.*,t2.name as "teamName", p.name as "parentName"
         from t_okr_manage_objectives t1
         left join t_okr_teams t2 on t2.id=t1.team_id
         left join t_okr_manage_results t4 on t4.object_id=t1.id and t4.del_flag='0'
+        left join t_okr_manage_objectives p on p.id = t1.parent_id
         where t1.del_flag='0'
         and t1.type='3'
         and t2.type='1'

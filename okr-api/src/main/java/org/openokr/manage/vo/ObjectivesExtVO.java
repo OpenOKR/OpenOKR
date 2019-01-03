@@ -20,6 +20,8 @@ public class ObjectivesExtVO extends ObjectivesVO implements Serializable {
     // 团队名称
     private String teamName;
 
+    private String parentName;
+
     // 参与人员
     private List<UserVO> joinUsers;
 
@@ -57,6 +59,14 @@ public class ObjectivesExtVO extends ObjectivesVO implements Serializable {
 
     public void setTeamName(String teamName) {
         this.teamName = teamName;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
     }
 
     public List<ResultsExtVO> getResultsExtList() {

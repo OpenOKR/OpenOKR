@@ -57,9 +57,10 @@ public class OkrObjectController extends BaseController {
      * OKR详情页面
      */
     @GetMapping(value = "/okrDetail.htm")
-    public String okrDetail(String id, String type, Model model) {
+    public String okrDetail(String id, String type, String editFlag, Model model) {
         model.addAttribute("id", id);
         model.addAttribute("type", type);
+        model.addAttribute("editFlag", editFlag);
         return "manage/okrObjectDetail";
     }
 

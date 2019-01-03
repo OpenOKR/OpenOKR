@@ -36,7 +36,7 @@
                 <label class="form-lab">父目标：</label>
                 <div class="form-control">
                     <div class="select">
-                        <input id="parentName" name="parentName" type="text" placeholder="请选择父目标，可以不选择"/><em class="icon"></em>
+                        <input id="parentName" name="parentName" type="text" value="${objectVO.parentName}" placeholder="请选择父目标，可以不选择"/><em class="icon"></em>
                         <input id="parentId" name="parentId" type="hidden" value="${objectVO.parentId}"/>
                     </div>
                 </div>
@@ -46,13 +46,19 @@
                 <div class="form-control">
                     <div class="search">
                         <input id="teamNames" name="teamNames" type="text" placeholder="请选择影响团队，可多选"/><em class="icon"></em>
+                        <c:forEach items="${objectVO.relTeams}" var="team">
+                            <input type="hidden" name="relTeams" data-name="${team.name}">
+                        </c:forEach>
                     </div>
                 </div>
             </li>
             <li class="col-sm-11">
                 <label class="form-lab">标签：</label>
                 <div class="form-control">
-                    <input id="labelNames" name="labelNames" type="text" class="inp" placeholder="请输入标签，可多选"/>
+                    <input id="labelNames" name="labelNames" type="text" class="inp" placeholder="请选择标签，可多选"/>
+                    <c:forEach items="${objectVO.relLabels}" var="label">
+                        <input type="hidden" name="relLabels" data-name="${label.name}">
+                    </c:forEach>
                 </div>
             </li>
             <li class="col-sm-11">

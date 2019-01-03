@@ -21,6 +21,24 @@ require(["jQuery"], function () {
                 _this.getForm();
             });
             _this.initDrag();
+            _this.initRelData('relTeams', '#teamNames');
+            _this.initRelData('relLabels', '#labelNames');
+
+            require(["AutoTree"], function () {
+                // 处理完关联数据之后 刷新2个tree控件
+                _this.getTeamsTree().AutoTree('reload');
+                _this.getLabelsTree().AutoTree('reload');
+            });
+        },
+
+        initRelData: function (name, targetName) {
+            var nameArr = [];
+            $.each($("input[name='" + name + "']"), function (ind, team) {
+                nameArr.push($(team).data('name'));
+            });
+            if (nameArr.length > 0) {
+                $(targetName).val(nameArr.join(','));
+            }
         },
 
         getParentCombo: function () {

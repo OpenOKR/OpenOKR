@@ -32,7 +32,7 @@ require(["jQuery"], function () {
                 var statusList = enumUtil.getEnum("objectivesStatusList.json");
                 var executeList = enumUtil.getEnum("executeStatusList.json");
                 $.each(res.info, function (idx, object) {
-                    object.href = App.contextPath + "/manage/okrObject/okrDetail.htm?id=" + object.id + "&type=" + object.type;
+                    object.href = App.contextPath + "/manage/okrObject/okrDetail.htm?id=" + object.id + "&type=" + object.type + "&editFlag=" + pageObj.editFlag;
                     var okrHeader =
                         '<div class="okr-header">' +
                         '   <div class="area-charts">' +
@@ -72,9 +72,9 @@ require(["jQuery"], function () {
                         '                       <div class="participant">' +
                         '                           <span class="name">参与人员：</span>' +
                         '                           <ul class="participant-list">' +
-                        '                               [%if(!_.isNull(object.joinUsers) && object.joinUsers.length>0){%]' +
-                        '                                   [%_.each(object.joinUsers, function(user){%]' +
-                        '                                       <li class="part-item"><span><img src="/assets/images/temp/pic.png"></span></li>' +
+                        '                               [%if(!_.isNull(item.joinUsers) && item.joinUsers.length>0){%]' +
+                        '                                   [%_.each(item.joinUsers, function(user){%]' +
+                        '                                       <li class="part-item"><span><img src="[%=user.photoUrl%]"></span></li>' +
                         '                                   [%});%]' +
                         '                                   <li class="part-item"><a href=""><i class="iconfont icon-more"></i></a></li>' +
                         '                               [%}%]' +
@@ -115,20 +115,15 @@ require(["jQuery"], function () {
         showHideOperationButton: function () {
             switch (pageObj.currentType) {
                 case '1':
-                    $('#addObject').show();
                     break;
                 case '2':
-                    if (pageObj.editFlag === '1') {
-                        $('#addObject').show();
-                    } else {
+                    if (pageObj.editFlag !== 1) {
                         $('#addObject').hide();
                         $('.btn-del').hide();
                     }
                     break;
                 case '3':
-                    if ($('#companyEditFlag').val() === '1') {
-                        $('#addObject').show();
-                    } else {
+                    if ($('#companyEditFlag').val() !== 1) {
                         $('#addObject').hide();
                         $('.btn-del').hide();
                     }
@@ -174,7 +169,7 @@ require(["jQuery"], function () {
 
         tabClick: function (dom, type, teamId) {
             if (type === '2') {
-                pageObj.editFlag = $(dom).data('editFlag');
+                pageObj.editFlag = $(dom).data('edit');
             }
             $(dom).addClass('active').siblings().removeClass('active');
             pageObj.loadOKRObjects(type, teamId);

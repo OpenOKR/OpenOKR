@@ -115,6 +115,9 @@ require(["jQuery"], function () {
 
                 var con = UnderscoreUtil.getHtmlByText(okrCon, {object: object, executeList: executeList});
                 $okrObjectDetail.append(con);
+
+                pageObj.showHideOperationButton();
+
                 pageObj.pieEchartsFunc(object.id, object.progress);
                 $.each(object.operateRecordList, function (idx, item) {
                     var okrHistory = '<div class="area-process-li past">' +
@@ -350,6 +353,24 @@ require(["jQuery"], function () {
         chnNumChar: ["零成","一成","二成","三成","四成","五成","六成","七成","八成","九成"],
         sectionToChinese: function (section) {
             return pageObj.chnNumChar[section];
+        },
+
+        // 操作按钮显示隐藏处理
+        showHideOperationButton: function () {
+            switch (pageObj.type) {
+                case '1':
+                    break;
+                case '2':
+                    if (pageObj.editFlag !== '1') {
+                        $('.btn-del').hide();
+                    }
+                    break;
+                case '3':
+                    if ($('#companyEditFlag').val() !== '1') {
+                        $('.btn-del').hide();
+                    }
+                    break;
+            }
         }
     });
 

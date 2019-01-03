@@ -50,7 +50,7 @@
                         </c:forEach>
                     </c:if>
                     <input id="usersId" name="usersId" type="hidden" value="${joinUsersIdStr}">
-                    <input id="users" name="users" type="text" class="inp" onclick="pageObj.showTree();" value="${joinUsersStr}" readonly placeholder="请输入协同者，可多选"/>
+                    <input id="users" name="users" type="text" class="inp" onclick="pageObj.showTree();" value="${joinUsersStr}" readonly placeholder="请选择协同者，可多选"/>
                     <div id="treeContent" style="border:1px solid #000; height: 160px; display: none; overflow-y: auto;">
                         <ul id="ulUsersTree" class="ztree" style="overflow-y: auto;"></ul>
                     </div>

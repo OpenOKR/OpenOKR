@@ -31,7 +31,7 @@
                     <label class="form-lab">父团队：</label>
                     <div class="form-control">
                         <div class="search">
-                            <input id="parentName" name="parentName" type="text" value="${teamsExtVO.parentName}" class="inp" placeholder="请选择父团队" />
+                            <input id="parentName" name="parentName" type="text" value="${teamsExtVO.parentName}" placeholder="请选择父团队" />
                             <input id="parentId" name="parentId" type="hidden" value="${teamsExtVO.parentId}"/>
                             <em></em>
                         </div>
