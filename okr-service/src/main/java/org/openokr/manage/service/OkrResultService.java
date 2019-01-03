@@ -1,10 +1,12 @@
 package org.openokr.manage.service;
 
 import com.zzheng.framework.adapter.vo.ResponseResult;
+import com.zzheng.framework.base.utils.UUIDUtils;
 import com.zzheng.framework.exception.BusinessException;
 import org.apache.commons.lang3.StringUtils;
 import org.openokr.application.framework.service.OkrBaseService;
 import org.openokr.manage.entity.*;
+import org.openokr.manage.enumerate.ExecuteStatusEnum;
 import org.openokr.manage.enumerate.ResultMetricUnitEnum;
 import org.openokr.manage.vo.CheckinsExtVO;
 import org.openokr.manage.vo.LogVO;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -60,8 +63,9 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
         if (StringUtils.isEmpty(resultId)) { //新增
             ResultsEntity entity = new ResultsEntity();
             BeanUtils.copyBean(resultVO, entity);
+            entity.setId(UUIDUtils.getStringValue());
             entity.setOwnerId(userId);
-            entity.setStatus("1");//未开始状态
+            entity.setStatus(ExecuteStatusEnum.STATUS_0.getCode());//未开始状态
             entity.setDelFlag("0");//删除状态:否
             entity.setCreateTs(new Date());
 
@@ -69,6 +73,11 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
             if(ResultMetricUnitEnum.TYPE_1.getCode().equals(entity.getMetricUnit())) {
                 entity.setTargetValue("完成");
                 entity.setInitialValue("未完成");
+                entity.setCurrentValue("0");
+                entity.setPreProgress(new BigDecimal(0));
+                entity.setProgress(new BigDecimal(0));
+            } else {
+
             }
             this.insert(entity);
             resultId = entity.getId();
@@ -144,20 +153,15 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
 
     @Override
     public ResponseResult saveCheckins(CheckinsExtVO checkinsVO) throws BusinessException {
-        ResponseResult responseResult = new ResponseResult();
         String resultId = checkinsVO.getResultId();
         if (StringUtils.isEmpty(resultId)) {
-            responseResult.setSuccess(false);
-            responseResult.setMessage("关键结果ID不能为空");
-            return responseResult;
+            return new ResponseResult(false, null, "关键结果ID不能为空！");
         }
         //KR进度每次都是新增,不改旧数据
         CheckinsEntity entity = new CheckinsEntity();
         BeanUtils.copyBean(checkinsVO, entity);
         entity.setCreateTs(new Date());
         this.insert(entity);
-        responseResult.setMessage("保存成功");
-        return responseResult;
+        return new ResponseResult(true, null, "保存成功");
     }
-
 }

@@ -20,6 +20,7 @@ public class ObjectivesExtVO extends ObjectivesVO implements Serializable {
     // 团队名称
     private String teamName;
 
+    // 父目标名称
     private String parentName;
 
     // 参与人员

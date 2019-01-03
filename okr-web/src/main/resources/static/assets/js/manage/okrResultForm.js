@@ -17,6 +17,7 @@ require(["jQuery"], function () {
         validateRule: function () {
             return {
                 name: {label: '名称', required: true, minLength:2,maxLength:32},
+                metricUnit: {label: '执行单位', required: true},
                 endTs: {label: '完成时间', required: true}
             };
         },
@@ -145,5 +146,16 @@ require(["jQuery"], function () {
     $(window).ready(function () {
         window.pageObj = pageObj;
         pageObj.init();
+
+        // 单选按钮绑定事件
+        $("input[name='metricUnit']").bind("click", function () {
+            if ($(this).val() === '1') {
+                $('#targetValue').parent().parent().hide();
+                $('#initialValue').parent().parent().hide();
+            } else {
+                $('#targetValue').parent().parent().show();
+                $('#initialValue').parent().parent().show();
+            }
+        });
     });
 });

@@ -13,6 +13,9 @@
         select t1.*
         from t_okr_messages t1
         where 1=1
+        <if test="userId != null and userId != ''">
+            and t1.user_id = #{userId}
+        </if>
         <!--page与limitAmount不会同时传进来-->
         <if test="limitAmount != null and limitAmount != ''">
             <!--只查询未处理或者未读的消息-->

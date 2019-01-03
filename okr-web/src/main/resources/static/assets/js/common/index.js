@@ -28,7 +28,7 @@ require(["jQuery"], function () {
                 var $menuItem = $("#menuUL"),
                     templateText =
                         '[%if(children.length>0){%]' +
-                        '    <li>' +
+                        '    <li id="menu-[%=id%]">' +
                         '        <a>[%=name%]</a>' +
                         '        <div class="menu-list">' +
                         '           <div class="menu-content clearfix">' +
@@ -43,7 +43,7 @@ require(["jQuery"], function () {
                         '        </div>' +
                         '    </li>' +
                         '[%}else{%]' +
-                        '    <li><a onclick="mainObj.menuClick(this, \'[%=url%]\');">[%=name%]</a></li>' +
+                        '    <li id="menu-[%=id%]"><a onclick="mainObj.menuClick(this, \'[%=url%]\');">[%=name%]</a></li>' +
                         '[%}%]';
                 $.each(rootMenu.children, function (idx, obj) {
                     var html = UnderscoreUtil.getHtmlByText(templateText, obj);
@@ -61,11 +61,14 @@ require(["jQuery"], function () {
         initEvent: function () {
         },
 
-        menuClick: function (dom, url) {
+        menuClick: function (dom, url, id) {
             var $iframe = $('#mainContent');
             $(dom).parents('li').addClass('active').siblings().removeClass('active');
             $iframe.attr('src', url);
             mainObj.changeFrameHeight();
+            if ($("#" + id).length > 0) {
+                $("#" + id).addClass('active').siblings().removeClass('active');
+            }
         },
 
         changeFrameHeight: function () {

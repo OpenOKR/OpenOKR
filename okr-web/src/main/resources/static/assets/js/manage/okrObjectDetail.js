@@ -55,11 +55,11 @@ require(["jQuery"], function () {
                 var okrCon = '<div class="okr-con">' +
                     '   <ul class="okr-list">' +
                     '       [%if(!_.isNull(object.resultsExtList) && object.resultsExtList.length>0){%]' +
-                    '           [%_.each(object.resultsExtList, function(item){%]' +
+                    '           [%_.each(object.resultsExtList, function(item, idx){%]' +
                     '               <li>' +
                     '                   <div class="okr-list-in">' +
                     '                       <h4>' +
-                    '                           K1：[%=item.name%]' +
+                    '                           K[%=idx+1%]：[%=item.name%]' +
                     '                           <div class="action">' +
                     '                               <span class="txt-all [%=executeList[item.status].cssClass%]">' +
                     '                                   <i class="iconfont icon-dot"></i>[%=executeList[item.status].name%]' +
@@ -69,11 +69,13 @@ require(["jQuery"], function () {
                     '                       <div class="participant">' +
                     '                           <span class="name">参与人员：</span>' +
                     '                           <ul class="participant-list">' +
-                    '                               [%if(!_.isNull(object.joinUsers) && object.joinUsers.length>0){%]' +
-                    '                                   [%_.each(object.joinUsers, function(user){%]' +
-                    '                                       <li class="part-item"><span><img src="/assets/images/temp/pic.png"></span></li>' +
+                    '                               [%if(!_.isNull(item.joinUsers) && item.joinUsers.length>0){%]' +
+                    '                                   [%_.each(item.joinUsers, function(user){%]' +
+                    '                                       [%if(!_.isNull(user)){%]' +
+                    '                                           <li class="part-item"><span><img src="/assets/images/temp/pic.png" title="[%=user.realName%]" alt="[%=user.realName%]"></span></li>' +
+                    '                                       [%}%]' +
                     '                                   [%});%]' +
-                    '                                   <li class="part-item"><a href=""><i class="iconfont icon-more"></i></a></li>' +
+                    '                                   <li class="part-item"><i class="iconfont icon-more"></i></li>' +
                     '                               [%}%]' +
                     '                           </ul>' +
                     '                       </div>' +
@@ -89,7 +91,8 @@ require(["jQuery"], function () {
                     '                       <div class="action">' +
                     '                           <a class="btn-del text-primary" onclick="pageObj.deleteResultFunc([%=item.id%])"><i class="icon-del"></i>删除</a>' +
                     '                           <a class="btn-other text-primary" onclick="pageObj.addCheckin([%=item.id%], [%=object.id%])"><i class="icon-refresh"></i>进度</a>' +
-                    '                           <a class="btn-del text-primary" onclick="pageObj.editResult([%=item.id%], [%=object.id%])"><i class="icon-edit"></i>编辑</a>' +
+                    '                           <a class="btn-del text-primary" onclick="pageObj.editResult([%=object.id%], [%=item.id%])"><i class="icon-edit"></i>编辑</a>' +
+                    '                           <a></a>' +
                     '                       </div>' +
                     '                   </div>' +
                     '               </li>' +
@@ -263,6 +266,53 @@ require(["jQuery"], function () {
 
         editResult: function (objectId, resultId) {
             require(["artDialog", "jqForm", "AutoTree"], function () {
+                var _func = function (dialogObj) {
+                    var $form = $(window.frames[dialogObj.id].window.pageObj.getForm()),
+                        formData = $form.jqForm("getValue"),
+                        checkedAll, checkedUsers = [];
+                    //验证
+                    var validateMsgObj = validateUtil.validateDatas(formData, $(window.frames[dialogObj.id].window.pageObj.validateRule())[0]);
+                    if (!$.isEmptyObject(validateMsgObj)) {
+                        require(["Tips"], function () {
+                            //提示 拼接的验证信息
+                            TipsUtil.warn(validateUtil.concatValidateMsg(validateMsgObj));
+                            //焦点定位到 第一个 验证不通过的控件
+                            $form.jqForm("focusToElement", validateUtil.getFirstNoPassName(validateMsgObj));
+                        });
+                        return;
+                    }
+                    //赋值 users
+                    checkedAll = $(window.frames[dialogObj.id].window.pageObj.getUsersTree().getCheckedNodes());
+                    $.each(checkedAll, function (idx, item) {
+                        checkedUsers.push(item);
+                    });
+                    formData.joinUsers = checkedUsers;
+                    //
+                    //判断表单是否被修改( isDirty 是根据 setDefaultValue 设置的默认数据进行判断)
+                    require(["Tips"], function () {
+                        var _saveFunc = function () {
+                            //保存
+                            ajaxUtil.ajaxWithBlock({
+                                url: App["contextPath"] + "/manage/okrResult/saveResult.json",
+                                type: "post",
+                                data: JSON.stringify({resultVO: formData}),
+                                contentType: 'application/json;charset=utf-8' //设置请求头信息
+                            }, function (data) {
+                                require(["Tips"], function () {
+                                    if (data.success) {
+                                        TipsUtil.info(data.message);
+                                        dialogObj.close();
+                                        pageObj.loadOKRObjects(pageObj.currentType, pageObj.currentTeamId);
+                                    } else {
+                                        TipsUtil.warn(data.message);
+                                    }
+                                });
+                            });
+                        };
+                        //
+                        _saveFunc();
+                    });
+                };
                 var dialogObj = dialog({
                     url: App["contextPath"] + "/manage/okrResult/okrResultForm.htm?objectId=" + objectId + "&resultId=" + resultId,
                     title: '新增/编辑关键结果',
@@ -270,6 +320,7 @@ require(["jQuery"], function () {
                     okValue: "保存",
                     cancelValue: "关闭",
                     ok: function () {
+                        _func(dialogObj);
                         return false;
                     },
                     cancel: function () {

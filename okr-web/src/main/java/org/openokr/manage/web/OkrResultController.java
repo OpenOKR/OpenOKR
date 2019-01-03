@@ -5,6 +5,7 @@ import org.openokr.application.framework.annotation.JsonPathParam;
 import org.openokr.application.web.BaseController;
 import org.openokr.manage.enumerate.ExecuteStatusEnum;
 import org.openokr.manage.enumerate.ResultMetricUnitEnum;
+import org.openokr.manage.service.IOkrObjectService;
 import org.openokr.manage.service.IOkrResultService;
 import org.openokr.manage.vo.CheckinsExtVO;
 import org.openokr.manage.vo.ResultsExtVO;
@@ -29,6 +30,9 @@ public class OkrResultController extends BaseController {
     @Autowired
     private IOkrResultService okrResultService;
 
+    @Autowired
+    private IOkrObjectService okrObjectService;
+
     /**
      * 新增或编辑关键结果页面
      * @return
@@ -39,6 +43,7 @@ public class OkrResultController extends BaseController {
         if (resultVO == null) {
             resultVO = new ResultsExtVO();
             resultVO.setObjectId(objectId);
+            resultVO.setObjectName(okrObjectService.editObject(objectId).getName());
         }
         model.addAttribute("metricUnitEnumList", ResultMetricUnitEnum.toList());
         model.addAttribute("resultVO", resultVO);
@@ -55,8 +60,7 @@ public class OkrResultController extends BaseController {
     @ResponseBody
     public ResponseResult saveResult(@JsonPathParam("$.resultVO") ResultsExtVO resultVO) {
         resultVO.setCreateUserId(getCurrentUserId());
-        ResponseResult responseResult = okrResultService.saveResult(resultVO);
-        return responseResult;
+        return okrResultService.saveResult(resultVO);
     }
 
     /**
@@ -92,7 +96,6 @@ public class OkrResultController extends BaseController {
     public ResponseResult saveCheckins(@JsonPathParam("$.checkinVO") CheckinsExtVO checkinsVO) {
         checkinsVO.setCreateUserId(getCurrentUserId());
         checkinsVO.setCreateTs(new Date());
-        ResponseResult responseResult = okrResultService.saveCheckins(checkinsVO);
-        return responseResult;
+        return okrResultService.saveCheckins(checkinsVO);
     }
 }

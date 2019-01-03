@@ -56,33 +56,45 @@
                     </div>
                 </div>
             </li>
+            <c:set var="disabled" value=""></c:set>
+            <c:set var="radioMsg" value=""></c:set>
+            <c:if test="${resultVO.id != null && resultVO.id != ''}">
+                <c:set var="disabled" value="disabled"></c:set>
+                <c:set var="radioMsg" value="（不可修改）"></c:set>
+            </c:if>
             <li class="col-sm-11">
-                <label class="form-lab">评价单位：</label>
+                <label class="form-lab">执行单位：</label>
                 <div class="form-control">
                     <p class="radio-inline">
                         <c:forEach items="${metricUnitEnumList}" var="metricUnit">
                             <c:if test="${metricUnit.code != ''}">
                                 <label class="radio">
-                                    <input name="metricUnit" type="radio" value="${metricUnit.code}" ${resultVO.metricUnit == metricUnit.code ? "checked" : ""}/>
+                                    <input name="metricUnit" type="radio" ${disabled} value="${metricUnit.code}" ${resultVO.metricUnit == metricUnit.code ? "checked" : ""}/>
                                     <i class="icon"></i><em>${metricUnit.name}</em>
                                 </label>
                             </c:if>
                         </c:forEach>
                     </p>
+                    ${radioMsg}
                 </div>
             </li>
-            <li class="col-sm-11">
+            <c:set var="display" value="inline"></c:set>
+            <c:if test="${resultVO.metricUnit != null && resultVO.metricUnit == '3'}">
+                <c:set var="display" value="none"></c:set>
+            </c:if>
+            <li class="col-sm-11" style="display: ${display};">
                 <label class="form-lab">目标值：</label>
                 <div class="form-control">
                     <input id="targetValue" name="targetValue" type="text" class="inp" placeholder="请输入" value="${resultVO.targetValue}"/>
                 </div>
             </li>
-            <li class="col-sm-11">
+            <li class="col-sm-11" style="display: ${display};">
                 <label class="form-lab">起始值：</label>
                 <div class="form-control">
                     <input id="initialValue" name="initialValue" type="text" class="inp" placeholder="请输入" value="${resultVO.initialValue}"/>
                 </div>
             </li>
+
             <%--<li class="col-sm-11">--%>
                 <%--<label class="form-lab">影响团队：</label>--%>
                 <%--<div class="form-control">--%>
@@ -101,7 +113,7 @@
                 <label class="form-lab">完成时间：</label>
                 <div class="form-control">
                     <div class="datepicker">
-                        <input id="endTs" name="endTs" type="text" class="inp" value="${endTs}" style="width: 60%;" placeholder="完成时间">
+                        <input id="endTs" name="endTs" type="text" class="inp" value="${endTs}" placeholder="请选择预计完成时间">
                         <img id="iEndTs" src="${staticContextPath}/assets/images/all/date-icon.png">
                     </div>
                 </div>

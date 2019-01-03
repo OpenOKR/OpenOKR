@@ -67,7 +67,7 @@ require(["jQuery"], function () {
                         '       </div>' +
                         '   </div>' +
                         '</div>';
-                    if (idx === (teamList.length -1)) {
+                    if (type === '1' && idx === (teamList.length - 1)) {
                         html +=
                             '<div class="col-sm-4 mb15">' +
                             '   <div class="meg-outer ui-addFile" onclick="pageObj.editTeam(\'\');">' +
@@ -81,7 +81,19 @@ require(["jQuery"], function () {
                     var header = UnderscoreUtil.getHtmlByText(html, {team: team, type: type});
                     $okrTeamList.append(header);
                 });
-
+                if (type === '1' && teamList.length === 0) {
+                    var html =
+                        '<div class="col-sm-4 mb15">' +
+                        '   <div class="meg-outer ui-addFile" onclick="pageObj.editTeam(\'\');">' +
+                        '       <div class="meg-in">' +
+                        '           <i class="icon icon-add"></i>' +
+                        '           <h4 class="meg-h4">新建团队</h4>' +
+                        '       </div>' +
+                        '   </div>' +
+                        '</div>';
+                    var header = UnderscoreUtil.getHtmlByText(html);
+                    $okrTeamList.append(header);
+                }
             });
         },
 

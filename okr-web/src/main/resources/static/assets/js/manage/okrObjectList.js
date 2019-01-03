@@ -74,9 +74,11 @@ require(["jQuery"], function () {
                         '                           <ul class="participant-list">' +
                         '                               [%if(!_.isNull(item.joinUsers) && item.joinUsers.length>0){%]' +
                         '                                   [%_.each(item.joinUsers, function(user){%]' +
-                        '                                       <li class="part-item"><span><img src="[%=user.photoUrl%]"></span></li>' +
+                        '                                       [%if(!_.isNull(user)){%]' +
+                        '                                           <li class="part-item"><span><img src="/assets/images/temp/pic.png" title="[%=user.realName%]" alt="[%=user.realName%]"></span></li>' +
+                        '                                       [%}%]' +
                         '                                   [%});%]' +
-                        '                                   <li class="part-item"><a href=""><i class="iconfont icon-more"></i></a></li>' +
+                        '                                   <li class="part-item"><i class="iconfont icon-more"></i></li>' +
                         '                               [%}%]' +
                         '                           </ul>' +
                         '                       </div>' +
@@ -296,6 +298,7 @@ require(["jQuery"], function () {
                 var dialogObj = dialog({
                     url: App["contextPath"] + "/manage/okrResult/okrResultForm.htm?resultId=" + id + "&objectId=" + objectId,
                     title: '新增/编辑关键结果',
+                    height: 400,
                     quickClose: false,
                     okValue: "保存",
                     cancelValue: "关闭",
@@ -328,11 +331,11 @@ require(["jQuery"], function () {
                     }, function (data) {
                         require(["Tips"], function () {
                             if (data.success) {
-                                TipsUtil.info(data.info);
+                                TipsUtil.info(data.message);
                                 dialogObj.close();
                                 pageObj.loadOKRObjects(pageObj.currentType, pageObj.currentTeamId);
                             } else {
-                                TipsUtil.warn(data.info);
+                                TipsUtil.warn(data.message);
                             }
                         });
                     });
