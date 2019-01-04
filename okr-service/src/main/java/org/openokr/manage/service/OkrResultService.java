@@ -1,17 +1,24 @@
 package org.openokr.manage.service;
 
 import com.zzheng.framework.adapter.vo.ResponseResult;
+import com.zzheng.framework.base.utils.BeanUtils;
 import com.zzheng.framework.exception.BusinessException;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openokr.application.framework.service.OkrBaseService;
-import org.openokr.manage.entity.*;
+import org.openokr.manage.entity.CheckinsEntity;
+import org.openokr.manage.entity.ObjectivesEntity;
+import org.openokr.manage.entity.ResultUserRelaEntity;
+import org.openokr.manage.entity.ResultUserRelaEntityCondition;
+import org.openokr.manage.entity.ResultsEntity;
+import org.openokr.manage.entity.ResultsEntityCondition;
 import org.openokr.manage.enumerate.ExecuteStatusEnum;
+import org.openokr.manage.enumerate.ObjectivesStatusEnum;
 import org.openokr.manage.enumerate.ResultMetricUnitEnum;
 import org.openokr.manage.vo.CheckinsExtVO;
 import org.openokr.manage.vo.LogVO;
 import org.openokr.manage.vo.ResultsExtVO;
 import org.openokr.sys.vo.UserVO;
-import com.zzheng.framework.base.utils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +48,9 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
         resultsEntity.setUpdateUserId(userId);
         this.update(resultsEntity);
 
+        //删除KR要更新O的进度
+        this.calculateObjectProgress(resultsEntity, userId);
+
         // 保存操作记录
         LogVO logVO = new LogVO();
         logVO.setBizId(resultId);
@@ -65,25 +75,36 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
             entity.setStatus(ExecuteStatusEnum.STATUS_0.getCode());//未开始状态
             entity.setDelFlag("0");//删除状态:否
             entity.setCreateTs(new Date());
+            entity.setProgress(new BigDecimal(0));
+            entity.setCurrentValue("0");
 
             //如果评价单位是"是否",要设置一下默认的目标值和起始值
             if(ResultMetricUnitEnum.TYPE_1.getCode().equals(entity.getMetricUnit())) {
                 entity.setTargetValue("完成");
                 entity.setInitialValue("未完成");
-                entity.setCurrentValue("0");
-                entity.setPreProgress(new BigDecimal(0));
-                entity.setProgress(new BigDecimal(0));
             } else {
-
+                //计算KR的进度
+                this.calculateResultProgress(entity, entity.getInitialValue());
             }
+            // 新增KR信息
             this.insert(entity);
             resultId = entity.getId();
+
+            //计算O的进度
+            this.calculateObjectProgress(entity, userId);
         } else { //更新
             ResultsEntity entity = this.selectByPrimaryKey(ResultsEntity.class, resultId);
             resultVO.setStatus(entity.getStatus());//状态不能修改
             resultVO.setUpdateTs(new Date());
             resultVO.setUpdateUserId(userId);
             BeanUtils.copyBean(resultVO, entity);
+
+            //如果修改了KR的目标值：要重新计算进度
+            this.calculateResultProgress(entity, entity.getCurrentValue());
+            //计算O的进度
+            this.calculateObjectProgress(entity, userId);
+
+            //更新KR信息
             this.update(entity);
 
             // 更新关键结果协同人员
@@ -159,6 +180,70 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
         BeanUtils.copyBean(checkinsVO, entity);
         entity.setCreateTs(new Date());
         this.insert(entity);
+
+        //计算KR的进度
+        ResultsEntity resultsEntity = this.selectByPrimaryKey(ResultsEntity.class, resultId);
+        this.calculateResultProgress(resultsEntity, entity.getCurrentValue());
+
+        //计算O的进度
+        this.calculateObjectProgress(resultsEntity, checkinsVO.getCreateUserId());
+
+        resultsEntity.setCurrentValue(checkinsVO.getCurrentValue());
+        resultsEntity.setUpdateUserId(checkinsVO.getCreateUserId());
+        resultsEntity.setUpdateTs(new Date());
+        this.update(resultsEntity);
         return new ResponseResult(true, null, "保存成功");
     }
+
+    //计算KR的进度
+    private void calculateResultProgress(ResultsEntity entity, String currentValue) {
+        if(ResultMetricUnitEnum.TYPE_1.getCode().equals(entity.getMetricUnit())) { //是否完成
+           if ("1".equals(currentValue)) {// 如果是已完成,则把KR的状态也更新成已完成,并且进度改成百分百
+               entity.setCurrentValue("1");
+               entity.setPreProgress(entity.getProgress());
+               entity.setProgress(new BigDecimal(100));
+               entity.setStatus(ExecuteStatusEnum.STATUS_5.getCode());
+            }
+        } else { //百分比或者数值
+            String targetValue = entity.getTargetValue();
+            if (StringUtils.isNotEmpty(targetValue) && StringUtils.isNotEmpty(currentValue)) {
+                BigDecimal bigTargetValue = new BigDecimal(targetValue);
+                if (bigTargetValue.compareTo(BigDecimal.ZERO) == 1) {
+                    BigDecimal preProgress = new BigDecimal(currentValue).
+                            divide(bigTargetValue, 2, BigDecimal.ROUND_UP).multiply(new BigDecimal(100));
+                    entity.setProgress(preProgress);
+                }
+            }
+        }
+    }
+
+    //计算O的进度
+    private void calculateObjectProgress(ResultsEntity entity, String userId) {
+        String objectId = entity.getObjectId();
+        ResultsEntityCondition resultsEntityCondition = new ResultsEntityCondition();
+        resultsEntityCondition.createCriteria().andObjectIdEqualTo(objectId).andDelFlagEqualTo("0").
+                andIdNotEqualTo(entity.getId());
+        List<ResultsEntity> resultsEntityList = this.selectByCondition(resultsEntityCondition);
+        BigDecimal objectPreProgress = BigDecimal.ZERO;
+        Integer count = 0;
+        if (CollectionUtils.isNotEmpty(resultsEntityList)) {
+            for (ResultsEntity resultsEntity : resultsEntityList) {
+                objectPreProgress = objectPreProgress.add(resultsEntity.getProgress());
+                count++;
+            }
+        }
+        if ("0".equals(entity.getDelFlag())) {//当前KR是删除的情况,要排除掉
+            count++;
+            objectPreProgress = objectPreProgress.add(entity.getProgress());
+        }
+        objectPreProgress = objectPreProgress.divide(new BigDecimal(count), 2, BigDecimal.ROUND_UP);
+        ObjectivesEntity objectivesEntity = this.selectByPrimaryKey(ObjectivesEntity.class, objectId);
+        objectivesEntity.setProgress(objectPreProgress);
+        objectivesEntity.setStatus(ObjectivesStatusEnum.STATUS_1.getCode());//一旦有修改,目标就要变成未提交状态
+        objectivesEntity.setUpdateTs(new Date());
+        objectivesEntity.setUpdateUserId(userId);
+        this.update(objectivesEntity);
+    }
+
+
 }
