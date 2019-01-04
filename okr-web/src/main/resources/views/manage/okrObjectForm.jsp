@@ -9,6 +9,7 @@
         <ul class="form-grid font4">
             <input id="id" name="id" type="hidden" value="${objectVO.id}">
             <input id="type" name="type" type="hidden" value="${objectVO.type}"/>
+            <input id="teamId" name="teamId" type="hidden" value="${objectVO.teamId}">
             <li class="col-sm-11">
                 <label class="form-lab">目标：</label>
                 <div class="form-control">

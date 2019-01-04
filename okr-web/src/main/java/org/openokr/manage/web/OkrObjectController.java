@@ -100,11 +100,12 @@ public class OkrObjectController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/okrObjectForm.htm")
-    public String okrObjectForm(Model model, String objectId, String type) {
+    public String okrObjectForm(Model model, String objectId, String type, String teamId) {
         ObjectivesExtVO objectVO = okrObjectService.editObject(objectId);
         if (objectVO == null) {
             objectVO = new ObjectivesExtVO();
             objectVO.setType(type);
+            objectVO.setTeamId(teamId);
         }
         model.addAttribute("objectVO", objectVO);
         return "manage/okrObjectForm";

@@ -227,7 +227,8 @@ require(["jQuery"], function () {
                     });
                 };
                 var dialogObj = dialog({
-                    url: App["contextPath"] + "/manage/okrObject/okrObjectForm.htm?objectId=" + id + "&type=" + pageObj.currentType,
+                    url: App["contextPath"] + "/manage/okrObject/okrObjectForm.htm?objectId=" + id +
+                        "&type=" + pageObj.currentType + "&teamId=" + pageObj.currentTeamId,
                     title: '新增/编辑目标',
                     quickClose: false,
                     okValue: "保存",
