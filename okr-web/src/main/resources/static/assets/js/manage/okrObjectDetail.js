@@ -239,7 +239,7 @@ require(["jQuery"], function () {
                                     if (data.success) {
                                         TipsUtil.info(data.message);
                                         dialogObj.close();
-                                        pageObj.loadOKRObjects(pageObj.currentType, pageObj.currentTeamId);
+                                        pageObj.loadOKRObjectDetail();
                                     } else {
                                         TipsUtil.warn(data.message);
                                     }
@@ -308,7 +308,7 @@ require(["jQuery"], function () {
                                     if (data.success) {
                                         TipsUtil.info(data.message);
                                         dialogObj.close();
-                                        pageObj.loadOKRObjects(pageObj.currentType, pageObj.currentTeamId);
+                                        pageObj.loadOKRObjectDetail();
                                     } else {
                                         TipsUtil.warn(data.message);
                                     }
@@ -349,7 +349,7 @@ require(["jQuery"], function () {
                             require(["Tips"], function () {
                                 if (data.success) {
                                     TipsUtil.info(data.message);
-                                    pageObj.loadOKRObjects(pageObj.currentType, pageObj.currentTeamId);
+                                    pageObj.loadOKRObjectDetail();
                                 } else {
                                     TipsUtil.warn(data.message);
                                 }
@@ -388,7 +388,7 @@ require(["jQuery"], function () {
                         if (data.success) {
                             TipsUtil.info(data.info);
                             dialogObj.close();
-                            pageObj.loadOKRObjects(pageObj.currentType, pageObj.currentTeamId);
+                            pageObj.loadOKRObjectDetail();
                         } else {
                             TipsUtil.warn(data.info);
                         }
