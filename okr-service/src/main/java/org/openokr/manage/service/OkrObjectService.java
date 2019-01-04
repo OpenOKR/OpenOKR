@@ -16,6 +16,7 @@ import org.openokr.manage.entity.ObjectivesEntity;
 import org.openokr.manage.entity.ObjectivesEntityCondition;
 import org.openokr.manage.entity.ResultsEntity;
 import org.openokr.manage.entity.ResultsEntityCondition;
+import org.openokr.manage.enumerate.ObjectivesStatusEnum;
 import org.openokr.manage.enumerate.ObjectivesTypeEnum;
 import org.openokr.manage.vo.LabelVO;
 import org.openokr.manage.vo.LogVO;
@@ -189,7 +190,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
             entity.setTimeSessionId(getCurrentTimeSessionId());
             entity.setOwnerId(userId);
             entity.setVisibility("1");//默认公开
-            entity.setStatus("1");//未提交状态
+            entity.setStatus(ObjectivesStatusEnum.STATUS_1.getCode());//一旦有修改,目标就要变成未提交状态
             entity.setDelFlag("0");//删除状态:否
             entity.setCreateTs(new Date());
             this.insert(entity);
@@ -197,6 +198,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         } else { //更新
             ObjectivesEntity entity = this.selectByPrimaryKey(ObjectivesEntity.class, objectId);
             BeanUtils.copyBean(objectVO, entity);
+            entity.setStatus(ObjectivesStatusEnum.STATUS_1.getCode());//一旦有修改,目标就要变成未提交状态
             entity.setUpdateTs(new Date());
             entity.setUpdateUserId(userId);
             this.update(entity);

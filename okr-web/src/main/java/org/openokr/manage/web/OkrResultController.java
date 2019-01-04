@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Date;
-
 /**
  * OKR关键结果
  *
@@ -101,7 +99,6 @@ public class OkrResultController extends BaseController {
     @ResponseBody
     public ResponseResult saveCheckins(@JsonPathParam("$.checkinVO") CheckinsExtVO checkinsVO) {
         checkinsVO.setCreateUserId(getCurrentUserId());
-        checkinsVO.setCreateTs(new Date());
         return okrResultService.saveCheckins(checkinsVO);
     }
 

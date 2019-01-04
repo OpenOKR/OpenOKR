@@ -15,17 +15,17 @@
                     <p class="login-desc"><span>离你的目标越来越近啦～</span></p>
                     <form id="loginForm" action="${contextPath}/login.htm" method="post">
                         <!-- item-focus 鼠标移入效果，item-error输入报错状态，item-success输入成确状态 -->
-                        <div class="item ">
+                        <div class="item item-focus">
                             <label class="lab-sub"> 用户 </label>
                             <input id="username" name="username" type="text"/>
                         </div>
-                        <div class="item">
+                        <div class="item item-focus">
                             <label class="lab-sub"> 密码 </label>
                             <input id="password" name="password" type="password"/>
                             <div class="msg-box error"><i class="iconfont icon-waring"></i>${message}</div>
                         </div>
                         <!-- 输错三次出现验证码 -->
-                        <div class="item item-code" style="display: none;" id="validateCodeDiv">
+                        <div class="item item-code item-focus" style="display: none;" id="validateCodeDiv">
                             <label class="lab-sub"> 验证码 </label>
                             <input id="validateCode" name="validateCode" type="text"/>
                         </div>
