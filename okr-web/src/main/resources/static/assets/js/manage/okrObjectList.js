@@ -317,27 +317,34 @@ require(["jQuery"], function () {
         },
 
         addCheckin: function (id, objectId) {
-            require(["artDialog"], function () {
+            require(["artDialog", "Tips"], function () {
                 var _func = function (dialogObj) {
-                    var resultId = $(window.frames[dialogObj.id].document).find("#resultId").val(),
-                        currentValue = $(window.frames[dialogObj.id].document).find("#currentValue").val(),
+                    var resultId = $(window.frames[dialogObj.id].document).find("#resultId").val(), currentValue,
                         status = $(window.frames[dialogObj.id].document).find("input[name='metricUnit']:checked").val(),
                         description = $(window.frames[dialogObj.id].document).find("#description").val();
+                    if ($(window.frames[dialogObj.id].document).find("#currentValue").length > 0) {
+                        currentValue = $(window.frames[dialogObj.id].document).find("#currentValue").val();
+                        var regexp = new RegExp(/^\d+(\.\d+)?$/);
+                        if (!regexp.test(currentValue)) {
+                            TipsUtil.warn("当前值不符合规则，只能输入数值！");
+                            return;
+                        }
+                    } else {
+                        currentValue = $(window.frames[dialogObj.id].document).find("input[name='currentValue']:checked").val();
+                    }
                     ajaxUtil.ajaxWithBlock({
                         url: App["contextPath"] + "/manage/okrResult/saveCheckins.json",
                         type: "post",
                         data: JSON.stringify({checkinVO:{resultId: resultId, currentValue: currentValue, status: status, description: description}}),
                         contentType: 'application/json;charset=utf-8' //设置请求头信息
                     }, function (data) {
-                        require(["Tips"], function () {
-                            if (data.success) {
-                                TipsUtil.info(data.message);
-                                dialogObj.close();
-                                pageObj.loadOKRObjects(pageObj.currentType, pageObj.currentTeamId);
-                            } else {
-                                TipsUtil.warn(data.message);
-                            }
-                        });
+                        if (data.success) {
+                            TipsUtil.info(data.message);
+                            dialogObj.close();
+                            pageObj.loadOKRObjects(pageObj.currentType, pageObj.currentTeamId);
+                        } else {
+                            TipsUtil.warn(data.message);
+                        }
                     });
                 };
                 var dialogObj = dialog({

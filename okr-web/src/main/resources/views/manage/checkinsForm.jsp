@@ -19,10 +19,10 @@
                     <div class="form-control">
                         <p class="radio-inline">
                             <label class="radio">
-                                <input name="metricUnit" type="radio" value="0"/><i class="icon"></i><em>未完成</em>
+                                <input name="currentValue" type="radio" value="未完成"/><i class="icon"></i><em>未完成</em>
                             </label>
                             <label class="radio">
-                                <input name="metricUnit" type="radio" value="1"/><i class="icon"></i><em>完成</em>
+                                <input name="currentValue" type="radio" value="完成"/><i class="icon"></i><em>完成</em>
                             </label>
                         </p>
                     </div>

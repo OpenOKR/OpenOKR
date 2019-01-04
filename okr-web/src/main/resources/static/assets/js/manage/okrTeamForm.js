@@ -24,7 +24,7 @@ require(["jQuery"], function () {
             //渲染控件
             return $("#parentName").AutoCombobox({
                 async: {
-                    url: App["contextPath"] + "/manage/okrTeam/getParentObject.json",
+                    url: App["contextPath"] + "/manage/okrTeam/getTeamList.json",
                     dataSourceType: "onceRemote"
                 },
                 view: {
@@ -34,7 +34,7 @@ require(["jQuery"], function () {
                     },
                     colModels: [
                         {name: "id", label: "id", isHide: true},
-                        {name: "name", label: "目标名"}
+                        {name: "name", label: "团队名"}
                     ],
                     bindFill: {"#parentName": "name", "#parentId": "id"}
                 }

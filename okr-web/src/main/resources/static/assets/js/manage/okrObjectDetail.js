@@ -108,9 +108,9 @@ require(["jQuery"], function () {
                     '       <i class="iconfont icon-waring"></i>' +
                     '       对内容进行重新编辑，需要再次提交确认！' +
                     '   </span>' +
-                    '</div>' +
-                    '<div class="action">' +
-                    '   <a href="" class="btn btn-primary waves-effect waves-light">提交确认</a>' +
+                    '   <div class="action">' +
+                    '       <a href="" class="btn btn-primary waves-effect waves-light">提交确认</a>' +
+                    '   </div>' +
                     '</div>';
                 var header = UnderscoreUtil.getHtmlByText(okrHeader, {object: object, statusList: statusList});
                 $okrObjectDetail.append(header);
@@ -122,8 +122,13 @@ require(["jQuery"], function () {
                 pageObj.showHideOperationButton();
 
                 pageObj.pieEchartsFunc(object.id, object.progress);
+                var currentDateStr = $.DateUtils.getDateString(new Date());
                 $.each(object.operateRecordList, function (idx, item) {
-                    item.createTsStr = $.DateUtils.getDateTimeString(new Date(item.createTs));
+                    if (currentDateStr === $.DateUtils.getDateString(item.createTs)) {
+                        item.createTsStr = $.DateUtils.getFormatDateString(item.createTs, "HH:mm:ss");
+                    } else {
+                        item.createTsStr = $.DateUtils.getDateTimeString(new Date(item.createTs));
+                    }
                     var okrHistory = '<div class="area-process-li past">' +
                         '   <em class="area-process-em"></em>' +
                         '   <p class="area-process-date">[%=createTsStr%]</p>' +
@@ -359,27 +364,34 @@ require(["jQuery"], function () {
         },
 
         addCheckin: function (id, objectId) {
-            require(["artDialog"], function () {
+            require(["artDialog", "Tips"], function () {
                 var _func = function (dialogObj) {
-                    var resultId = $(window.frames[dialogObj.id].document).find("#resultId").val(),
-                        currentValue = $(window.frames[dialogObj.id].document).find("#currentValue").val(),
+                    var resultId = $(window.frames[dialogObj.id].document).find("#resultId").val(), currentValue,
                         status = $(window.frames[dialogObj.id].document).find("input[name='metricUnit']:checked").val(),
                         description = $(window.frames[dialogObj.id].document).find("#description").val();
+                    if ($(window.frames[dialogObj.id].document).find("#currentValue").length > 0) {
+                        currentValue = $(window.frames[dialogObj.id].document).find("#currentValue").val();
+                        var regexp = new RegExp(/^\d+(\.\d+)?$/);
+                        if (!regexp.test(currentValue)) {
+                            TipsUtil.warn("当前值不符合规则，只能输入数值！");
+                            return;
+                        }
+                    } else {
+                        currentValue = $(window.frames[dialogObj.id].document).find("input[name='currentValue']:checked").val();
+                    }
                     ajaxUtil.ajaxWithBlock({
                         url: App["contextPath"] + "/manage/okrResult/saveCheckins.json",
                         type: "post",
                         data: JSON.stringify({checkinVO:{resultId: resultId, currentValue: currentValue, status: status, description: description}}),
                         contentType: 'application/json;charset=utf-8' //设置请求头信息
                     }, function (data) {
-                        require(["Tips"], function () {
-                            if (data.success) {
-                                TipsUtil.info(data.info);
-                                dialogObj.close();
-                                pageObj.loadOKRObjects(pageObj.currentType, pageObj.currentTeamId);
-                            } else {
-                                TipsUtil.warn(data.info);
-                            }
-                        });
+                        if (data.success) {
+                            TipsUtil.info(data.info);
+                            dialogObj.close();
+                            pageObj.loadOKRObjects(pageObj.currentType, pageObj.currentTeamId);
+                        } else {
+                            TipsUtil.warn(data.info);
+                        }
                     });
                 };
                 var dialogObj = dialog({

@@ -48,7 +48,7 @@ require(["jQuery", "countUp"], function () {
                         '                           <li class="part-item"><span><img src="/assets/images/temp/pic.png"/></span></li>' +
                         '                       [%}%]' +
                         '                   [%});%]' +
-                        '                   <li class="part-item"><a href=""><i class="iconfont icon-more"></i></a></li>' +
+                        '                   <li class="part-item"><a href="javascript:void(0);"><i class="iconfont icon-more"></i></a></li>' +
                         '               </ul>' +
                         '               [%}%]' +
                         '           </div>' +
