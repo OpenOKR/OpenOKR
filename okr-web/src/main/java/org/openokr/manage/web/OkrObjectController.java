@@ -3,11 +3,11 @@ package org.openokr.manage.web;
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import org.openokr.application.framework.annotation.JsonPathParam;
 import org.openokr.application.web.BaseController;
+import org.openokr.manage.service.IOkrMessageService;
 import org.openokr.manage.service.IOkrObjectService;
 import org.openokr.manage.service.IOkrTeamService;
-import org.openokr.manage.vo.ObjectivesExtVO;
-import org.openokr.manage.vo.OkrObjectSearchVO;
-import org.openokr.manage.vo.TeamsExtVO;
+import org.openokr.manage.vo.*;
+import org.openokr.utils.StringUtils;
 import org.openokr.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,6 +32,9 @@ public class OkrObjectController extends BaseController {
 
     @Autowired
     private IOkrTeamService okrTeamService;
+
+    @Autowired
+    private IOkrMessageService okrMessageService;
 
     @GetMapping(value = "/init.htm")
     public String index(Model model) throws Exception {
@@ -60,6 +63,10 @@ public class OkrObjectController extends BaseController {
     @GetMapping(value = "/okrDetail.htm")
     public String okrDetail(String id, String type, Model model) {
         model.addAttribute("id", id);
+        if (StringUtils.isEmpty(type)) {
+            ObjectivesExtVO objectivesExtVO = okrObjectService.editObject(id);
+            type = objectivesExtVO.getType();
+        }
         model.addAttribute("type", type);
         String editFlag = "0";
         if (type.equals("1")) {
@@ -133,5 +140,16 @@ public class OkrObjectController extends BaseController {
     @ResponseBody
     public List<ObjectivesExtVO> getParentObject(String type) {
         return okrObjectService.getParentObject(getCurrentUserId(), type);
+    }
+
+    /**
+     * 目标审核
+     * @return
+     */
+    @GetMapping(value = "/audit.htm")
+    public String audit(String id, Model model) {
+        MessagesVO message = okrMessageService.getById(id);
+        model.addAttribute("message", message);
+        return "manage/okrObjectAudit";
     }
 }

@@ -39,4 +39,11 @@ public interface IOkrMessageService {
      * @param currentUserId
      */
     ResponseResult update(MessagesVO vo, String currentUserId);
+
+    /**
+     * 根据id获取消息
+     * @param id
+     * @return
+     */
+    MessagesVO getById(String id);
 }

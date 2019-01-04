@@ -44,7 +44,11 @@ require(["jQuery"], function () {
                     '       <li id="[%=msg.id%]" data-isread="[%=msg.isRead%]">' +
                     '           <div class="new-item">' +
                     '               <i class="[%=markList[msg.mark - 1].cssClass%]"></i>' +
-                    '               <h4>[%=msg.title%]</h4>' +
+                    '               [%if(msg.type == 1){%]' +
+                    '                   <h4>[%=msg.title%]</h4>' +
+                    '               [%}else{%]' +
+                    '                   <h4><a onclick="pageObj.processDialog([%=msg.id%], [%=msg.type%])">[%=msg.title%]</a></h4>' +
+                    '               [%}%]' +
                     '               <p>[%=msg.createTsStr%]</p>' +
                     '               <div class="action">' +
                     '                   [%if(msg.isProcessed == 1 && msg.isRead == 1){%]' +
@@ -87,6 +91,52 @@ require(["jQuery"], function () {
                     $("#" + id).unblock();
                 });
             }
+        },
+
+        processDialog: function (id, type) {
+            var typeList = enumUtil.getEnum("messageTypeList.json"),
+                typeParams = typeList[type - 1],
+                url1Params = typeParams.url1.split(':'),
+                url1 = App.contextPath + url1Params[1] + id;
+            if (url1Params[0] === "open") {
+                top.mainObj.menuClick(null, url1, 'menu-2');
+                return;
+            }
+            require(["artDialog", "Tips"], function () {
+                var _func = function (dialogObj) {
+                    ajaxUtil.ajaxWithBlock({
+                        url: typeParams.url2,
+                        type: "post",
+                        data: JSON.stringify({messageVO: {}, relaExtVO: {}}),
+                        contentType: 'application/json;charset=utf-8' //设置请求头信息
+                    }, function (data) {
+                        if (data.success) {
+                            TipsUtil.info(data.message);
+                            dialogObj.close();
+                            pageObj.loadOKRMessage(true, 1);
+                        } else {
+                            TipsUtil.warn(data.message);
+                        }
+                    });
+                };
+                var dialogObj = dialog({
+                    url: url1,
+                    title: typeList[type - 1].name,
+                    quickClose: false,
+                    okValue: "保存",
+                    cancelValue: "关闭",
+                    ok: function () {
+                        _func(dialogObj);
+                        return false;
+                    },
+                    cancel: function () {
+                        //关闭对话框
+                        dialogObj.close();
+                        return false;
+                    }
+                });
+                dialogObj.showModal();
+            });
         }
     });
 

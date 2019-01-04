@@ -5,14 +5,17 @@ import org.openokr.application.framework.annotation.JsonPathParam;
 import org.openokr.application.web.BaseController;
 import org.openokr.manage.enumerate.ExecuteStatusEnum;
 import org.openokr.manage.enumerate.ResultMetricUnitEnum;
+import org.openokr.manage.service.IOkrMessageService;
 import org.openokr.manage.service.IOkrObjectService;
 import org.openokr.manage.service.IOkrResultService;
 import org.openokr.manage.vo.CheckinsExtVO;
+import org.openokr.manage.vo.MessagesVO;
 import org.openokr.manage.vo.ResultsExtVO;
 import org.openokr.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -32,6 +35,9 @@ public class OkrResultController extends BaseController {
 
     @Autowired
     private IOkrObjectService okrObjectService;
+
+    @Autowired
+    private IOkrMessageService okrMessageService;
 
     /**
      * 新增或编辑关键结果页面
@@ -97,5 +103,17 @@ public class OkrResultController extends BaseController {
         checkinsVO.setCreateUserId(getCurrentUserId());
         checkinsVO.setCreateTs(new Date());
         return okrResultService.saveCheckins(checkinsVO);
+    }
+
+    /**
+     * 协同审核
+     * @return
+     */
+    @GetMapping(value = "/audit.htm")
+    public String audit(String id, Model model) {
+        MessagesVO message = okrMessageService.getById(id);
+        model.addAttribute("message", message);
+        model.addAttribute("metricUnitEnumList", ResultMetricUnitEnum.toList());
+        return "manage/okrResultAudit";
     }
 }
