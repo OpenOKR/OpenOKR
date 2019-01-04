@@ -32,7 +32,7 @@ require(["jQuery"], function () {
                 var statusList = enumUtil.getEnum("objectivesStatusList.json");
                 var executeList = enumUtil.getEnum("executeStatusList.json");
                 $.each(res.info, function (idx, object) {
-                    object.href = App.contextPath + "/manage/okrObject/okrDetail.htm?id=" + object.id + "&type=" + object.type + "&editFlag=" + pageObj.editFlag;
+                    object.href = App.contextPath + "/manage/okrObject/okrDetail.htm?id=" + object.id + "&type=" + object.type;
                     var okrHeader =
                         '<div class="okr-header">' +
                         '   <div class="area-charts">' +
@@ -78,7 +78,7 @@ require(["jQuery"], function () {
                         '                                           <li class="part-item"><span><img src="/assets/images/temp/pic.png" title="[%=user.realName%]" alt="[%=user.realName%]"></span></li>' +
                         '                                       [%}%]' +
                         '                                   [%});%]' +
-                        '                                   <li class="part-item"><i class="iconfont icon-more"></i></li>' +
+                        '                                   <li class="part-item"><a href="javascript:void(0);"><i class="iconfont icon-more"></i></li></a>' +
                         '                               [%}%]' +
                         '                           </ul>' +
                         '                       </div>' +

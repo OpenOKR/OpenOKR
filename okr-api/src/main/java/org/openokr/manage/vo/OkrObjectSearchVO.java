@@ -44,7 +44,7 @@ public class OkrObjectSearchVO implements Serializable {
     }
 
     public Integer getLimitAmount() {
-        return limitAmount;
+        return limitAmount == null ? 4 : limitAmount;
     }
 
     public void setLimitAmount(Integer limitAmount) {

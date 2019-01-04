@@ -1,6 +1,5 @@
 package org.openokr.sys.service;
 
-import com.zzheng.framework.base.utils.UUIDUtils;
 import com.zzheng.framework.mybatis.service.impl.BaseServiceImpl;
 import org.openokr.sys.entity.RolePermissionEntity;
 import org.openokr.sys.entity.RolePermissionEntityCondition;
@@ -49,7 +48,6 @@ public class RolePermissionService extends BaseServiceImpl implements IRolePermi
             List<RolePermissionEntity> permissionEntities = new ArrayList<>();
             for (String permission : permissionIds) {
                 RolePermissionEntity permissionEntity = new RolePermissionEntity();
-                permissionEntity.setId(UUIDUtils.getStringValue());
                 permissionEntity.setPermissionId(permission);
                 permissionEntity.setRoleId(roleId);
                 permissionEntities.add(permissionEntity);

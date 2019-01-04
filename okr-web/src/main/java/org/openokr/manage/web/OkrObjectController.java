@@ -8,6 +8,7 @@ import org.openokr.manage.service.IOkrTeamService;
 import org.openokr.manage.vo.ObjectivesExtVO;
 import org.openokr.manage.vo.OkrObjectSearchVO;
 import org.openokr.manage.vo.TeamsExtVO;
+import org.openokr.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -57,9 +58,17 @@ public class OkrObjectController extends BaseController {
      * OKR详情页面
      */
     @GetMapping(value = "/okrDetail.htm")
-    public String okrDetail(String id, String type, String editFlag, Model model) {
+    public String okrDetail(String id, String type, Model model) {
         model.addAttribute("id", id);
         model.addAttribute("type", type);
+        String editFlag = "0";
+        if (type.equals("1")) {
+            editFlag = "1";
+        } else if (type.equals("2") && okrObjectService.editObject(id).getOwnerId().equals(getCurrentUserId())) {
+            editFlag = "1";
+        } else if (type.equals("3") && UserUtils.getSubject().isPermitted("company:edit")) {
+            editFlag = "1";
+        }
         model.addAttribute("editFlag", editFlag);
         return "manage/okrObjectDetail";
     }

@@ -15,8 +15,6 @@ public class ObjectivesExtVO extends ObjectivesVO implements Serializable {
         this.setConfidenceLevel("5");
     }
 
-    private String typeName;
-
     // 团队名称
     private String teamName;
 
@@ -37,14 +35,6 @@ public class ObjectivesExtVO extends ObjectivesVO implements Serializable {
 
     // 历史操作记录
     private List<LogVO> operateRecordList;
-
-    public String getTypeName() {
-        return ObjectivesTypeEnum.getByCode(getType()).getName();
-    }
-
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
-    }
 
     public List<UserVO> getJoinUsers() {
         return joinUsers;

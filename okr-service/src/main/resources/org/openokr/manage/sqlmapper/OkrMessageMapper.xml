@@ -7,6 +7,9 @@
         select count(t1.*)
         from t_okr_messages t1
         where 1=1
+        <if test="userId != null and userId != ''">
+            and t1.user_id = #{userId}
+        </if>
     </select>
 
     <select id="getMessageList" parameterType="java.util.Map" resultType="org.openokr.manage.vo.MessagesVO">

@@ -1,7 +1,6 @@
 package org.openokr.manage.service;
 
 import com.zzheng.framework.adapter.vo.ResponseResult;
-import com.zzheng.framework.base.utils.UUIDUtils;
 import com.zzheng.framework.exception.BusinessException;
 import org.apache.commons.lang3.StringUtils;
 import org.openokr.application.framework.service.OkrBaseService;
@@ -10,7 +9,6 @@ import org.openokr.manage.enumerate.ExecuteStatusEnum;
 import org.openokr.manage.enumerate.ResultMetricUnitEnum;
 import org.openokr.manage.vo.CheckinsExtVO;
 import org.openokr.manage.vo.LogVO;
-import org.openokr.manage.vo.ObjectivesExtVO;
 import org.openokr.manage.vo.ResultsExtVO;
 import org.openokr.sys.vo.UserVO;
 import com.zzheng.framework.base.utils.BeanUtils;
@@ -63,7 +61,6 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
         if (StringUtils.isEmpty(resultId)) { //新增
             ResultsEntity entity = new ResultsEntity();
             BeanUtils.copyBean(resultVO, entity);
-            entity.setId(UUIDUtils.getStringValue());
             entity.setOwnerId(userId);
             entity.setStatus(ExecuteStatusEnum.STATUS_0.getCode());//未开始状态
             entity.setDelFlag("0");//删除状态:否

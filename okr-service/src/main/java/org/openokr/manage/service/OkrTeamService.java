@@ -3,7 +3,6 @@ package org.openokr.manage.service;
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.base.utils.BeanUtils;
 import com.zzheng.framework.base.utils.StringUtils;
-import com.zzheng.framework.base.utils.UUIDUtils;
 import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.service.impl.BaseServiceImpl;
 import org.openokr.manage.entity.TeamUserRelaEntity;
@@ -68,7 +67,6 @@ public class OkrTeamService extends BaseServiceImpl implements IOkrTeamService {
         if (StringUtils.isEmpty(teamId)) { //新增
             TeamsEntity entity = new TeamsEntity();
             BeanUtils.copyBean(teamsVO, entity);
-            entity.setId(UUIDUtils.getStringValue());
             entity.setOwnerId(userId);
             entity.setType("2");//其他团队
             entity.setCreateUserId(userId);

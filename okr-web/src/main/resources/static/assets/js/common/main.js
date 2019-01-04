@@ -34,9 +34,10 @@ require(["jQuery", "countUp"], function () {
                     var templateText =
                         '<div class="col-sm-3">' +
                         '    <div class="card-area2">' +
-                        '       <strong class="cart-tag">[%=typeName%]</strong>' +
+                        '       <strong class="cart-tag">[%=teamName%]</strong>' +
                         '       <div class="area-report">' +
-                        '           <h3>[%=name%]</h3>' +
+                        '           <h3><a onclick="top.mainObj.menuClick(null, App.contextPath + \'/manage/okrObject/okrDetail.htm?id=[%=id%]&type=[%=type%]\', ' +
+                        '               \'menu-2\');">[%=name%]</a></h3>' +
                         '           <p>[%=description%]</p>' +
                         '           <div class="participant">' +
                         '               <span class="name">参与人员：</span>' +
@@ -161,7 +162,7 @@ require(["jQuery", "countUp"], function () {
                         '<ul class="new-list">' +
                         '   [%_.each(list, function(msg, idx){%]' +
                         '       <li>' +
-                        '           <a class="new-item" onclick="top.mainObj.menuClick(null, \'[%=msg.href%]\');">' +
+                        '           <a class="new-item" onclick="top.mainObj.menuClick(null, \'[%=msg.href%]\', \'menu-4\');">' +
                         '               <i class="[%=markList[msg.mark - 1].cssClass%]"></i>' +
                         '               <h4>[%=msg.title%]</h4>' +
                         '               <p>[%=msg.createTsStr%]</p>' +

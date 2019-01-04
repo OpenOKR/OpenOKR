@@ -70,7 +70,7 @@ require(["jQuery"], function () {
                     if (type === '1' && idx === (teamList.length - 1)) {
                         html +=
                             '<div class="col-sm-4 mb15">' +
-                            '   <div class="meg-outer ui-addFile" onclick="pageObj.editTeam(\'\');">' +
+                            '   <div class="meg-outer ui-addFile" onclick="pageObj.editTeam(null);">' +
                             '       <div class="meg-in">' +
                             '           <i class="icon icon-add"></i>' +
                             '           <h4 class="meg-h4">新建团队</h4>' +
@@ -84,7 +84,7 @@ require(["jQuery"], function () {
                 if (type === '1' && teamList.length === 0) {
                     var html =
                         '<div class="col-sm-4 mb15">' +
-                        '   <div class="meg-outer ui-addFile" onclick="pageObj.editTeam(\'\');">' +
+                        '   <div class="meg-outer ui-addFile" onclick="pageObj.editTeam(null);">' +
                         '       <div class="meg-in">' +
                         '           <i class="icon icon-add"></i>' +
                         '           <h4 class="meg-h4">新建团队</h4>' +

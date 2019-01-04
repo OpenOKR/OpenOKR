@@ -79,7 +79,7 @@
                 </div>
             </li>
             <c:set var="display" value="inline"></c:set>
-            <c:if test="${resultVO.metricUnit != null && resultVO.metricUnit == '3'}">
+            <c:if test="${resultVO.metricUnit != null && resultVO.metricUnit == '1'}">
                 <c:set var="display" value="none"></c:set>
             </c:if>
             <li class="col-sm-11" style="display: ${display};">

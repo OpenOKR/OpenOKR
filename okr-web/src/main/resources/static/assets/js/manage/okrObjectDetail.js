@@ -75,7 +75,7 @@ require(["jQuery"], function () {
                     '                                           <li class="part-item"><span><img src="/assets/images/temp/pic.png" title="[%=user.realName%]" alt="[%=user.realName%]"></span></li>' +
                     '                                       [%}%]' +
                     '                                   [%});%]' +
-                    '                                   <li class="part-item"><i class="iconfont icon-more"></i></li>' +
+                    '                                   <li class="part-item"><a href="javascript:void(0);"><i class="iconfont icon-more"></i></a></li>' +
                     '                               [%}%]' +
                     '                           </ul>' +
                     '                       </div>' +
@@ -89,9 +89,9 @@ require(["jQuery"], function () {
                     '                           </span>' +
                     '                       </p>' +
                     '                       <div class="action">' +
-                    '                           <a class="btn-del text-primary" onclick="pageObj.deleteResultFunc([%=item.id%])"><i class="icon-del"></i>删除</a>' +
-                    '                           <a class="btn-other text-primary" onclick="pageObj.addCheckin([%=item.id%], [%=object.id%])"><i class="icon-refresh"></i>进度</a>' +
-                    '                           <a class="btn-del text-primary" onclick="pageObj.editResult([%=object.id%], [%=item.id%])"><i class="icon-edit"></i>编辑</a>' +
+                    '                           <a class="btn-del text-primary" onclick="pageObj.deleteResultFunc(\'[%=item.id%]\')"><i class="icon-del"></i>删除</a>' +
+                    '                           <a class="btn-other text-primary" onclick="pageObj.addCheckin(\'[%=item.id%]\', \'[%=object.id%]\')"><i class="icon-refresh"></i>进度</a>' +
+                    '                           <a class="btn-del text-primary" onclick="pageObj.editResult(\'[%=object.id%]\', \'[%=item.id%]\')"><i class="icon-edit"></i>编辑</a>' +
                     '                           <a></a>' +
                     '                       </div>' +
                     '                   </div>' +
@@ -123,9 +123,10 @@ require(["jQuery"], function () {
 
                 pageObj.pieEchartsFunc(object.id, object.progress);
                 $.each(object.operateRecordList, function (idx, item) {
+                    item.createTsStr = $.DateUtils.getDateTimeString(new Date(item.createTs));
                     var okrHistory = '<div class="area-process-li past">' +
                         '   <em class="area-process-em"></em>' +
-                        '   <p class="area-process-date"></p>' +
+                        '   <p class="area-process-date">[%=createTsStr%]</p>' +
                         '   <div class="area-process-con">' +
                         '       <h4>[%=message%]</h4>' +
                         '   </div>' +
@@ -401,7 +402,7 @@ require(["jQuery"], function () {
             });
         },
 
-        chnNumChar: ["零成","一成","二成","三成","四成","五成","六成","七成","八成","九成"],
+        chnNumChar: ["零成","一成","二成","三成","四成","五成","六成","七成","八成","九成","十成"],
         sectionToChinese: function (section) {
             return pageObj.chnNumChar[section];
         },
