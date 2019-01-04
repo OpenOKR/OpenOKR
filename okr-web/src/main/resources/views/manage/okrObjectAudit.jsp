@@ -19,7 +19,7 @@
                 </div>
             </li>
             <li class="col-sm-12" id="contentLi" style="display: none;">
-                <label class="form-lab">理由：</label>
+                <label class="form-lab">驳回理由：</label>
                 <div class="form-control">
                     <textarea id="content" name="content" class="textarea" placeholder="内容描述"></textarea>
                 </div>

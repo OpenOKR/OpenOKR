@@ -4,8 +4,8 @@
 <c:set var="pageTitle" value="协同审核"/>
 <c:set var="pageJs" value="${staticContextPath}/assets/js/manage/okrResultAudit.js"/>
 <%@ include file="/views/application/_include_top.jsp" %>
-<div style="width: 600px;height: 440px;border-radius: 5px; background-color: #fff; margin: 0 auto;">
-    <form id="resultAuditForm" class="ui-form inner3">
+<div style="width: 600px;height: 480px;border-radius: 5px; background-color: #fff; margin: 0 auto;">
+    <form id="resultAuditForm" class="ui-form inner2">
         <input name="id" type="hidden" value="${message.id}">
         <strong class="search-title">${message.content}</strong>
         <ul class="form-grid font4">
@@ -19,7 +19,7 @@
                 </div>
             </li>
             <li class="col-sm-12" id="contentLi" style="display: none;">
-                <label class="form-lab">理由：</label>
+                <label class="form-lab">驳回理由：</label>
                 <div class="form-control">
                     <textarea id="content" name="content" class="textarea" placeholder="内容描述"></textarea>
                 </div>
@@ -42,6 +42,16 @@
                 <label class="form-lab">内容描述：</label>
                 <div class="form-control">
                     <textarea id="description" name="description" class="textarea" placeholder="请输入"></textarea>
+                </div>
+            </li>
+            <li class="col-sm-12" data-name="addResult" style="display: none;">
+                <label class="form-lab">协同者：</label>
+                <div class="form-control">
+                    <input id="usersId" name="usersId" type="hidden">
+                    <input id="users" name="users" type="text" class="inp" onclick="pageObj.showTree();" readonly placeholder="请选择协同者，可多选"/>
+                    <div id="treeContent" style="border:1px solid #000; height: 160px; display: none; overflow-y: auto;">
+                        <ul id="ulUsersTree" class="ztree" style="overflow-y: auto;"></ul>
+                    </div>
                 </div>
             </li>
             <li class="col-sm-12" data-name="addResult" style="display: none;">

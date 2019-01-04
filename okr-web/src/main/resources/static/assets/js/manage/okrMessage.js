@@ -46,8 +46,12 @@ require(["jQuery"], function () {
                     '               <i class="[%=markList[msg.mark - 1].cssClass%]"></i>' +
                     '               [%if(msg.type == 1){%]' +
                     '                   <h4>[%=msg.title%]</h4>' +
-                    '               [%}else{%]' +
-                    '                   <h4><a onclick="pageObj.processDialog([%=msg.id%], [%=msg.type%])">[%=msg.title%]</a></h4>' +
+                    '               [%}else if (msg.type == 2){%]' +
+                    '                   <h4><a onclick="pageObj.objectAudit([%=msg.id%])">[%=msg.title%]</a></h4>' +
+                    '               [%}else if (msg.type == 3){%]' +
+                    '                   <h4><a onclick="pageObj.resultAudit([%=msg.id%])">[%=msg.title%]</a></h4>' +
+                    '               [%}else {%]' +
+                    '                   <h4><a onclick="top.mainObj.menuClick(null, App.contextPath + \'/manage/okrObject/okrDetail?id=[%=msg.targetId%]\', \'menu-2\');">[%=msg.title%]</a></h4>' +
                     '               [%}%]' +
                     '               <p>[%=msg.createTsStr%]</p>' +
                     '               <div class="action">' +
@@ -93,35 +97,110 @@ require(["jQuery"], function () {
             }
         },
 
-        processDialog: function (id, type) {
-            var typeList = enumUtil.getEnum("messageTypeList.json"),
-                typeParams = typeList[type - 1],
-                url1Params = typeParams.url1.split(':'),
-                url1 = App.contextPath + url1Params[1] + id;
-            if (url1Params[0] === "open") {
-                top.mainObj.menuClick(null, url1, 'menu-2');
-                return;
-            }
-            require(["artDialog", "Tips"], function () {
+        objectAudit: function (id) {
+            require(["artDialog", "jqForm", "zTree", "Tips"], function () {
                 var _func = function (dialogObj) {
-                    ajaxUtil.ajaxWithBlock({
-                        url: typeParams.url2,
-                        type: "post",
-                        data: JSON.stringify({messageVO: {}, relaExtVO: {}}),
-                        contentType: 'application/json;charset=utf-8' //设置请求头信息
-                    }, function (data) {
-                        if (data.success) {
-                            TipsUtil.info(data.message);
-                            dialogObj.close();
-                            pageObj.loadOKRMessage(true, 1);
-                        } else {
-                            TipsUtil.warn(data.message);
-                        }
-                    });
+                    var $form = $(window.frames[dialogObj.id].window.pageObj.getForm()),
+                        formData = $form.jqForm("getValue");
+                    if (formData.radio === '0' && (formData.content === null || formData.content === undefined || formData.content === '')) {
+                        TipsUtil.warn("不同意请填写驳回理由。");
+                        return;
+                    }
+                    var _saveFunc = function () {
+                        //保存
+                        ajaxUtil.ajaxWithBlock({
+                            url: App["contextPath"] + "/manage/okrObject/auditSave.json",
+                            type: "post",
+                            data: JSON.stringify({objectVO: formData}),
+                            contentType: 'application/json;charset=utf-8' //设置请求头信息
+                        }, function (data) {
+                            require(["Tips"], function () {
+                                if (data.success) {
+                                    TipsUtil.info(data.message);
+                                    dialogObj.close();
+                                    pageObj.loadOKRMessage(true, 1);
+                                } else {
+                                    TipsUtil.warn(data.message);
+                                }
+                            });
+                        });
+                    };
+                    //
+                    _saveFunc();
                 };
                 var dialogObj = dialog({
-                    url: url1,
-                    title: typeList[type - 1].name,
+                    url: App.contextPath + "/manage/okrObject/audit.htm?id=" + id,
+                    title: '目标审核',
+                    quickClose: false,
+                    okValue: "保存",
+                    cancelValue: "关闭",
+                    ok: function () {
+                        _func(dialogObj);
+                        return false;
+                    },
+                    cancel: function () {
+                        //关闭对话框
+                        dialogObj.close();
+                        return false;
+                    }
+                });
+                dialogObj.showModal();
+            });
+        },
+
+        resultAudit: function (id) {
+            require(["artDialog", "jqForm", "zTree", "Tips"], function () {
+                var _func = function (dialogObj) {
+                    var $form = $(window.frames[dialogObj.id].window.pageObj.getForm()),
+                        formData = $form.jqForm("getValue"),
+                        checkedAll, checkedUsers = [];
+                    //验证
+                    if (formData.radio === '0' && (formData.content === null || formData.content === undefined || formData.content === '')) {
+                        TipsUtil.warn("不同意请填写驳回理由。");
+                        return;
+                    }
+                    var validateMsgObj = validateUtil.validateDatas(formData, $(window.frames[dialogObj.id].window.pageObj.validateRule())[0]);
+                    if (!$.isEmptyObject(validateMsgObj)) {
+                        require(["Tips"], function () {
+                            //提示 拼接的验证信息
+                            TipsUtil.warn(validateUtil.concatValidateMsg(validateMsgObj));
+                            //焦点定位到 第一个 验证不通过的控件
+                            $form.jqForm("focusToElement", validateUtil.getFirstNoPassName(validateMsgObj));
+                        });
+                        return;
+                    }
+                    //赋值 users
+                    checkedAll = $(window.frames[dialogObj.id].window.pageObj.getUsersTree().getCheckedNodes());
+                    $.each(checkedAll, function (idx, item) {
+                        checkedUsers.push(item);
+                    });
+                    formData.joinUsers = checkedUsers;
+                    //
+                    var _saveFunc = function () {
+                        //保存
+                        ajaxUtil.ajaxWithBlock({
+                            url: App["contextPath"] + "/manage/okrResult/saveResult.json",
+                            type: "post",
+                            data: JSON.stringify({resultVO: formData}),
+                            contentType: 'application/json;charset=utf-8' //设置请求头信息
+                        }, function (data) {
+                            require(["Tips"], function () {
+                                if (data.success) {
+                                    TipsUtil.info(data.message);
+                                    dialogObj.close();
+                                    pageObj.loadOKRMessage(true, 1);
+                                } else {
+                                    TipsUtil.warn(data.message);
+                                }
+                            });
+                        });
+                    };
+                    //
+                    _saveFunc();
+                };
+                var dialogObj = dialog({
+                    url: App.contextPath + "/manage/okrResult/audit.htm?id=" + id,
+                    title: '协同审核',
                     quickClose: false,
                     okValue: "保存",
                     cancelValue: "关闭",

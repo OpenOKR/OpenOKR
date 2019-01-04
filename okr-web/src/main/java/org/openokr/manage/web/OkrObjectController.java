@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -143,7 +144,7 @@ public class OkrObjectController extends BaseController {
     }
 
     /**
-     * 目标审核
+     * 目标审核页面
      * @return
      */
     @GetMapping(value = "/audit.htm")
@@ -151,5 +152,16 @@ public class OkrObjectController extends BaseController {
         MessagesVO message = okrMessageService.getById(id);
         model.addAttribute("message", message);
         return "manage/okrObjectAudit";
+    }
+
+    /**
+     * 目标审核逻辑处理
+     */
+    @PostMapping(value = "/auditSubmit.json")
+    @ResponseBody
+    public ResponseResult auditSubmit(@JsonPathParam("msgVO") MessagesExtVO messagesExtVO) {
+//        ResponseResult result = okrMessageService.objectAudit(messagesExtVO);
+//        return result;
+        return null;
     }
 }

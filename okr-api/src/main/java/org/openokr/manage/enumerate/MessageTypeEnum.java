@@ -14,38 +14,32 @@ public enum  MessageTypeEnum {
     /**
      * 1-一般文本
      */
-    TYPE_1("1", "一般文本", "", ""),
+    TYPE_1("1", "一般文本"),
 
     /**
      * 2-目标审核
      */
-    TYPE_2("2", "目标审核", "dialog:/manage/okrObject/audit.htm?id=", "/manage/okrObject/audit.json"),
+    TYPE_2("2", "目标审核"),
 
     /**
      * 3-协同审核
      */
-    TYPE_3("3", "协同审核", "dialog:/manage/okrResult/audit.htm?id=", "/manage/okrResult/audit.json"),
+    TYPE_3("3", "协同审核"),
 
     /**
      * 4-目标跳转
      */
-    TYPE_4("4", "目标跳转", "open:/manage/okrObject/okrDetail.htm?id=", ""),
+    TYPE_4("4", "目标跳转"),
 
-    DEFAULT("", "", "", "");
+    DEFAULT("", "");
 
     private String name;
 
     private String code;
 
-    private String url1;
-
-    private String url2;
-
-    MessageTypeEnum(String code, String name, String url1, String url2) {
+    MessageTypeEnum(String code, String name) {
         this.code = code;
         this.name = name;
-        this.url1 = url1;
-        this.url2 = url2;
     }
 
     public String getName() {
@@ -64,22 +58,6 @@ public enum  MessageTypeEnum {
         this.code = code;
     }
 
-    public String getUrl1() {
-        return url1;
-    }
-
-    public void setUrl1(String url1) {
-        this.url1 = url1;
-    }
-
-    public String getUrl2() {
-        return url2;
-    }
-
-    public void setUrl2(String url2) {
-        this.url2 = url2;
-    }
-
     private static List<Map<String, Object>> list = new ArrayList<>();
 
     private static Map<String, Object> map = new HashMap<>();
@@ -94,8 +72,6 @@ public enum  MessageTypeEnum {
                 Map<String, Object> map = new HashMap<>();
                 map.put("name", enumerate.getName());
                 map.put("code", enumerate.getCode());
-                map.put("url1", enumerate.getUrl1());
-                map.put("url2", enumerate.getUrl2());
                 //
                 list.add(map);
             }
