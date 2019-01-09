@@ -47,8 +47,8 @@ require(["jQuery"], function () {
                         '           [%=object.name%]' +
                         '           <div class="action">' +
                         '               <em class="em-start [%=statusList[object.status].cssClass%]">[%=statusList[object.status].name%]</em>' +
-                        '               <a id="object-del-[%=object.id%]" class="btn-del text-primary" onclick="pageObj.deleteFunc([%=object.id%]);"><i class="icon-del"></i>删除</a>' +
-                        '               <a id="object-edit-[%=object.id%]" class="btn-del text-primary" onclick="pageObj.editObject([%=object.id%]);"><i class="icon-edit"></i>编辑</a>' +
+                        '               <a id="object-del-[%=object.id%]" class="btn-del text-primary" onclick="pageObj.deleteFunc(\'[%=object.id%]\');"><i class="icon-del"></i>删除</a>' +
+                        '               <a id="object-edit-[%=object.id%]" class="btn-del text-primary" onclick="pageObj.editObject(\'[%=object.id%]\');"><i class="icon-edit"></i>编辑</a>' +
                         '           </div>' +
                         '       </h3>' +
                         '       <p>[%=object.description%]</p>' +
