@@ -12,7 +12,7 @@
                 <div class="header-other">
                     <div class="selection">
                         <label class="lbl">目标时间：</label>
-                        <input type="text" class="inp-sm" value="2018年第4季度"/>
+                        <input type="text" class="inp-sm" value="${currentTimeSessionName}"/>
                         <i class="icon"></i>
                     </div>
                 </div>

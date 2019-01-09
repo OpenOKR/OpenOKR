@@ -5,10 +5,12 @@ import org.openokr.index.service.IIndexService;
 import org.openokr.index.vo.ExecutionVO;
 import org.openokr.manage.service.IOkrMessageService;
 import org.openokr.manage.service.IOkrObjectService;
+import org.openokr.manage.service.IOkrTimeSessionsService;
 import org.openokr.manage.vo.MessagesVO;
 import org.openokr.manage.vo.ObjectivesExtVO;
 import org.openokr.manage.vo.ObjectivesVO;
 import org.openokr.manage.vo.OkrObjectSearchVO;
+import org.openokr.manage.vo.TimeSessionsExtVO;
 import org.openokr.utils.StringUtils;
 import org.openokr.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,9 @@ public class IndexController extends BaseController {
     @Autowired
     private IOkrMessageService okrMessageService;
 
+    @Autowired
+    private IOkrTimeSessionsService okrTimeSessionsService;
+
     @GetMapping(value = "/index.htm")
     public String index(Model model, boolean flag) throws Exception {
         String userName = getCurrentUser().getRealName();
@@ -44,6 +49,9 @@ public class IndexController extends BaseController {
         model.addAttribute("flag", flag);
         model.addAttribute("userName", userName);
         model.addAttribute("photoUrl", getCurrentUser().getPhotoUrl());
+        // 查询当前时间段
+        TimeSessionsExtVO timeSessionsExtVO = okrTimeSessionsService.getDefaultTimeSession();
+        model.addAttribute("currentTimeSessionName", timeSessionsExtVO.getName());
         return "common/index";
     }
 
