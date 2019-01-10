@@ -15,13 +15,22 @@ require(["jQuery"], function () {
         },
 
         validateRule: function () {
-            return {
-                name: {label: '名称', required: true, minLength:2,maxLength:32},
-                metricUnit: {label: '执行单位', required: true},
-                endTs: {label: '完成时间', required: true},
-                targetValue: {label: '目标值', required: false, reqExp: /^\d+(\.\d+)?$/, reqExpMsg: '只允许输入数字'},
-                initialValue: {label: '初始值', required: false, reqExp: /^\d+(\.\d+)?$/, reqExpMsg: '只允许输入数字'}
-            };
+            var metricUnit = $("input[name='metricUnit']:checked").val();
+            if (metricUnit === '1') {
+                return {
+                    name: {label: '名称', required: true, minLength:2,maxLength:32},
+                    metricUnit: {label: '执行单位', required: true},
+                    endTs: {label: '完成时间', required: true}
+                };
+            } else {
+                return {
+                    name: {label: '名称', required: true, minLength:2,maxLength:32},
+                    metricUnit: {label: '执行单位', required: true},
+                    endTs: {label: '完成时间', required: true},
+                    targetValue: {label: '目标值', required: true, reqExp: /^\d+(\.\d+)?$/, reqExpMsg: '只允许输入数字'},
+                    initialValue: {label: '初始值', required: true, reqExp: /^\d+(\.\d+)?$/, reqExpMsg: '只允许输入数字'}
+                };
+            }
         },
 
         getForm: function () {

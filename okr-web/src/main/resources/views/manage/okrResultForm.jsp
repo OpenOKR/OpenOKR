@@ -11,7 +11,7 @@
             <li class="col-sm-11">
                 <label class="form-lab">目标：</label>
                 <div class="form-control">
-                    <input id="objectName" name="objectName" type="text" readonly class="inp" placeholder="请输入" value="${resultVO.objectName}"/>
+                    <span id="objectName" class="form-text">${resultVO.objectName}</span>
                     <input id="objectId" name="objectId" type="hidden" value="${resultVO.objectId}" readonly/>
                 </div>
             </li>

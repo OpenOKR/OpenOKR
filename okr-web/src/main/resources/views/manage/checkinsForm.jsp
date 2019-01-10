@@ -10,7 +10,7 @@
             <li class="col-sm-11">
                 <label class="form-lab">关键结果：</label>
                 <div class="form-control">
-                    <input id="objectName" name="objectName" type="text" class="inp" value="${resultVO.name}" readonly/>
+                    <span id="objectName" class="form-text">${resultVO.name}</span>
                 </div>
             </li>
             <c:if test="${resultVO.metricUnit == '1'}">
