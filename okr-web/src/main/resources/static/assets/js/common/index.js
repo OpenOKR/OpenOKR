@@ -1,6 +1,53 @@
 var mainObj = mainObj || {};
 require(["jQuery"], function () {
     $.extend(mainObj, {
+
+        init: function () {
+            require(["AutoCombobox"], function (){
+                mainObj.loadTimeSession();
+            });
+            mainObj.loadMenu(); //初始化菜单
+        },
+
+        /**
+         * 获取当前时间段方法，供子页面使用
+         * @returns {*|jQuery}
+         */
+        getCurrentTimeSession: function () {
+            return $('#timeSessionId').val();
+        },
+
+        /**
+         * 初始化时间段
+         */
+        loadTimeSession: function () {
+            //渲染控件
+            return $("#timeSessionName").AutoCombobox({
+                async: {
+                    url: App["contextPath"] + "/manage/okrTimeSessions//getTimeSessionList.json",
+                    dataSourceType: "onceRemote"
+                },
+                view: {
+                    singleColumnNotHead: true,
+                    widthRefer: function () {
+                        return $(this).width() + 16;//引用当前自己输入框
+                    },
+                    colModels: [
+                        {name: "id", label: "id", isHide: true},
+                        {name: "name", label: "时间段"}
+                    ],
+                    bindFill: {"#timeSessionName": "name", "#timeSessionId": "id"}
+                },
+                callback: {
+                    afterSelectRow: function (rowData) {
+                        require(["jQueryBlockUI"], function () {
+                            $('#mainContent').attr('src', $('#mainContent').attr('src'));
+                        });
+                    }
+                }
+            });
+        },
+
         /**
          * 加载菜单数据，成功后渲染菜单html结构
          */
@@ -59,6 +106,9 @@ require(["jQuery"], function () {
         },
 
         initEvent: function () {
+            $("#timeSessionIcon").click(function (){
+                mainObj.loadTimeSession().AutoCombobox('triggerAction');
+            });
         },
 
         menuClick: function (dom, url, id) {
@@ -81,7 +131,7 @@ require(["jQuery"], function () {
         //为了让菜单打开的 <iframe> 里的top.mainObj 指向当前的 mainObj
         window.mainObj = mainObj;
         if (!mainObj.flag) {
-            mainObj.loadMenu(); //初始化菜单
+            mainObj.init();
             //mainObj.initMenuScroll();//初始化菜单滚动插件
             mainObj.initEvent();
         }

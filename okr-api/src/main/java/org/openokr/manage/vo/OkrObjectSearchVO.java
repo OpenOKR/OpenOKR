@@ -27,6 +27,8 @@ public class OkrObjectSearchVO implements Serializable {
     // 查询个数限制
     private Integer limitAmount;
 
+    private String timeSessionId;
+
     public String getUserId() {
         return userId;
     }
@@ -81,5 +83,13 @@ public class OkrObjectSearchVO implements Serializable {
 
     public void setObjectId(String objectId) {
         this.objectId = objectId;
+    }
+
+    public String getTimeSessionId() {
+        return timeSessionId;
+    }
+
+    public void setTimeSessionId(String timeSessionId) {
+        this.timeSessionId = timeSessionId;
     }
 }

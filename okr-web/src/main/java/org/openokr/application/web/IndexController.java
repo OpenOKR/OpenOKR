@@ -51,7 +51,7 @@ public class IndexController extends BaseController {
         model.addAttribute("photoUrl", getCurrentUser().getPhotoUrl());
         // 查询当前时间段
         TimeSessionsExtVO timeSessionsExtVO = okrTimeSessionsService.getDefaultTimeSession();
-        model.addAttribute("currentTimeSessionName", timeSessionsExtVO.getName());
+        model.addAttribute("timeSession", timeSessionsExtVO);
         return "common/index";
     }
 
@@ -61,35 +61,37 @@ public class IndexController extends BaseController {
     }
 
     /**
+     * 获取OKR列表
+     * @return
+     */
+    @RequestMapping(value = "/getAllOkrList.json")
+    @ResponseBody
+    public ResponseResult getAllOkrList(String timeSessionId) {
+        ResponseResult responseResult = new ResponseResult();
+        OkrObjectSearchVO searchVO = new OkrObjectSearchVO();
+        searchVO.setTimeSessionId(timeSessionId);
+        searchVO.setUserId(getCurrentUserId());
+        searchVO.setLimitAmount(4);
+        List<ObjectivesExtVO> objectivesExtList = okrObjectService.getAllOkrList(searchVO);
+        responseResult.setInfo(objectivesExtList);
+        return responseResult;
+    }
+
+    /**
      * 获取执行情况
      * @param type
      * @return
      */
     @RequestMapping(value = "/execution.json")
     @ResponseBody
-    public ResponseResult getByApplyNo(String type) {
+    public ResponseResult getByApplyNo(String timeSessionId, String type) {
         ResponseResult responseResult = new ResponseResult();
         ObjectivesVO objectivesVO = new ObjectivesVO();
         objectivesVO.setType(type);
         objectivesVO.setOwnerId(getCurrentUserId());
+        objectivesVO.setTimeSessionId(timeSessionId);
         ExecutionVO executionVO = indexService.execution(objectivesVO);
         responseResult.setInfo(executionVO);
-        return responseResult;
-    }
-
-    /**
-     * 获取OKR列表
-     * @return
-     */
-    @RequestMapping(value = "/getAllOkrList.json")
-    @ResponseBody
-    public ResponseResult getAllOkrList() {
-        ResponseResult responseResult = new ResponseResult();
-        OkrObjectSearchVO searchVO = new OkrObjectSearchVO();
-        searchVO.setUserId(getCurrentUserId());
-        searchVO.setLimitAmount(4);
-        List<ObjectivesExtVO> objectivesExtList = okrObjectService.getAllOkrList(searchVO);
-        responseResult.setInfo(objectivesExtList);
         return responseResult;
     }
 
@@ -106,5 +108,4 @@ public class IndexController extends BaseController {
         responseResult.setInfo(messagesList);
         return responseResult;
     }
-
 }

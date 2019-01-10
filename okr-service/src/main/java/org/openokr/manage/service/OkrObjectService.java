@@ -55,6 +55,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         Map<String, Object> params = new HashMap<>();
         params.put("userId", searchVO.getUserId());
         params.put("limitAmount", searchVO.getLimitAmount());
+        params.put("timeSessionId", searchVO.getTimeSessionId());
         List<ObjectivesExtVO> objectivesExtList = this.getDao().selectListBySql(MAPPER_NAMESPACE + ".getAllOkrList", params);
         if (objectivesExtList != null && objectivesExtList.size()>0) {
             for (ObjectivesExtVO objectivesExtVO : objectivesExtList) {
@@ -97,6 +98,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         params.put("keyword", searchVO.getKeyword());
         params.put("objectId", searchVO.getObjectId());//查看OKR的详情时才需要传该参数
         params.put("executeStatus", searchVO.getExecuteStatus());
+        params.put("timeSessionId", searchVO.getTimeSessionId());
         List<ObjectivesExtVO> objectivesExtList = this.getDao().selectListBySql(MAPPER_NAMESPACE + ".getPersonalOkrList", params);
         //设置KR信息
         this.setKrInfo(objectivesExtList, searchVO);
@@ -111,6 +113,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         params.put("objectId", searchVO.getObjectId());//查看OKR的详情时才需要传该参数
         params.put("keyword", searchVO.getKeyword());
         params.put("executeStatus", searchVO.getExecuteStatus());
+        params.put("timeSessionId", searchVO.getTimeSessionId());
         List<ObjectivesExtVO> objectivesExtList = this.getDao().selectListBySql(MAPPER_NAMESPACE + ".getTeamOkrList", params);
         //设置KR信息
         this.setKrInfo(objectivesExtList, searchVO);
@@ -123,6 +126,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         params.put("objectId", searchVO.getObjectId());//查看OKR的详情时才需要传该参数
         params.put("keyword", searchVO.getKeyword());
         params.put("executeStatus", searchVO.getExecuteStatus());
+        params.put("timeSessionId", searchVO.getTimeSessionId());
         List<ObjectivesExtVO> objectivesExtList = this.getDao().selectListBySql(MAPPER_NAMESPACE + ".getCompanyOkrList", params);
         //设置KR信息
         this.setKrInfo(objectivesExtList, searchVO);

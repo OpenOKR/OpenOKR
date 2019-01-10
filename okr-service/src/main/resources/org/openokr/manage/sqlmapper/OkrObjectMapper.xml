@@ -28,7 +28,10 @@
         and t1.type='3'
         and t2.type='1'
         ) t
-        where t.time_session_id = (select id from t_okr_time_sessions where is_activate = '1')
+        where 1 = 1
+        <if test="timeSessionId != null and timeSessionId != ''">
+            and t.time_session_id = #{timeSessionId}
+        </if>
         order by t.create_ts desc
         <if test="limitAmount != null and limitAmount != ''">
            limit #{limitAmount}
@@ -70,6 +73,9 @@
         <if test="objectId != null and !objectId.isEmpty()">
             AND t1.id = #{objectId}
         </if>
+        <if test="timeSessionId != null and timeSessionId != ''">
+            and t1.time_session_id = #{timeSessionId}
+        </if>
         order by t1.create_ts desc
     </select>
 
@@ -100,6 +106,9 @@
         <if test="objectId != null and !objectId.isEmpty()">
             AND t1.id = #{objectId}
         </if>
+        <if test="timeSessionId != null and timeSessionId != ''">
+            and t1.time_session_id = #{timeSessionId}
+        </if>
         order by t1.create_ts desc
     </select>
 
@@ -126,8 +135,10 @@
         <if test="objectId != null and !objectId.isEmpty()">
             AND t1.id = #{objectId}
         </if>
+        <if test="timeSessionId != null and timeSessionId != ''">
+            and t1.time_session_id = #{timeSessionId}
+        </if>
         order by t1.create_ts desc
     </select>
-
 
 </mapper>

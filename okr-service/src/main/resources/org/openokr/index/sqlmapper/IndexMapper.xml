@@ -20,6 +20,9 @@
         <if test="type != null and type != ''">
             AND t1.type = #{type}
         </if>
+        <if test="timeSessionId != null and timeSessionId != ''">
+            AND t1.time_session_id = #{timeSessionId}
+        </if>
     </select>
 
     <!--获取KR执行情况-->
@@ -40,6 +43,9 @@
         </if>
         <if test="type != null and type != ''">
             AND t1.type = #{type}
+        </if>
+        <if test="timeSessionId != null and timeSessionId != ''">
+            AND t1.time_session_id = #{timeSessionId}
         </if>
     </select>
 

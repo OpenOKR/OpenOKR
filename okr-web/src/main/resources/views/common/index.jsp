@@ -12,8 +12,9 @@
                 <div class="header-other">
                     <div class="selection">
                         <label class="lbl">目标时间：</label>
-                        <input type="text" class="inp-sm" value="${currentTimeSessionName}"/>
-                        <i class="icon"></i>
+                        <input id="timeSessionName" name="timeSessionName" type="text" class="inp-sm" value="${timeSession.name}"/>
+                        <input id="timeSessionId" name="timeSessionId" type="hidden" value="${timeSession.id}"/>
+                        <i id="timeSessionIcon" class="icon"></i>
                     </div>
                 </div>
                 <ul class="hearder-menu" id="menuUL">
@@ -35,12 +36,12 @@
             </div>
         </div>
     </c:if>
-        <div>
-            <iframe id="mainContent" name="mainContent" src="${contextPath}/main.htm"
-                    width="100%" frameborder="0" allowfullscreen scrolling="no"></iframe>
-        </div>
+    <div>
+        <iframe id="mainContent" name="mainContent" src="${contextPath}/main.htm"
+                width="100%" frameborder="0" allowfullscreen scrolling="no"></iframe>
+    </div>
     <script>
-        var mainObj = {flag:${flag}};
+        var mainObj = {flag: ${flag}};
     </script>
 </body>
 <%@ include file="/views/application/_include_bottom.jsp" %>

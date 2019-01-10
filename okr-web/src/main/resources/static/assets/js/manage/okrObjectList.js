@@ -14,7 +14,7 @@ require(["jQuery"], function () {
                 $.ajax({
                     url: App["contextPath"] + "/manage/okrObject/getOkrListByType.json",
                     type: "POST",
-                    data: JSON.stringify({searchVO: {type: type, teamId: teamId}}),
+                    data: JSON.stringify({searchVO: {timeSessionId: top.mainObj.getCurrentTimeSession(), type: type, teamId: teamId}}),
                     contentType: 'application/json;charset=utf-8'
                 }).done(function (res) {
                     pageObj.currentType = type;

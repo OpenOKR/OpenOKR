@@ -13,7 +13,7 @@ require(["jQuery", "countUp"], function () {
             require(["jQueryBlockUI"], function () {
                 $("#OKRList").block();
                 $.ajax({
-                    url: App["contextPath"] + "/getAllOkrList.json",
+                    url: App["contextPath"] + "/getAllOkrList.json?timeSessionId=" + top.mainObj.getCurrentTimeSession(),
                     type: "GET",
                     dataType: "json"
                 }).done(function (res) {
@@ -36,8 +36,7 @@ require(["jQuery", "countUp"], function () {
                         '    <div class="card-area2">' +
                         '       <strong class="cart-tag">[%=teamName%]</strong>' +
                         '       <div class="area-report">' +
-                        '           <h3><a onclick="top.mainObj.menuClick(null, App.contextPath + \'/manage/okrObject/okrDetail.htm?id=[%=id%]&type=[%=type%]\', ' +
-                        '               \'menu-2\');">[%=name%]</a></h3>' +
+                        '           <h3><a onclick="top.mainObj.menuClick(null, App.contextPath + \'/manage/okrObject/okrDetail.htm?id=[%=id%]&type=[%=type%]\', \'menu-2\');">[%=name%]</a></h3>' +
                         '           <p>[%=description%]</p>' +
                         '           <div class="participant">' +
                         '               <span class="name">参与人员：</span>' +
@@ -98,7 +97,7 @@ require(["jQuery", "countUp"], function () {
             require(["jQueryBlockUI"], function () {
                 $("#OKRExecution").block();
                 $.ajax({
-                    url: App["contextPath"] + "/execution.json?type=" +type,
+                    url: App["contextPath"] + "/execution.json?timeSessionId=" + top.mainObj.getCurrentTimeSession() + "&type=" +type,
                     type: "GET",
                     dataType: "json"
                 }).done(function (res) {

@@ -25,6 +25,7 @@ public class IndexService extends BaseServiceImpl implements IIndexService {
             params.put("ownerId", objectivesVO.getOwnerId());
         }
         params.put("type", objectivesVO.getType());
+        params.put("timeSessionId", objectivesVO.getTimeSessionId());
         if (ObjectivesTypeEnum.TYPE_2.getCode().equals(objectivesVO.getType())) {
             return this.getMyBatisDao().selectOneBySql(MAPPER_NAMESPACE + ".findTeamExecutionByOwnerId", params);
         } else {
