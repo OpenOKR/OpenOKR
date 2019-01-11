@@ -109,7 +109,9 @@ require(["jQuery"], function () {
                         '                                   [%if(!_.isNull(item.joinUsers) && item.joinUsers.length>0){%]' +
                         '                                       [%_.each(item.joinUsers, function(user){%]' +
                         '                                           [%if(!_.isNull(user)){%]' +
-                        '                                               <li class="part-item"><span><img src="/assets/images/temp/pic.png" title="[%=user.realName%]" alt="[%=user.realName%]"></span></li>' +
+                        '                                           [%if(user.realName.length>2)%]' +
+                        '                                           <li class="part-item"><span class="image">[%=user.realName.substr(1,2)%]</span></li> [%else%]<li class="part-item"><span class="image">[%=user.realName%]</span></li>' +
+                        '                                           [%;%]' +
                         '                                           [%}%]' +
                         '                                       [%});%]' +
                         '                                   <li class="part-item"><a href="javascript:void(0);"><i class="iconfont icon-more"></i></li></a>' +

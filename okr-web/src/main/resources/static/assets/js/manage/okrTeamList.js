@@ -56,7 +56,7 @@ require(["jQuery"], function () {
                         '                           [%if(user.id != team.ownerId){%]' +
                         '                               <i data-id="[%=user.id%]" class="iconfont icon-close"></i>' +
                         '                           [%};%]' +
-                        '                           <span><img src="[%=user.photoUrl%]">头像</span>' +
+                        '                            [%if(user.realName.length>2)%]<span class="image">[%=user.realName.substr(1,2)%]</span> [%else%]<span class="image">[%=user.realName%]</span>[%;%]' +
                         '                           <strong>[%=user.realName%]</strong>' +
                         '                       </li>' +
                         '                   [%});%]' +

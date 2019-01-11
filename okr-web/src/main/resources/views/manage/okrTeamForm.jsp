@@ -16,8 +16,7 @@
                     <label class="form-lab mt20">团队LOGO：</label>
                     <div class="form-control">
                         <div class="part-item ui-mx">
-                            <i class="iconfont icon-close"></i>
-                            <span><img src="${teamsExtVO.icon}"/></span>
+                            <em class="em-radio blue">${teamsExtVO.name}</em>
                         </div>
                     </div>
                 </li>

@@ -25,9 +25,6 @@
                 </ul>
                 <div class="most-set">
                     <div class="user-set">
-                        <img src="${photoUrl}" class="user-img">
-                        <input type="file"/>
-                        <i class="iconfont icon-upload"></i>
                     </div>
                     <span class="user-name">${userName}</span>
                     <ul class="most-set-list">
