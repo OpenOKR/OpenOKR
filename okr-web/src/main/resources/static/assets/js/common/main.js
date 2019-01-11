@@ -44,7 +44,11 @@ require(["jQuery", "countUp"], function () {
                         '               <ul class="participant-list">' +
                         '                   [%_.each(joinUsers, function(user, idx){%]' +
                         '                       [%if(idx < 3){%]' +
-                        '                           <li class="part-item"><span><img src="/assets/images/temp/pic.png"/></span></li>' +
+                        '                        [%if(!_.isNull(user)){%]' +
+                        '                       [%if(user.realName.length>2)%]' +
+                        '                           <li class="part-item"><span class="image">[%=user.realName.substr(1,2)%]</span></li> [%else%]<li class="part-item"><span class="image">[%=user.realName%]</span></li>' +
+                        '                       [%;%]' +
+                        '                       [%}%]' +
                         '                       [%}%]' +
                         '                   [%});%]' +
                         '                   <li class="part-item"><a href="javascript:void(0);"><i class="iconfont icon-more"></i></a></li>' +

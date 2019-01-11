@@ -39,13 +39,13 @@
     </select>
 
     <select id="getJoinUsersByObjectId" parameterType="java.util.Map" resultType="org.openokr.sys.vo.UserVO">
-        select distinct t4.id ,t4.user_name
+        select distinct t4.id ,t4.real_name
         from t_okr_manage_objectives t1
         left join t_okr_manage_results t2 on t2.object_id=t1.id
         left join t_okr_manage_result_user_rela t3 on t3.result_id =t2.id
         left join t_okr_sys_user t4 on t4.id = t3.user_id
         where t1.id=#{objectId} and t2.del_flag='0'
-        order by t4.user_name
+        order by t4.real_name
         <if test="limitAmount != null and limitAmount != ''">
             limit #{limitAmount}
         </if>
