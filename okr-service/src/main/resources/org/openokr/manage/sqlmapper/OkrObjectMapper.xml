@@ -67,7 +67,7 @@
             )
         </if>
         <if test="executeStatus != null and !executeStatus.isEmpty()">
-            AND t2.status = #{executeStatus}
+            AND t1.status = #{executeStatus}
         </if>
         <if test="objectId != null and !objectId.isEmpty()">
             AND t1.id = #{objectId}
@@ -99,7 +99,7 @@
             )
         </if>
         <if test="executeStatus != null and !executeStatus.isEmpty()">
-            AND t2.status = #{executeStatus}
+            AND t1.status = #{executeStatus}
         </if>
         <if test="objectId != null and !objectId.isEmpty()">
             AND t1.id = #{objectId}
@@ -127,7 +127,7 @@
             )
         </if>
         <if test="executeStatus != null and !executeStatus.isEmpty()">
-            AND t2.status = #{executeStatus}
+            AND t1.status = #{executeStatus}
         </if>
         <if test="objectId != null and !objectId.isEmpty()">
             AND t1.id = #{objectId}

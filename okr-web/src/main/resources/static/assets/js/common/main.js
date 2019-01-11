@@ -13,7 +13,7 @@ require(["jQuery", "countUp"], function () {
             require(["jQueryBlockUI"], function () {
                 $("#OKRList").block();
                 $.ajax({
-                    url: App["contextPath"] + "/getAllOkrList.json?timeSessionId=" + top.mainObj.getCurrentTimeSession(),
+                    url: App["contextPath"] + "/getAllOkrList.json?timeSessionId=" + top.mainObj.getCurrentTimeSession().id,
                     type: "GET",
                     dataType: "json"
                 }).done(function (res) {
@@ -97,7 +97,7 @@ require(["jQuery", "countUp"], function () {
             require(["jQueryBlockUI"], function () {
                 $("#OKRExecution").block();
                 $.ajax({
-                    url: App["contextPath"] + "/execution.json?timeSessionId=" + top.mainObj.getCurrentTimeSession() + "&type=" +type,
+                    url: App["contextPath"] + "/execution.json?timeSessionId=" + top.mainObj.getCurrentTimeSession().id + "&type=" +type,
                     type: "GET",
                     dataType: "json"
                 }).done(function (res) {

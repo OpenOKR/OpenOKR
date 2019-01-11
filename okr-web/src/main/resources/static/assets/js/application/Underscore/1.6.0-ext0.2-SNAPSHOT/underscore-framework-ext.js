@@ -56,7 +56,7 @@ var UnderscoreUtil = UnderscoreUtil || {
         try {
             rel = _.template(String(templateText).replace(/^\s+|\s+$/g, ""), templateData, templateSetting);
         } catch (e) {
-            console && console.log(e.source);
+            console && console.log(e.message);
         }
         return rel;
     }

@@ -23,6 +23,9 @@ require(["jQuery"], function () {
                                 }
                             });
                         });
+                        if (res.totalRecord === 0) {
+                            $('#page').hide();
+                        }
                     }
                     res && _this.buildOKRMessage(res);
                 }).always(function () {

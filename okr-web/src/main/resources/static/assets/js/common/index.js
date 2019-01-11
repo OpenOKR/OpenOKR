@@ -14,7 +14,7 @@ require(["jQuery"], function () {
          * @returns {*|jQuery}
          */
         getCurrentTimeSession: function () {
-            return $('#timeSessionId').val();
+            return {id: $('#timeSessionId').val(), isActivate: $('#timeSessionIsActivate').val()};
         },
 
         /**
@@ -34,9 +34,10 @@ require(["jQuery"], function () {
                     },
                     colModels: [
                         {name: "id", label: "id", isHide: true},
-                        {name: "name", label: "时间段"}
+                        {name: "name", label: "时间段"},
+                        {name: "isActivate", label: "是否激活", isHide: true}
                     ],
-                    bindFill: {"#timeSessionName": "name", "#timeSessionId": "id"}
+                    bindFill: {"#timeSessionName": "name", "#timeSessionId": "id", "#timeSessionIsActivate": "isActivate"}
                 },
                 callback: {
                     afterSelectRow: function (rowData) {

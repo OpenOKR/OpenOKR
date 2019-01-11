@@ -90,7 +90,9 @@ require(["jQuery"], function () {
                     '                       </p>' +
                     '                       <div class="action">' +
                     '                           <a class="btn-del text-primary" onclick="pageObj.deleteResultFunc(\'[%=item.id%]\')"><i class="icon-del"></i>删除</a>' +
-                    '                           <a class="btn-other text-primary" onclick="pageObj.addCheckin(\'[%=item.id%]\', \'[%=object.id%]\')"><i class="icon-refresh"></i>进度</a>' +
+                    '                           [%if(object.status == 3){%]' +
+                    '                               <a class="btn-other text-primary" onclick="pageObj.addCheckin(\'[%=item.id%]\', \'[%=object.id%]\')"><i class="icon-refresh"></i>进度</a>' +
+                    '                           [%}%]' +
                     '                           <a class="btn-del text-primary" onclick="pageObj.editResult(\'[%=object.id%]\', \'[%=item.id%]\')"><i class="icon-edit"></i>编辑</a>' +
                     '                           <a></a>' +
                     '                       </div>' +

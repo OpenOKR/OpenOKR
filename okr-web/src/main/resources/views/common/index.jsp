@@ -14,6 +14,7 @@
                         <label class="lbl">目标时间：</label>
                         <input id="timeSessionName" name="timeSessionName" type="text" class="inp-sm" value="${timeSession.name}"/>
                         <input id="timeSessionId" name="timeSessionId" type="hidden" value="${timeSession.id}"/>
+                        <input id="timeSessionIsActivate" name="timeSessionIsActivate" type="hidden" value="${timeSession.isActivate}">
                         <i id="timeSessionIcon" class="icon"></i>
                     </div>
                 </div>
