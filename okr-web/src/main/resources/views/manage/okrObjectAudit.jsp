@@ -4,11 +4,14 @@
 <c:set var="pageTitle" value="目标审核"/>
 <c:set var="pageJs" value="${staticContextPath}/assets/js/manage/okrObjectAudit.js"/>
 <%@ include file="/views/application/_include_top.jsp" %>
-<div style="width: 600px;height: 200px;border-radius: 5px; background-color: #fff; margin: 0 auto;">
+<div style="width: 600px;height: 200px;border-radius: 5px; background-color: #fff; margin: 0 auto; overflow-y: auto;">
     <form id="objectAuditForm" class="ui-form inner3">
         <input name="id" type="hidden" value="${message.id}">
-        <strong class="search-title">${message.content}</strong>
+        <input name="targetId" type="hidden" value="${message.targetId}">
         <ul class="form-grid font4">
+            <li class="col-sm-12">
+                <strong style="font-size: 14px">${message.content}</strong>
+            </li>
             <li class="col-sm-12">
                 <label class="form-lab">是否同意：</label>
                 <div class="form-control">

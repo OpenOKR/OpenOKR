@@ -40,7 +40,7 @@ require(["jQuery"], function () {
                     '       <h3 class="name">' +
                     '           [%=object.name%]' +
                     '           <div class="action">' +
-                    '               <em class="em-start [%=statusList[object.status].cssClass%]">[%=statusList[object.status].name%]</em>' +
+                    '               <em class="em-start [%=statusList[object.status - 1].cssClass%]">[%=statusList[object.status - 1].name%]</em>' +
                     '               <a class="btn-del text-primary" onclick="pageObj.deleteFunc(\'[%=object.id%]\');"><i class="icon-del"></i>删除</a>' +
                     '               <a class="btn-del text-primary" onclick="pageObj.editObject(\'[%=object.id%]\');"><i class="icon-edit"></i>编辑</a>' +
                     '           </div>' +
@@ -56,7 +56,7 @@ require(["jQuery"], function () {
                     '   <ul class="okr-list">' +
                     '       [%if(!_.isNull(object.resultsExtList) && object.resultsExtList.length>0){%]' +
                     '           [%_.each(object.resultsExtList, function(item, idx){%]' +
-                    '               <li>' +
+                    '               <li onmouseover="$(this).siblings().find(\'.participant\').hide(\'slow\');$(this).find(\'.participant\').show(\'slow\');">' +
                     '                   <div class="okr-list-in">' +
                     '                       <h4>' +
                     '                           K[%=idx+1%]：[%=item.name%]' +
@@ -432,7 +432,6 @@ require(["jQuery"], function () {
                 require(["artDialog", "Tips"], function () {
                     if (data.success) {
                         TipsUtil.info(data.message);
-                        dialogObj.close();
                         pageObj.loadOKRObjectDetail();
                     } else {
                         TipsUtil.warn(data.message);

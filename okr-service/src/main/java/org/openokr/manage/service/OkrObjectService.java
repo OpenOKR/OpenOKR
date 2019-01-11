@@ -40,10 +40,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @Service
 @Transactional
@@ -82,7 +80,6 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
             }
         }
         return objectivesExtList;
-
     }
 
     @Override
@@ -153,14 +150,13 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
     public List<LogVO> getOperateRecordList(String objectId, List<String> resultIds) throws BusinessException {
         List<LogVO> operateRecordList = new ArrayList<>();
         LogEntityCondition logCondition = new LogEntityCondition();
-        //1、目标
+
+        // bizId 业务id bizType 1、目标 2、关键结果
         LogEntityCondition.Criteria criteria = logCondition.createCriteria();
         criteria.andBizTypeEqualTo("1").andBizIdEqualTo(objectId);
-        //2、关键结果
         LogEntityCondition.Criteria criteria2 = logCondition.or();
-        criteria2.andBizTypeEqualTo("2");
         if (resultIds != null && resultIds.size() > 0) {
-            criteria2.andBizIdIn(resultIds);
+            criteria2.andBizTypeEqualTo("2").andBizIdIn(resultIds);
         }
         logCondition.setOrderByClause("create_ts desc");
         List<LogEntity> logEntityList = this.selectByCondition(logCondition);
@@ -182,8 +178,14 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
             return null;
         }
         BeanUtils.copyBean(entity, objectVO);
+        List<ObjectivesExtVO> list = new ArrayList<>();
+        list.add(objectVO);
 
         // KR列表
+        OkrObjectSearchVO searchVO = new OkrObjectSearchVO();
+        searchVO.setObjectId(objectId);
+        searchVO.setLimitAmount(4);
+        this.setKrInfo(list, searchVO);
 
         // 所属团队
         TeamsEntity teamsEntity = this.selectByPrimaryKey(TeamsEntity.class, objectVO.getTeamId());
@@ -211,24 +213,39 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         ResponseResult responseResult = new ResponseResult();
         String objectId = objectVO.getId();
         String userId = objectVO.getCreateUserId();
-        ObjectivesEntity entity;
+        ObjectivesEntity targetEntity; ObjectivesEntity originalEntity = new ObjectivesEntity();
+
+        if (StringUtils.isEmpty(objectId)) {
+            targetEntity = new ObjectivesEntity();
+            BeanUtils.copyBean(objectVO, targetEntity);
+        } else {
+            targetEntity = this.selectByPrimaryKey(ObjectivesEntity.class, objectId);
+            originalEntity = BeanUtils.copyToNewBean(targetEntity, ObjectivesEntity.class);
+            BeanUtils.copyBean(objectVO, targetEntity);
+        }
+
+        // 获取object所属团队责任人，若修改的目标所属团队责任人和当前用户一致，直接将状态设置为已确认
+        TeamsEntity teamsEntity = this.selectByPrimaryKey(TeamsEntity.class, objectVO.getTeamId());
+        // 设置状态，当类型是 团队或公司时，不需要审核，其他情况下一律设置成未提交
+        if (targetEntity.getType().equals(ObjectivesTypeEnum.TYPE_2.getCode()) || targetEntity.getType().equals(ObjectivesTypeEnum.TYPE_3.getCode())) {
+            targetEntity.setStatus(ObjectivesStatusEnum.STATUS_3.getCode());
+        } else if (teamsEntity.getOwnerId().equals(userId)) {
+            targetEntity.setStatus(ObjectivesStatusEnum.STATUS_3.getCode());
+        } else {
+            targetEntity.setStatus(ObjectivesStatusEnum.STATUS_1.getCode());//一旦有修改,目标就要变成未提交状态
+        }
+
         if (StringUtils.isEmpty(objectId)) { //新增
-            entity = new ObjectivesEntity();
-            BeanUtils.copyBean(objectVO, entity);
-            entity.setTimeSessionId(getCurrentTimeSessionId());
-            entity.setOwnerId(userId);
-            entity.setVisibility("1");//默认公开
-            entity.setDelFlag("0");//删除状态:否
-            entity.setCreateTs(new Date());
-            this.insert(entity);
-            objectId = entity.getId();
+            targetEntity.setTimeSessionId(getCurrentTimeSessionId());
+            targetEntity.setOwnerId(userId);
+            targetEntity.setVisibility("1");//默认公开
+            targetEntity.setDelFlag("0");//删除状态:否
+            targetEntity.setCreateTs(new Date());
+            this.insert(targetEntity);
         } else { //更新
-            entity = this.selectByPrimaryKey(ObjectivesEntity.class, objectId);
-            ObjectivesEntity originalEntity = BeanUtils.copyToNewBean(entity, ObjectivesEntity.class);
-            BeanUtils.copyBean(objectVO, entity);
-            entity.setUpdateTs(new Date());
-            entity.setUpdateUserId(userId);
-            this.update(entity);
+            targetEntity.setUpdateTs(new Date());
+            targetEntity.setUpdateUserId(userId);
+            this.update(targetEntity);
 
             // 更新影响团队
             ObjectTeamRelaEntityCondition teamRelaCondition = new ObjectTeamRelaEntityCondition();
@@ -247,16 +264,10 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
             if (labelsRelList !=null && labelsRelList.size()>0) {
                 this.delete(labelsRelList);
             }
-
             // 更新检查变化的字段，写入历史操作日志
-            setObjectLogInfo(originalEntity, entity, teamRelaList, labelsRelList, objectVO.getRelTeams(), objectVO.getRelLabels());
+            setObjectLogInfo(originalEntity, targetEntity, teamRelaList, labelsRelList, objectVO.getRelTeams(), objectVO.getRelLabels());
         }
-        // 设置状态，当类型是 团队或公司时，不需要审核，其他情况下一律设置成未提交
-        if (entity.getType().equals(ObjectivesTypeEnum.TYPE_2.getCode()) || entity.getType().equals(ObjectivesTypeEnum.TYPE_3.getCode())) {
-            entity.setStatus(ObjectivesStatusEnum.STATUS_3.getCode());
-        } else {
-            entity.setStatus(ObjectivesStatusEnum.STATUS_1.getCode());//一旦有修改,目标就要变成未提交状态
-        }
+
         // 新增影响团队
         if (objectVO.getRelTeams() != null && objectVO.getRelTeams().size()>0) {
             List<ObjectTeamRelaEntity> teamsEntityList = new ArrayList<>();
@@ -343,9 +354,12 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         ObjectivesExtVO objectivesExtVO = this.editObject(objectId);
         StringBuilder content = new StringBuilder().append(currentUser.getRealName()).append(" 提交目标审核请求，目标名：")
                 .append(objectivesExtVO.getName()).append("<br/>");
-        for (int i = 0; i < objectivesExtVO.getResultsExtList().size(); i++) {
-            ResultsExtVO resultsExtVO = objectivesExtVO.getResultsExtList().get(i);
-            content.append((i+1)).append(".").append(resultsExtVO.getName()).append("<br/>");
+        if (objectivesExtVO.getResultsExtList() != null && objectivesExtVO.getResultsExtList().size() > 0) {
+            content.append("关键结果：<br/>");
+            for (int i = 0; i < objectivesExtVO.getResultsExtList().size(); i++) {
+                ResultsExtVO resultsExtVO = objectivesExtVO.getResultsExtList().get(i);
+                content.append("K").append((i+1)).append(".").append(resultsExtVO.getName()).append("<br/>");
+            }
         }
 
         // 获取团队负责人
@@ -354,6 +368,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         // 新建审核消息
         MessagesEntity messagesEntity = new MessagesEntity();
         messagesEntity.setTitle("目标审核请求");
+        messagesEntity.setUserId(userVOExt.getId());
         messagesEntity.setContent(content.toString());
         messagesEntity.setType(MessageTypeEnum.TYPE_2.getCode());
         messagesEntity.setTargetId(entity.getId());
@@ -388,6 +403,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         // 新建消息，将同意或不同意封装成消息发回提交审核用户
         MessagesEntity newMessageEntity = new MessagesEntity();
         newMessageEntity.setTitle("目标审核" + ObjectivesStatusEnum.getByCode(entity.getStatus()).getName());
+        newMessageEntity.setUserId(entity.getOwnerId());
         newMessageEntity.setContent(messagesExtVO.getContent());
         newMessageEntity.setType(MessageTypeEnum.TYPE_4.getCode());
         newMessageEntity.setTargetId(entity.getId());
@@ -463,7 +479,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
                     continue;
                 }
                 if (key.equals("confidenceLevel")){
-                    message.append("目标把握修改为：").append(compareMap.get(key)).append("成，");
+                    message.append("目标把握度修改为：").append(compareMap.get(key)).append("成，");
                 }
                 if (key.equals("status")) {
                     message.append("目标状态修改为：").append(ObjectivesStatusEnum.getByCode(compareMap.get(key).toString()).getName()).append("，");

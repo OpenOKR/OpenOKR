@@ -15,6 +15,7 @@ require(["jQuery"], function () {
                 } else {
                     $('#contentLi').hide();
                 }
+
             });
         },
 

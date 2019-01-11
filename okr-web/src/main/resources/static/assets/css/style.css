@@ -551,6 +551,7 @@
     max-width: 100%;
 }
 .okr-list-in  .participant {
+    display: none;
     margin: 0;
 }
 .okr-list-in  .participant .name{

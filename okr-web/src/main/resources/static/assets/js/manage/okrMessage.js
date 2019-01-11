@@ -50,11 +50,11 @@ require(["jQuery"], function () {
                     '               [%if(msg.type == 1){%]' +
                     '                   <h4>[%=msg.title%]</h4>' +
                     '               [%}else if (msg.type == 2){%]' +
-                    '                   <h4><a onclick="pageObj.objectAudit([%=msg.id%])">[%=msg.title%]</a></h4>' +
+                    '                   <h4><a onclick="pageObj.objectAudit(\'[%=msg.id%]\')">[%=msg.title%]</a></h4>' +
                     '               [%}else if (msg.type == 3){%]' +
-                    '                   <h4><a onclick="pageObj.resultAudit([%=msg.id%])">[%=msg.title%]</a></h4>' +
+                    '                   <h4><a onclick="pageObj.resultAudit(\'[%=msg.id%]\')">[%=msg.title%]</a></h4>' +
                     '               [%}else {%]' +
-                    '                   <h4><a onclick="top.mainObj.menuClick(null, App.contextPath + \'/manage/okrObject/okrDetail?id=[%=msg.targetId%]\', \'menu-2\');">[%=msg.title%]</a></h4>' +
+                    '                   <h4><a onclick="top.mainObj.menuClick(null, App.contextPath + \'/manage/okrObject/okrDetail.htm?id=[%=msg.targetId%]\', \'menu-2\');">[%=msg.title%]</a></h4>' +
                     '               [%}%]' +
                     '               <p>[%=msg.createTsStr%]</p>' +
                     '               <div class="action">' +
@@ -137,6 +137,7 @@ require(["jQuery"], function () {
                     quickClose: false,
                     okValue: "确认",
                     cancelValue: "关闭",
+                    fixed: true,
                     ok: function () {
                         _func(dialogObj);
                         return false;
@@ -182,7 +183,7 @@ require(["jQuery"], function () {
                     var _saveFunc = function () {
                         //保存
                         ajaxUtil.ajaxWithBlock({
-                            url: App["contextPath"] + "/manage/okrResult/saveResult.json",
+                            url: App["contextPath"] + "/manage/okrResult/auditConfirm.json",
                             type: "post",
                             data: JSON.stringify({resultVO: formData}),
                             contentType: 'application/json;charset=utf-8' //设置请求头信息
