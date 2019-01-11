@@ -230,6 +230,7 @@ require(["jQuery"], function () {
                     url: App["contextPath"] + "/manage/okrObject/okrObjectForm.htm?objectId=" + id +
                         "&type=" + pageObj.currentType + "&teamId=" + pageObj.currentTeamId,
                     title: '新增/编辑目标',
+                    height: 440,
                     quickClose: false,
                     okValue: "保存",
                     cancelValue: "关闭",

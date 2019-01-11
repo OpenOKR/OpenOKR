@@ -16,23 +16,23 @@ import java.util.Map;
  */
 public class GetChangeDateUtil {
     /**
-     *
      * <p>Title: compareFields</p>
      * <p>Description: </p>
      * 比较两个实体属性值
-     * @param original 原始的对象
-     * @param target 修改后的对象
+     *
+     * @param original  原始的对象
+     * @param target    修改后的对象
      * @param ignoreArr 忽略的字段
      * @return
      */
     public static Map<String, Object> compareFields(Object original, Object target, String[] ignoreArr) {
-        try{
+        if (original == null || target == null || ignoreArr == null || ignoreArr.length == 0) {
+            return null;
+        }
+        try {
             Map<String, Object> map = new HashMap<>();
-            List<String> ignoreList = null;
-            if(ignoreArr != null && ignoreArr.length > 0){
-                // array转化为list
-                ignoreList = Arrays.asList(ignoreArr);
-            }
+            // array转化为list
+            List<String> ignoreList = Arrays.asList(ignoreArr);
             if (original.getClass() == target.getClass()) {// 只有两个对象都是同一类型的才有可比性
                 Class clazz = original.getClass();
                 // 获取object的属性描述
@@ -40,7 +40,7 @@ public class GetChangeDateUtil {
                         Object.class).getPropertyDescriptors();
                 for (PropertyDescriptor pd : pds) {// 这里就是所有的属性了
                     String name = pd.getName();// 属性名
-                    if(ignoreList != null && ignoreList.contains(name)){// 如果当前属性选择忽略比较，跳到下一次循环
+                    if (!ignoreList.contains(name)) {// 如果当前属性选择忽略比较，跳到下一次循环
                         continue;
                     }
                     Method readMethod = pd.getReadMethod();// get方法
@@ -48,19 +48,16 @@ public class GetChangeDateUtil {
                     Object o1 = readMethod.invoke(original);
                     // 在obj2上调用get方法等同于获得obj2的属性值
                     Object o2 = readMethod.invoke(target);
-                    if(o1 instanceof Timestamp){
+                    if (o1 instanceof Timestamp) {
                         o1 = new Date(((Timestamp) o1).getTime());
                     }
-                    if(o2 instanceof Timestamp){
+                    if (o2 instanceof Timestamp) {
                         o2 = new Date(((Timestamp) o2).getTime());
                     }
-                    if(o1 == null && o2 == null){
+                    if (o1 == null && o2 == null) {
                         continue;
-                    }else if(o1 == null && o2 != null){
-                        List<Object> list = new ArrayList<Object>();
-                        list.add(o1);
-                        list.add(o2);
-                        map.put(name, list);
+                    } else if (o1 == null) {
+                        map.put(name, o2);
                         continue;
                     }
                     if (!o1.equals(o2)) {// 比较这两个值是否相等,不等就可以放入map了
@@ -69,7 +66,7 @@ public class GetChangeDateUtil {
                 }
             }
             return map;
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }

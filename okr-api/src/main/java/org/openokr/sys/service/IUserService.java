@@ -24,4 +24,6 @@ public interface IUserService {
     ResponseResult updatePassword(String userId, String oldPassword, String newPassword, String confirmNewPassword);
 
     long countByOrganizationId(String organizationId);
+
+    UserVOExt getTeamOwnerUserByTeamId(String teamId);
 }

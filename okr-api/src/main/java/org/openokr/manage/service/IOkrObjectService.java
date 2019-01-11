@@ -4,9 +4,11 @@ package org.openokr.manage.service;
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.exception.BusinessException;
 import org.openokr.manage.vo.LogVO;
+import org.openokr.manage.vo.MessagesExtVO;
 import org.openokr.manage.vo.ObjectivesExtVO;
 import org.openokr.manage.vo.OkrObjectSearchVO;
 import org.openokr.sys.vo.UserVO;
+import org.openokr.sys.vo.UserVOExt;
 
 import java.util.List;
 
@@ -107,5 +109,20 @@ public interface IOkrObjectService {
      */
     List<ObjectivesExtVO> getParentObject(String userId, String type) throws BusinessException;
 
+    /**
+     * 目标审核提交
+     * @param objectId
+     * @param userVOExt
+     * @return
+     */
+    ResponseResult auditSubmit(String objectId, UserVOExt userVOExt);
+
+    /**
+     * 目标审核（同步处理消息状态）
+     * @param messagesExtVO
+     * @param currentUserId
+     * @return
+     */
+    ResponseResult auditConfirm(MessagesExtVO messagesExtVO, String currentUserId);
 
 }

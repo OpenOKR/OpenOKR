@@ -109,9 +109,9 @@ require(["jQuery"], function () {
                     var _saveFunc = function () {
                         //保存
                         ajaxUtil.ajaxWithBlock({
-                            url: App["contextPath"] + "/manage/okrObject/auditSave.json",
+                            url: App["contextPath"] + "/manage/okrObject/auditConfirm.json",
                             type: "post",
-                            data: JSON.stringify({objectVO: formData}),
+                            data: JSON.stringify({vo: formData}),
                             contentType: 'application/json;charset=utf-8' //设置请求头信息
                         }, function (data) {
                             require(["Tips"], function () {
@@ -132,7 +132,7 @@ require(["jQuery"], function () {
                     url: App.contextPath + "/manage/okrObject/audit.htm?id=" + id,
                     title: '目标审核',
                     quickClose: false,
-                    okValue: "保存",
+                    okValue: "确认",
                     cancelValue: "关闭",
                     ok: function () {
                         _func(dialogObj);

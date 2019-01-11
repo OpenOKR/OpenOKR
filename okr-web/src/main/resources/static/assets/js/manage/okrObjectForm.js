@@ -4,13 +4,15 @@ require(["jQuery"], function () {
 
         validateRule: function () {
             return {
-                name: {label: '目标', required: true, minLength:2,maxLength:32}
+                name: {label: '目标', required: true, minLength:2,maxLength:32},
+                teamId: {label: '所属团队', required: true}
             };
         },
 
         init: function () {
             var _this = this;
             require(["AutoCombobox"], function () {
+                _this.getTeamCombo();
                 _this.getParentCombo();
             });
             require(["AutoTree"], function () {
@@ -39,6 +41,27 @@ require(["jQuery"], function () {
             if (nameArr.length > 0) {
                 $(targetName).val(nameArr.join(','));
             }
+        },
+
+        getTeamCombo: function () {
+            //渲染控件
+            return $("#teamName").AutoCombobox({
+                async: {
+                    url: App["contextPath"] + "/manage/okrTeam/getTeamList.json",
+                    dataSourceType: "onceRemote"
+                },
+                view: {
+                    singleColumnNotHead: true,
+                    widthRefer: function () {
+                        return $(this).width() + 16;//引用当前自己输入框
+                    },
+                    colModels: [
+                        {name: "id", label: "id", isHide: true},
+                        {name: "name", label: "目标名"}
+                    ],
+                    bindFill: {"#teamName": "name", "#teamId": "id"}
+                }
+            });
         },
 
         getParentCombo: function () {

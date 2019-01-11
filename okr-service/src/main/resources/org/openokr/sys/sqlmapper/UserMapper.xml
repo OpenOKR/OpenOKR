@@ -45,4 +45,21 @@
         </if>
     </select>
 
+    <!-- 获取团队负责人 -->
+    <select id="getTeamOwnerUserByTeamId" parameterType="java.util.Map" resultType="org.openokr.sys.vo.UserVOExt">
+        select t1.id,
+        t1.create_time,
+        t1.password,
+        t1.salt,
+        t1.active,
+        t1.user_name,
+        t1.email,
+        t1.real_name,
+        t1.phone,
+        t1.organization_id
+        from t_okr_sys_user t1
+        left join t_okr_teams t2 on t2.owner_id = t1.id
+        where t2.id = #{teamId}
+    </select>
+
 </mapper>

@@ -100,7 +100,7 @@ require(["jQuery"], function () {
                     '       [%}%]' +
                     '   </ul>' +
                     '   <div class="okr-ohter">' +
-                    '       <a onclick="pageObj.editResult(\'[%=object.id%]\', \'\')" class="txt-all text-primary"><i class="iconfont icon-add"></i>新增KR</a>' +
+                    '       <a onclick="pageObj.editResult(\'[%=object.id%]\', \'\');" class="txt-all text-primary"><i class="iconfont icon-add"></i>新增KR</a>' +
                     '   </div>' +
                     '</div>' +
                     '<div class="card-footer">' +
@@ -108,9 +108,11 @@ require(["jQuery"], function () {
                     '       <i class="iconfont icon-waring"></i>' +
                     '       对内容进行重新编辑，需要再次提交确认！' +
                     '   </span>' +
-                    '   <div class="action">' +
-                    '       <a href="" class="btn btn-primary waves-effect waves-light">提交确认</a>' +
-                    '   </div>' +
+                    '   [%if(object.status != 2 && object.status != 3){%]' +
+                    '       <div class="action">' +
+                    '           <a onclick="pageObj.auditSubmit(\'[%=object.id%]\');" class="btn btn-primary waves-effect waves-light">提交确认</a>' +
+                    '       </div>' +
+                    '   [%}%]' +
                     '</div>';
                 var header = UnderscoreUtil.getHtmlByText(okrHeader, {object: object, statusList: statusList});
                 $okrObjectDetail.append(header);
@@ -124,12 +126,16 @@ require(["jQuery"], function () {
                 pageObj.pieEchartsFunc(object.id, object.progress);
                 var currentDateStr = $.DateUtils.getDateString(new Date());
                 $.each(object.operateRecordList, function (idx, item) {
-                    if (currentDateStr === $.DateUtils.getDateString(item.createTs)) {
-                        item.createTsStr = $.DateUtils.getFormatDateString(item.createTs, "HH:mm:ss");
+                    if (currentDateStr === $.DateUtils.getDateString(new Date(item.createTs))) {
+                        item.createTsStr = $.DateUtils.getFormatDateString(new Date(item.createTs), "HH:mm:ss");
+                        item.cssClass = "past";
                     } else {
                         item.createTsStr = $.DateUtils.getDateTimeString(new Date(item.createTs));
                     }
-                    var okrHistory = '<div class="area-process-li past">' +
+                    if (idx === 0) {
+                        item.cssClass = "active";
+                    }
+                    var okrHistory = '<div class="area-process-li [%=cssClass%]">' +
                         '   <em class="area-process-em"></em>' +
                         '   <p class="area-process-date">[%=createTsStr%]</p>' +
                         '   <div class="area-process-con">' +
@@ -386,11 +392,11 @@ require(["jQuery"], function () {
                         contentType: 'application/json;charset=utf-8' //设置请求头信息
                     }, function (data) {
                         if (data.success) {
-                            TipsUtil.info(data.info);
+                            TipsUtil.info(data.message);
                             dialogObj.close();
                             pageObj.loadOKRObjectDetail();
                         } else {
-                            TipsUtil.warn(data.info);
+                            TipsUtil.warn(data.message);
                         }
                     });
                 };
@@ -411,6 +417,25 @@ require(["jQuery"], function () {
                     }
                 });
                 dialogObj.showModal();
+            });
+        },
+
+        auditSubmit: function (id) {
+            ajaxUtil.ajaxWithBlock({
+                url: App["contextPath"] + "/manage/okrObject/auditSubmit.json",
+                type: "post",
+                data: JSON.stringify({id:id}),
+                contentType: 'application/json;charset=utf-8' //设置请求头信息
+            }, function (data) {
+                require(["artDialog", "Tips"], function () {
+                    if (data.success) {
+                        TipsUtil.info(data.message);
+                        dialogObj.close();
+                        pageObj.loadOKRObjectDetail();
+                    } else {
+                        TipsUtil.warn(data.message);
+                    }
+                });
             });
         },
 

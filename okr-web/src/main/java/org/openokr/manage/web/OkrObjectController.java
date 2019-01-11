@@ -145,6 +145,16 @@ public class OkrObjectController extends BaseController {
     }
 
     /**
+     * 目标提交审核
+     */
+    @PostMapping(value = "/auditSubmit.json")
+    @ResponseBody
+    public ResponseResult auditSubmit(@JsonPathParam("$.id") String id) {
+        ResponseResult result = okrObjectService.auditSubmit(id, getCurrentUser());
+        return result;
+    }
+
+    /**
      * 目标审核页面
      * @return
      */
@@ -156,13 +166,12 @@ public class OkrObjectController extends BaseController {
     }
 
     /**
-     * 目标审核逻辑处理
+     * 目标审核确认逻辑处理
      */
-    @PostMapping(value = "/auditSubmit.json")
+    @PostMapping(value = "/auditConfirm.json")
     @ResponseBody
-    public ResponseResult auditSubmit(@JsonPathParam("msgVO") MessagesExtVO messagesExtVO) {
-//        ResponseResult result = okrMessageService.objectAudit(messagesExtVO);
-//        return result;
-        return null;
+    public ResponseResult auditConfirm(@JsonPathParam("vo") MessagesExtVO messagesExtVO) {
+        ResponseResult result = okrObjectService.auditConfirm(messagesExtVO, getCurrentUserId());
+        return result;
     }
 }

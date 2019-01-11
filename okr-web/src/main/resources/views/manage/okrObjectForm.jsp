@@ -9,7 +9,7 @@
         <ul class="form-grid font4">
             <input id="id" name="id" type="hidden" value="${objectVO.id}">
             <input id="type" name="type" type="hidden" value="${objectVO.type}"/>
-            <input id="teamId" name="teamId" type="hidden" value="${objectVO.teamId}">
+            <input id="teamId" name="teamId" type="hidden" value="${objectVO.teamId}"/>
             <li class="col-sm-11">
                 <label class="form-lab">目标：</label>
                 <div class="form-control">
@@ -33,6 +33,16 @@
                     <%--</p>--%>
                 <%--</div>--%>
             <%--</li>--%>
+            <c:if test="${objectVO.type == '1'}">
+                <li class="col-sm-11">
+                    <label class="form-lab">所属团队：</label>
+                    <div class="form-control">
+                        <div class="select">
+                            <input id="teamName" name="team" type="text" value="${objectVO.teamName}" placeholder="所属团队，必须选择"/><em class="icon"></em>
+                        </div>
+                    </div>
+                </li>
+            </c:if>
             <li class="col-sm-11">
                 <label class="form-lab">父目标：</label>
                 <div class="form-control">
