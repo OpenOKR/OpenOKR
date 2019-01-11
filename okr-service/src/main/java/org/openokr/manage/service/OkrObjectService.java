@@ -57,9 +57,6 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
     private IOkrResultService okrResultService;
 
     @Autowired
-    private IOkrMessageService okrMessageService;
-
-    @Autowired
     private IUserService userService;
 
     private final static String MAPPER_NAMESPACE = "org.openokr.manage.sqlmapper.OkrObjectMapper";
