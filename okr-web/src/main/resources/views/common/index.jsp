@@ -36,7 +36,7 @@
     </c:if>
     <div>
         <iframe id="mainContent" name="mainContent" src="${contextPath}/main.htm"
-                width="100%" frameborder="0" allowfullscreen scrolling="no"></iframe>
+                width="100%" frameborder="0" allowfullscreen></iframe>
     </div>
     <script>
         var mainObj = {flag: ${flag}};

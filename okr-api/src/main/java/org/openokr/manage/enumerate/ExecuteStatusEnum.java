@@ -111,4 +111,15 @@ public enum ExecuteStatusEnum {
         return map;
     }
 
+    public static ExecuteStatusEnum getByCode(String code) {
+        ExecuteStatusEnum _enum = null;
+        for (ExecuteStatusEnum enumerate : ExecuteStatusEnum.values()) {
+            if (enumerate.getCode().equals(code)) {
+                _enum = enumerate;
+                break;
+            }
+        }
+        return _enum;
+    }
+
 }

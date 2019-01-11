@@ -2,24 +2,28 @@ package org.openokr.manage.service;
 
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.base.utils.BeanUtils;
+import com.zzheng.framework.base.utils.DateUtils;
 import com.zzheng.framework.exception.BusinessException;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openokr.application.framework.service.OkrBaseService;
+import org.openokr.application.utils.GetChangeDateUtil;
 import org.openokr.manage.entity.CheckinsEntity;
 import org.openokr.manage.entity.ObjectivesEntity;
 import org.openokr.manage.entity.ResultUserRelaEntity;
 import org.openokr.manage.entity.ResultUserRelaEntityCondition;
 import org.openokr.manage.entity.ResultsEntity;
 import org.openokr.manage.entity.ResultsEntityCondition;
+import org.openokr.manage.entity.TeamsEntity;
 import org.openokr.manage.enumerate.ExecuteStatusEnum;
 import org.openokr.manage.enumerate.ObjectivesStatusEnum;
+import org.openokr.manage.enumerate.ObjectivesTypeEnum;
 import org.openokr.manage.enumerate.ResultMetricUnitEnum;
 import org.openokr.manage.vo.CheckinsExtVO;
 import org.openokr.manage.vo.LogVO;
 import org.openokr.manage.vo.ResultsExtVO;
 import org.openokr.sys.vo.UserVO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,9 +39,6 @@ import java.util.Map;
 public class OkrResultService extends OkrBaseService implements IOkrResultService {
 
     private final static String MAPPER_NAMESPACE = "org.openokr.manage.sqlmapper.OkrResultMapper";
-
-    @Autowired
-    private IOkrObjectService okrObjectService;
 
     @Override
     public ResponseResult deleteResult(String resultId, String userId) throws BusinessException {
@@ -93,19 +94,20 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
             //计算O的进度
             this.calculateObjectProgress(entity, userId);
         } else { //更新
-            ResultsEntity entity = this.selectByPrimaryKey(ResultsEntity.class, resultId);
-            resultVO.setStatus(entity.getStatus());//状态不能修改
+            ResultsEntity targetEntity = this.selectByPrimaryKey(ResultsEntity.class, resultId);
+            ResultsEntity originalEntity = BeanUtils.copyToNewBean(targetEntity, ResultsEntity.class);
+            resultVO.setStatus(targetEntity.getStatus());//状态不能修改
             resultVO.setUpdateTs(new Date());
             resultVO.setUpdateUserId(userId);
-            BeanUtils.copyBean(resultVO, entity);
+            BeanUtils.copyBean(resultVO, targetEntity);
 
             //如果修改了KR的目标值：要重新计算进度
-            this.calculateResultProgress(entity, entity.getCurrentValue());
+            this.calculateResultProgress(targetEntity, targetEntity.getCurrentValue());
             //计算O的进度
-            this.calculateObjectProgress(entity, userId);
+            this.calculateObjectProgress(targetEntity, userId);
 
             //更新KR信息
-            this.update(entity);
+            this.update(targetEntity);
 
             // 更新关键结果协同人员
             ResultUserRelaEntityCondition resultUserRelCondition = new ResultUserRelaEntityCondition();
@@ -115,6 +117,8 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
             if (resultUserRelList !=null && resultUserRelList.size()>0) {
                 this.delete(resultUserRelList);
             }
+            // 更新检查变化的字段，写入历史操作日志
+            setResultLogInfo(originalEntity, targetEntity, resultUserRelList, resultVO.getJoinUsers());
         }
         // 新增关键结果协同人员
         if (resultVO.getJoinUsers() != null && resultVO.getJoinUsers().size()>0) {
@@ -130,8 +134,7 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
             }
             this.insertList(resultUserRelList);
         }
-
-        responseResult.setMessage("保存成功");
+        responseResult.setSuccess(true).setMessage("保存成功");
         return responseResult;
     }
 
@@ -239,11 +242,89 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
         objectPreProgress = objectPreProgress.divide(new BigDecimal(count), 2, BigDecimal.ROUND_UP);
         ObjectivesEntity objectivesEntity = this.selectByPrimaryKey(ObjectivesEntity.class, objectId);
         objectivesEntity.setProgress(objectPreProgress);
-        objectivesEntity.setStatus(ObjectivesStatusEnum.STATUS_1.getCode());//一旦有修改,目标就要变成未提交状态
+
+        // 获取object所属团队责任人，若修改的目标所属团队责任人和当前用户一致，直接将状态设置为已确认
+        TeamsEntity teamsEntity = this.selectByPrimaryKey(TeamsEntity.class, objectivesEntity.getTeamId());
+        // 设置状态，当类型是 团队或公司时，不需要审核，其他情况下一律设置成未提交
+        if (objectivesEntity.getType().equals(ObjectivesTypeEnum.TYPE_2.getCode()) || objectivesEntity.getType().equals(ObjectivesTypeEnum.TYPE_3.getCode())) {
+            objectivesEntity.setStatus(ObjectivesStatusEnum.STATUS_3.getCode());
+        } else if (teamsEntity.getOwnerId().equals(userId)) {
+            objectivesEntity.setStatus(ObjectivesStatusEnum.STATUS_3.getCode());
+        } else {
+            objectivesEntity.setStatus(ObjectivesStatusEnum.STATUS_1.getCode());//一旦有修改,目标就要变成未提交状态
+        }
         objectivesEntity.setUpdateTs(new Date());
         objectivesEntity.setUpdateUserId(userId);
         this.update(objectivesEntity);
     }
 
+    /**
+     * 历史操作日志
+     * @param originalEntity 原始的实体
+     * @param targetEntity 页面修改后的实体
+     * @param originalUserRelList 原始协同人
+     * @param targetUserRelList 修改后协同人
+     */
+    private void setResultLogInfo(ResultsEntity originalEntity, ResultsEntity targetEntity,
+                                  List<ResultUserRelaEntity> originalUserRelList, List<UserVO> targetUserRelList) {
+        Map<String ,Object> compareMap = GetChangeDateUtil.compareFields(originalEntity, targetEntity,
+                new String[]{"name", "description", "currentValue", "endTs", "status", "progress"});
+        StringBuilder message = new StringBuilder();
+        if (compareMap != null && !compareMap.isEmpty()) {
+            for (String key : compareMap.keySet()) {
+                if (key.equals("name")){
+                    message.append("关键结果名称修改为：").append(compareMap.get(key)).append("，");
+                    continue;
+                }
+                if (key.equals("description")){
+                    message.append("关键结果描述修改为：").append(compareMap.get(key)).append("，");
+                    continue;
+                }
+                if (key.equals("currentValue")){
+                    message.append("关键结果当前值修改为：").append(compareMap.get(key)).append("，");
+                    continue;
+                }
+                if (key.equals("endTs")) {
+                    message.append("关键结果完成时间修改为：").append(DateUtils.getDateStr((Date) compareMap.get(key))).append("，");
+                    continue;
+                }
+                if (key.equals("status")) {
+                    message.append("关键结果执行状态更新为：").append(ExecuteStatusEnum.getByCode(compareMap.get(key).toString()).getName()).append("，");
+                    continue;
+                }
+                if (key.equals("progress")) {
+                    message.append("关键结果执行进度更新为：").append(compareMap.get(key)).append("，");
+                }
+            }
+        }
+        List<String> originalUserRelaIds = new ArrayList<>(); List<String> targetUserRelaIds = new ArrayList<>();
+        StringBuilder targetUserRelaNames = new StringBuilder("[");
+        // 协同人
+        for (ResultUserRelaEntity entity : originalUserRelList) {
+            originalUserRelaIds.add(entity.getUserId());
+        }
+        for (UserVO vo : targetUserRelList) {
+            targetUserRelaIds.add(vo.getId());
+            targetUserRelaNames.append(vo.getRealName()).append("，");
+        }
+        if (!ListUtils.isEqualList(originalUserRelaIds, targetUserRelaIds)) {
+            if (!targetUserRelaIds.isEmpty()) {
+                targetUserRelaNames.deleteCharAt(targetUserRelaNames.length() - 1).append("]");
+            } else {
+                targetUserRelaNames.delete(0, targetUserRelaNames.length()).append("空");
+            }
+            message.append("关键结果协同人修改为：").append(targetUserRelaNames.toString()).append("，");
+        }
 
+        if (StringUtils.isNotEmpty(message.toString())) {
+            // 保存操作记录
+            LogVO logVO = new LogVO();
+            logVO.setBizId(targetEntity.getId());
+            logVO.setBizType("2");
+            logVO.setMessage(message.substring(0, message.length() - 1));
+            logVO.setCreateTs(new Date());
+            logVO.setCreateUserId(targetEntity.getUpdateUserId());
+            this.saveOkrLog(logVO);
+        }
+    }
 }

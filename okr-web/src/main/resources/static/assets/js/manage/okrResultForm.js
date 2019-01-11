@@ -41,7 +41,8 @@ require(["jQuery"], function () {
             laydate.render({
                 elem: '#endTs',
                 eventElem: '#iEndTs',
-                trigger: 'click'
+                trigger: 'click',
+                format: 'yyyy-MM-dd'
             });
         },
 
@@ -93,7 +94,7 @@ require(["jQuery"], function () {
                     nodes = zTree.getCheckedNodes(true),
                     v = "";
                 for (var i=0, l=nodes.length; i<l; i++) {
-                    v += nodes[i].name + ",";
+                    v += nodes[i].realName + ",";
                 }
                 if (v.length > 0 ) v = v.substring(0, v.length-1);
                 var cityObj = $("#users");
@@ -103,7 +104,7 @@ require(["jQuery"], function () {
                 $.fn.zTree.init($tree, {
                     check: {enable: true},
                     view: {dblClickExpand: false},
-                    data: {simpleData: {enable: true}},
+                    data: {simpleData: {enable: true}, key: {name: "realName"}},
                     callback: {beforeClick: beforeClick, onCheck: onCheck}
                 });
                 //给用户树赋值数据

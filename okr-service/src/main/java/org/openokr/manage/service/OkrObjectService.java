@@ -451,16 +451,16 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
     }
 
     /**
-     *
+     * 历史操作日志
      * @param originalEntity 原始的实体
      * @param targetEntity 页面修改后的实体
-     * @param originalTeamRelaList 原始影响团队
+     * @param originalTeamRelList 原始影响团队
      * @param originalLabelsRelList 原始标签
      * @param targetRelTeams 修改后影响团队
      * @param targetRelLabels 修改后标签
      */
     private void setObjectLogInfo(ObjectivesEntity originalEntity, ObjectivesEntity targetEntity,
-                                  List<ObjectTeamRelaEntity> originalTeamRelaList, List<ObjectLabelRelaEntity> originalLabelsRelList,
+                                  List<ObjectTeamRelaEntity> originalTeamRelList, List<ObjectLabelRelaEntity> originalLabelsRelList,
                                   List<TeamsVO> targetRelTeams, List<LabelVO> targetRelLabels) {
         Map<String ,Object> compareMap = GetChangeDateUtil.compareFields(originalEntity, targetEntity,
                 new String[]{"name", "description", "confidenceLevel", "status", "parentId", "teamId"});
@@ -477,9 +477,11 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
                 }
                 if (key.equals("confidenceLevel")){
                     message.append("目标把握度修改为：").append(compareMap.get(key)).append("成，");
+                    continue;
                 }
                 if (key.equals("status")) {
                     message.append("目标状态修改为：").append(ObjectivesStatusEnum.getByCode(compareMap.get(key).toString()).getName()).append("，");
+                    continue;
                 }
                 if (key.equals("parentId")) {
                     ObjectivesEntity targetParentEntity = this.selectByPrimaryKey(ObjectivesEntity.class, targetEntity.getParentId());
@@ -489,6 +491,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
                         message.append("目标父目标修改为：").append("空");
                     }
                     message.append("，");
+                    continue;
                 }
                 if (key.equals("teamId")) {
                     TeamsEntity targetTeamEntity = this.selectByPrimaryKey(TeamsEntity.class, targetEntity.getTeamId());
@@ -500,7 +503,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         List<String> originalLabelRelaIds = new ArrayList<>(); List<String> targetLabelRelaIds = new ArrayList<>();
         StringBuilder targetTeamRelaNames = new StringBuilder("["); StringBuilder targetLabelRelaNames = new StringBuilder("[");
         // 影响团队
-        for (ObjectTeamRelaEntity entity : originalTeamRelaList) {
+        for (ObjectTeamRelaEntity entity : originalTeamRelList) {
             originalTeamRelaIds.add(entity.getTeamId());
         }
         for (TeamsVO vo : targetRelTeams) {
