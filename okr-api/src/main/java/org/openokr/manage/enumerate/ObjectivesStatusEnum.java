@@ -29,9 +29,7 @@ public enum ObjectivesStatusEnum {
     /**
      * 4-被驳回
      */
-    STATUS_4("4", "被驳回", "red"),
-
-    DEFAULT("", "", "");
+    STATUS_4("4", "被驳回", "red");
 
     private String name;
 
@@ -105,7 +103,7 @@ public enum ObjectivesStatusEnum {
     }
 
     public static ObjectivesStatusEnum getByCode(String code) {
-        ObjectivesStatusEnum _enum = DEFAULT;
+        ObjectivesStatusEnum _enum = null;
         for (ObjectivesStatusEnum enumerate : ObjectivesStatusEnum.values()) {
             if (enumerate.getCode().equals(code)) {
                 _enum = enumerate;
@@ -114,4 +112,5 @@ public enum ObjectivesStatusEnum {
         }
         return _enum;
     }
+
 }

@@ -19,7 +19,7 @@ public class OkrTimeSessionsService extends OkrBaseService implements IOkrTimeSe
 
     public List<TimeSessionsExtVO> getTimeSessionList() throws BusinessException {
         TimeSessionsEntityCondition sessionsCondition = new TimeSessionsEntityCondition();
-        sessionsCondition.setOrderByClause("create_ts");
+        sessionsCondition.setOrderByClause("create_ts desc");
         List<TimeSessionsEntity> timeSessionsEntities = this.selectByCondition(sessionsCondition);
         List<TimeSessionsExtVO> timeSessionList = BeanUtils.copyToNewList(timeSessionsEntities, TimeSessionsExtVO.class);
         return timeSessionList;

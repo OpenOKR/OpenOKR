@@ -593,6 +593,76 @@ public class CheckinsEntityCondition extends BaseEntityCondition implements Seri
             return (Criteria) this;
         }
 
+        public Criteria andMetricUnitIsNull() {
+            addCriterion("metric_unit is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMetricUnitIsNotNull() {
+            addCriterion("metric_unit is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMetricUnitEqualTo(String value) {
+            addCriterion("metric_unit =", value, "metricUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andMetricUnitNotEqualTo(String value) {
+            addCriterion("metric_unit <>", value, "metricUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andMetricUnitGreaterThan(String value) {
+            addCriterion("metric_unit >", value, "metricUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andMetricUnitGreaterThanOrEqualTo(String value) {
+            addCriterion("metric_unit >=", value, "metricUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andMetricUnitLessThan(String value) {
+            addCriterion("metric_unit <", value, "metricUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andMetricUnitLessThanOrEqualTo(String value) {
+            addCriterion("metric_unit <=", value, "metricUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andMetricUnitLike(String value) {
+            addCriterion("metric_unit like", value, "metricUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andMetricUnitNotLike(String value) {
+            addCriterion("metric_unit not like", value, "metricUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andMetricUnitIn(List<String> values) {
+            addCriterion("metric_unit in", values, "metricUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andMetricUnitNotIn(List<String> values) {
+            addCriterion("metric_unit not in", values, "metricUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andMetricUnitBetween(String value1, String value2) {
+            addCriterion("metric_unit between", value1, value2, "metricUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andMetricUnitNotBetween(String value1, String value2) {
+            addCriterion("metric_unit not between", value1, value2, "metricUnit");
+            return (Criteria) this;
+        }
+
         public Criteria andIdLikeInsensitive(String value) {
             addCriterion("upper(id) like", value.toUpperCase(), "id");
             return (Criteria) this;
@@ -620,6 +690,11 @@ public class CheckinsEntityCondition extends BaseEntityCondition implements Seri
 
         public Criteria andCreateUserIdLikeInsensitive(String value) {
             addCriterion("upper(create_user_id) like", value.toUpperCase(), "createUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMetricUnitLikeInsensitive(String value) {
+            addCriterion("upper(metric_unit) like", value.toUpperCase(), "metricUnit");
             return (Criteria) this;
         }
 
@@ -710,6 +785,21 @@ public class CheckinsEntityCondition extends BaseEntityCondition implements Seri
          */
         public Criteria andCreateUserIdLikeIgnoreCase(String value) {
             addCriterion("upper(create_user_id) like ", value.toUpperCase(), "createUserId");
+            return (Criteria) this;
+        }
+
+        /**
+         *(扩展Mybatis原生like的不足)
+         *忽略字段大小写的模糊查询
+         *Java编码如下：
+         *  criteria.andNameLikeIgnoreCase("%Abc%"); 前后模糊,A字母大写
+         *  criteria.andName2LikeIgnoreCase("%aBc"); 前模糊,B字母大写
+         *  criteria.andName3LikeIgnoreCase("abC%"); 后模糊,C字母大写
+         *执行时SQL如下:
+         *  where name like '%abc%' or name2 like '%abc' or name3 like 'abc%'
+         */
+        public Criteria andMetricUnitLikeIgnoreCase(String value) {
+            addCriterion("upper(metric_unit) like ", value.toUpperCase(), "metricUnit");
             return (Criteria) this;
         }
     }

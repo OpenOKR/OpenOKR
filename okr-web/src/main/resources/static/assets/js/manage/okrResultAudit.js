@@ -15,67 +15,52 @@ require(["jQuery"], function () {
         },
 
         validateRule: function () {
-            var metricUnit = $("input[name='metricUnit']:checked").val();
-            if (metricUnit === '1') {
-                return {
-                    name: {label: '名称', required: true, minLength:2,maxLength:32},
-                    metricUnit: {label: '执行单位', required: true},
-                    endTs: {label: '完成时间', required: true}
-                };
-            } else {
-                return {
-                    name: {label: '名称', required: true, minLength:2,maxLength:32},
-                    metricUnit: {label: '执行单位', required: true},
-                    endTs: {label: '完成时间', required: true},
-                    targetValue: {label: '目标值', required: true, reqExp: /^\d+(\.\d+)?$/, reqExpMsg: '只允许输入数字'},
-                    initialValue: {label: '初始值', required: true, reqExp: /^\d+(\.\d+)?$/, reqExpMsg: '只允许输入数字'}
-                };
-            }
+            return {
+                name: {label: '名称', required: true, minLength:2,maxLength:32},
+                metricUnit: {label: '执行单位', required: true},
+                endTs: {label: '完成时间', required: true},
+                targetValue: {label: '目标值', required: false, reqExp: /^\d+(\.\d+)?$/, reqExpMsg: '只允许输入数字'},
+                initialValue: {label: '初始值', required: false, reqExp: /^\d+(\.\d+)?$/, reqExpMsg: '只允许输入数字'}
+            };
         },
 
-        getForm: function () {
-            return $("#resultForm").jqForm({});
+        initEvent: function () {
+            $("input[name='radio']").bind('click', function () {
+                if ($(this).val() === '0') {
+                    $('#contentLi').show();
+                    $("li[data-name='addResult']").hide();
+                    $('#targetValue').parent().parent().hide();
+                    $('#initialValue').parent().parent().hide();
+                    $('input:radio[name=metricUnit]').attr('checked',false);
+                } else {
+                    $('#contentLi').hide();
+                    $("li[data-name='addResult']").show();
+                }
+            });
+
+            // 单选按钮绑定事件
+            $("input[name='metricUnit']").bind("click", function () {
+                if ($(this).val() === '1') {
+                    $('#targetValue').parent().parent().hide();
+                    $('#initialValue').parent().parent().hide();
+                } else {
+                    $('#targetValue').parent().parent().show();
+                    $('#initialValue').parent().parent().show();
+                }
+            });
         },
 
         decareDate: function () {
             laydate.render({
                 elem: '#endTs',
                 eventElem: '#iEndTs',
-                trigger: 'click',
-                format: 'yyyy-MM-dd'
+                trigger: 'click'
             });
         },
 
-        // getUsersTree: function () {
-        //     return $('#users').AutoTree({
-        //         async: {
-        //             dataSourceType: "onceRemote",
-        //             url: App["contextPath"] + "/sys/organization/findContainUserOfAll.json"
-        //         },
-        //         view: {
-        //             height: 150,
-        //             inputFilterFieldNames: ["name"],
-        //             viewUniqueFieldName: "name",
-        //             widthRefer: function () {
-        //                 return $(this).width() + 14;//引用当前自己输入框
-        //             }
-        //         },
-        //         callback: {
-        //             afterLoad: function (dataStore) {
-        //                 console.log(dataStore);
-        //                 dataStore[0].ischeck = false;
-        //                 if ($('#users').val() !== '') {
-        //                     $(this).AutoTree('setCheckedNodes', $('#users').val());
-        //                 }
-        //             }
-        //         },
-        //         treeConfig: {
-        //             check: {
-        //                 enable: true
-        //             }
-        //         }
-        //     });
-        // },
+        getForm: function () {
+            return $("#resultAuditForm").jqForm({});
+        },
 
         /**
          * 用户树
@@ -94,7 +79,7 @@ require(["jQuery"], function () {
                     nodes = zTree.getCheckedNodes(true),
                     v = "";
                 for (var i=0, l=nodes.length; i<l; i++) {
-                    v += nodes[i].realName + ",";
+                    v += nodes[i].name + ",";
                 }
                 if (v.length > 0 ) v = v.substring(0, v.length-1);
                 var cityObj = $("#users");
@@ -104,7 +89,7 @@ require(["jQuery"], function () {
                 $.fn.zTree.init($tree, {
                     check: {enable: true},
                     view: {dblClickExpand: false},
-                    data: {simpleData: {enable: true}, key: {name: "realName"}},
+                    data: {simpleData: {enable: true}},
                     callback: {beforeClick: beforeClick, onCheck: onCheck}
                 });
                 //给用户树赋值数据
@@ -158,16 +143,6 @@ require(["jQuery"], function () {
     $(window).ready(function () {
         window.pageObj = pageObj;
         pageObj.init();
-
-        // 单选按钮绑定事件
-        $("input[name='metricUnit']").bind("click", function () {
-            if ($(this).val() === '1') {
-                $('#targetValue').parent().parent().hide();
-                $('#initialValue').parent().parent().hide();
-            } else {
-                $('#targetValue').parent().parent().show();
-                $('#initialValue').parent().parent().show();
-            }
-        });
+        pageObj.initEvent();
     });
 });

@@ -110,7 +110,7 @@
  *
  * @returns
  */
-function fuzzySearch(zTreeId, searchField, isHighLight, isExpand){
+function fuzzySearch(zTreeId, searchField, isHighLight, isExpand, hideNodes){
     var zTreeObj = $.fn.zTree.getZTreeObj(zTreeId);//get the ztree object by ztree id
     if(!zTreeObj){
         alert("fail to get ztree object");
@@ -167,7 +167,7 @@ function fuzzySearch(zTreeId, searchField, isHighLight, isExpand){
                 zTreeObj.showNode(node);//show node with matching keywords
                 return true; //return true and show this node
             }
-
+            hideNodes.push(node);
             zTreeObj.hideNode(node); // hide node that not matched
             return false; //return false for node not matched
         }

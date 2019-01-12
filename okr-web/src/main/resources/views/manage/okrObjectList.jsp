@@ -26,13 +26,21 @@
             <div class="tab-pane active">
                 <div class="top-search">
                     <label class="ind-title">关键字：</label>
-                    <input name="keyword" type="text" class="inp inp-big" placeholder="请输入关键字" />
+                    <input id="keyword" name="keyword" type="text" class="inp inp-big" placeholder="请输入关键字" />
                     <label class="ind-title">执行状态：</label>
                     <div class="select select-big">
-                        <input type="text" class=" " placeholder="请选择" />
+                        <input id="statusName" name="statusName" type="text" placeholder="请选择" />
+                        <input id="status" name="status" type="hidden" />
                         <i class="icon"></i>
                     </div>
-                    <a id="search" class="btn btn-primary waves-effect waves-light"><i class="icon-search"></i>搜索</a>
+                    <label class="ind-title" id="realNameLabel">用户：</label>
+                    <div class="select select-big" id="realNameDiv">
+                        <input id="realName" name="realName" type="text" placeholder="请选择" />
+                        <input id="userId" name="userId" type="hidden" />
+                        <i class="icon"></i>
+                    </div>
+                    <a id="search" onclick="pageObj.loadOKRObjects(pageObj.currentType, pageObj.currentTeamId);"
+                       class="btn btn-primary waves-effect waves-light"><i class="icon-search"></i>搜索</a>
                     <c:set var="companyEditFlag" value="0"/>
                     <so:hasPermission name="company:edit">
                         <c:set var="companyEditFlag" value="1"/>
@@ -42,9 +50,12 @@
                         <a class="btn btn-primary waves-effect waves-light"><i class="icon-add"></i>新建OKR</a>
                     </div>
                 </div>
-                <div class=" card-area2" id="okrObjectList"></div>
+                <div id="okrObjectList"></div>
             </div>
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    var pageObj = {currentUserId: '${currentUserId}'};
+</script>
 <%@ include file="/views/application/_include_bottom.jsp"%>

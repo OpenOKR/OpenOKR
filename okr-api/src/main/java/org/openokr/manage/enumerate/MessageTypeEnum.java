@@ -6,50 +6,40 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 执行状态枚举类
+ * message type 类型枚举
+ * Created by zhengzheng on 2019/1/4.
  */
-public enum ExecuteStatusEnum {
+public enum  MessageTypeEnum {
 
     /**
-     * 0-未开始
+     * 1-一般文本
      */
-    STATUS_0("0", "未开始", "text-muted"),
+    TYPE_1("1", "一般文本"),
 
     /**
-     * 1-正常执行
+     * 2-目标审核
      */
-    STATUS_1("1", "正常执行", "text-primary"),
+    TYPE_2("2", "目标审核"),
 
     /**
-     * 2-执行有风险
+     * 3-协同审核
      */
-    STATUS_2("2", "执行有风险", "text-danger"),
+    TYPE_3("3", "协同审核"),
 
     /**
-     * 3-暂停执行
+     * 4-目标跳转
      */
-    STATUS_3("3", "暂停执行", "text-danger"),
+    TYPE_4("4", "目标跳转"),
 
-    /**
-     * 4-提前终止
-     */
-    STATUS_4("4", "提前终止", "text-warning"),
-
-    /**
-     * 5-完成
-     */
-    STATUS_5("5", "完成", "text-success");
+    DEFAULT("", "");
 
     private String name;
 
     private String code;
 
-    private String cssClass;
-
-    ExecuteStatusEnum(String code, String name, String cssClass) {
+    MessageTypeEnum(String code, String name) {
         this.code = code;
         this.name = name;
-        this.cssClass = cssClass;
     }
 
     public String getName() {
@@ -68,14 +58,6 @@ public enum ExecuteStatusEnum {
         this.code = code;
     }
 
-    public String getCssClass() {
-        return cssClass;
-    }
-
-    public void setCssClass(String cssClass) {
-        this.cssClass = cssClass;
-    }
-
     private static List<Map<String, Object>> list = new ArrayList<>();
 
     private static Map<String, Object> map = new HashMap<>();
@@ -86,11 +68,10 @@ public enum ExecuteStatusEnum {
      */
     public static List<Map<String, Object>> toList() {
         if (list.isEmpty()) {
-            for (ExecuteStatusEnum enumerate : ExecuteStatusEnum.values()) {
+            for (MessageTypeEnum enumerate : MessageTypeEnum.values()) {
                 Map<String, Object> map = new HashMap<>();
                 map.put("name", enumerate.getName());
                 map.put("code", enumerate.getCode());
-                map.put("cssClass", enumerate.getCssClass());
                 //
                 list.add(map);
             }
@@ -104,16 +85,16 @@ public enum ExecuteStatusEnum {
      */
     public static Map<String, Object> toMap() {
         if (map.isEmpty()) {
-            for (ExecuteStatusEnum enumerate : ExecuteStatusEnum.values()) {
+            for (MessageMarkEnum enumerate : MessageMarkEnum.values()) {
                 map.put(enumerate.getCode(), enumerate.getName());
             }
         }
         return map;
     }
 
-    public static ExecuteStatusEnum getByCode(String code) {
-        ExecuteStatusEnum _enum = null;
-        for (ExecuteStatusEnum enumerate : ExecuteStatusEnum.values()) {
+    public static MessageTypeEnum getByCode(String code) {
+        MessageTypeEnum _enum = DEFAULT;
+        for (MessageTypeEnum enumerate : MessageTypeEnum.values()) {
             if (enumerate.getCode().equals(code)) {
                 _enum = enumerate;
                 break;

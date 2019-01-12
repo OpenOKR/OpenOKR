@@ -12,8 +12,10 @@
                 <div class="header-other">
                     <div class="selection">
                         <label class="lbl">目标时间：</label>
-                        <input type="text" class="inp-sm" value="2018年第4季度"/>
-                        <i class="icon"></i>
+                        <input id="timeSessionName" name="timeSessionName" type="text" class="inp-sm" value="${timeSession.name}"/>
+                        <input id="timeSessionId" name="timeSessionId" type="hidden" value="${timeSession.id}"/>
+                        <input id="timeSessionIsActivate" name="timeSessionIsActivate" type="hidden" value="${timeSession.isActivate}">
+                        <i id="timeSessionIcon" class="icon"></i>
                     </div>
                 </div>
                 <ul class="hearder-menu" id="menuUL">
@@ -23,9 +25,6 @@
                 </ul>
                 <div class="most-set">
                     <div class="user-set">
-                        <img src="${staticContextPath}/assets/images/temp/pic.png" class="user-img" alt="">
-                        <input type="file"/>
-                        <i class="iconfont icon-upload"></i>
                     </div>
                     <span class="user-name">${userName}</span>
                     <ul class="most-set-list">
@@ -35,12 +34,12 @@
             </div>
         </div>
     </c:if>
-        <div>
-            <iframe id="mainContent" name="mainContent" src="${contextPath}/main.htm"
-                    width="100%" frameborder="0" allowfullscreen scrolling="no"></iframe>
-        </div>
+    <div>
+        <iframe id="mainContent" name="mainContent" src="${contextPath}/main.htm"
+                width="100%" frameborder="0" allowfullscreen></iframe>
+    </div>
     <script>
-        var mainObj = {flag:${flag}};
+        var mainObj = {flag: ${flag}};
     </script>
 </body>
 <%@ include file="/views/application/_include_bottom.jsp" %>

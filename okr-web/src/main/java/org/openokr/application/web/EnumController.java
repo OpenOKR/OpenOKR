@@ -1,9 +1,6 @@
 package org.openokr.application.web;
 
-import org.openokr.manage.enumerate.ExecuteStatusEnum;
-import org.openokr.manage.enumerate.MessageMarkEnum;
-import org.openokr.manage.enumerate.ObjectivesStatusEnum;
-import org.openokr.manage.enumerate.ObjectivesTypeEnum;
+import org.openokr.manage.enumerate.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,6 +23,12 @@ public class EnumController extends BaseController {
         return MessageMarkEnum.toList();
     }
 
+    @RequestMapping("/messageTypeList.json")
+    @ResponseBody
+    public List<Map<String, Object>> messageTypeList() {
+        return MessageTypeEnum.toList();
+    }
+
     @RequestMapping("/objectivesStatusList.json")
     @ResponseBody
     public List<Map<String, Object>> objectivesStatusList() {
@@ -36,5 +39,11 @@ public class EnumController extends BaseController {
     @ResponseBody
     public List<Map<String, Object>> executeStatusList() {
         return ExecuteStatusEnum.toList();
+    }
+
+    @RequestMapping("/metricUnitList.json")
+    @ResponseBody
+    public List<Map<String, Object>> metricUnitList() {
+        return ResultMetricUnitEnum.toList();
     }
 }

@@ -5,17 +5,19 @@ import org.openokr.application.framework.annotation.JsonPathParam;
 import org.openokr.application.web.BaseController;
 import org.openokr.manage.enumerate.ExecuteStatusEnum;
 import org.openokr.manage.enumerate.ResultMetricUnitEnum;
+import org.openokr.manage.service.IOkrMessageService;
+import org.openokr.manage.service.IOkrObjectService;
 import org.openokr.manage.service.IOkrResultService;
 import org.openokr.manage.vo.CheckinsExtVO;
+import org.openokr.manage.vo.MessagesVO;
 import org.openokr.manage.vo.ResultsExtVO;
 import org.openokr.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.Date;
 
 /**
  * OKR关键结果
@@ -29,6 +31,12 @@ public class OkrResultController extends BaseController {
     @Autowired
     private IOkrResultService okrResultService;
 
+    @Autowired
+    private IOkrObjectService okrObjectService;
+
+    @Autowired
+    private IOkrMessageService okrMessageService;
+
     /**
      * 新增或编辑关键结果页面
      * @return
@@ -39,6 +47,7 @@ public class OkrResultController extends BaseController {
         if (resultVO == null) {
             resultVO = new ResultsExtVO();
             resultVO.setObjectId(objectId);
+            resultVO.setObjectName(okrObjectService.getObjectById(objectId).getName());
         }
         model.addAttribute("metricUnitEnumList", ResultMetricUnitEnum.toList());
         model.addAttribute("resultVO", resultVO);
@@ -55,8 +64,7 @@ public class OkrResultController extends BaseController {
     @ResponseBody
     public ResponseResult saveResult(@JsonPathParam("$.resultVO") ResultsExtVO resultVO) {
         resultVO.setCreateUserId(getCurrentUserId());
-        ResponseResult responseResult = okrResultService.saveResult(resultVO);
-        return responseResult;
+        return okrResultService.saveResult(resultVO);
     }
 
     /**
@@ -91,8 +99,18 @@ public class OkrResultController extends BaseController {
     @ResponseBody
     public ResponseResult saveCheckins(@JsonPathParam("$.checkinVO") CheckinsExtVO checkinsVO) {
         checkinsVO.setCreateUserId(getCurrentUserId());
-        checkinsVO.setCreateTs(new Date());
-        ResponseResult responseResult = okrResultService.saveCheckins(checkinsVO);
-        return responseResult;
+        return okrResultService.saveCheckins(checkinsVO);
+    }
+
+    /**
+     * 协同审核
+     * @return
+     */
+    @GetMapping(value = "/audit.htm")
+    public String audit(String id, Model model) {
+        MessagesVO message = okrMessageService.getById(id);
+        model.addAttribute("message", message);
+        model.addAttribute("metricUnitEnumList", ResultMetricUnitEnum.toList());
+        return "manage/okrResultAudit";
     }
 }

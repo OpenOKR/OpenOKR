@@ -4,9 +4,11 @@ package org.openokr.manage.service;
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.exception.BusinessException;
 import org.openokr.manage.vo.LogVO;
+import org.openokr.manage.vo.MessagesExtVO;
 import org.openokr.manage.vo.ObjectivesExtVO;
 import org.openokr.manage.vo.OkrObjectSearchVO;
 import org.openokr.sys.vo.UserVO;
+import org.openokr.sys.vo.UserVOExt;
 
 import java.util.List;
 
@@ -33,7 +35,7 @@ public interface IOkrObjectService {
     List<UserVO> getJoinUsersByObjectId(String objectId, Integer limitAmount);
 
     /**
-     * 根据类型或者OKR列表
+     * 根据类型获取OKR列表
      * @param searchVO
      * @return
      * @throws BusinessException
@@ -65,21 +67,12 @@ public interface IOkrObjectService {
     List<ObjectivesExtVO> getCompanyOkrList(OkrObjectSearchVO searchVO) throws BusinessException;
 
     /**
-     * 获取OKR的历史操作记录
-     * @param objectId
-     * @param resultIds KR的所有ID
-     * @return
-     * @throws BusinessException
-     */
-    List<LogVO> getOperateRecordList(String objectId, List<String> resultIds) throws BusinessException;
-
-    /**
      * 编辑目标
      * @param objectId
      * @return
      * @throws BusinessException
      */
-    ObjectivesExtVO editObject(String objectId) throws BusinessException;
+    ObjectivesExtVO getObjectById(String objectId) throws BusinessException;
 
     /**
      * 保存目标
@@ -107,5 +100,20 @@ public interface IOkrObjectService {
      */
     List<ObjectivesExtVO> getParentObject(String userId, String type) throws BusinessException;
 
+    /**
+     * 目标审核提交
+     * @param objectId
+     * @param userVOExt
+     * @return
+     */
+    ResponseResult auditSubmit(String objectId, UserVOExt userVOExt);
+
+    /**
+     * 目标审核（同步处理消息状态）
+     * @param messagesExtVO
+     * @param currentUserId
+     * @return
+     */
+    ResponseResult auditConfirm(MessagesExtVO messagesExtVO, String currentUserId);
 
 }

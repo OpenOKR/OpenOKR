@@ -50,14 +50,6 @@ public interface IOkrResultService {
     List<UserVO> getJoinUsersByResultId(String resultId, Integer limitAmount) throws BusinessException;
 
     /**
-     * 编辑KR进度
-     * @param resultId 关键结果ID
-     * @return
-     * @throws BusinessException
-     */
-    CheckinsExtVO editCheckins(String resultId) throws BusinessException;
-
-    /**
      * 保存KR进度
      * @param checkinsVO
      * @return

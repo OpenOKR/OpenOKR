@@ -57,6 +57,13 @@ public class OkrMessageService extends BaseServiceImpl implements IOkrMessageSer
         return new ResponseResult(true, null, "更新成功！");
     }
 
+    @Override
+    public MessagesVO getById(String id) {
+        MessagesEntity entity = this.getMyBatisDao().selectByPrimaryKey(MessagesEntity.class, id);
+        MessagesVO message = BeanUtils.copyToNewBean(entity, MessagesVO.class);
+        return message;
+    }
+
     public ResponseResult dealMessage(String messageId, String userId) throws BusinessException {
         ResponseResult result = new ResponseResult();
         try {

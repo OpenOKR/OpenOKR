@@ -197,6 +197,14 @@ public class UserService extends BaseServiceImpl implements IUserService {
         return this.countByCondition(condition);
     }
 
+    @Override
+    public UserVOExt getTeamOwnerUserByTeamId(String teamId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("teamId", teamId);
+        UserVOExt userVOExt = this.getMyBatisDao().selectOneBySql(MAPPER_NAMESPACE + ".getTeamOwnerUserByTeamId", params);
+        return userVOExt;
+    }
+
     private long countByUsername(String id, String username) {
         UserEntityCondition condition = new UserEntityCondition();
         if (StringUtils.isNotBlank(id)) {

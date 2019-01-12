@@ -15,6 +15,9 @@
             <div class="fl">
                 <span class="title">OKR列表</span>
             </div>
+            <div class="action">
+                <a onclick="top.mainObj.menuClick(null, '${contextPath}/manage/okrObject/init.htm', 'menu-2');" class="txt-all uir">查看全部<i class="iconfont icon-arrowDR"></i></a>
+            </div>
         </div>
         <div class="row card-area" id="OKRList"></div>
     </div>
@@ -46,7 +49,7 @@
                         <em class="em-radio2 red" id="messageCount"></em>
                     </div>
                     <div class="action">
-                        <a href="" class="txt-all uir">查看全部<i class="iconfont icon-arrowDR"></i></a>
+                        <a onclick="top.mainObj.menuClick(null, '${contextPath}/manage/okrMessage/index.htm', 'menu-4');" class="txt-all uir">查看全部<i class="iconfont icon-arrowDR"></i></a>
                     </div>
                 </div>
                 <div class="card-area4" style="height: 356px;" id="messageItem">

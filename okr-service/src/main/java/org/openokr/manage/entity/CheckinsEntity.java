@@ -31,6 +31,9 @@ public class CheckinsEntity extends BaseEntity implements Serializable {
     /** 创建者 */
     private String createUserId;
 
+    /** 评价单位（是否、百分比、数值） */
+    private String metricUnit;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -139,6 +142,24 @@ public class CheckinsEntity extends BaseEntity implements Serializable {
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
         addSettedField("createUserId");
+    }
+
+    /**
+     * 评价单位（是否、百分比、数值）
+     * @return metricUnit
+     */
+    @Column(name = "metric_unit")
+    public String getMetricUnit() {
+        return metricUnit;
+    }
+
+    /**
+     * 评价单位（是否、百分比、数值）
+     * @param metricUnit
+     */
+    public void setMetricUnit(String metricUnit) {
+        this.metricUnit = metricUnit;
+        addSettedField("metricUnit");
     }
 
     /**

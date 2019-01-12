@@ -8,23 +8,46 @@
         <input id="resultId" name="resultId" type="hidden" value="${resultId}">
         <ul class="form-grid font4">
             <li class="col-sm-11">
+                <label class="form-lab">目标：</label>
+                <div class="form-control">
+                    <span id="objectName" class="form-text">${resultVO.objectName}</span>
+                </div>
+            </li>
+            <li class="col-sm-11">
                 <label class="form-lab">关键结果：</label>
                 <div class="form-control">
-                    <input id="objectName" name="objectName" type="text" class="inp" value="${resultVO.name}" readonly/>
+                    <span id="resultName" class="form-text">${resultVO.name}</span>
                 </div>
             </li>
-            <li class="col-sm-11">
-                <label class="form-lab">目标值：</label>
-                <div class="form-control">
-                    <input id="targetValue" name="targetValue" type="text" class="inp" value="${resultVO.targetValue}" readonly/>
-                </div>
-            </li>
-            <li class="col-sm-11">
-                <label class="form-lab">当前值：</label>
-                <div class="form-control">
-                    <input id="currentValue" name="currentValue" type="text" class="inp" placeholder="请输入"/>
-                </div>
-            </li>
+            <c:if test="${resultVO.metricUnit == '1'}">
+                <li class="col-sm-11">
+                    <label class="form-lab">是否完成：</label>
+                    <div class="form-control">
+                        <p class="radio-inline">
+                            <label class="radio">
+                                <input name="currentValue" type="radio" value="0"/><i class="icon"></i><em>未完成</em>
+                            </label>
+                            <label class="radio">
+                                <input name="currentValue" type="radio" value="1"/><i class="icon"></i><em>完成</em>
+                            </label>
+                        </p>
+                    </div>
+                </li>
+            </c:if>
+            <c:if test="${resultVO.metricUnit == '2' || resultVO.metricUnit == '3'}">
+                <li class="col-sm-11">
+                    <label class="form-lab">目标值：</label>
+                    <div class="form-control">
+                        <input id="targetValue" name="targetValue" type="text" class="inp" value="${resultVO.targetValue}" readonly/>
+                    </div>
+                </li>
+                <li class="col-sm-11">
+                    <label class="form-lab">当前值：</label>
+                    <div class="form-control">
+                        <input id="currentValue" name="currentValue" type="text" class="inp" placeholder="请输入"/>
+                    </div>
+                </li>
+            </c:if>
             <li class="col-sm-11">
                 <label class="form-lab">执行状态：</label>
                 <div class="form-control">

@@ -15,10 +15,11 @@ public class ObjectivesExtVO extends ObjectivesVO implements Serializable {
         this.setConfidenceLevel("5");
     }
 
-    private String typeName;
-
     // 团队名称
     private String teamName;
+
+    // 父目标名称
+    private String parentName;
 
     // 参与人员
     private List<UserVO> joinUsers;
@@ -35,13 +36,8 @@ public class ObjectivesExtVO extends ObjectivesVO implements Serializable {
     // 历史操作记录
     private List<LogVO> operateRecordList;
 
-    public String getTypeName() {
-        return ObjectivesTypeEnum.getByCode(getType()).getName();
-    }
-
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
-    }
+    // 每周更新记录
+    private List<CheckinsVO> checkinsVOList;
 
     public List<UserVO> getJoinUsers() {
         return joinUsers;
@@ -57,6 +53,14 @@ public class ObjectivesExtVO extends ObjectivesVO implements Serializable {
 
     public void setTeamName(String teamName) {
         this.teamName = teamName;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
     }
 
     public List<ResultsExtVO> getResultsExtList() {
@@ -89,5 +93,13 @@ public class ObjectivesExtVO extends ObjectivesVO implements Serializable {
 
     public void setRelLabels(List<LabelVO> relLabels) {
         this.relLabels = relLabels;
+    }
+
+    public List<CheckinsVO> getCheckinsVOList() {
+        return checkinsVOList;
+    }
+
+    public void setCheckinsVOList(List<CheckinsVO> checkinsVOList) {
+        this.checkinsVOList = checkinsVOList;
     }
 }

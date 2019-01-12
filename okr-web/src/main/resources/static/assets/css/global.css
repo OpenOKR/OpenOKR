@@ -116,6 +116,8 @@ i, em {
     font-style: normal;
 }
 
+
+
 textarea {
     overflow: auto;
     outline-style: none;
@@ -326,6 +328,7 @@ img {
 }
 .select-form > .icon-select,
 .select > .icon,
+.laydate-icon,
 .iconfont {
     font-family:"iconfont" !important;
     font-size:16px;
@@ -350,6 +353,10 @@ img {
 .icon-add2:before { content: "\e64a"}
 .icon-search:before { content: "\e666"}
 .icon-close:before { content: "\e625"}
+.laydate-prev-y:before {content: "\eb0e"}
+.laydate-next-y:before {content: "\eb0b"}
+.laydate-prev-m:before {content: "\eb0f"}
+.laydate-next-m:before {content: "\eb0c"}
 
 /*color*/
 .text-muted { color: #ccc!important; }

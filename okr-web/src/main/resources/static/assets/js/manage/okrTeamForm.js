@@ -24,7 +24,7 @@ require(["jQuery"], function () {
             //渲染控件
             return $("#parentName").AutoCombobox({
                 async: {
-                    url: App["contextPath"] + "/manage/okrTeam/getParentObject.json",
+                    url: App["contextPath"] + "/manage/okrTeam/getTeamList.json",
                     dataSourceType: "onceRemote"
                 },
                 view: {
@@ -34,7 +34,7 @@ require(["jQuery"], function () {
                     },
                     colModels: [
                         {name: "id", label: "id", isHide: true},
-                        {name: "name", label: "目标名"}
+                        {name: "name", label: "团队名"}
                     ],
                     bindFill: {"#parentName": "name", "#parentId": "id"}
                 }
@@ -79,7 +79,8 @@ require(["jQuery"], function () {
                                 window.clearInterval(intervalTimeObj);
                             }
                         }, 100);
-                        fuzzySearch('ulUsersTree','#searchKey', null, true); //初始化模糊搜索方法
+                        pageObj.hideNodes = [];
+                        fuzzySearch('ulUsersTree','#searchKey', null, true, pageObj.hideNodes); //初始化模糊搜索方法
                     },
                     error: function (res) {
 

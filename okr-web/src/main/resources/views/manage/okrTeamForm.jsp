@@ -16,8 +16,7 @@
                     <label class="form-lab mt20">团队LOGO：</label>
                     <div class="form-control">
                         <div class="part-item ui-mx">
-                            <i class="iconfont icon-close"></i>
-                            <span><img src="${teamsExtVO.icon}"/></span>
+                            <em class="em-radio blue">${teamsExtVO.name}</em>
                         </div>
                     </div>
                 </li>
@@ -31,7 +30,7 @@
                     <label class="form-lab">父团队：</label>
                     <div class="form-control">
                         <div class="search">
-                            <input id="parentName" name="parentName" type="text" value="${teamsExtVO.parentName}" class="inp" placeholder="请选择父团队" />
+                            <input id="parentName" name="parentName" type="text" value="${teamsExtVO.parentName}" placeholder="请选择父团队" />
                             <input id="parentId" name="parentId" type="hidden" value="${teamsExtVO.parentId}"/>
                             <em></em>
                         </div>

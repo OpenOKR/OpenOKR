@@ -33,27 +33,6 @@ require(["jQuery"], function () {
         },
 
         initEvent:function () {
-            //登录页效果
-            $(".item input").focus(function(){
-                var $parent=$(this).parents(".item");
-                $parent.addClass("item-focus");
-                if($(this).val().length>0){
-                    $parent.addClass("item-change");
-                }
-            }).blur(function(){
-                var $parent=$(this).parents(".item");
-                if($(this).val().length==0){
-                    $parent.removeClass("item-focus");
-                }
-                $parent.removeClass("item-change");
-            }).keyup(function(){
-                var $parent=$(this).parents(".item");
-                if($(this).val().length>0){
-                    $parent.addClass("item-change");
-                }else {
-                    $parent.removeClass("item-change");
-                }
-            });
         }
     });
 
