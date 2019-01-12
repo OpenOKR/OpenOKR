@@ -6,8 +6,11 @@ import org.openokr.application.web.BaseController;
 import org.openokr.manage.service.IOkrMessageService;
 import org.openokr.manage.service.IOkrObjectService;
 import org.openokr.manage.service.IOkrTeamService;
-import org.openokr.manage.vo.*;
-import org.openokr.sys.vo.UserVOExt;
+import org.openokr.manage.vo.MessagesExtVO;
+import org.openokr.manage.vo.MessagesVO;
+import org.openokr.manage.vo.ObjectivesExtVO;
+import org.openokr.manage.vo.OkrObjectSearchVO;
+import org.openokr.manage.vo.TeamsExtVO;
 import org.openokr.utils.StringUtils;
 import org.openokr.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +45,7 @@ public class OkrObjectController extends BaseController {
     public String index(Model model) throws Exception {
         List<TeamsExtVO> teamList = okrTeamService.getTeamByUserId(getCurrentUserId());
         model.addAttribute("teamList", teamList);
-        UserVOExt current = getCurrentUser();
-        model.addAttribute("currentRealName", current.getRealName());
-        model.addAttribute("currentUserId", current.getId());
+        model.addAttribute("currentUserId", getCurrentUserId());
         return "manage/okrObjectList";
     }
 
@@ -68,7 +69,7 @@ public class OkrObjectController extends BaseController {
      * OKR详情页面
      */
     @GetMapping(value = "/okrDetail.htm")
-    public String okrDetail(String id, String type, Model model) {
+    public String okrDetail(String id, String type, String userId, Model model) {
         model.addAttribute("id", id);
         if (StringUtils.isEmpty(type)) {
             ObjectivesExtVO objectivesExtVO = okrObjectService.editObject(id);
@@ -84,6 +85,7 @@ public class OkrObjectController extends BaseController {
             editFlag = "1";
         }
         model.addAttribute("editFlag", editFlag);
+        model.addAttribute("userId", userId);
         return "manage/okrObjectDetail";
     }
 
@@ -95,7 +97,6 @@ public class OkrObjectController extends BaseController {
     @ResponseBody
     public ResponseResult getOkrDetail(@JsonPathParam("$.searchVO") OkrObjectSearchVO searchVO) {
         ResponseResult responseResult = new ResponseResult(true, null);
-        searchVO.setUserId(getCurrentUserId());
         ObjectivesExtVO object = okrObjectService.getOkrListByType(searchVO).get(0);
         responseResult.setInfo(object);
         return responseResult;

@@ -58,6 +58,10 @@ require(["jQuery"], function () {
                 callback: {
                     setRequestData: function (requestData) {
                         requestData.inputValue = this.value;
+                    },
+                    afterSelectRow: function (rowData) {
+                        $('#realName').val(rowData.realName);
+                        $('#userId').val(rowData.id);
                     }
                 }
             });
@@ -103,7 +107,7 @@ require(["jQuery"], function () {
                     if (idx !== 0) {
                         object.cssClass = "mt20";
                     }
-                    object.href = App.contextPath + "/manage/okrObject/okrDetail.htm?id=" + object.id + "&type=" + object.type;
+                    object.href = App.contextPath + "/manage/okrObject/okrDetail.htm?id=" + object.id + "&type=" + object.type + "&userId=" + object.ownerId;
                     var okrBody =
                         '<div class="card-area2 [%=object.cssClass%]">' +
                         '   <div class="okr-header">' +
@@ -192,17 +196,21 @@ require(["jQuery"], function () {
         showHideOperationButton: function () {
             switch (pageObj.currentType) {
                 case '1':
+                    if (pageObj.currentUserId !== $('#userId')) {
+                        $('#addObject').hide();
+                        $('.btn-del').hide(); $('.btn-other').hide();
+                    }
                     break;
                 case '2':
                     if (pageObj.editFlag !== 1) {
                         $('#addObject').hide();
-                        $('.btn-del').hide();
+                        $('.btn-del').hide(); $('.btn-other').hide();
                     }
                     break;
                 case '3':
                     if ($('#companyEditFlag').val() !== 1) {
                         $('#addObject').hide();
-                        $('.btn-del').hide();
+                        $('.btn-del').hide(); $('.btn-other').hide();
                     }
                     break;
             }

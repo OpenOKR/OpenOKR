@@ -11,9 +11,10 @@ require(["jQuery"], function () {
                 $.ajax({
                     url: App["contextPath"] + "/manage/okrObject/getOkrDetail.json",
                     type: "POST",
-                    data: JSON.stringify({searchVO: {objectId: pageObj.id, type: pageObj.type}}),
+                    data: JSON.stringify({searchVO: {objectId: pageObj.id, type: pageObj.type, userId: pageObj.userId}}),
                     contentType: 'application/json;charset=utf-8'
                 }).done(function (res) {
+                    pageObj.objectOwnerId = res.ownerId;
                     res && _this.buildOKRObjectDetail(res.info);
                 }).always(function () {
                     $("#detail").unblock();
@@ -449,6 +450,10 @@ require(["jQuery"], function () {
         showHideOperationButton: function () {
             switch (pageObj.type) {
                 case '1':
+                    if (pageObj.userId !== pageObj.objectOwnerId) {
+                        $('.btn-del').hide(); $('.btn-other').hide();
+                        $('.okr-ohter').hide();
+                    }
                     break;
                 case '2':
                     if (pageObj.editFlag !== '1') {

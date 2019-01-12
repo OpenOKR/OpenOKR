@@ -35,8 +35,8 @@
                     </div>
                     <label class="ind-title" id="realNameLabel">用户：</label>
                     <div class="select select-big" id="realNameDiv">
-                        <input id="realName" name="realName" type="text" placeholder="请选择" value="${currentRealName}" />
-                        <input id="userId" name="userId" type="hidden" value="${currentUserId}" />
+                        <input id="realName" name="realName" type="text" placeholder="请选择" />
+                        <input id="userId" name="userId" type="hidden" />
                         <i class="icon"></i>
                     </div>
                     <a id="search" onclick="pageObj.loadOKRObjects(pageObj.currentType, pageObj.currentTeamId);"
@@ -55,4 +55,7 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    var pageObj = {currentUserId: '${currentUserId}'};
+</script>
 <%@ include file="/views/application/_include_bottom.jsp"%>

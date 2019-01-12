@@ -31,6 +31,6 @@
     </div>
 </div>
 <script type="text/javascript">
-    var pageObj = {id : '${id}', type: '${type}', editFlag: '${editFlag}'};
+    var pageObj = {id : '${id}', type: '${type}', editFlag: '${editFlag}', userId: '${userId}'};
 </script>
 <%@ include file="/views/application/_include_bottom.jsp" %>
