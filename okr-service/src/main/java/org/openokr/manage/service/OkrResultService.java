@@ -3,13 +3,14 @@ package org.openokr.manage.service;
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.base.utils.BeanUtils;
 import com.zzheng.framework.base.utils.DateUtils;
+import com.zzheng.framework.base.utils.StringUtils;
 import com.zzheng.framework.exception.BusinessException;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.ListUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.openokr.application.framework.service.OkrBaseService;
 import org.openokr.application.utils.GetChangeDateUtil;
 import org.openokr.manage.entity.CheckinsEntity;
+import org.openokr.manage.entity.MessagesEntity;
 import org.openokr.manage.entity.ObjectivesEntity;
 import org.openokr.manage.entity.ResultUserRelaEntity;
 import org.openokr.manage.entity.ResultUserRelaEntityCondition;
@@ -17,13 +18,17 @@ import org.openokr.manage.entity.ResultsEntity;
 import org.openokr.manage.entity.ResultsEntityCondition;
 import org.openokr.manage.entity.TeamsEntity;
 import org.openokr.manage.enumerate.ExecuteStatusEnum;
+import org.openokr.manage.enumerate.MessageMarkEnum;
+import org.openokr.manage.enumerate.MessageTypeEnum;
 import org.openokr.manage.enumerate.ObjectivesStatusEnum;
 import org.openokr.manage.enumerate.ObjectivesTypeEnum;
 import org.openokr.manage.enumerate.ResultMetricUnitEnum;
 import org.openokr.manage.vo.CheckinsExtVO;
 import org.openokr.manage.vo.LogVO;
 import org.openokr.manage.vo.ResultsExtVO;
+import org.openokr.manage.vo.TeamsVO;
 import org.openokr.sys.vo.UserVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +44,9 @@ import java.util.Map;
 public class OkrResultService extends OkrBaseService implements IOkrResultService {
 
     private final static String MAPPER_NAMESPACE = "org.openokr.manage.sqlmapper.OkrResultMapper";
+
+    @Autowired
+    private IOkrTeamService okrTeamService;
 
     @Override
     public ResponseResult deleteResult(String resultId, String userId) throws BusinessException {
@@ -167,12 +175,6 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
     }
 
     @Override
-    public CheckinsExtVO editCheckins(String resultId) throws BusinessException {
-        CheckinsExtVO checkinsVO = new CheckinsExtVO();
-        return checkinsVO;
-    }
-
-    @Override
     public ResponseResult saveCheckins(CheckinsExtVO checkinsVO) throws BusinessException {
         String resultId = checkinsVO.getResultId();
         if (StringUtils.isEmpty(resultId)) {
@@ -187,9 +189,40 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
         //计算KR的进度
         ResultsEntity resultsEntity = this.selectByPrimaryKey(ResultsEntity.class, resultId);
         this.calculateResultProgress(resultsEntity, entity.getCurrentValue());
+        ObjectivesEntity objectivesEntity = this.selectByPrimaryKey(ObjectivesEntity.class, resultsEntity.getObjectId());
 
         //计算O的进度
         this.calculateObjectProgress(resultsEntity, checkinsVO.getCreateUserId());
+
+        // 消息通知影响团队
+        List<TeamsVO> teamsVOList = okrTeamService.getObjectTeamRel(resultsEntity.getObjectId());
+        List<MessagesEntity> messagesEntityList = new ArrayList<>();
+        for (TeamsVO teamsVO : teamsVOList) {
+            // 每周更新所属团队的负责人是自己，不需要进行消息通知
+            if (teamsVO.getOwnerId().equals(checkinsVO.getCreateUserId())) {
+                continue;
+            }
+            MessagesEntity messagesEntity = new MessagesEntity();
+            messagesEntity.setUserId(teamsVO.getOwnerId());
+            messagesEntity.setTitle("每周更新通知");
+            messagesEntity.setContent("目标：" + objectivesEntity.getName() + "，关键结果：" + resultsEntity.getName() +
+                    "<br/>状态更新为：" + ExecuteStatusEnum.getByCode(checkinsVO.getStatus()).getName() +
+                    "，执行单位：" + ResultMetricUnitEnum.getByCode(resultsEntity.getMetricUnit()).getName());
+            if (StringUtils.isNotEmpty(checkinsVO.getCurrentValue())) {
+                messagesEntity.setContent(messagesEntity.getContent() + " 当前值更新为：" + checkinsVO.getCurrentValue());
+            }
+            messagesEntity.setType(MessageTypeEnum.TYPE_4.getCode());
+            messagesEntity.setTargetId(resultsEntity.getId());
+            messagesEntity.setIsProcessed("1");
+            messagesEntity.setIsRead("0");
+            messagesEntity.setMark(MessageMarkEnum.MARK_4.getCode());
+            messagesEntity.setCreateUserId(checkinsVO.getCreateUserId());
+            messagesEntity.setCreateTs(new Date());
+            messagesEntityList.add(messagesEntity);
+        }
+        if (!messagesEntityList.isEmpty()) {
+            this.insertList(messagesEntityList);
+        }
 
         resultsEntity.setStatus(entity.getStatus());
         resultsEntity.setCurrentValue(checkinsVO.getCurrentValue());

@@ -69,23 +69,19 @@ public class OkrObjectController extends BaseController {
      * OKR详情页面
      */
     @GetMapping(value = "/okrDetail.htm")
-    public String okrDetail(String id, String type, String userId, Model model) {
-        model.addAttribute("id", id);
-        if (StringUtils.isEmpty(type)) {
-            ObjectivesExtVO objectivesExtVO = okrObjectService.editObject(id);
-            type = objectivesExtVO.getType();
-        }
-        model.addAttribute("type", type);
+    public String okrDetail(String id, Model model) {
+        ObjectivesExtVO objectivesExtVO = okrObjectService.getObjectById(id);
+        String type = objectivesExtVO.getType();
         String editFlag = "0";
-        if (type.equals("1")) {
+        if (type.equals("1") && objectivesExtVO.getOwnerId().equals(getCurrentUserId())) {
             editFlag = "1";
-        } else if (type.equals("2") && okrObjectService.editObject(id).getOwnerId().equals(getCurrentUserId())) {
+        } else if (type.equals("2") && objectivesExtVO.getOwnerId().equals(getCurrentUserId())) {
             editFlag = "1";
         } else if (type.equals("3") && UserUtils.getSubject().isPermitted("company:edit")) {
             editFlag = "1";
         }
+        model.addAttribute("id", id);
         model.addAttribute("editFlag", editFlag);
-        model.addAttribute("userId", userId);
         return "manage/okrObjectDetail";
     }
 
@@ -97,7 +93,7 @@ public class OkrObjectController extends BaseController {
     @ResponseBody
     public ResponseResult getOkrDetail(@JsonPathParam("$.searchVO") OkrObjectSearchVO searchVO) {
         ResponseResult responseResult = new ResponseResult(true, null);
-        ObjectivesExtVO object = okrObjectService.getOkrListByType(searchVO).get(0);
+        ObjectivesExtVO object = okrObjectService.getObjectById(searchVO.getObjectId());
         responseResult.setInfo(object);
         return responseResult;
     }
@@ -108,7 +104,7 @@ public class OkrObjectController extends BaseController {
      */
     @RequestMapping(value = "/okrObjectForm.htm")
     public String okrObjectForm(Model model, String objectId, String type, String teamId) {
-        ObjectivesExtVO objectVO = okrObjectService.editObject(objectId);
+        ObjectivesExtVO objectVO = okrObjectService.getObjectById(objectId);
         if (objectVO == null) {
             objectVO = new ObjectivesExtVO();
             objectVO.setType(type);

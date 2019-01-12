@@ -44,7 +44,10 @@ public class CheckinsVO extends BaseVO implements Serializable {
      */
     private String createUserId;
 
-
+    /**
+     * 评价单位（是否、百分比、数值）
+     */
+    private String metricUnit;
 
     /**
      * 主键
@@ -142,6 +145,20 @@ public class CheckinsVO extends BaseVO implements Serializable {
      */
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
+    }
+
+    /**
+     * 评价单位（是否、百分比、数值）
+     */
+    public String getMetricUnit() {
+        return metricUnit;
+    }
+
+    /**
+     * 评价单位（是否、百分比、数值）
+     */
+    public void setMetricUnit(String metricUnit) {
+        this.metricUnit = metricUnit;
     }
 
 }

@@ -35,7 +35,7 @@ public interface IOkrObjectService {
     List<UserVO> getJoinUsersByObjectId(String objectId, Integer limitAmount);
 
     /**
-     * 根据类型或者OKR列表
+     * 根据类型获取OKR列表
      * @param searchVO
      * @return
      * @throws BusinessException
@@ -67,21 +67,12 @@ public interface IOkrObjectService {
     List<ObjectivesExtVO> getCompanyOkrList(OkrObjectSearchVO searchVO) throws BusinessException;
 
     /**
-     * 获取OKR的历史操作记录
-     * @param objectId
-     * @param resultIds KR的所有ID
-     * @return
-     * @throws BusinessException
-     */
-    List<LogVO> getOperateRecordList(String objectId, List<String> resultIds) throws BusinessException;
-
-    /**
      * 编辑目标
      * @param objectId
      * @return
      * @throws BusinessException
      */
-    ObjectivesExtVO editObject(String objectId) throws BusinessException;
+    ObjectivesExtVO getObjectById(String objectId) throws BusinessException;
 
     /**
      * 保存目标

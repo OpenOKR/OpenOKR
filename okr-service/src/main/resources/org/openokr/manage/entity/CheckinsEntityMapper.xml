@@ -9,6 +9,7 @@
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="create_ts" jdbcType="TIMESTAMP" property="createTs" />
     <result column="create_user_id" jdbcType="VARCHAR" property="createUserId" />
+    <result column="metric_unit" jdbcType="CHAR" property="metricUnit" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,7 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, result_id, current_value, status, description, create_ts, create_user_id
+    id, result_id, current_value, status, description, create_ts, create_user_id, metric_unit
   </sql>
   <select id="selectByCondition" parameterType="org.openokr.manage.entity.CheckinsEntityCondition" resultMap="BaseResultMap">
     select
@@ -122,6 +123,9 @@
       <if test="record.createUserId != null">
         create_user_id = #{record.createUserId,jdbcType=VARCHAR},
       </if>
+      <if test="record.metricUnit != null">
+        metric_unit = #{record.metricUnit,jdbcType=CHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -133,9 +137,9 @@
     </if>
   </sql>
   <insert id="insertList" parameterType="java.util.List">
-     insert into t_okr_manage_checkins ( id,result_id,current_value,status,description,create_ts,create_user_id ) values
+     insert into t_okr_manage_checkins ( id,result_id,current_value,status,description,create_ts,create_user_id,metric_unit ) values
     <foreach collection="list" index="index" item="item" separator=",">
-       ( #{item.id,jdbcType=VARCHAR},#{item.resultId,jdbcType=VARCHAR},#{item.currentValue,jdbcType=VARCHAR},#{item.status,jdbcType=CHAR},#{item.description,jdbcType=VARCHAR},#{item.createTs,jdbcType=TIMESTAMP},#{item.createUserId,jdbcType=VARCHAR} )
+       ( #{item.id,jdbcType=VARCHAR},#{item.resultId,jdbcType=VARCHAR},#{item.currentValue,jdbcType=VARCHAR},#{item.status,jdbcType=CHAR},#{item.description,jdbcType=VARCHAR},#{item.createTs,jdbcType=TIMESTAMP},#{item.createUserId,jdbcType=VARCHAR},#{item.metricUnit,jdbcType=CHAR} )
     </foreach>
   </insert>
 </mapper>

@@ -47,7 +47,7 @@ require(["jQuery"], function () {
                     '       <li id="[%=msg.id%]" data-isread="[%=msg.isRead%]">' +
                     '           <div class="new-item">' +
                     '               <i class="[%=markList[msg.mark - 1].cssClass%]"></i>' +
-                    '               [%if(msg.type == 1){%]' +
+                    '               [%if(msg.type == 1 || msg.isProcessed == 1){%]' +
                     '                   <h4>[%=msg.title%]</h4>' +
                     '               [%}else if (msg.type == 2){%]' +
                     '                   <h4><a onclick="pageObj.objectAudit(\'[%=msg.id%]\')">[%=msg.title%]</a></h4>' +

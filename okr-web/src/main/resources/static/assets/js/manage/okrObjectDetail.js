@@ -11,10 +11,9 @@ require(["jQuery"], function () {
                 $.ajax({
                     url: App["contextPath"] + "/manage/okrObject/getOkrDetail.json",
                     type: "POST",
-                    data: JSON.stringify({searchVO: {objectId: pageObj.id, type: pageObj.type, userId: pageObj.userId}}),
+                    data: JSON.stringify({searchVO: {objectId: pageObj.id}}),
                     contentType: 'application/json;charset=utf-8'
                 }).done(function (res) {
-                    pageObj.objectOwnerId = res.ownerId;
                     res && _this.buildOKRObjectDetail(res.info);
                 }).always(function () {
                     $("#detail").unblock();
@@ -25,7 +24,6 @@ require(["jQuery"], function () {
         buildOKRObjectDetail: function (object) {
             require(["Underscore", "jQueryUtils", "AppUtils"], function () {
                 var $okrObjectDetail = $("#detail"); $okrObjectDetail.empty();
-                var $okrObjectHistory = $('#historyList'); $okrObjectHistory.empty();
                 var statusList = enumUtil.getEnum("objectivesStatusList.json");
                 var executeList = enumUtil.getEnum("executeStatusList.json");
                 var okrHeader =
@@ -123,12 +121,14 @@ require(["jQuery"], function () {
 
                 var con = UnderscoreUtil.getHtmlByText(okrCon, {object: object, executeList: executeList});
                 $okrObjectDetail.append(con);
-
                 pageObj.showHideOperationButton();
-
                 pageObj.pieEchartsFunc(object.id, object.progress);
+
+                // 历史操作
+                var $okrObjectHistory = $('#historyList'); $okrObjectHistory.empty();
                 var currentDateStr = $.DateUtils.getDateString(new Date());
                 $.each(object.operateRecordList, function (idx, item) {
+                    item.cssClass = "";
                     if (currentDateStr === $.DateUtils.getDateString(new Date(item.createTs))) {
                         item.createTsStr = $.DateUtils.getFormatDateString(new Date(item.createTs), "HH:mm:ss");
                         item.cssClass = "past";
@@ -147,6 +147,33 @@ require(["jQuery"], function () {
                         '</div>';
                     var history = UnderscoreUtil.getHtmlByText(okrHistory, item);
                     $okrObjectHistory.append(history);
+                });
+
+                // 每周更新
+                var metricUnitList = enumUtil.getEnum("metricUnitList.json");
+                var $okrObjectCheincks = $('#checkinList'); $okrObjectCheincks.empty();
+                $.each(object.checkinsVOList, function (idx, item) {
+                    item.cssClass = "";
+                    if (currentDateStr === $.DateUtils.getDateString(new Date(item.createTs))) {
+                        item.createTsStr = $.DateUtils.getFormatDateString(new Date(item.createTs), "HH:mm:ss");
+                        item.cssClass = "past";
+                    } else {
+                        item.createTsStr = $.DateUtils.getDateTimeString(new Date(item.createTs));
+                    }
+                    if (idx === 0) {
+                        item.cssClass = "active";
+                    }
+                    var okrCheckin = '<div class="area-process-li [%=item.cssClass%]">' +
+                        '   <em class="area-process-em"></em>' +
+                        '   <p class="area-process-date">[%=item.createTsStr%]</p>' +
+                        '   <div class="area-process-con">' +
+                        '       <h4>执行状态更新为：[%=executeList[item.status].name%]，' +
+                        '       执行单位：[%=metricUnitList[item.metricUnit - 1].name%]，当前值：[%=item.currentValue%]，' +
+                        '       描述：[%=item.description%]</h4>' +
+                        '   </div>' +
+                        '</div>';
+                    var checkin = UnderscoreUtil.getHtmlByText(okrCheckin, {item: item, executeList: executeList, metricUnitList: metricUnitList});
+                    $okrObjectCheincks.append(checkin);
                 });
             });
         },
@@ -260,7 +287,7 @@ require(["jQuery"], function () {
                     });
                 };
                 var dialogObj = dialog({
-                    url: App["contextPath"] + "/manage/okrObject/okrObjectForm.htm?objectId=" + id + "&type=" + pageObj.currentType,
+                    url: App["contextPath"] + "/manage/okrObject/okrObjectForm.htm?objectId=" + id,
                     title: '新增/编辑目标',
                     quickClose: false,
                     okValue: "保存",
@@ -448,23 +475,8 @@ require(["jQuery"], function () {
 
         // 操作按钮显示隐藏处理
         showHideOperationButton: function () {
-            switch (pageObj.type) {
-                case '1':
-                    if (pageObj.userId !== pageObj.objectOwnerId) {
-                        $('.btn-del').hide(); $('.btn-other').hide();
-                        $('.okr-ohter').hide();
-                    }
-                    break;
-                case '2':
-                    if (pageObj.editFlag !== '1') {
-                        $('.btn-del').hide();
-                    }
-                    break;
-                case '3':
-                    if ($('#companyEditFlag').val() !== '1') {
-                        $('.btn-del').hide();
-                    }
-                    break;
+            if (pageObj.editFlag !== '1') {
+                $('.btn-del').hide(); $('.btn-other').hide(); $('.okr-ohter').hide();
             }
         }
     });

@@ -36,7 +36,7 @@ require(["jQuery", "countUp"], function () {
                         '    <div class="card-area2">' +
                         '       <strong class="cart-tag">[%=teamName%]</strong>' +
                         '       <div class="area-report">' +
-                        '           <h3><a onclick="top.mainObj.menuClick(null, App.contextPath + \'/manage/okrObject/okrDetail.htm?id=[%=id%]&type=[%=type%]\', \'menu-2\');">[%=name%]</a></h3>' +
+                        '           <h3><a onclick="top.mainObj.menuClick(null, App.contextPath + \'/manage/okrObject/okrDetail.htm?id=[%=id%]\', \'menu-2\');">[%=name%]</a></h3>' +
                         '           <p>[%=description%]</p>' +
                         '           <div class="participant">' +
                         '               <span class="name">参与人员：</span>' +

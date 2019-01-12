@@ -107,7 +107,7 @@ require(["jQuery"], function () {
                     if (idx !== 0) {
                         object.cssClass = "mt20";
                     }
-                    object.href = App.contextPath + "/manage/okrObject/okrDetail.htm?id=" + object.id + "&type=" + object.type + "&userId=" + object.ownerId;
+                    object.href = App.contextPath + "/manage/okrObject/okrDetail.htm?id=" + object.id;
                     var okrBody =
                         '<div class="card-area2 [%=object.cssClass%]">' +
                         '   <div class="okr-header">' +

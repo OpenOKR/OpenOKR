@@ -47,7 +47,7 @@ public class OkrResultController extends BaseController {
         if (resultVO == null) {
             resultVO = new ResultsExtVO();
             resultVO.setObjectId(objectId);
-            resultVO.setObjectName(okrObjectService.editObject(objectId).getName());
+            resultVO.setObjectName(okrObjectService.getObjectById(objectId).getName());
         }
         model.addAttribute("metricUnitEnumList", ResultMetricUnitEnum.toList());
         model.addAttribute("resultVO", resultVO);

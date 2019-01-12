@@ -7,6 +7,8 @@ import com.zzheng.framework.exception.BusinessException;
 import org.apache.commons.collections.ListUtils;
 import org.openokr.application.framework.service.OkrBaseService;
 import org.openokr.application.utils.GetChangeDateUtil;
+import org.openokr.manage.entity.CheckinsEntity;
+import org.openokr.manage.entity.CheckinsEntityCondition;
 import org.openokr.manage.entity.LogEntity;
 import org.openokr.manage.entity.LogEntityCondition;
 import org.openokr.manage.entity.MessagesEntity;
@@ -23,6 +25,7 @@ import org.openokr.manage.enumerate.MessageMarkEnum;
 import org.openokr.manage.enumerate.MessageTypeEnum;
 import org.openokr.manage.enumerate.ObjectivesStatusEnum;
 import org.openokr.manage.enumerate.ObjectivesTypeEnum;
+import org.openokr.manage.vo.CheckinsVO;
 import org.openokr.manage.vo.LabelVO;
 import org.openokr.manage.vo.LogVO;
 import org.openokr.manage.vo.MessagesExtVO;
@@ -98,6 +101,8 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         } else if (ObjectivesTypeEnum.TYPE_3.getCode().equals(searchVO.getType())) { //公司OKR
             objectivesExtList = this.getCompanyOkrList(searchVO);
         }
+        // 设置KR信息
+        this.setKrInfo(objectivesExtList, searchVO);
         return objectivesExtList;
     }
 
@@ -110,8 +115,6 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         params.put("executeStatus", searchVO.getExecuteStatus());
         params.put("timeSessionId", searchVO.getTimeSessionId());
         List<ObjectivesExtVO> objectivesExtList = this.getDao().selectListBySql(MAPPER_NAMESPACE + ".getPersonalOkrList", params);
-        //设置KR信息
-        this.setKrInfo(objectivesExtList, searchVO);
         return objectivesExtList;
     }
 
@@ -125,8 +128,6 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         params.put("executeStatus", searchVO.getExecuteStatus());
         params.put("timeSessionId", searchVO.getTimeSessionId());
         List<ObjectivesExtVO> objectivesExtList = this.getDao().selectListBySql(MAPPER_NAMESPACE + ".getTeamOkrList", params);
-        //设置KR信息
-        this.setKrInfo(objectivesExtList, searchVO);
         return objectivesExtList;
     }
 
@@ -138,37 +139,11 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         params.put("executeStatus", searchVO.getExecuteStatus());
         params.put("timeSessionId", searchVO.getTimeSessionId());
         List<ObjectivesExtVO> objectivesExtList = this.getDao().selectListBySql(MAPPER_NAMESPACE + ".getCompanyOkrList", params);
-        //设置KR信息
-        this.setKrInfo(objectivesExtList, searchVO);
         return objectivesExtList;
     }
 
     @Override
-    public List<LogVO> getOperateRecordList(String objectId, List<String> resultIds) throws BusinessException {
-        List<LogVO> operateRecordList = new ArrayList<>();
-        LogEntityCondition logCondition = new LogEntityCondition();
-
-        // bizId 业务id bizType 1、目标 2、关键结果
-        LogEntityCondition.Criteria criteria = logCondition.createCriteria();
-        criteria.andBizTypeEqualTo("1").andBizIdEqualTo(objectId);
-        LogEntityCondition.Criteria criteria2 = logCondition.or();
-        if (resultIds != null && resultIds.size() > 0) {
-            criteria2.andBizTypeEqualTo("2").andBizIdIn(resultIds);
-        }
-        logCondition.setOrderByClause("create_ts desc");
-        List<LogEntity> logEntityList = this.selectByCondition(logCondition);
-        if (logEntityList != null && logEntityList.size()>0) {
-            for(LogEntity logEntity : logEntityList) {
-                LogVO logVO = new LogVO();
-                BeanUtils.copyBean(logEntity, logVO);
-                operateRecordList.add(logVO);
-            }
-        }
-        return operateRecordList;
-    }
-
-    @Override
-    public ObjectivesExtVO editObject(String objectId) throws BusinessException {
+    public ObjectivesExtVO getObjectById(String objectId) throws BusinessException {
         ObjectivesExtVO objectVO = new ObjectivesExtVO();
         ObjectivesEntity entity = this.selectByPrimaryKey(ObjectivesEntity.class, objectId);
         if (entity == null) {
@@ -183,6 +158,14 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         searchVO.setObjectId(objectId);
         searchVO.setLimitAmount(4);
         this.setKrInfo(list, searchVO);
+        List<String> resultIds = new ArrayList<>();
+        if (!objectVO.getResultsExtList().isEmpty()) {
+            for (ResultsExtVO resultsExtVO : objectVO.getResultsExtList()) {
+                resultIds.add(resultsExtVO.getId());
+            }
+        }
+        // 历史操作，每周更新
+        this.setOperateRecordInfo(objectVO, resultIds);
 
         // 所属团队
         TeamsEntity teamsEntity = this.selectByPrimaryKey(TeamsEntity.class, objectVO.getTeamId());
@@ -348,7 +331,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         this.update(entity);
 
         // 获取kr列表
-        ObjectivesExtVO objectivesExtVO = this.editObject(objectId);
+        ObjectivesExtVO objectivesExtVO = this.getObjectById(objectId);
         StringBuilder content = new StringBuilder().append(currentUser.getRealName()).append(" 提交目标审核请求，目标名：")
                 .append(objectivesExtVO.getName()).append("<br/>");
         if (objectivesExtVO.getResultsExtList() != null && objectivesExtVO.getResultsExtList().size() > 0) {
@@ -417,9 +400,8 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
      * 设置KR信息
      */
     private void setKrInfo(List<ObjectivesExtVO> objectivesExtList, OkrObjectSearchVO searchVO) {
-        if (objectivesExtList != null && objectivesExtList.size()>0) {
+        if (objectivesExtList != null && objectivesExtList.size() > 0) {
             for (ObjectivesExtVO objectivesExtVO : objectivesExtList) {
-                List<String> resultIds = new ArrayList<>();
                 // 获取KR信息
                 ResultsEntityCondition resultsCondition = new ResultsEntityCondition();
                 resultsCondition.createCriteria().andObjectIdEqualTo(objectivesExtVO.getId())
@@ -427,7 +409,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
                 resultsCondition.setOrderByClause("create_ts desc");
                 List<ResultsEntity> resultsList = this.selectByCondition(resultsCondition);
                 List<ResultsExtVO> resultsExtList = new ArrayList<>();
-                if (resultsList !=null) {
+                if (resultsList != null && resultsList.size() > 0) {
                     for (ResultsEntity resultsEntity : resultsList) {
                         ResultsExtVO resultsExtVO = new ResultsExtVO();
                         BeanUtils.copyBean(resultsEntity, resultsExtVO);
@@ -436,18 +418,56 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
                             resultsExtVO.setJoinUsers(userList);
                         }
                         resultsExtList.add(resultsExtVO);
-                        resultIds.add(resultsEntity.getId());
                     }
                 }
                 objectivesExtVO.setResultsExtList(resultsExtList);
-
-                //获取OKR的历史操作记录
-                if (StringUtils.isNotEmpty(searchVO.getObjectId())) { //目前业务,单个目标才需要展示历史操作记录
-                    List<LogVO> operateRecordList = this.getOperateRecordList(searchVO.getObjectId(), resultIds);
-                    objectivesExtVO.setOperateRecordList(operateRecordList);
-                }
             }
         }
+    }
+
+    /**
+     * 设置历史操作，每周更新
+     */
+    private void setOperateRecordInfo(ObjectivesExtVO objectivesExtVO, List<String> resultIds) {
+        // 获取OKR的历史操作记录
+        List<LogVO> operateRecordList = this.getOperateRecordList(objectivesExtVO.getId(), resultIds);
+        objectivesExtVO.setOperateRecordList(operateRecordList);
+        // 获取OKR的每周更新记录
+        List<CheckinsVO> checkinsVOList = this.getCheckinList(resultIds);
+        objectivesExtVO.setCheckinsVOList(checkinsVOList);
+    }
+
+    private List<LogVO> getOperateRecordList(String objectId, List<String> resultIds) throws BusinessException {
+        List<LogVO> operateRecordList = new ArrayList<>();
+        LogEntityCondition logCondition = new LogEntityCondition();
+        // bizId 业务id bizType 1、目标 2、关键结果
+        LogEntityCondition.Criteria criteria = logCondition.createCriteria();
+        criteria.andBizTypeEqualTo("1").andBizIdEqualTo(objectId);
+        LogEntityCondition.Criteria criteria2 = logCondition.or();
+        if (resultIds != null && resultIds.size() > 0) {
+            criteria2.andBizTypeEqualTo("2").andBizIdIn(resultIds);
+        }
+        logCondition.setOrderByClause("create_ts desc");
+        List<LogEntity> logEntityList = this.selectByCondition(logCondition);
+        if (logEntityList != null && logEntityList.size() > 0) {
+            operateRecordList = BeanUtils.copyToNewList(logEntityList, LogVO.class);
+        }
+        return operateRecordList;
+    }
+
+    private List<CheckinsVO> getCheckinList(List<String> resultIds) {
+        List<CheckinsVO> checkinsVOList = new ArrayList<>();
+        CheckinsEntityCondition checkinsCondition = new CheckinsEntityCondition();
+        List<CheckinsEntity> checkinsEntityList = new ArrayList<>();
+        if (resultIds != null && resultIds.size() > 0) {
+            checkinsCondition.createCriteria().andResultIdIn(resultIds);
+            checkinsCondition.setOrderByClause("create_ts desc");
+            checkinsEntityList = this.selectByCondition(checkinsCondition);
+        }
+        if (checkinsEntityList != null && checkinsEntityList.size() > 0) {
+            checkinsVOList = BeanUtils.copyToNewList(checkinsEntityList, CheckinsVO.class);
+        }
+        return checkinsVOList;
     }
 
     /**

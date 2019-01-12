@@ -36,6 +36,9 @@ public class ObjectivesExtVO extends ObjectivesVO implements Serializable {
     // 历史操作记录
     private List<LogVO> operateRecordList;
 
+    // 每周更新记录
+    private List<CheckinsVO> checkinsVOList;
+
     public List<UserVO> getJoinUsers() {
         return joinUsers;
     }
@@ -90,5 +93,13 @@ public class ObjectivesExtVO extends ObjectivesVO implements Serializable {
 
     public void setRelLabels(List<LabelVO> relLabels) {
         this.relLabels = relLabels;
+    }
+
+    public List<CheckinsVO> getCheckinsVOList() {
+        return checkinsVOList;
+    }
+
+    public void setCheckinsVOList(List<CheckinsVO> checkinsVOList) {
+        this.checkinsVOList = checkinsVOList;
     }
 }

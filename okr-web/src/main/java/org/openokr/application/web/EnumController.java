@@ -40,4 +40,10 @@ public class EnumController extends BaseController {
     public List<Map<String, Object>> executeStatusList() {
         return ExecuteStatusEnum.toList();
     }
+
+    @RequestMapping("/metricUnitList.json")
+    @ResponseBody
+    public List<Map<String, Object>> metricUnitList() {
+        return ResultMetricUnitEnum.toList();
+    }
 }
