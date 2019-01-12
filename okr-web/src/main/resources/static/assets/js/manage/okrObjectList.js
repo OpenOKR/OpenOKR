@@ -12,6 +12,7 @@ require(["jQuery"], function () {
             pageObj.editFlag = '1';
             require(["AutoCombobox"], function () {
                 pageObj.getStatusCombo();
+                pageObj.getUserCombo();
             });
         },
 
@@ -36,24 +37,61 @@ require(["jQuery"], function () {
             });
         },
 
+        getUserCombo: function () {
+            //渲染控件
+            return $("#realName").AutoCombobox({
+                async: {
+                    url: App["contextPath"] + "/sys/user/findByPageLikeInputValue.json",
+                    dataSourceType: "remote"
+                },
+                view: {
+                    singleColumnNotHead: true,
+                    widthRefer: function () {
+                        return $(this).parent().width();//引用当前自己输入框
+                    },
+                    colModels: [
+                        {name: "id", label: "id", isHide: true},
+                        {name: "realName", label: "真实姓名"}
+                    ],
+                    bindFill: {"#userName": "realName", "#userId": "id"}
+                },
+                callback: {
+                    setRequestData: function (requestData) {
+                        requestData.inputValue = this.value;
+                    }
+                }
+            });
+        },
+
         loadOKRObjects: function (type, teamId) {
-            var _this = this, keyword = $('#keyword').val(), status = $('#status').val();
+            var _this = this, keyword = $('#keyword').val(), status = $('#status').val(), userId = $('#userId').val();
             require(["jQueryBlockUI"], function () {
                 $("#message").block();
                 $.ajax({
                     url: App["contextPath"] + "/manage/okrObject/getOkrListByType.json",
                     type: "POST",
                     data: JSON.stringify({searchVO: {timeSessionId: top.mainObj.getCurrentTimeSession().id,
-                        type: type, teamId: teamId, keyword: keyword, executeStatus: status}}),
+                        type: type, teamId: teamId, keyword: keyword, executeStatus: status, userId: userId}}),
                     contentType: 'application/json;charset=utf-8'
                 }).done(function (res) {
                     pageObj.currentType = type;
                     pageObj.currentTeamId = teamId;
                     res && _this.buildOKRObjects(res);
+                    res && _this.showHideSearchDom();
                 }).always(function () {
                     $("#message").unblock();
                 });
             });
+        },
+
+        showHideSearchDom: function () {
+            if (pageObj.currentType === '1') {
+                $('#realNameLabel').show();
+                $('#realNameDiv').show();
+            } else {
+                $('#realNameLabel').hide();
+                $('#realNameDiv').hide();
+            }
         },
 
         buildOKRObjects: function (res) {

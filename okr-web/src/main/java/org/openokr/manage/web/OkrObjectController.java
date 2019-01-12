@@ -7,6 +7,7 @@ import org.openokr.manage.service.IOkrMessageService;
 import org.openokr.manage.service.IOkrObjectService;
 import org.openokr.manage.service.IOkrTeamService;
 import org.openokr.manage.vo.*;
+import org.openokr.sys.vo.UserVOExt;
 import org.openokr.utils.StringUtils;
 import org.openokr.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,9 @@ public class OkrObjectController extends BaseController {
     public String index(Model model) throws Exception {
         List<TeamsExtVO> teamList = okrTeamService.getTeamByUserId(getCurrentUserId());
         model.addAttribute("teamList", teamList);
+        UserVOExt current = getCurrentUser();
+        model.addAttribute("currentRealName", current.getRealName());
+        model.addAttribute("currentUserId", current.getId());
         return "manage/okrObjectList";
     }
 
@@ -52,7 +56,9 @@ public class OkrObjectController extends BaseController {
     @ResponseBody
     public ResponseResult getOkrListByType(@JsonPathParam("$.searchVO") OkrObjectSearchVO searchVO) {
         ResponseResult responseResult = new ResponseResult();
-        searchVO.setUserId(getCurrentUserId());
+        if (StringUtils.isEmpty(searchVO.getUserId())) {
+            searchVO.setUserId(getCurrentUserId());
+        }
         List<ObjectivesExtVO> objectivesExtList = okrObjectService.getOkrListByType(searchVO);
         responseResult.setInfo(objectivesExtList);
         return responseResult;

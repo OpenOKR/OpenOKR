@@ -30,7 +30,13 @@
                     <label class="ind-title">执行状态：</label>
                     <div class="select select-big">
                         <input id="statusName" name="statusName" type="text" placeholder="请选择" />
-                        <input id="status" name="status" type="hidden">
+                        <input id="status" name="status" type="hidden" />
+                        <i class="icon"></i>
+                    </div>
+                    <label class="ind-title" id="realNameLabel">用户：</label>
+                    <div class="select select-big" id="realNameDiv">
+                        <input id="realName" name="realName" type="text" placeholder="请选择" value="${currentRealName}" />
+                        <input id="userId" name="userId" type="hidden" value="${currentUserId}" />
                         <i class="icon"></i>
                     </div>
                     <a id="search" onclick="pageObj.loadOKRObjects(pageObj.currentType, pageObj.currentTeamId);"
