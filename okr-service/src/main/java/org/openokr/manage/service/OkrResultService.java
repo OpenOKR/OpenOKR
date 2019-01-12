@@ -180,14 +180,16 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
         if (StringUtils.isEmpty(resultId)) {
             return new ResponseResult(false, null, "关键结果ID不能为空！");
         }
+        ResultsEntity resultsEntity = this.selectByPrimaryKey(ResultsEntity.class, resultId);
+
         //KR进度每次都是新增,不改旧数据
         CheckinsEntity entity = new CheckinsEntity();
         BeanUtils.copyBean(checkinsVO, entity);
         entity.setCreateTs(new Date());
+        entity.setMetricUnit(resultsEntity.getMetricUnit());
         this.insert(entity);
 
         //计算KR的进度
-        ResultsEntity resultsEntity = this.selectByPrimaryKey(ResultsEntity.class, resultId);
         this.calculateResultProgress(resultsEntity, entity.getCurrentValue());
         ObjectivesEntity objectivesEntity = this.selectByPrimaryKey(ObjectivesEntity.class, resultsEntity.getObjectId());
 
