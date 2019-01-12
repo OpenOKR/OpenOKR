@@ -191,6 +191,7 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
         //计算O的进度
         this.calculateObjectProgress(resultsEntity, checkinsVO.getCreateUserId());
 
+        resultsEntity.setStatus(entity.getStatus());
         resultsEntity.setCurrentValue(checkinsVO.getCurrentValue());
         resultsEntity.setUpdateUserId(checkinsVO.getCreateUserId());
         resultsEntity.setUpdateTs(new Date());

@@ -196,9 +196,12 @@ require(["jQuery"], function () {
         showHideOperationButton: function () {
             switch (pageObj.currentType) {
                 case '1':
-                    if (pageObj.currentUserId !== $('#userId')) {
-                        $('#addObject').hide();
-                        $('.btn-del').hide(); $('.btn-other').hide();
+                    var searchUserId = $('#userId').val();
+                    if (searchUserId !== null && searchUserId !== '') {
+                        if (pageObj.currentUserId !== searchUserId) {
+                            $('#addObject').hide();
+                            $('.btn-del').hide(); $('.btn-other').hide();
+                        }
                     }
                     break;
                 case '2':
