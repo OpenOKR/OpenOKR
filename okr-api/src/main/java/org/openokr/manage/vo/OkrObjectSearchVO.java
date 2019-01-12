@@ -1,5 +1,7 @@
 package org.openokr.manage.vo;
 
+import org.openokr.application.Global;
+
 import java.io.Serializable;
 
 /**
@@ -24,7 +26,6 @@ public class OkrObjectSearchVO implements Serializable {
 
     private String executeStatus;
 
-    // 查询个数限制
     private Integer limitAmount;
 
     private String timeSessionId;
@@ -46,7 +47,7 @@ public class OkrObjectSearchVO implements Serializable {
     }
 
     public Integer getLimitAmount() {
-        return limitAmount == null ? 4 : limitAmount;
+        return limitAmount == null ? Global.OKR.limitAmount : limitAmount;
     }
 
     public void setLimitAmount(Integer limitAmount) {

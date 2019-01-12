@@ -20,7 +20,7 @@ require(["jQuery"], function () {
             //渲染控件
             return $("#statusName").AutoCombobox({
                 async: {
-                    url: App["contextPath"] + "/application/enum/objectivesStatusList.json",
+                    url: App["contextPath"] + "/application/enum/executeStatusList.json",
                     dataSourceType: "onceRemote"
                 },
                 view: {
@@ -103,6 +103,7 @@ require(["jQuery"], function () {
                 var $okrObjectList = $("#okrObjectList"); $okrObjectList.empty();
                 var statusList = enumUtil.getEnum("objectivesStatusList.json");
                 var executeList = enumUtil.getEnum("executeStatusList.json");
+                var status = $('#status').val();
                 $.each(res.info, function (idx, object) {
                     if (idx !== 0) {
                         object.cssClass = "mt20";
@@ -138,7 +139,11 @@ require(["jQuery"], function () {
                         '                   <li onmouseover="$(this).siblings().find(\'.participant\').hide(\'slow\');$(this).find(\'.participant\').show(\'slow\');">' +
                         '                       <div class="okr-list-in">' +
                         '                           <h4>' +
+                        '                               [%if(status != null && status != \'\'){%]' +
+                        '                               [%=item.name%]' +
+                        '                               [%}else{%]' +
                         '                               K[%=idx+1%]：[%=item.name%]' +
+                        '                               [%}%]' +
                         '                               <div class="action">' +
                         '                                   <span class="txt-all [%=executeList[item.status].cssClass%]">' +
                         '                                       <i class="iconfont icon-dot"></i>[%=executeList[item.status].name%]' +
@@ -183,7 +188,7 @@ require(["jQuery"], function () {
                         '       </ul>' +
                         '   </div>' +
                         '</div>';
-                    var okrList = UnderscoreUtil.getHtmlByText(okrBody, {object: object, statusList: statusList, executeList: executeList});
+                    var okrList = UnderscoreUtil.getHtmlByText(okrBody, {object: object, status: status, statusList: statusList, executeList: executeList});
                     $okrObjectList.append(okrList);
 
                     pageObj.showHideOperationButton();
@@ -415,6 +420,10 @@ require(["jQuery"], function () {
                     var resultId = $(window.frames[dialogObj.id].document).find("#resultId").val(), currentValue,
                         status = $(window.frames[dialogObj.id].document).find("input[name='metricUnit']:checked").val(),
                         description = $(window.frames[dialogObj.id].document).find("#description").val();
+                    if (status === null || status === '' || status === undefined) {
+                        TipsUtil.warn("必须选择当前执行状态！");
+                        return;
+                    }
                     if ($(window.frames[dialogObj.id].document).find("#currentValue").length > 0) {
                         currentValue = $(window.frames[dialogObj.id].document).find("#currentValue").val();
                         var regexp = new RegExp(/^\d+(\.\d+)?$/);

@@ -234,6 +234,11 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
         return new ResponseResult(true, null, "保存成功");
     }
 
+    @Override
+    public List<CheckinsExtVO> findCheckinList(Map<String, Object> params) {
+        return this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE + ".findCheckinList", params);
+    }
+
     //计算KR的进度
     private void calculateResultProgress(ResultsEntity entity, String currentValue) {
         if(ResultMetricUnitEnum.TYPE_1.getCode().equals(entity.getMetricUnit())) { //是否完成

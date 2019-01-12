@@ -71,7 +71,6 @@ public class IndexController extends BaseController {
         OkrObjectSearchVO searchVO = new OkrObjectSearchVO();
         searchVO.setTimeSessionId(timeSessionId);
         searchVO.setUserId(getCurrentUserId());
-        searchVO.setLimitAmount(4);
         List<ObjectivesExtVO> objectivesExtList = okrObjectService.getAllOkrList(searchVO);
         responseResult.setInfo(objectivesExtList);
         return responseResult;

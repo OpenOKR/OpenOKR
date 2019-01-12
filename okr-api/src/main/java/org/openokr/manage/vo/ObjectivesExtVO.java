@@ -1,6 +1,5 @@
 package org.openokr.manage.vo;
 
-import org.openokr.manage.enumerate.ObjectivesTypeEnum;
 import org.openokr.sys.vo.UserVO;
 
 import java.io.Serializable;
@@ -37,7 +36,7 @@ public class ObjectivesExtVO extends ObjectivesVO implements Serializable {
     private List<LogVO> operateRecordList;
 
     // 每周更新记录
-    private List<CheckinsVO> checkinsVOList;
+    private List<CheckinsExtVO> checkinsExtVOList;
 
     public List<UserVO> getJoinUsers() {
         return joinUsers;
@@ -95,11 +94,12 @@ public class ObjectivesExtVO extends ObjectivesVO implements Serializable {
         this.relLabels = relLabels;
     }
 
-    public List<CheckinsVO> getCheckinsVOList() {
-        return checkinsVOList;
+    public List<CheckinsExtVO> getCheckinsExtVOList() {
+        return checkinsExtVOList;
     }
 
-    public void setCheckinsVOList(List<CheckinsVO> checkinsVOList) {
-        this.checkinsVOList = checkinsVOList;
+    public ObjectivesExtVO setCheckinsExtVOList(List<CheckinsExtVO> checkinsExtVOList) {
+        this.checkinsExtVOList = checkinsExtVOList;
+        return this;
     }
 }

@@ -8,6 +8,7 @@ import org.openokr.manage.vo.ResultsExtVO;
 import org.openokr.sys.vo.UserVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * OKR 关键结果(result)service
@@ -57,4 +58,10 @@ public interface IOkrResultService {
      */
     ResponseResult saveCheckins(CheckinsExtVO checkinsVO) throws BusinessException;
 
+    /**
+     * 获取每周更新
+     * @param params
+     * @return
+     */
+    List<CheckinsExtVO> findCheckinList(Map<String, Object> params);
 }

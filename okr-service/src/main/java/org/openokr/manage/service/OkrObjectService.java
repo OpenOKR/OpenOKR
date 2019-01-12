@@ -25,7 +25,7 @@ import org.openokr.manage.enumerate.MessageMarkEnum;
 import org.openokr.manage.enumerate.MessageTypeEnum;
 import org.openokr.manage.enumerate.ObjectivesStatusEnum;
 import org.openokr.manage.enumerate.ObjectivesTypeEnum;
-import org.openokr.manage.vo.CheckinsVO;
+import org.openokr.manage.vo.CheckinsExtVO;
 import org.openokr.manage.vo.LabelVO;
 import org.openokr.manage.vo.LogVO;
 import org.openokr.manage.vo.MessagesExtVO;
@@ -156,7 +156,6 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         // KR列表
         OkrObjectSearchVO searchVO = new OkrObjectSearchVO();
         searchVO.setObjectId(objectId);
-        searchVO.setLimitAmount(4);
         this.setKrInfo(list, searchVO);
         List<String> resultIds = new ArrayList<>();
         if (!objectVO.getResultsExtList().isEmpty()) {
@@ -404,9 +403,12 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
             for (ObjectivesExtVO objectivesExtVO : objectivesExtList) {
                 // 获取KR信息
                 ResultsEntityCondition resultsCondition = new ResultsEntityCondition();
-                resultsCondition.createCriteria().andObjectIdEqualTo(objectivesExtVO.getId())
-                        .andDelFlagEqualTo("0");
-                resultsCondition.setOrderByClause("create_ts desc");
+                ResultsEntityCondition.Criteria criteria = resultsCondition.createCriteria();
+                criteria.andObjectIdEqualTo(objectivesExtVO.getId()).andDelFlagEqualTo("0");
+                if (StringUtils.isNotEmpty(searchVO.getExecuteStatus())) {
+                    criteria.andStatusEqualTo(searchVO.getExecuteStatus());
+                }
+                resultsCondition.setOrderByClause("create_ts asc");
                 List<ResultsEntity> resultsList = this.selectByCondition(resultsCondition);
                 List<ResultsExtVO> resultsExtList = new ArrayList<>();
                 if (resultsList != null && resultsList.size() > 0) {
@@ -433,8 +435,8 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         List<LogVO> operateRecordList = this.getOperateRecordList(objectivesExtVO.getId(), resultIds);
         objectivesExtVO.setOperateRecordList(operateRecordList);
         // 获取OKR的每周更新记录
-        List<CheckinsVO> checkinsVOList = this.getCheckinList(resultIds);
-        objectivesExtVO.setCheckinsVOList(checkinsVOList);
+        List<CheckinsExtVO> checkinsVOList = this.getCheckinList(resultIds);
+        objectivesExtVO.setCheckinsExtVOList(checkinsVOList);
     }
 
     private List<LogVO> getOperateRecordList(String objectId, List<String> resultIds) throws BusinessException {
@@ -455,17 +457,12 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         return operateRecordList;
     }
 
-    private List<CheckinsVO> getCheckinList(List<String> resultIds) {
-        List<CheckinsVO> checkinsVOList = new ArrayList<>();
-        CheckinsEntityCondition checkinsCondition = new CheckinsEntityCondition();
-        List<CheckinsEntity> checkinsEntityList = new ArrayList<>();
+    private List<CheckinsExtVO> getCheckinList(List<String> resultIds) {
+        List<CheckinsExtVO> checkinsVOList = new ArrayList<>();
+        Map<String, Object> params = new HashMap<>();
+        params.put("resultIds", resultIds);
         if (resultIds != null && resultIds.size() > 0) {
-            checkinsCondition.createCriteria().andResultIdIn(resultIds);
-            checkinsCondition.setOrderByClause("create_ts desc");
-            checkinsEntityList = this.selectByCondition(checkinsCondition);
-        }
-        if (checkinsEntityList != null && checkinsEntityList.size() > 0) {
-            checkinsVOList = BeanUtils.copyToNewList(checkinsEntityList, CheckinsVO.class);
+            checkinsVOList = okrResultService.findCheckinList(params);
         }
         return checkinsVOList;
     }
