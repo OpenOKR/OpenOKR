@@ -98,7 +98,7 @@ require(["jQuery"], function () {
                     $menuItem.append(html);
                 });
                 $(".hearder-menu li").hover(function(e){
-                    e.stopPropagation();
+                    $(this).find(".menu-list").finish();
                     $(this).find(".menu-list").slideDown("flow");
                 },function(){
                     $(this).find(".menu-list").slideUp("flow");

@@ -56,7 +56,7 @@ require(["jQuery"], function () {
                     '   <ul class="okr-list">' +
                     '       [%if(!_.isNull(object.resultsExtList) && object.resultsExtList.length>0){%]' +
                     '           [%_.each(object.resultsExtList, function(item, idx){%]' +
-                    '               <li onmouseover="$(this).siblings().find(\'.participant\').hide(\'slow\');$(this).find(\'.participant\').show(\'slow\');">' +
+                    '               <li>' +
                     '                   <div class="okr-list-in">' +
                     '                       <h4>' +
                     '                           K[%=idx+1%]：[%=item.name%]' +
@@ -125,6 +125,15 @@ require(["jQuery"], function () {
 
                 var con = UnderscoreUtil.getHtmlByText(okrCon, {object: object, executeList: executeList});
                 $okrObjectDetail.append(con);
+
+                $(".okr-list li").hover(function(e){
+                    console.log($(this));
+                    $(this).find(".participant").finish();
+                    $(this).find(".participant").slideDown("flow");
+                },function(){
+                    $(this).find(".participant").slideUp("flow");
+                });
+
                 pageObj.showHideOperationButton();
                 pageObj.pieEchartsFunc(object.id, object.progress);
 
