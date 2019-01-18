@@ -1,6 +1,5 @@
 package org.openokr.application.framework.service;
 
-
 import com.zzheng.framework.base.utils.BeanUtils;
 import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.service.impl.BaseServiceImpl;
@@ -32,5 +31,4 @@ public class OkrBaseService extends BaseServiceImpl implements IOkrBaseService {
 	public String getCurrentTimeSessionId() throws BusinessException {
 		return okrTimeSessionsService.getDefaultTimeSession().getId();
 	}
-
 }

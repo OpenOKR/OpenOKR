@@ -24,6 +24,13 @@
         <foreach collection="resultIds" open="(" close=")" item="item" separator=",">
             #{item}
         </foreach>
+        order by t1.create_ts desc
+    </select>
+
+    <select id="getIdxById" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select rownum from
+        (select row_number() over (order by create_ts) as rownum, id from t_okr_manage_results where object_id = #{objectId}) a
+        where id = #{id}
     </select>
 
 </mapper>

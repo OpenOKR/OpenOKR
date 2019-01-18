@@ -59,16 +59,9 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
 
         //删除KR要更新O的进度
         this.calculateObjectProgress(resultsEntity, userId);
+        addOrDelResultLogInfo("删除", resultsEntity, userId);
 
-        // 保存操作记录
-        LogVO logVO = new LogVO();
-        logVO.setBizId(resultId);
-        logVO.setBizType("2");
-        logVO.setMessage("删除关键结果:"+ resultsEntity.getName() +"");
-        logVO.setCreateTs(new Date());
-        logVO.setCreateUserId(userId);
-        this.saveOkrLog(logVO);
-        responseResult.setMessage("删除成功");
+        responseResult.setSuccess(true).setMessage("删除成功");
         return responseResult;
     }
 
@@ -101,6 +94,7 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
 
             //计算O的进度
             this.calculateObjectProgress(entity, userId);
+            addOrDelResultLogInfo("新增", entity, entity.getCreateUserId());
         } else { //更新
             ResultsEntity targetEntity = this.selectByPrimaryKey(ResultsEntity.class, resultId);
             ResultsEntity originalEntity = BeanUtils.copyToNewBean(targetEntity, ResultsEntity.class);
@@ -300,6 +294,26 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
     }
 
     /**
+     * 新增/删除 关键结果日志
+     */
+    private void addOrDelResultLogInfo(String pre, ResultsEntity entity, String currentUserId) {
+        // 获取关键结果下标
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", entity.getId());
+        params.put("objectId", entity.getObjectId());
+        int idx = this.getMyBatisDao().selectOneBySql(MAPPER_NAMESPACE + ".getIdxById", params);
+
+        // 保存新增操作记录
+        LogVO logVO = new LogVO();
+        logVO.setBizId(entity.getId());
+        logVO.setBizType("2");
+        logVO.setMessage(pre + "关键结果：KR" + idx + "，名称：" +  entity.getName());
+        logVO.setCreateTs(new Date());
+        logVO.setCreateUserId(currentUserId);
+        this.saveOkrLog(logVO);
+    }
+
+    /**
      * 历史操作日志
      * @param originalEntity 原始的实体
      * @param targetEntity 页面修改后的实体
@@ -310,31 +324,44 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
                                   List<ResultUserRelaEntity> originalUserRelList, List<UserVO> targetUserRelList) {
         Map<String ,Object> compareMap = GetChangeDateUtil.compareFields(originalEntity, targetEntity,
                 new String[]{"name", "description", "currentValue", "endTs", "status", "progress"});
-        StringBuilder message = new StringBuilder();
+
+        StringBuilder message = new StringBuilder(); boolean flag = false;
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", originalEntity.getId());
+        params.put("objectId", originalEntity.getObjectId());
+        int idx = this.getMyBatisDao().selectOneBySql(MAPPER_NAMESPACE + ".getIdxById", params);
+        message.append("关键结果标识：KR").append(idx).append("<br/>");
+
         if (compareMap != null && !compareMap.isEmpty()) {
             for (String key : compareMap.keySet()) {
                 if (key.equals("name")){
                     message.append("关键结果名称修改为：").append(compareMap.get(key)).append("，");
+                    flag = true;
                     continue;
                 }
                 if (key.equals("description")){
                     message.append("关键结果描述修改为：").append(compareMap.get(key)).append("，");
+                    flag = true;
                     continue;
                 }
                 if (key.equals("currentValue")){
                     message.append("关键结果当前值修改为：").append(compareMap.get(key)).append("，");
+                    flag = true;
                     continue;
                 }
                 if (key.equals("endTs")) {
                     message.append("关键结果完成时间修改为：").append(DateUtils.getDateStr((Date) compareMap.get(key))).append("，");
+                    flag = true;
                     continue;
                 }
                 if (key.equals("status")) {
                     message.append("关键结果执行状态更新为：").append(ExecuteStatusEnum.getByCode(compareMap.get(key).toString()).getName()).append("，");
+                    flag = true;
                     continue;
                 }
                 if (key.equals("progress")) {
                     message.append("关键结果执行进度更新为：").append(compareMap.get(key)).append("，");
+                    flag = true;
                 }
             }
         }
@@ -355,9 +382,10 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
                 targetUserRelaNames.delete(0, targetUserRelaNames.length()).append("空");
             }
             message.append("关键结果协同人修改为：").append(targetUserRelaNames.toString()).append("，");
+            flag = true;
         }
 
-        if (StringUtils.isNotEmpty(message.toString())) {
+        if (flag) {
             // 保存操作记录
             LogVO logVO = new LogVO();
             logVO.setBizId(targetEntity.getId());

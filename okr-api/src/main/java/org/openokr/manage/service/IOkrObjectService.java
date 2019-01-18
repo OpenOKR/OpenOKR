@@ -67,7 +67,7 @@ public interface IOkrObjectService {
     List<ObjectivesExtVO> getCompanyOkrList(OkrObjectSearchVO searchVO) throws BusinessException;
 
     /**
-     * 编辑目标
+     * 获取目标详情
      * @param objectId
      * @return
      * @throws BusinessException
