@@ -480,16 +480,12 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
                                   List<ObjectTeamRelaEntity> originalTeamRelList, List<ObjectLabelRelaEntity> originalLabelsRelList,
                                   List<TeamsVO> targetRelTeams, List<LabelVO> targetRelLabels) {
         Map<String ,Object> compareMap = GetChangeDateUtil.compareFields(originalEntity, targetEntity,
-                new String[]{"name", "description", "confidenceLevel", "status", "parentId", "teamId"});
+                new String[]{"name", "confidenceLevel", "status", "parentId", "teamId"});
         StringBuilder message = new StringBuilder();
         if (compareMap != null && !compareMap.isEmpty()) {
             for (String key : compareMap.keySet()) {
                 if (key.equals("name")){
                     message.append("目标名称修改为：").append(compareMap.get(key)).append("，");
-                    continue;
-                }
-                if (key.equals("description")){
-                    message.append("目标描述修改为：").append(compareMap.get(key)).append("，");
                     continue;
                 }
                 if (key.equals("confidenceLevel")){
@@ -551,6 +547,15 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
                 targetLabelRelaNames.delete(0, targetLabelRelaNames.length()).append("空");
             }
             message.append("目标标签修改为：").append(targetLabelRelaNames.toString()).append("，");
+        }
+        // 单独对description进行处理，之前没消息时直接添加，有消息去除掉，后再<br/>单独一行添加
+        if (!originalEntity.getDescription().equals(targetEntity.getDescription())) {
+            if (message.toString().equals("")) {
+                message.append("目标描述修改为：").append(targetEntity.getDescription());
+            } else {
+                String temp = message.substring(0, message.length() - 1);
+                message.delete(0, message.length()).append(temp).append("<br/>目标描述修改为：").append(targetEntity.getDescription());
+            }
         }
         if (StringUtils.isNotEmpty(message.toString())) {
             // 保存操作记录

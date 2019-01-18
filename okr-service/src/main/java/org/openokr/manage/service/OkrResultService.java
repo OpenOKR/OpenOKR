@@ -207,6 +207,9 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
             if (StringUtils.isNotEmpty(checkinsVO.getCurrentValue())) {
                 messagesEntity.setContent(messagesEntity.getContent() + " 当前值更新为：" + checkinsVO.getCurrentValue());
             }
+            if (StringUtils.isNotEmpty(checkinsVO.getDescription())) {
+                messagesEntity.setContent(messagesEntity.getContent() + "<br/>描述：" + checkinsVO.getDescription());
+            }
             messagesEntity.setType(MessageTypeEnum.TYPE_4.getCode());
             messagesEntity.setTargetId(resultsEntity.getId());
             messagesEntity.setIsProcessed("1");
@@ -323,7 +326,7 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
     private void setResultLogInfo(ResultsEntity originalEntity, ResultsEntity targetEntity,
                                   List<ResultUserRelaEntity> originalUserRelList, List<UserVO> targetUserRelList) {
         Map<String ,Object> compareMap = GetChangeDateUtil.compareFields(originalEntity, targetEntity,
-                new String[]{"name", "description", "currentValue", "endTs", "status", "progress"});
+                new String[]{"name", "currentValue", "endTs", "status", "progress"});
 
         StringBuilder message = new StringBuilder(); boolean flag = false;
         Map<String, Object> params = new HashMap<>();
@@ -336,11 +339,6 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
             for (String key : compareMap.keySet()) {
                 if (key.equals("name")){
                     message.append("关键结果名称修改为：").append(compareMap.get(key)).append("，");
-                    flag = true;
-                    continue;
-                }
-                if (key.equals("description")){
-                    message.append("关键结果描述修改为：").append(compareMap.get(key)).append("，");
                     flag = true;
                     continue;
                 }
@@ -384,7 +382,15 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
             message.append("关键结果协同人修改为：").append(targetUserRelaNames.toString()).append("，");
             flag = true;
         }
-
+        // 单独对description进行处理，之前没消息时直接添加，有消息去除掉，后再<br/>单独一行添加
+        if (!originalEntity.getDescription().equals(targetEntity.getDescription())) {
+            if (message.toString().equals("")) {
+                message.append("关键结果描述修改为：").append(targetEntity.getDescription());
+            } else {
+                String temp = message.substring(0, message.length() - 1);
+                message.delete(0, message.length()).append(temp).append("<br/>关键结果描述修改为：").append(targetEntity.getDescription());
+            }
+        }
         if (flag) {
             // 保存操作记录
             LogVO logVO = new LogVO();
