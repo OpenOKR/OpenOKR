@@ -54,15 +54,8 @@ require(["jQuery"], function () {
             var treeId = 'ulUsersTree', $tree = $('#' + treeId);
             if (pageObj._initUsersTree !== true) {//防重复
                 $.fn.zTree.init($tree, {
-                    check: {
-                        enable: true,
-                        checkboxType: {"Y": "ps", "N": "ps"}
-                    },
-                    data: {
-                        simpleData: {
-                            enable: true
-                        }
-                    }
+                    check: {enable: true, checkboxType: {"Y": "ps", "N": "ps"}},
+                    data: {simpleData: {enable: true}, key: {name: "realName"}}
                 });
                 //给用户树赋值数据
                 $.ajax({
