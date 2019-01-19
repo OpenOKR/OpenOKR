@@ -384,12 +384,13 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
         }
         // 单独对description进行处理，之前没消息时直接添加，有消息去除掉，后再<br/>单独一行添加
         if (!originalEntity.getDescription().equals(targetEntity.getDescription())) {
-            if (message.toString().equals("")) {
+            if (!flag) {
                 message.append("关键结果描述修改为：").append(targetEntity.getDescription());
             } else {
                 String temp = message.substring(0, message.length() - 1);
                 message.delete(0, message.length()).append(temp).append("<br/>关键结果描述修改为：").append(targetEntity.getDescription());
             }
+            flag = true;
         }
         if (flag) {
             // 保存操作记录

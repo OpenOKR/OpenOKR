@@ -549,7 +549,9 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
             message.append("目标标签修改为：").append(targetLabelRelaNames.toString()).append("，");
         }
         // 单独对description进行处理，之前没消息时直接添加，有消息去除掉，后再<br/>单独一行添加
+        boolean editDescFlag = false;
         if (!originalEntity.getDescription().equals(targetEntity.getDescription())) {
+            editDescFlag = true;
             if (message.toString().equals("")) {
                 message.append("目标描述修改为：").append(targetEntity.getDescription());
             } else {
@@ -562,7 +564,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
             LogVO logVO = new LogVO();
             logVO.setBizId(targetEntity.getId());
             logVO.setBizType("1");
-            logVO.setMessage(message.substring(0, message.length() - 1));
+            logVO.setMessage(editDescFlag ? message.toString() : message.substring(0, message.length() - 1));
             logVO.setCreateTs(new Date());
             logVO.setCreateUserId(targetEntity.getUpdateUserId());
             this.saveOkrLog(logVO);

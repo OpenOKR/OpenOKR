@@ -182,8 +182,8 @@ require(["jQuery"], function () {
                         '   <div class="area-process-con">' +
                         '       <h4>关键结果：[%=item.resultName%]</h4>' +
                         '       <h4>执行状态更新为：[%=executeList[item.status].name%]，' +
-                        '       执行单位：[%=metricUnitList[item.metricUnit - 1].name%]，当前值：[%=item.currentValue%]，' +
-                        '       描述：[%=item.description%]</h4>' +
+                        '       执行单位：[%=metricUnitList[item.metricUnit - 1].name%]，当前值：[%=item.currentValue%]' +
+                        '       <br/>描述：[%=item.description%]</h4>' +
                         '   </div>' +
                         '</div>';
                     var checkin = UnderscoreUtil.getHtmlByText(okrCheckin, {item: item, executeList: executeList, metricUnitList: metricUnitList});
