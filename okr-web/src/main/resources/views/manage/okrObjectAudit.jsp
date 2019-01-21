@@ -5,12 +5,15 @@
 <c:set var="pageJs" value="${staticContextPath}/assets/js/manage/okrObjectAudit.js"/>
 <%@ include file="/views/application/_include_top.jsp" %>
 <div style="width: 600px;height: 200px;border-radius: 5px; background-color: #fff; margin: 0 auto; overflow-y: auto;">
-    <form id="objectAuditForm" class="ui-form inner3">
+    <form id="objectAuditForm" class="ui-form">
         <input name="id" type="hidden" value="${message.id}">
         <input name="targetId" type="hidden" value="${message.targetId}">
         <ul class="form-grid font4">
             <li class="col-sm-12">
-                <strong style="font-size: 14px">${message.content}</strong>
+                <label class="form-lab">描述：</label>
+                <div class="form-control" style="line-height: 24px;">
+                    ${message.content}
+                </div>
             </li>
             <li class="col-sm-12">
                 <label class="form-lab">是否同意：</label>

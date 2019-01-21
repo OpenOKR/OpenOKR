@@ -122,6 +122,22 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
             // 更新检查变化的字段，写入历史操作日志
             setResultLogInfo(originalEntity, targetEntity, resultUserRelList, resultVO.getJoinUsers());
         }
+
+        // 关键结果所属目标需要重新审核
+        String objectId = resultVO.getObjectId();
+        ObjectivesEntity entity = this.selectByPrimaryKey(ObjectivesEntity.class, objectId);
+        // 获取object所属团队责任人，若修改的目标所属团队责任人和当前用户一致，直接将状态设置为已确认
+        TeamsEntity teamsEntity = this.selectByPrimaryKey(TeamsEntity.class, entity.getTeamId());
+        // 设置状态，当类型是 团队或公司时，不需要审核，其他情况下一律设置成未提交
+        if (entity.getType().equals(ObjectivesTypeEnum.TYPE_2.getCode()) || entity.getType().equals(ObjectivesTypeEnum.TYPE_3.getCode())) {
+            entity.setStatus(ObjectivesStatusEnum.STATUS_3.getCode());
+        } else if (teamsEntity.getOwnerId().equals(userId)) {
+            entity.setStatus(ObjectivesStatusEnum.STATUS_3.getCode());
+        } else {
+            entity.setStatus(ObjectivesStatusEnum.STATUS_1.getCode());//一旦有修改,目标就要变成未提交状态
+        }
+        this.update(entity);
+
         // 新增关键结果协同人员
         if (resultVO.getJoinUsers() != null && resultVO.getJoinUsers().size()>0) {
             List<ResultUserRelaEntity> resultUserRelList = new ArrayList<>();

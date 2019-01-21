@@ -5,7 +5,7 @@
     <resultMap id="mapList" type="java.util.Map">
         <id column="id" property="id"/>
         <result column="realName" property="realName"/>
-        <result column="parent_id" property="parentId"/>
+        <result column="parent_id" property="pId"/>
         <collection property="children" ofType="java.util.Map"
                     column="{organizationId=id,currentUserId=currentUserId}"
                     select="org.openokr.sys.sqlmapper.OrganizationMapper.findUserListByOrganizationId" >

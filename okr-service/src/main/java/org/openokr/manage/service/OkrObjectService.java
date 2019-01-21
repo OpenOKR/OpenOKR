@@ -331,8 +331,8 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
 
         // 获取kr列表
         ObjectivesExtVO objectivesExtVO = this.getObjectById(objectId);
-        StringBuilder content = new StringBuilder().append(currentUser.getRealName()).append(" 提交目标审核请求，目标名：")
-                .append(objectivesExtVO.getName()).append("<br/>");
+        StringBuilder content = new StringBuilder().append(currentUser.getRealName()).append(" 提交目标审核请求<br/>" +
+                "目标名：").append(objectivesExtVO.getName()).append("<br/>");
         if (objectivesExtVO.getResultsExtList() != null && objectivesExtVO.getResultsExtList().size() > 0) {
             content.append("关键结果：<br/>");
             for (int i = 0; i < objectivesExtVO.getResultsExtList().size(); i++) {
