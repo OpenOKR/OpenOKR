@@ -247,6 +247,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
             setObjectLogInfo(originalEntity, targetEntity, teamRelaList, labelsRelList, objectVO.getRelTeams(), objectVO.getRelLabels());
         }
 
+        objectId = targetEntity.getId();
         // 新增影响团队
         if (objectVO.getRelTeams() != null && objectVO.getRelTeams().size()>0) {
             List<ObjectTeamRelaEntity> teamsEntityList = new ArrayList<>();

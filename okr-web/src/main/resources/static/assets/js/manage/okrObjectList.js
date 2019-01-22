@@ -334,7 +334,6 @@ require(["jQuery"], function () {
                     url: App["contextPath"] + "/manage/okrObject/okrObjectForm.htm?objectId=" + id +
                         "&type=" + pageObj.currentType + "&teamId=" + pageObj.currentTeamId,
                     title: '新增/编辑目标',
-                    height: 440,
                     quickClose: false,
                     okValue: "保存",
                     cancelValue: "关闭",
@@ -404,7 +403,6 @@ require(["jQuery"], function () {
                 var dialogObj = dialog({
                     url: App["contextPath"] + "/manage/okrResult/okrResultForm.htm?resultId=" + id + "&objectId=" + objectId,
                     title: '新增/编辑关键结果',
-                    height: 400,
                     quickClose: false,
                     okValue: "保存",
                     cancelValue: "关闭",

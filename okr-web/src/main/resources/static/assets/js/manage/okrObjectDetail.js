@@ -491,6 +491,7 @@ require(["jQuery"], function () {
         showHideOperationButton: function () {
             if (pageObj.editFlag !== '1') {
                 $('.btn-del').hide(); $('.btn-other').hide(); $('.okr-ohter').hide();
+                $('.btn-primary').hide();   // 提交确认
             }
         }
     });
