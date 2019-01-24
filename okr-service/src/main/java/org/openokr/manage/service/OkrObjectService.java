@@ -25,7 +25,7 @@ import org.openokr.manage.enumerate.MessageMarkEnum;
 import org.openokr.manage.enumerate.MessageTypeEnum;
 import org.openokr.manage.enumerate.ObjectivesStatusEnum;
 import org.openokr.manage.enumerate.ObjectivesTypeEnum;
-import org.openokr.manage.vo.CheckinsVO;
+import org.openokr.manage.vo.CheckinsExtVO;
 import org.openokr.manage.vo.LabelVO;
 import org.openokr.manage.vo.LogVO;
 import org.openokr.manage.vo.MessagesExtVO;
@@ -156,7 +156,6 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         // KR列表
         OkrObjectSearchVO searchVO = new OkrObjectSearchVO();
         searchVO.setObjectId(objectId);
-        searchVO.setLimitAmount(4);
         this.setKrInfo(list, searchVO);
         List<String> resultIds = new ArrayList<>();
         if (!objectVO.getResultsExtList().isEmpty()) {
@@ -248,6 +247,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
             setObjectLogInfo(originalEntity, targetEntity, teamRelaList, labelsRelList, objectVO.getRelTeams(), objectVO.getRelLabels());
         }
 
+        objectId = targetEntity.getId();
         // 新增影响团队
         if (objectVO.getRelTeams() != null && objectVO.getRelTeams().size()>0) {
             List<ObjectTeamRelaEntity> teamsEntityList = new ArrayList<>();
@@ -332,8 +332,8 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
 
         // 获取kr列表
         ObjectivesExtVO objectivesExtVO = this.getObjectById(objectId);
-        StringBuilder content = new StringBuilder().append(currentUser.getRealName()).append(" 提交目标审核请求，目标名：")
-                .append(objectivesExtVO.getName()).append("<br/>");
+        StringBuilder content = new StringBuilder().append(currentUser.getRealName()).append(" 提交目标审核请求<br/>" +
+                "目标名：").append(objectivesExtVO.getName()).append("<br/>");
         if (objectivesExtVO.getResultsExtList() != null && objectivesExtVO.getResultsExtList().size() > 0) {
             content.append("关键结果：<br/>");
             for (int i = 0; i < objectivesExtVO.getResultsExtList().size(); i++) {
@@ -404,9 +404,12 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
             for (ObjectivesExtVO objectivesExtVO : objectivesExtList) {
                 // 获取KR信息
                 ResultsEntityCondition resultsCondition = new ResultsEntityCondition();
-                resultsCondition.createCriteria().andObjectIdEqualTo(objectivesExtVO.getId())
-                        .andDelFlagEqualTo("0");
-                resultsCondition.setOrderByClause("create_ts desc");
+                ResultsEntityCondition.Criteria criteria = resultsCondition.createCriteria();
+                criteria.andObjectIdEqualTo(objectivesExtVO.getId()).andDelFlagEqualTo("0");
+                if (StringUtils.isNotEmpty(searchVO.getExecuteStatus())) {
+                    criteria.andStatusEqualTo(searchVO.getExecuteStatus());
+                }
+                resultsCondition.setOrderByClause("create_ts asc");
                 List<ResultsEntity> resultsList = this.selectByCondition(resultsCondition);
                 List<ResultsExtVO> resultsExtList = new ArrayList<>();
                 if (resultsList != null && resultsList.size() > 0) {
@@ -433,8 +436,8 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         List<LogVO> operateRecordList = this.getOperateRecordList(objectivesExtVO.getId(), resultIds);
         objectivesExtVO.setOperateRecordList(operateRecordList);
         // 获取OKR的每周更新记录
-        List<CheckinsVO> checkinsVOList = this.getCheckinList(resultIds);
-        objectivesExtVO.setCheckinsVOList(checkinsVOList);
+        List<CheckinsExtVO> checkinsVOList = this.getCheckinList(resultIds);
+        objectivesExtVO.setCheckinsExtVOList(checkinsVOList);
     }
 
     private List<LogVO> getOperateRecordList(String objectId, List<String> resultIds) throws BusinessException {
@@ -455,17 +458,12 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         return operateRecordList;
     }
 
-    private List<CheckinsVO> getCheckinList(List<String> resultIds) {
-        List<CheckinsVO> checkinsVOList = new ArrayList<>();
-        CheckinsEntityCondition checkinsCondition = new CheckinsEntityCondition();
-        List<CheckinsEntity> checkinsEntityList = new ArrayList<>();
+    private List<CheckinsExtVO> getCheckinList(List<String> resultIds) {
+        List<CheckinsExtVO> checkinsVOList = new ArrayList<>();
+        Map<String, Object> params = new HashMap<>();
+        params.put("resultIds", resultIds);
         if (resultIds != null && resultIds.size() > 0) {
-            checkinsCondition.createCriteria().andResultIdIn(resultIds);
-            checkinsCondition.setOrderByClause("create_ts desc");
-            checkinsEntityList = this.selectByCondition(checkinsCondition);
-        }
-        if (checkinsEntityList != null && checkinsEntityList.size() > 0) {
-            checkinsVOList = BeanUtils.copyToNewList(checkinsEntityList, CheckinsVO.class);
+            checkinsVOList = okrResultService.findCheckinList(params);
         }
         return checkinsVOList;
     }
@@ -483,16 +481,12 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
                                   List<ObjectTeamRelaEntity> originalTeamRelList, List<ObjectLabelRelaEntity> originalLabelsRelList,
                                   List<TeamsVO> targetRelTeams, List<LabelVO> targetRelLabels) {
         Map<String ,Object> compareMap = GetChangeDateUtil.compareFields(originalEntity, targetEntity,
-                new String[]{"name", "description", "confidenceLevel", "status", "parentId", "teamId"});
+                new String[]{"name", "confidenceLevel", "status", "parentId", "teamId"});
         StringBuilder message = new StringBuilder();
         if (compareMap != null && !compareMap.isEmpty()) {
             for (String key : compareMap.keySet()) {
                 if (key.equals("name")){
                     message.append("目标名称修改为：").append(compareMap.get(key)).append("，");
-                    continue;
-                }
-                if (key.equals("description")){
-                    message.append("目标描述修改为：").append(compareMap.get(key)).append("，");
                     continue;
                 }
                 if (key.equals("confidenceLevel")){
@@ -555,12 +549,23 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
             }
             message.append("目标标签修改为：").append(targetLabelRelaNames.toString()).append("，");
         }
+        // 单独对description进行处理，之前没消息时直接添加，有消息去除掉，后再<br/>单独一行添加
+        boolean editDescFlag = false;
+        if (!originalEntity.getDescription().equals(targetEntity.getDescription())) {
+            editDescFlag = true;
+            if (message.toString().equals("")) {
+                message.append("目标描述修改为：").append(targetEntity.getDescription());
+            } else {
+                String temp = message.substring(0, message.length() - 1);
+                message.delete(0, message.length()).append(temp).append("<br/>目标描述修改为：").append(targetEntity.getDescription());
+            }
+        }
         if (StringUtils.isNotEmpty(message.toString())) {
             // 保存操作记录
             LogVO logVO = new LogVO();
             logVO.setBizId(targetEntity.getId());
             logVO.setBizType("1");
-            logVO.setMessage(message.substring(0, message.length() - 1));
+            logVO.setMessage(editDescFlag ? message.toString() : message.substring(0, message.length() - 1));
             logVO.setCreateTs(new Date());
             logVO.setCreateUserId(targetEntity.getUpdateUserId());
             this.saveOkrLog(logVO);

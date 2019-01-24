@@ -15,5 +15,22 @@
         </if>
     </select>
 
+    <select id="findCheckinList" parameterType="java.util.Map" resultType="org.openokr.manage.vo.CheckinsExtVO">
+        select t1.id, t1.result_id, t1.current_value, t1.status, t1.description, t1.create_ts, t1.metric_unit,
+        t2.name as "resultName"
+        from t_okr_manage_checkins t1
+        left join t_okr_manage_results t2 on t2.id = t1.result_id
+        where 1 = 1 and t1.result_id in
+        <foreach collection="resultIds" open="(" close=")" item="item" separator=",">
+            #{item}
+        </foreach>
+        order by t1.create_ts desc
+    </select>
+
+    <select id="getIdxById" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select rownum from
+        (select row_number() over (order by create_ts) as rownum, id from t_okr_manage_results where object_id = #{objectId}) a
+        where id = #{id}
+    </select>
 
 </mapper>

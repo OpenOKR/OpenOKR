@@ -89,7 +89,7 @@ require(["jQuery"], function () {
                 $.fn.zTree.init($tree, {
                     check: {enable: true},
                     view: {dblClickExpand: false},
-                    data: {simpleData: {enable: true}},
+                    data: {simpleData: {enable: true}, key: {name: "realName"}},
                     callback: {beforeClick: beforeClick, onCheck: onCheck}
                 });
                 //给用户树赋值数据

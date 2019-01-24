@@ -59,16 +59,9 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
 
         //删除KR要更新O的进度
         this.calculateObjectProgress(resultsEntity, userId);
+        addOrDelResultLogInfo("删除", resultsEntity, userId);
 
-        // 保存操作记录
-        LogVO logVO = new LogVO();
-        logVO.setBizId(resultId);
-        logVO.setBizType("2");
-        logVO.setMessage("删除关键结果:"+ resultsEntity.getName() +"");
-        logVO.setCreateTs(new Date());
-        logVO.setCreateUserId(userId);
-        this.saveOkrLog(logVO);
-        responseResult.setMessage("删除成功");
+        responseResult.setSuccess(true).setMessage("删除成功");
         return responseResult;
     }
 
@@ -101,6 +94,7 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
 
             //计算O的进度
             this.calculateObjectProgress(entity, userId);
+            addOrDelResultLogInfo("新增", entity, entity.getCreateUserId());
         } else { //更新
             ResultsEntity targetEntity = this.selectByPrimaryKey(ResultsEntity.class, resultId);
             ResultsEntity originalEntity = BeanUtils.copyToNewBean(targetEntity, ResultsEntity.class);
@@ -128,6 +122,22 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
             // 更新检查变化的字段，写入历史操作日志
             setResultLogInfo(originalEntity, targetEntity, resultUserRelList, resultVO.getJoinUsers());
         }
+
+        // 关键结果所属目标需要重新审核
+        String objectId = resultVO.getObjectId();
+        ObjectivesEntity entity = this.selectByPrimaryKey(ObjectivesEntity.class, objectId);
+        // 获取object所属团队责任人，若修改的目标所属团队责任人和当前用户一致，直接将状态设置为已确认
+        TeamsEntity teamsEntity = this.selectByPrimaryKey(TeamsEntity.class, entity.getTeamId());
+        // 设置状态，当类型是 团队或公司时，不需要审核，其他情况下一律设置成未提交
+        if (entity.getType().equals(ObjectivesTypeEnum.TYPE_2.getCode()) || entity.getType().equals(ObjectivesTypeEnum.TYPE_3.getCode())) {
+            entity.setStatus(ObjectivesStatusEnum.STATUS_3.getCode());
+        } else if (teamsEntity.getOwnerId().equals(userId)) {
+            entity.setStatus(ObjectivesStatusEnum.STATUS_3.getCode());
+        } else {
+            entity.setStatus(ObjectivesStatusEnum.STATUS_1.getCode());//一旦有修改,目标就要变成未提交状态
+        }
+        this.update(entity);
+
         // 新增关键结果协同人员
         if (resultVO.getJoinUsers() != null && resultVO.getJoinUsers().size()>0) {
             List<ResultUserRelaEntity> resultUserRelList = new ArrayList<>();
@@ -213,6 +223,9 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
             if (StringUtils.isNotEmpty(checkinsVO.getCurrentValue())) {
                 messagesEntity.setContent(messagesEntity.getContent() + " 当前值更新为：" + checkinsVO.getCurrentValue());
             }
+            if (StringUtils.isNotEmpty(checkinsVO.getDescription())) {
+                messagesEntity.setContent(messagesEntity.getContent() + "<br/>描述：" + checkinsVO.getDescription());
+            }
             messagesEntity.setType(MessageTypeEnum.TYPE_4.getCode());
             messagesEntity.setTargetId(resultsEntity.getId());
             messagesEntity.setIsProcessed("1");
@@ -232,6 +245,11 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
         resultsEntity.setUpdateTs(new Date());
         this.update(resultsEntity);
         return new ResponseResult(true, null, "保存成功");
+    }
+
+    @Override
+    public List<CheckinsExtVO> findCheckinList(Map<String, Object> params) {
+        return this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE + ".findCheckinList", params);
     }
 
     //计算KR的进度
@@ -295,6 +313,26 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
     }
 
     /**
+     * 新增/删除 关键结果日志
+     */
+    private void addOrDelResultLogInfo(String pre, ResultsEntity entity, String currentUserId) {
+        // 获取关键结果下标
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", entity.getId());
+        params.put("objectId", entity.getObjectId());
+        int idx = this.getMyBatisDao().selectOneBySql(MAPPER_NAMESPACE + ".getIdxById", params);
+
+        // 保存新增操作记录
+        LogVO logVO = new LogVO();
+        logVO.setBizId(entity.getId());
+        logVO.setBizType("2");
+        logVO.setMessage(pre + "关键结果：KR" + idx + "，名称：" +  entity.getName());
+        logVO.setCreateTs(new Date());
+        logVO.setCreateUserId(currentUserId);
+        this.saveOkrLog(logVO);
+    }
+
+    /**
      * 历史操作日志
      * @param originalEntity 原始的实体
      * @param targetEntity 页面修改后的实体
@@ -304,32 +342,40 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
     private void setResultLogInfo(ResultsEntity originalEntity, ResultsEntity targetEntity,
                                   List<ResultUserRelaEntity> originalUserRelList, List<UserVO> targetUserRelList) {
         Map<String ,Object> compareMap = GetChangeDateUtil.compareFields(originalEntity, targetEntity,
-                new String[]{"name", "description", "currentValue", "endTs", "status", "progress"});
-        StringBuilder message = new StringBuilder();
+                new String[]{"name", "currentValue", "endTs", "status", "progress"});
+
+        StringBuilder message = new StringBuilder(); boolean flag = false;
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", originalEntity.getId());
+        params.put("objectId", originalEntity.getObjectId());
+        int idx = this.getMyBatisDao().selectOneBySql(MAPPER_NAMESPACE + ".getIdxById", params);
+        message.append("关键结果标识：KR").append(idx).append("<br/>");
+
         if (compareMap != null && !compareMap.isEmpty()) {
             for (String key : compareMap.keySet()) {
                 if (key.equals("name")){
                     message.append("关键结果名称修改为：").append(compareMap.get(key)).append("，");
-                    continue;
-                }
-                if (key.equals("description")){
-                    message.append("关键结果描述修改为：").append(compareMap.get(key)).append("，");
+                    flag = true;
                     continue;
                 }
                 if (key.equals("currentValue")){
                     message.append("关键结果当前值修改为：").append(compareMap.get(key)).append("，");
+                    flag = true;
                     continue;
                 }
                 if (key.equals("endTs")) {
                     message.append("关键结果完成时间修改为：").append(DateUtils.getDateStr((Date) compareMap.get(key))).append("，");
+                    flag = true;
                     continue;
                 }
                 if (key.equals("status")) {
                     message.append("关键结果执行状态更新为：").append(ExecuteStatusEnum.getByCode(compareMap.get(key).toString()).getName()).append("，");
+                    flag = true;
                     continue;
                 }
                 if (key.equals("progress")) {
                     message.append("关键结果执行进度更新为：").append(compareMap.get(key)).append("，");
+                    flag = true;
                 }
             }
         }
@@ -350,9 +396,19 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
                 targetUserRelaNames.delete(0, targetUserRelaNames.length()).append("空");
             }
             message.append("关键结果协同人修改为：").append(targetUserRelaNames.toString()).append("，");
+            flag = true;
         }
-
-        if (StringUtils.isNotEmpty(message.toString())) {
+        // 单独对description进行处理，之前没消息时直接添加，有消息去除掉，后再<br/>单独一行添加
+        if (!originalEntity.getDescription().equals(targetEntity.getDescription())) {
+            if (!flag) {
+                message.append("关键结果描述修改为：").append(targetEntity.getDescription());
+            } else {
+                String temp = message.substring(0, message.length() - 1);
+                message.delete(0, message.length()).append(temp).append("<br/>关键结果描述修改为：").append(targetEntity.getDescription());
+            }
+            flag = true;
+        }
+        if (flag) {
             // 保存操作记录
             LogVO logVO = new LogVO();
             logVO.setBizId(targetEntity.getId());

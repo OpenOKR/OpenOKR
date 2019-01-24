@@ -96,7 +96,8 @@ require(["jQuery"], function () {
                     viewUniqueFieldName: "name",
                     widthRefer: function () {
                         return $(this).width() + 14;//引用当前自己输入框
-                    }
+                    },
+                    dropDownWithin: "form"
                 },
                 callback: {
                     beforeAjaxSuccess: function (treeData) {
@@ -130,7 +131,8 @@ require(["jQuery"], function () {
                     viewUniqueFieldName: "name",
                     widthRefer: function () {
                         return $(this).width() + 14;//引用当前自己输入框
-                    }
+                    },
+                    dropDownWithin: "form"
                 },
                 callback: {
                     beforeAjaxSuccess: function (treeData) {

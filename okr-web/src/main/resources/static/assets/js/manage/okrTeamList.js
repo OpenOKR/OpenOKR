@@ -49,7 +49,7 @@ require(["jQuery"], function () {
                         '       </div>' +
                         '       <div class="participant ui-l">' +
                         '           <span class="name">参与人员：</span>' +
-                        '           <ul id="teamUsers-[%=team.id%]" data-edit="0" class="participant-list nicescroll">' +
+                        '           <ul id="teamUsers-[%=team.id%]" data-edit="0" class="participant-list nicescroll" style="overflow-y: auto;">' +
                         '               [%if(!_.isNull(team.teamRelUsers) && team.teamRelUsers.length>0){%]' +
                         '                   [%_.each(team.teamRelUsers, function (user){%]' +
                         '                       <li class="part-item">' +

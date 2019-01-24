@@ -51,11 +51,12 @@ require(["jQuery"], function () {
                     '       <span id="confidenceLevel" class="txt-item" data-value="[%=object.confidenceLevel%]">把握</span>' +
                     '   </div>' +
                     '</div>';
-                var okrCon = '<div class="okr-con">' +
+                var okrCon =
+                    '<div class="okr-con">' +
                     '   <ul class="okr-list">' +
                     '       [%if(!_.isNull(object.resultsExtList) && object.resultsExtList.length>0){%]' +
                     '           [%_.each(object.resultsExtList, function(item, idx){%]' +
-                    '               <li onmouseover="$(this).siblings().find(\'.participant\').hide(\'slow\');$(this).find(\'.participant\').show(\'slow\');">' +
+                    '               <li>' +
                     '                   <div class="okr-list-in">' +
                     '                       <h4>' +
                     '                           K[%=idx+1%]：[%=item.name%]' +
@@ -71,7 +72,11 @@ require(["jQuery"], function () {
                     '                               [%if(!_.isNull(item.joinUsers) && item.joinUsers.length>0){%]' +
                     '                                   [%_.each(item.joinUsers, function(user){%]' +
                     '                                       [%if(!_.isNull(user)){%]' +
-                    '                                           <li class="part-item"><span><img src="/assets/images/temp/pic.png" title="[%=user.realName%]" alt="[%=user.realName%]"></span></li>' +
+                    '                                           [%if(user.realName.length>2)%]' +
+                    '                                           <li class="part-item"><span class="image">[%=user.realName.substr(1,2)%]</span></li>' +
+                    '                                           [%else%]' +
+                    '                                           <li class="part-item"><span class="image">[%=user.realName%]</span></li>' +
+                    '                                           [%;%]' +
                     '                                       [%}%]' +
                     '                                   [%});%]' +
                     '                                   <li class="part-item"><a href="javascript:void(0);"><i class="iconfont icon-more"></i></a></li>' +
@@ -81,8 +86,7 @@ require(["jQuery"], function () {
                     '                   </div>' +
                     '                   <div class="okr-list-tab">' +
                     '                       <p class="scroll-bar">' +
-                    '                           <i class="complete"></i>' +
-                    '                           <i class="new"></i>' +
+                    '                           <i class="complete"></i><i class="new"></i>' +
                     '                           <span class="vals">' +
                     '                               <em class="num" data-end="[%=item.preProgress%]" data-new="[%=item.progress%]">[%=item.progress%]</em>%' +
                     '                           </span>' +
@@ -121,6 +125,15 @@ require(["jQuery"], function () {
 
                 var con = UnderscoreUtil.getHtmlByText(okrCon, {object: object, executeList: executeList});
                 $okrObjectDetail.append(con);
+
+                $(".okr-list li").hover(function(e){
+                    console.log($(this));
+                    $(this).find(".participant").finish();
+                    $(this).find(".participant").slideDown("flow");
+                },function(){
+                    $(this).find(".participant").slideUp("flow");
+                });
+
                 pageObj.showHideOperationButton();
                 pageObj.pieEchartsFunc(object.id, object.progress);
 
@@ -152,7 +165,7 @@ require(["jQuery"], function () {
                 // 每周更新
                 var metricUnitList = enumUtil.getEnum("metricUnitList.json");
                 var $okrObjectCheincks = $('#checkinList'); $okrObjectCheincks.empty();
-                $.each(object.checkinsVOList, function (idx, item) {
+                $.each(object.checkinsExtVOList, function (idx, item) {
                     item.cssClass = "";
                     if (currentDateStr === $.DateUtils.getDateString(new Date(item.createTs))) {
                         item.createTsStr = $.DateUtils.getFormatDateString(new Date(item.createTs), "HH:mm:ss");
@@ -167,9 +180,10 @@ require(["jQuery"], function () {
                         '   <em class="area-process-em"></em>' +
                         '   <p class="area-process-date">[%=item.createTsStr%]</p>' +
                         '   <div class="area-process-con">' +
+                        '       <h4>关键结果：[%=item.resultName%]</h4>' +
                         '       <h4>执行状态更新为：[%=executeList[item.status].name%]，' +
-                        '       执行单位：[%=metricUnitList[item.metricUnit - 1].name%]，当前值：[%=item.currentValue%]，' +
-                        '       描述：[%=item.description%]</h4>' +
+                        '       执行单位：[%=metricUnitList[item.metricUnit - 1].name%]，当前值：[%=item.currentValue%]' +
+                        '       <br/>描述：[%=item.description%]</h4>' +
                         '   </div>' +
                         '</div>';
                     var checkin = UnderscoreUtil.getHtmlByText(okrCheckin, {item: item, executeList: executeList, metricUnitList: metricUnitList});
@@ -477,6 +491,7 @@ require(["jQuery"], function () {
         showHideOperationButton: function () {
             if (pageObj.editFlag !== '1') {
                 $('.btn-del').hide(); $('.btn-other').hide(); $('.okr-ohter').hide();
+                $('.btn-primary').hide();   // 提交确认
             }
         }
     });

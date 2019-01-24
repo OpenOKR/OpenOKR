@@ -1,6 +1,7 @@
 package org.openokr.sys.web;
 
 import com.zzheng.framework.adapter.vo.ResponseResult;
+import com.zzheng.framework.base.utils.JSONUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.openokr.application.framework.annotation.JsonPathParam;
 import org.openokr.application.web.BaseController;
@@ -60,6 +61,7 @@ public class OrganizationController extends BaseController {
     @PostMapping(value = "/organization/findContainUserOfAll.json")
     @ResponseBody
     public List<Map<String, Object>> findContainUserOfAll() {
-        return organizationService.findContainUserOfAll(getCurrentUserId());
+        List<Map<String, Object>> list = organizationService.findContainUserOfAll(getCurrentUserId());
+        return list;
     }
 }

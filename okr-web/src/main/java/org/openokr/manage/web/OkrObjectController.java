@@ -80,6 +80,10 @@ public class OkrObjectController extends BaseController {
         } else if (type.equals("3") && UserUtils.getSubject().isPermitted("company:edit")) {
             editFlag = "1";
         }
+        // 判断时间段是否是未激活的
+        if (!objectivesExtVO.getTimeSessionId().equals(getCurrentTimeSessionId())) {
+            editFlag = "0";
+        }
         model.addAttribute("id", id);
         model.addAttribute("editFlag", editFlag);
         return "manage/okrObjectDetail";
