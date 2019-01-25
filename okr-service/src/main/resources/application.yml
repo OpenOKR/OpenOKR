@@ -82,6 +82,6 @@ spring:
 spring:
   profiles: prd
   datasource:
-    url: jdbc:postgresql://172.16.128.27:5433/okr
+    url: jdbc:postgresql://172.16.11.165:5432/okr
     username: okr
     password: okr
