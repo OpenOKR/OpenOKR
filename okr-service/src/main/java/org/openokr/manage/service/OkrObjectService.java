@@ -296,7 +296,6 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
                 break;
             }
 
-
         if (parentList !=null && parentList.size()>0 && judge==1) {
             responseResult.setMessage("该目标还存在子目标,无法删除");
             responseResult.setSuccess(false);
