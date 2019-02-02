@@ -44,16 +44,16 @@ public class OkrBaseService extends BaseServiceImpl implements IOkrBaseService {
 	@Override
 	public void deleteAuditMsg(String objectId) {
 		MessagesEntityCondition condition = new MessagesEntityCondition();
-		// 目标审核消息
+		// 重新审核，删除未处理目标审核消息
 		condition.createCriteria().andTypeEqualTo(MessageTypeEnum.TYPE_2.getCode())
 				.andTargetIdEqualTo(objectId).andIsProcessedEqualTo("0");
-
 		MessagesEntity messagesEntity = new MessagesEntity();
 		messagesEntity.setDelFlag("1");
 		messagesEntity.setRemarks("目标重新审核，删除旧数据");
-
 		this.updateByCondition(messagesEntity, condition);
-		// 协同人审核消息
+
+
+		// 重新审核，删除未处理协同人审核消息
 		ResultsEntityCondition resultsEntityCondition = new ResultsEntityCondition();
 		resultsEntityCondition.createCriteria().andObjectIdEqualTo(objectId);
 		List<ResultsEntity> resultsEntityList = this.selectByCondition(resultsEntityCondition);
@@ -64,9 +64,8 @@ public class OkrBaseService extends BaseServiceImpl implements IOkrBaseService {
 		condition = new MessagesEntityCondition();
 		condition.createCriteria().andTypeEqualTo(MessageTypeEnum.TYPE_3.getCode())
 				.andTargetIdIn(krIds).andIsProcessedEqualTo("0");
-
+		messagesEntity.setDelFlag("1");
 		messagesEntity.setRemarks("协同人重新确认，删除旧数据");
-
 		this.updateByCondition(messagesEntity, condition);
 	}
 }

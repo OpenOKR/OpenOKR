@@ -359,7 +359,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
             content.append("关键结果：<br/>");
             for (int i = 0; i < objectivesExtVO.getResultsExtList().size(); i++) {
                 ResultsExtVO resultsExtVO = objectivesExtVO.getResultsExtList().get(i);
-                content.append("K").append((i+1)).append(".").append(resultsExtVO.getName()).append("<br/>");
+                content.append("K").append((i + 1)).append(".").append(resultsExtVO.getName()).append("<br/>");
                 if (!resultsExtVO.getJoinUsers().isEmpty()) {
                     for (UserVO joinUser : resultsExtVO.getJoinUsers()) {
                         // 协同人确认消息
