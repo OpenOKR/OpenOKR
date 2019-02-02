@@ -90,6 +90,7 @@ public class OrganizationService extends BaseServiceImpl implements IOrganizatio
             return new ResponseResult("删除失败");
         }
     }
+
     /*返回当前机构以及所有子机构*/
     @Override
     public List<OrganizationVOExt> findCurrentAndChildren(String currentOrganizationId) {
