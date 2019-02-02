@@ -117,7 +117,7 @@
         left join t_okr_teams t2 on t2.id=t1.team_id
         left join t_okr_manage_results t4 on t4.object_id=t1.id and t4.del_flag='0'
         left join t_okr_manage_objectives p on p.id = t1.parent_id
-        where t1.del_flag='0' and t1.type='3' and t2.type='1'
+        where t1.del_flag='0' and t1.type='3'/* and t2.type='1' */
         <if test="keyword != null and keyword != ''">
             AND (
                t1.name LIKE CONCAT('%', #{keyword}, '%')
@@ -137,5 +137,17 @@
         </if>
         order by t1.create_ts desc
     </select>
+
+    <!--获取子目标-->
+    <select id="getChildrenOkrList" parameterType="java.util.Map" resultType="org.openokr.manage.vo.ObjectivesExtVO">
+        select distinct c.*, t1.name as "parentName",t1.id as "parentId"
+        from t_okr_manage_objectives t1
+        left join t_okr_manage_objectives c on c.parent_id = t1.id
+        left join t_okr_manage_results t2 on t2.object_id=c.id and t2.del_flag='0'
+        where t1.del_flag='0' and t1.id=#{objectId}
+        order by c.create_ts desc
+    </select>
+
+
 
 </mapper>

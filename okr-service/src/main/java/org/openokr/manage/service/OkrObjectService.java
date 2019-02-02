@@ -34,6 +34,7 @@ import org.openokr.manage.vo.OkrObjectSearchVO;
 import org.openokr.manage.vo.ResultsExtVO;
 import org.openokr.manage.vo.TeamsVO;
 import org.openokr.sys.service.IUserService;
+import org.openokr.sys.vo.OrganizationVOExt;
 import org.openokr.sys.vo.UserVO;
 import org.openokr.sys.vo.UserVOExt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -283,12 +284,20 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
     @Override
     public ResponseResult deleteObject(String objectId, String userId) throws BusinessException {
         ResponseResult responseResult = new ResponseResult();
-
         //1、如果该目标已经是别人的父目标,则无法删除该目标
         ObjectivesEntityCondition parentCondition = new ObjectivesEntityCondition();
         parentCondition.createCriteria().andParentIdEqualTo(objectId);
         List<ObjectivesEntity> parentList = this.selectByCondition(parentCondition);
-        if (parentList !=null && parentList.size()>0) {
+
+        int judge=0;
+        for (ObjectivesEntity childrenEntity : parentList)
+            if (childrenEntity.getDelFlag().equals("0")) {
+                judge = 1;//有一个未删除就设为1
+                break;
+            }
+
+
+        if (parentList !=null && parentList.size()>0 && judge==1) {
             responseResult.setMessage("该目标还存在子目标,无法删除");
             responseResult.setSuccess(false);
             return responseResult;
@@ -571,4 +580,14 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
             this.saveOkrLog(logVO);
         }
     }
+
+
+    @Override
+    public List<ObjectivesExtVO> getChildrenObject(String objectId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("objectId", objectId);
+        List<ObjectivesExtVO> objectivesExtList = this.getDao().selectListBySql(MAPPER_NAMESPACE + ".getChildrenOkrList", params);
+        return objectivesExtList;
+    }
+
 }

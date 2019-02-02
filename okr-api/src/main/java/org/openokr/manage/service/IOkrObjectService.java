@@ -116,4 +116,12 @@ public interface IOkrObjectService {
      */
     ResponseResult auditConfirm(MessagesExtVO messagesExtVO, String currentUserId);
 
-}
+    /**
+     * 根据目标ID获取子目标
+     * @param objectId
+     * @return
+     **/
+    List<ObjectivesExtVO> getChildrenObject(String objectId) ;
+
+
+    }
