@@ -24,7 +24,7 @@ public enum ObjectivesStatusEnum {
     /**
      * 3-已生效
      */
-    STATUS_3("3", "进行中", "green"),
+    STATUS_3("3", "执行中", "green"),
 
     /**
      * 4-被驳回

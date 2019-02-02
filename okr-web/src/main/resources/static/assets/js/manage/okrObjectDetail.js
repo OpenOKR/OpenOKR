@@ -217,7 +217,9 @@ require(["jQuery"], function () {
             });
             require(["countUp"], function (CountUp) {
                 $(".charts-total .num,.vals .num").each(function () {
-                    var countUp = new CountUp(this, 0, $(this).data("new"), 0, 1, pageObj.options);
+                    var dataNew = $(this).data('new');
+                    dataNew = (dataNew === null || dataNew === '') ? 0 : dataNew;
+                    var countUp = new CountUp(this, 0, dataNew, 0, 1, pageObj.options);
                     countUp.start();
                 });
                 $(".vals .num").each(function () {
