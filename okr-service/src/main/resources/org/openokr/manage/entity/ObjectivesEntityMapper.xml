@@ -21,6 +21,7 @@
     <result column="update_ts" jdbcType="TIMESTAMP" property="updateTs" />
     <result column="update_user_id" jdbcType="VARCHAR" property="updateUserId" />
     <result column="team_id" jdbcType="VARCHAR" property="teamId" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -83,7 +84,7 @@
   <sql id="Base_Column_List">
     id, time_session_id, name, description, owner_id, parent_id, confidence_level, visibility, 
     type, status, del_flag, progress, score, assessment, create_ts, create_user_id, update_ts, 
-    update_user_id, team_id
+    update_user_id, team_id, sort
   </sql>
   <select id="selectByCondition" parameterType="org.openokr.manage.entity.ObjectivesEntityCondition" resultMap="BaseResultMap">
     select
@@ -172,6 +173,9 @@
       <if test="record.teamId != null">
         team_id = #{record.teamId,jdbcType=VARCHAR},
       </if>
+      <if test="record.sort != null">
+        sort = #{record.sort,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -183,9 +187,9 @@
     </if>
   </sql>
   <insert id="insertList" parameterType="java.util.List">
-     insert into t_okr_manage_objectives ( id,time_session_id,name,description,owner_id,parent_id,confidence_level,visibility,type,status,del_flag,progress,score,assessment,create_ts,create_user_id,update_ts,update_user_id,team_id ) values
+     insert into t_okr_manage_objectives ( id,time_session_id,name,description,owner_id,parent_id,confidence_level,visibility,type,status,del_flag,progress,score,assessment,create_ts,create_user_id,update_ts,update_user_id,team_id,sort ) values
     <foreach collection="list" index="index" item="item" separator=",">
-       ( #{item.id,jdbcType=VARCHAR},#{item.timeSessionId,jdbcType=VARCHAR},#{item.name,jdbcType=VARCHAR},#{item.description,jdbcType=VARCHAR},#{item.ownerId,jdbcType=VARCHAR},#{item.parentId,jdbcType=VARCHAR},#{item.confidenceLevel,jdbcType=VARCHAR},#{item.visibility,jdbcType=CHAR},#{item.type,jdbcType=CHAR},#{item.status,jdbcType=CHAR},#{item.delFlag,jdbcType=CHAR},#{item.progress,jdbcType=NUMERIC},#{item.score,jdbcType=VARCHAR},#{item.assessment,jdbcType=VARCHAR},#{item.createTs,jdbcType=TIMESTAMP},#{item.createUserId,jdbcType=VARCHAR},#{item.updateTs,jdbcType=TIMESTAMP},#{item.updateUserId,jdbcType=VARCHAR},#{item.teamId,jdbcType=VARCHAR} )
+       ( #{item.id,jdbcType=VARCHAR},#{item.timeSessionId,jdbcType=VARCHAR},#{item.name,jdbcType=VARCHAR},#{item.description,jdbcType=VARCHAR},#{item.ownerId,jdbcType=VARCHAR},#{item.parentId,jdbcType=VARCHAR},#{item.confidenceLevel,jdbcType=VARCHAR},#{item.visibility,jdbcType=CHAR},#{item.type,jdbcType=CHAR},#{item.status,jdbcType=CHAR},#{item.delFlag,jdbcType=CHAR},#{item.progress,jdbcType=NUMERIC},#{item.score,jdbcType=VARCHAR},#{item.assessment,jdbcType=VARCHAR},#{item.createTs,jdbcType=TIMESTAMP},#{item.createUserId,jdbcType=VARCHAR},#{item.updateTs,jdbcType=TIMESTAMP},#{item.updateUserId,jdbcType=VARCHAR},#{item.teamId,jdbcType=VARCHAR},#{item.sort,jdbcType=INTEGER} )
     </foreach>
   </insert>
 </mapper>

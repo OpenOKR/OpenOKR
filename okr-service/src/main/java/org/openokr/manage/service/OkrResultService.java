@@ -11,6 +11,7 @@ import org.openokr.application.framework.service.OkrBaseService;
 import org.openokr.application.utils.GetChangeDateUtil;
 import org.openokr.manage.entity.CheckinsEntity;
 import org.openokr.manage.entity.MessagesEntity;
+import org.openokr.manage.entity.MessagesEntityCondition;
 import org.openokr.manage.entity.ObjectivesEntity;
 import org.openokr.manage.entity.ResultUserRelaEntity;
 import org.openokr.manage.entity.ResultUserRelaEntityCondition;
@@ -57,9 +58,22 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
         resultsEntity.setUpdateUserId(userId);
         this.update(resultsEntity);
 
-        //删除KR要更新O的进度
+        // 删除KR要更新O的进度
         this.calculateObjectProgress(resultsEntity, userId);
         addOrDelResultLogInfo("删除", resultsEntity, userId);
+
+        // 删除对应消息
+        MessagesEntityCondition condition = new MessagesEntityCondition();
+        condition.createCriteria().andTypeEqualTo(MessageTypeEnum.TYPE_3.getCode())
+                .andTargetIdEqualTo(resultId).andIsProcessedEqualTo("0");
+        List<MessagesEntity> entityList = this.selectByCondition(condition);
+        if (!entityList.isEmpty()) {
+            for (MessagesEntity entity : entityList) {
+                entity.setDelFlag("1");
+                entity.setRemarks("删除关键结果，删除未处理协同人审核消息");
+            }
+            this.update(entityList);
+        }
 
         responseResult.setSuccess(true).setMessage("删除成功");
         return responseResult;
@@ -152,6 +166,11 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
             }
             this.insertList(resultUserRelList);
         }
+
+        if (entity.getStatus().equals(ObjectivesStatusEnum.STATUS_1.getCode())) {
+            deleteAuditMsg(entity.getId());
+        }
+
         responseResult.setSuccess(true).setMessage("保存成功");
         return responseResult;
     }

@@ -12,6 +12,7 @@ import org.openokr.manage.entity.CheckinsEntityCondition;
 import org.openokr.manage.entity.LogEntity;
 import org.openokr.manage.entity.LogEntityCondition;
 import org.openokr.manage.entity.MessagesEntity;
+import org.openokr.manage.entity.MessagesEntityCondition;
 import org.openokr.manage.entity.ObjectLabelRelaEntity;
 import org.openokr.manage.entity.ObjectLabelRelaEntityCondition;
 import org.openokr.manage.entity.ObjectTeamRelaEntity;
@@ -276,6 +277,10 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
             this.insertList(labelsRelList);
         }
 
+        if (targetEntity.getStatus().equals(ObjectivesStatusEnum.STATUS_1.getCode())) {
+            deleteAuditMsg(targetEntity.getId());
+        }
+
         responseResult.setMessage("保存成功");
         return responseResult;
     }
@@ -298,6 +303,15 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         entity.setUpdateTs(new Date());
         entity.setUpdateUserId(userId);
         this.update(entity);
+
+        // 删除对应消息
+        MessagesEntityCondition condition = new MessagesEntityCondition();
+        condition.createCriteria().andTypeEqualTo(MessageTypeEnum.TYPE_2.getCode())
+                .andTargetIdEqualTo(objectId).andIsProcessedEqualTo("0");
+        MessagesEntity messagesEntity = this.selectOneByCondition(condition);
+        messagesEntity.setDelFlag("1");
+        messagesEntity.setRemarks("删除目标，删除未处理负责人审核消息");
+
         responseResult.setMessage("删除成功");
         return responseResult;
     }
@@ -332,20 +346,41 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
 
         // 获取kr列表
         ObjectivesExtVO objectivesExtVO = this.getObjectById(objectId);
+        // 获取团队负责人
+        UserVOExt userVOExt = userService.getTeamOwnerUserByTeamId(objectivesExtVO.getTeamId());
+        // 协同人消息列表初始化
+        List<MessagesEntity> messagesEntityList = new ArrayList<>();
+
         StringBuilder content = new StringBuilder().append(currentUser.getRealName()).append(" 提交目标审核请求<br/>" +
                 "目标名：").append(objectivesExtVO.getName()).append("<br/>");
+        // 关键结果列表 html拼凑
         if (objectivesExtVO.getResultsExtList() != null && objectivesExtVO.getResultsExtList().size() > 0) {
             content.append("关键结果：<br/>");
             for (int i = 0; i < objectivesExtVO.getResultsExtList().size(); i++) {
                 ResultsExtVO resultsExtVO = objectivesExtVO.getResultsExtList().get(i);
                 content.append("K").append((i+1)).append(".").append(resultsExtVO.getName()).append("<br/>");
+                if (!resultsExtVO.getJoinUsers().isEmpty()) {
+                    for (UserVO joinUser : resultsExtVO.getJoinUsers()) {
+                        // 协同人确认消息
+                        MessagesEntity messagesEntity = new MessagesEntity();
+                        messagesEntity.setTitle("协同人确认请求");
+                        messagesEntity.setUserId(joinUser.getId());
+                        messagesEntity.setContent(currentUser.getRealName() + " 提交关键结果协同请求<br/>" + "关键结果：" +
+                                resultsExtVO.getName());
+                        messagesEntity.setType(MessageTypeEnum.TYPE_3.getCode());
+                        messagesEntity.setTargetId(resultsExtVO.getId());
+                        messagesEntity.setIsProcessed("0");
+                        messagesEntity.setIsRead("0");
+                        messagesEntity.setMark(MessageMarkEnum.MARK_4.getCode());
+                        messagesEntity.setCreateUserId(currentUser.getId());
+                        messagesEntity.setCreateTs(new Date());
+                        messagesEntityList.add(messagesEntity);
+                    }
+                }
             }
         }
 
-        // 获取团队负责人
-        UserVOExt userVOExt = userService.getTeamOwnerUserByTeamId(objectivesExtVO.getTeamId());
-
-        // 新建审核消息
+        // 目标审核消息，协同人确认消息 保存
         MessagesEntity messagesEntity = new MessagesEntity();
         messagesEntity.setTitle("目标审核请求");
         messagesEntity.setUserId(userVOExt.getId());
@@ -355,9 +390,13 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         messagesEntity.setIsProcessed("0");
         messagesEntity.setIsRead("0");
         messagesEntity.setMark(MessageMarkEnum.MARK_4.getCode());
-        messagesEntity.setCreateUserId(userVOExt.getId());
+        messagesEntity.setCreateUserId(currentUser.getId());
         messagesEntity.setCreateTs(new Date());
         this.save(messagesEntity);
+        if (!messagesEntityList.isEmpty()) {
+            this.insertList(messagesEntityList);
+        }
+
         return new ResponseResult(true, null, "提交成功");
     }
 

@@ -174,4 +174,18 @@ public class OkrTeamService extends BaseServiceImpl implements IOkrTeamService {
         params.put("teamId", teamId);
         return this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE + ".findUserListByTeamId", params);
     }
+
+    @Override
+    public ResponseResult transfer(String teamId, String userId, String currentUserId) {
+        TeamsEntity entity = this.selectByPrimaryKey(TeamsEntity.class, teamId);
+        entity.setOwnerId(userId);
+        entity.setUpdateUserId(currentUserId);
+        entity.setUpdateTs(new Date());
+        int i = this.update(entity);
+        // 设置团队负责人
+        if (i == 0) {
+            return new ResponseResult(false, null, "操作失败");
+        }
+        return new ResponseResult(true, null, "操作成功！");
+    }
 }

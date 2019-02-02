@@ -56,12 +56,14 @@ require(["jQuery"], function () {
                         '                           [%if(user.id != team.ownerId){%]' +
                         '                               <i data-id="[%=user.id%]" class="iconfont icon-close"></i>' +
                         '                           [%};%]' +
-                        '                            [%if(user.realName.length>2)%]<span class="image">[%=user.realName.substr(1,2)%]</span> [%else%]<span class="image">[%=user.realName%]</span>[%;%]' +
+                        '                           [%if(user.realName.length>2)%]<span class="image">[%=user.realName.substr(1,2)%]</span> ' +
+                        '                           [%else%]<span class="image">[%=user.realName%]</span>' +
+                        '                           [%;%]' +
                         '                           <strong>[%=user.realName%]</strong>' +
                         '                       </li>' +
                         '                   [%});%]' +
                         '               [%};%]' +
-                        '               [%if(type === \'1\'){%]<li class="part-item"><a onclick="pageObj.editTeam(\'[%=team.id%]\')">' +
+                        '               [%if(type === \'1\'){%]<li class="part-item part-add"><a onclick="pageObj.editTeam(\'[%=team.id%]\')">' +
                         '                   <i class="iconfont icon-add"></i></a></li>[%};%]' +
                         '           </ul>' +
                         '       </div>' +
@@ -93,6 +95,11 @@ require(["jQuery"], function () {
                         '</div>';
                     var header = UnderscoreUtil.getHtmlByText(html);
                     $okrTeamList.append(header);
+                }
+                if (type === '1') {
+                    $('.image').bind('dblclick', function () {
+                        pageObj.changeTeamOwner(this);
+                    });
                 }
             });
         },
@@ -241,6 +248,37 @@ require(["jQuery"], function () {
                 artDialogUtil.confirm("确认解散该团队吗？", function () {
                     $.ajax({
                         url: App["contextPath"] + "/manage/okrTeam/disbandTeam.json?teamId=" + id,
+                        dataType: "json",
+                        success: function (data) {
+                            require(["Tips"], function () {
+                                if (data.success) {
+                                    TipsUtil.info(data.message);
+                                    pageObj.loadOKRTeams('1');
+                                } else {
+                                    TipsUtil.warn(data.message);
+                                }
+                            });
+                        },
+                        error: function (res) {
+                            alert(JSON.stringify(res));
+                        }
+                    });
+                });
+            });
+        },
+
+        changeTeamOwner: function ($this) {
+            var teamId = $($this).parent().parent().attr('id').split('-')[1],
+                teamName = $($this).parent().parent().parent().parent().find('h4.ell').html(),
+                userId = $($this).prev().data('id'),
+                userName = $($this).next().html();
+            console.log(userId);
+            console.log(userName);
+
+            require(["artDialog"], function () {
+                artDialogUtil.confirm("确定任命【" + userName + "】成为【" + teamName + "】负责人？", function () {
+                    $.ajax({
+                        url: App["contextPath"] + "/manage/okrTeam/transfer.json?teamId=" + teamId + "&userId=" + userId,
                         dataType: "json",
                         success: function (data) {
                             require(["Tips"], function () {

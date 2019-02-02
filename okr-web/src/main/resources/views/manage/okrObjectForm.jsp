@@ -33,6 +33,12 @@
                     <%--</p>--%>
                 <%--</div>--%>
             <%--</li>--%>
+            <li class="col-sm-11">
+                <label class="form-lab">排序：</label>
+                <div class="form-control">
+                    <input id="sort" name="sort" type="text" class="inp" placeholder="请输入" value="${objectVO.sort}"/>
+                </div>
+            </li>
             <c:if test="${objectVO.type == '1'}">
                 <li class="col-sm-11">
                     <label class="form-lab">所属团队：</label>

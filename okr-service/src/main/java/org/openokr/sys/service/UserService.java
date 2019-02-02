@@ -72,7 +72,7 @@ public class UserService extends BaseServiceImpl implements IUserService {
         condition.createCriteria().andIdEqualTo(id);
         UserEntity entity = this.selectOneByCondition(condition);
         if (entity == null) {
-            return new ResponseResult("密码修改失败，该用户不存在", false);
+            return new ResponseResult(false, null, "密码修改失败，该用户不存在");
         }
         //加密密码，加盐
         PasswordUtil.HashPassword hashPassword = PasswordUtil.encrypt(defaultPassword);
@@ -82,7 +82,7 @@ public class UserService extends BaseServiceImpl implements IUserService {
         if (this.update(entity) > 0) {
             return new ResponseResult("密码修改成功");
         } else {
-            return new ResponseResult("密码修改失败", false);
+            return new ResponseResult(false, null, "密码修改失败");
         }
     }
 
@@ -90,19 +90,19 @@ public class UserService extends BaseServiceImpl implements IUserService {
     public ResponseResult addOrModify(UserVOExt userVOExt, String userId) {
         UserEntity saveUserEntity = null;
         if (this.countByUsername(userVOExt.getId(), userVOExt.getUserName()) > 0) {
-            ResponseResult result = new ResponseResult("保存失败，" + userVOExt.getUserName() + " 已经存在", false);
+            ResponseResult result = new ResponseResult(false, null, "保存失败，" + userVOExt.getUserName() + " 已经存在");
             result.setCode("1");
             result.setSuccess(false);
             return result;
         }
         if (this.countByEmail(userVOExt.getId(), userVOExt.getEmail()) > 0) {
-            ResponseResult result = new ResponseResult("保存失败，Email：" + userVOExt.getEmail() + " 已经存在", false);
+            ResponseResult result = new ResponseResult(false, null, "保存失败，Email：" + userVOExt.getEmail() + " 已经存在");
             result.setCode("1");
             result.setSuccess(false);
             return result;
         }
         if (this.countByPhone(userVOExt.getId(), userVOExt.getPhone()) > 0) {
-            ResponseResult result = new ResponseResult("保存失败，手机号：" + userVOExt.getPhone() + " 已经存在", false);
+            ResponseResult result = new ResponseResult(false, null, "保存失败，手机号：" + userVOExt.getPhone() + " 已经存在");
             result.setCode("2");
             result.setSuccess(false);
             return result;
@@ -138,16 +138,16 @@ public class UserService extends BaseServiceImpl implements IUserService {
             userRoleVO.setCreateTs(new Date());
             userRoleService.add(userRoleVO);
             //
-            return new ResponseResult("保存成功");
+            return new ResponseResult(true, null, "保存成功");
         } else {
-            return new ResponseResult("保存失败", false);
+            return new ResponseResult(false, null, "保存失败");
         }
     }
 
     @Override
     public ResponseResult delete(String id) {
         if ("1".equals(id)) {
-            return new ResponseResult("删除失败，系统管理员不允许删除", false);
+            return new ResponseResult(false, null, "删除失败，系统管理员不允许删除");
         }
         //删除关联的角色
         userRoleService.deleteByUserId(id);
@@ -156,27 +156,26 @@ public class UserService extends BaseServiceImpl implements IUserService {
             //删除用户的快捷菜单
             shortcutMenuService.deleteByUserId(id);
             //
-            return new ResponseResult("删除成功");
+            return new ResponseResult(true, null, "删除成功");
         } else {
-            return new ResponseResult("删除失败", false);
+            return new ResponseResult(false, null, "删除失败");
         }
     }
 
     @Override
-    public ResponseResult updatePassword(String userId, String oldPassword, String newPassword, String confirmNewPassword) {
+    public ResponseResult editPassword(String userId, String oldPassword, String newPassword, String confirmNewPassword) {
         UserEntityCondition condition = new UserEntityCondition();
         condition.createCriteria().andIdEqualTo(userId);
         UserEntity entity = this.selectOneByCondition(condition);
         if (entity == null) {
-            return new ResponseResult("密码修改失败，该用户不存在", false);
+            return new ResponseResult(false, null, "密码修改失败，该用户不存在");
         }
-        /*//加密密码，加盐
-        PasswordUtil.HashPassword hashOldPassword = PasswordUtil.encrypt(oldPassword);
-        if (!hashOldPassword.password.equals(entity.getPassword())) {
-            return new ResponseResult("旧密码不正确", false);
-        }*/
+        // 旧密码验证
+        if (!PasswordUtil.validaPassword(oldPassword, entity.getSalt(), entity.getPassword())) {
+            return new ResponseResult(false, null, "旧密码输入错误");
+        }
         if (!newPassword.equals(confirmNewPassword)) {
-            return new ResponseResult("两次新密码输入不一致", false);
+            return new ResponseResult(false, null, "两次新密码输入不一致");
         }
         //
         //加密密码，加盐
@@ -184,9 +183,9 @@ public class UserService extends BaseServiceImpl implements IUserService {
         entity.setSalt(hashNewPassword.getSalt());
         entity.setPassword(hashNewPassword.getPassword());
         if (this.update(entity) > 0) {
-            return new ResponseResult("密码修改成功");
+            return new ResponseResult(true, null, "密码修改成功");
         } else {
-            return new ResponseResult("密码修改失败", false);
+            return new ResponseResult(false, null, "密码修改失败");
         }
     }
 

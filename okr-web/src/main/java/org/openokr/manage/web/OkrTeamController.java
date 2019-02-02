@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -109,5 +110,14 @@ public class OkrTeamController extends BaseController {
     @ResponseBody
     public List<UserVO> getUsersByTeamId(String teamId) {
         return okrTeamService.getUsersByTeamId(teamId);
+    }
+
+    /**
+     * 团队负责人转让
+     */
+    @PostMapping(value = "/transfer.json")
+    @ResponseBody
+    public ResponseResult transfer(String teamId, String userId) {
+        return okrTeamService.transfer(teamId, userId, getCurrentUserId());
     }
 }

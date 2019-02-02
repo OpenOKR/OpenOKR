@@ -78,4 +78,12 @@ public interface IOkrTeamService {
     TeamsExtVO getByTeamId(String id);
 
     List<UserVO> getUsersByTeamId(String teamId);
+
+    /**
+     * 团队负责人转让
+     * @param teamId
+     * @param userId
+     * @return
+     */
+    ResponseResult transfer(String teamId, String userId, String currentUserId);
 }
