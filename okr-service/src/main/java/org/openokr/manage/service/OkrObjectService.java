@@ -581,13 +581,4 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         }
     }
 
-
-    @Override
-    public List<ObjectivesExtVO> getChildrenObject(String objectId) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("objectId", objectId);
-        List<ObjectivesExtVO> objectivesExtList = this.getDao().selectListBySql(MAPPER_NAMESPACE + ".getChildrenOkrList", params);
-        return objectivesExtList;
-    }
-
 }
