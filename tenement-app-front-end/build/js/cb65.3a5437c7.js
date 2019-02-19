@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["cb65"],{cb65:function(n,e,t){"use strict";t.r(e);var i=function(){var n=this,e=n.$createElement,t=n._self._c||e;return t("svg",{attrs:{"aria-hidden":"true"}},[t("use",{attrs:{"xlink:href":n.icon}})])},r=[],c=(t("7f7f"),{name:"d2-icon-svg",props:{name:{type:String,required:!0}},computed:{icon:function(){return"#d2-".concat(this.name)}}}),o=c,s=t("2877"),u=Object(s["a"])(o,i,r,!1,null,null,null);u.options.__file="index.vue";e["default"]=u.exports}}]);
+//# sourceMappingURL=cb65.3a5437c7.js.map
