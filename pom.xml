@@ -25,6 +25,8 @@
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
         <maven.compiler.compilerVersion>1.7</maven.compiler.compilerVersion>
+        <springfox-swagger2.version>2.2.2</springfox-swagger2.version>
+        <springfox-swagger-ui.version>2.2.2</springfox-swagger-ui.version>
         <!-- end -->
     </properties>
 
@@ -50,7 +52,16 @@
     <!-- 依赖预配置 -->
     <dependencyManagement>
         <dependencies>
-
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${springfox-swagger2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${springfox-swagger-ui.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
