@@ -47,7 +47,7 @@
         </javaClientGenerator>
 
         <!-- sys -->
-        <table tableName="t_okr_sys_menu" domainObjectName="sys.entity.MenuEntity">
+        <!--<table tableName="t_okr_sys_menu" domainObjectName="sys.entity.MenuEntity">
             <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
             <property name="domainVOName" value="sys.vo.MenuVO"/>
         </table>
@@ -84,7 +84,7 @@
             <property name="domainVOName" value="sys.vo.OrganizationVO"/>
         </table>
 
-        <!-- okr -->
+        &lt;!&ndash; okr &ndash;&gt;
         <table tableName="t_okr_manage_checkins" domainObjectName="manage.entity.CheckinsEntity">
             <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
             <property name="domainVOName" value="manage.vo.CheckinsVO"/>
@@ -132,8 +132,41 @@
         <table tableName="t_okr_time_sessions" domainObjectName="manage.entity.TimeSessionsEntity">
             <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
             <property name="domainVOName" value="manage.vo.TimeSessionsVO"/>
-        </table>
+        </table>-->
 
+        <!-- 报工相关 -->
+        <table tableName="t_okr_task_user_rel" domainObjectName="task.entity.TaskUserRelEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="task.vo.TaskUserRelVO"/>
+        </table>
+        <table tableName="t_okr_task" domainObjectName="task.entity.TaskEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="task.vo.TaskVO"/>
+        </table>
+        <table tableName="t_okr_task_apportion" domainObjectName="task.entity.TaskApportionEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="task.vo.TaskApportionVO"/>
+        </table>
+        <table tableName="t_okr_apportion_category" domainObjectName="task.entity.ApportionCategoryEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="task.vo.ApportionCategoryVO"/>
+        </table>
+        <table tableName="t_okr_project_info" domainObjectName="task.entity.ProjectInfoEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="task.vo.ProjectInfoVO"/>
+        </table>
+        <table tableName="t_okr_task_kr_rel" domainObjectName="task.entity.TaskKrRelEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="task.vo.TaskKrRelVO"/>
+        </table>
+        <table tableName="t_okr_weekly" domainObjectName="task.entity.WeeklyEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="task.vo.WeeklyVO"/>
+        </table>
+        <table tableName="t_okr_daily" domainObjectName="task.entity.DailyEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="task.vo.DailyVO"/>
+        </table>
 
     </context>
 </generatorConfiguration>
