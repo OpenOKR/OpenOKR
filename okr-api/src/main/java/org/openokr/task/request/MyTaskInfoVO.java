@@ -16,7 +16,7 @@ public class MyTaskInfoVO extends BaseVO implements Serializable {
     private String projectName;
 
     @ApiModelProperty(value = "成员数")
-    private Integer  memberNum;
+    private Integer memberNum;
 
     @ApiModelProperty(value = "任务数")
     private Integer relTaskNum;
