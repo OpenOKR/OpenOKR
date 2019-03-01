@@ -19,6 +19,11 @@ public class ProjectInfoVO extends BaseVO implements Serializable {
     private String projectName;
 
     /**
+     * 父级项目ID
+     */
+    private String parentProjectId;
+
+    /**
      * 类别： 1 项目 2 其他
      */
     private String categoryId;
@@ -51,6 +56,20 @@ public class ProjectInfoVO extends BaseVO implements Serializable {
      */
     public void setProjectName(String projectName) {
         this.projectName = projectName;
+    }
+
+    /**
+     * 父级项目ID
+     */
+    public String getParentProjectId() {
+        return parentProjectId;
+    }
+
+    /**
+     * 父级项目ID
+     */
+    public void setParentProjectId(String parentProjectId) {
+        this.parentProjectId = parentProjectId;
     }
 
     /**

@@ -30,11 +30,6 @@ public class TaskApportionVO extends BaseVO implements Serializable {
     private String categoryId;
 
     /**
-     * 类别名
-     */
-    private String categoryName;
-
-    /**
      * 分摊比例
      */
     private BigDecimal apportionRate;
@@ -95,20 +90,6 @@ public class TaskApportionVO extends BaseVO implements Serializable {
      */
     public void setCategoryId(String categoryId) {
         this.categoryId = categoryId;
-    }
-
-    /**
-     * 类别名
-     */
-    public String getCategoryName() {
-        return categoryName;
-    }
-
-    /**
-     * 类别名
-     */
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
     }
 
     /**

@@ -167,6 +167,10 @@
             <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
             <property name="domainVOName" value="task.vo.DailyVO"/>
         </table>
+        <table tableName="t_okr_customer" domainObjectName="task.entity.CustomerEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="task.vo.CustomerVO"/>
+        </table>
 
     </context>
 </generatorConfiguration>

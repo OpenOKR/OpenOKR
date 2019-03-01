@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="org.openokr.task.entity.ProjectInfoEntity">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="parent_project_id" jdbcType="VARCHAR" property="parentProjectId" />
     <result column="category_id" jdbcType="VARCHAR" property="categoryId" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -65,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, project_name, category_id
+    id, project_name, parent_project_id, category_id
   </sql>
   <select id="selectByCondition" parameterType="org.openokr.task.entity.ProjectInfoEntityCondition" resultMap="BaseResultMap">
     select
@@ -103,6 +104,9 @@
       <if test="record.projectName != null">
         project_name = #{record.projectName,jdbcType=VARCHAR},
       </if>
+      <if test="record.parentProjectId != null">
+        parent_project_id = #{record.parentProjectId,jdbcType=VARCHAR},
+      </if>
       <if test="record.categoryId != null">
         category_id = #{record.categoryId,jdbcType=VARCHAR},
       </if>
@@ -117,9 +121,9 @@
     </if>
   </sql>
   <insert id="insertList" parameterType="java.util.List">
-     insert into t_okr_project_info ( id,project_name,category_id ) values
+     insert into t_okr_project_info ( id,project_name,parent_project_id,category_id ) values
     <foreach collection="list" index="index" item="item" separator=",">
-       ( #{item.id,jdbcType=VARCHAR},#{item.projectName,jdbcType=VARCHAR},#{item.categoryId,jdbcType=VARCHAR} )
+       ( #{item.id,jdbcType=VARCHAR},#{item.projectName,jdbcType=VARCHAR},#{item.parentProjectId,jdbcType=VARCHAR},#{item.categoryId,jdbcType=VARCHAR} )
     </foreach>
   </insert>
 </mapper>

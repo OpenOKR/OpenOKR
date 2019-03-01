@@ -22,9 +22,6 @@ public class TaskApportionEntity extends BaseEntity implements Serializable {
     /** 类别ID */
     private String categoryId;
 
-    /** 类别名 */
-    private String categoryName;
-
     /** 分摊比例 */
     private BigDecimal apportionRate;
 
@@ -82,24 +79,6 @@ public class TaskApportionEntity extends BaseEntity implements Serializable {
     public void setCategoryId(String categoryId) {
         this.categoryId = categoryId;
         addSettedField("categoryId");
-    }
-
-    /**
-     * 类别名
-     * @return categoryName
-     */
-    @Column(name = "category_name")
-    public String getCategoryName() {
-        return categoryName;
-    }
-
-    /**
-     * 类别名
-     * @param categoryName
-     */
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-        addSettedField("categoryName");
     }
 
     /**

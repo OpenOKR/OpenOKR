@@ -252,6 +252,76 @@ public class ProjectInfoEntityCondition extends BaseEntityCondition implements S
             return (Criteria) this;
         }
 
+        public Criteria andParentProjectIdIsNull() {
+            addCriterion("parent_project_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentProjectIdIsNotNull() {
+            addCriterion("parent_project_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentProjectIdEqualTo(String value) {
+            addCriterion("parent_project_id =", value, "parentProjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentProjectIdNotEqualTo(String value) {
+            addCriterion("parent_project_id <>", value, "parentProjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentProjectIdGreaterThan(String value) {
+            addCriterion("parent_project_id >", value, "parentProjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentProjectIdGreaterThanOrEqualTo(String value) {
+            addCriterion("parent_project_id >=", value, "parentProjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentProjectIdLessThan(String value) {
+            addCriterion("parent_project_id <", value, "parentProjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentProjectIdLessThanOrEqualTo(String value) {
+            addCriterion("parent_project_id <=", value, "parentProjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentProjectIdLike(String value) {
+            addCriterion("parent_project_id like", value, "parentProjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentProjectIdNotLike(String value) {
+            addCriterion("parent_project_id not like", value, "parentProjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentProjectIdIn(List<String> values) {
+            addCriterion("parent_project_id in", values, "parentProjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentProjectIdNotIn(List<String> values) {
+            addCriterion("parent_project_id not in", values, "parentProjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentProjectIdBetween(String value1, String value2) {
+            addCriterion("parent_project_id between", value1, value2, "parentProjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentProjectIdNotBetween(String value1, String value2) {
+            addCriterion("parent_project_id not between", value1, value2, "parentProjectId");
+            return (Criteria) this;
+        }
+
         public Criteria andCategoryIdIsNull() {
             addCriterion("category_id is null");
             return (Criteria) this;
@@ -332,6 +402,11 @@ public class ProjectInfoEntityCondition extends BaseEntityCondition implements S
             return (Criteria) this;
         }
 
+        public Criteria andParentProjectIdLikeInsensitive(String value) {
+            addCriterion("upper(parent_project_id) like", value.toUpperCase(), "parentProjectId");
+            return (Criteria) this;
+        }
+
         public Criteria andCategoryIdLikeInsensitive(String value) {
             addCriterion("upper(category_id) like", value.toUpperCase(), "categoryId");
             return (Criteria) this;
@@ -364,6 +439,21 @@ public class ProjectInfoEntityCondition extends BaseEntityCondition implements S
          */
         public Criteria andProjectNameLikeIgnoreCase(String value) {
             addCriterion("upper(project_name) like ", value.toUpperCase(), "projectName");
+            return (Criteria) this;
+        }
+
+        /**
+         *(扩展Mybatis原生like的不足)
+         *忽略字段大小写的模糊查询
+         *Java编码如下：
+         *  criteria.andNameLikeIgnoreCase("%Abc%"); 前后模糊,A字母大写
+         *  criteria.andName2LikeIgnoreCase("%aBc"); 前模糊,B字母大写
+         *  criteria.andName3LikeIgnoreCase("abC%"); 后模糊,C字母大写
+         *执行时SQL如下:
+         *  where name like '%abc%' or name2 like '%abc' or name3 like 'abc%'
+         */
+        public Criteria andParentProjectIdLikeIgnoreCase(String value) {
+            addCriterion("upper(parent_project_id) like ", value.toUpperCase(), "parentProjectId");
             return (Criteria) this;
         }
 

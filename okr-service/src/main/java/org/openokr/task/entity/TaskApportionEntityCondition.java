@@ -393,76 +393,6 @@ public class TaskApportionEntityCondition extends BaseEntityCondition implements
             return (Criteria) this;
         }
 
-        public Criteria andCategoryNameIsNull() {
-            addCriterion("category_name is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCategoryNameIsNotNull() {
-            addCriterion("category_name is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCategoryNameEqualTo(String value) {
-            addCriterion("category_name =", value, "categoryName");
-            return (Criteria) this;
-        }
-
-        public Criteria andCategoryNameNotEqualTo(String value) {
-            addCriterion("category_name <>", value, "categoryName");
-            return (Criteria) this;
-        }
-
-        public Criteria andCategoryNameGreaterThan(String value) {
-            addCriterion("category_name >", value, "categoryName");
-            return (Criteria) this;
-        }
-
-        public Criteria andCategoryNameGreaterThanOrEqualTo(String value) {
-            addCriterion("category_name >=", value, "categoryName");
-            return (Criteria) this;
-        }
-
-        public Criteria andCategoryNameLessThan(String value) {
-            addCriterion("category_name <", value, "categoryName");
-            return (Criteria) this;
-        }
-
-        public Criteria andCategoryNameLessThanOrEqualTo(String value) {
-            addCriterion("category_name <=", value, "categoryName");
-            return (Criteria) this;
-        }
-
-        public Criteria andCategoryNameLike(String value) {
-            addCriterion("category_name like", value, "categoryName");
-            return (Criteria) this;
-        }
-
-        public Criteria andCategoryNameNotLike(String value) {
-            addCriterion("category_name not like", value, "categoryName");
-            return (Criteria) this;
-        }
-
-        public Criteria andCategoryNameIn(List<String> values) {
-            addCriterion("category_name in", values, "categoryName");
-            return (Criteria) this;
-        }
-
-        public Criteria andCategoryNameNotIn(List<String> values) {
-            addCriterion("category_name not in", values, "categoryName");
-            return (Criteria) this;
-        }
-
-        public Criteria andCategoryNameBetween(String value1, String value2) {
-            addCriterion("category_name between", value1, value2, "categoryName");
-            return (Criteria) this;
-        }
-
-        public Criteria andCategoryNameNotBetween(String value1, String value2) {
-            addCriterion("category_name not between", value1, value2, "categoryName");
-            return (Criteria) this;
-        }
-
         public Criteria andApportionRateIsNull() {
             addCriterion("apportion_rate is null");
             return (Criteria) this;
@@ -543,11 +473,6 @@ public class TaskApportionEntityCondition extends BaseEntityCondition implements
             return (Criteria) this;
         }
 
-        public Criteria andCategoryNameLikeInsensitive(String value) {
-            addCriterion("upper(category_name) like", value.toUpperCase(), "categoryName");
-            return (Criteria) this;
-        }
-
         /**
          *(扩展Mybatis原生like的不足)
          *忽略字段大小写的模糊查询
@@ -605,21 +530,6 @@ public class TaskApportionEntityCondition extends BaseEntityCondition implements
          */
         public Criteria andCategoryIdLikeIgnoreCase(String value) {
             addCriterion("upper(category_id) like ", value.toUpperCase(), "categoryId");
-            return (Criteria) this;
-        }
-
-        /**
-         *(扩展Mybatis原生like的不足)
-         *忽略字段大小写的模糊查询
-         *Java编码如下：
-         *  criteria.andNameLikeIgnoreCase("%Abc%"); 前后模糊,A字母大写
-         *  criteria.andName2LikeIgnoreCase("%aBc"); 前模糊,B字母大写
-         *  criteria.andName3LikeIgnoreCase("abC%"); 后模糊,C字母大写
-         *执行时SQL如下:
-         *  where name like '%abc%' or name2 like '%abc' or name3 like 'abc%'
-         */
-        public Criteria andCategoryNameLikeIgnoreCase(String value) {
-            addCriterion("upper(category_name) like ", value.toUpperCase(), "categoryName");
             return (Criteria) this;
         }
     }

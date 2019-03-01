@@ -6,7 +6,6 @@
     <result column="task_id" jdbcType="VARCHAR" property="taskId" />
     <result column="project_id" jdbcType="VARCHAR" property="projectId" />
     <result column="category_id" jdbcType="VARCHAR" property="categoryId" />
-    <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
     <result column="apportion_rate" jdbcType="NUMERIC" property="apportionRate" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -68,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, task_id, project_id, category_id, category_name, apportion_rate
+    id, task_id, project_id, category_id, apportion_rate
   </sql>
   <select id="selectByCondition" parameterType="org.openokr.task.entity.TaskApportionEntityCondition" resultMap="BaseResultMap">
     select
@@ -112,9 +111,6 @@
       <if test="record.categoryId != null">
         category_id = #{record.categoryId,jdbcType=VARCHAR},
       </if>
-      <if test="record.categoryName != null">
-        category_name = #{record.categoryName,jdbcType=VARCHAR},
-      </if>
       <if test="record.apportionRate != null">
         apportion_rate = #{record.apportionRate,jdbcType=NUMERIC},
       </if>
@@ -129,9 +125,9 @@
     </if>
   </sql>
   <insert id="insertList" parameterType="java.util.List">
-     insert into t_okr_task_apportion ( id,task_id,project_id,category_id,category_name,apportion_rate ) values
+     insert into t_okr_task_apportion ( id,task_id,project_id,category_id,apportion_rate ) values
     <foreach collection="list" index="index" item="item" separator=",">
-       ( #{item.id,jdbcType=VARCHAR},#{item.taskId,jdbcType=VARCHAR},#{item.projectId,jdbcType=VARCHAR},#{item.categoryId,jdbcType=VARCHAR},#{item.categoryName,jdbcType=VARCHAR},#{item.apportionRate,jdbcType=NUMERIC} )
+       ( #{item.id,jdbcType=VARCHAR},#{item.taskId,jdbcType=VARCHAR},#{item.projectId,jdbcType=VARCHAR},#{item.categoryId,jdbcType=VARCHAR},#{item.apportionRate,jdbcType=NUMERIC} )
     </foreach>
   </insert>
 </mapper>

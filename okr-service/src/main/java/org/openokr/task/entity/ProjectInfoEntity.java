@@ -15,6 +15,9 @@ public class ProjectInfoEntity extends BaseEntity implements Serializable {
     /** 项目名称 */
     private String projectName;
 
+    /** 父级项目ID */
+    private String parentProjectId;
+
     /** 类别： 1 项目 2 其他 */
     private String categoryId;
 
@@ -36,6 +39,24 @@ public class ProjectInfoEntity extends BaseEntity implements Serializable {
     public void setProjectName(String projectName) {
         this.projectName = projectName;
         addSettedField("projectName");
+    }
+
+    /**
+     * 父级项目ID
+     * @return parentProjectId
+     */
+    @Column(name = "parent_project_id")
+    public String getParentProjectId() {
+        return parentProjectId;
+    }
+
+    /**
+     * 父级项目ID
+     * @param parentProjectId
+     */
+    public void setParentProjectId(String parentProjectId) {
+        this.parentProjectId = parentProjectId;
+        addSettedField("parentProjectId");
     }
 
     /**
