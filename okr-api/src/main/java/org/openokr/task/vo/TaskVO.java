@@ -50,6 +50,11 @@ public class TaskVO extends BaseVO implements Serializable {
     private String jiraLabel;
 
     /**
+     * 确认人
+     */
+    private String confirmUserId;
+
+    /**
      * 创建者
      */
     private String createUserId;
@@ -181,6 +186,20 @@ public class TaskVO extends BaseVO implements Serializable {
      */
     public void setJiraLabel(String jiraLabel) {
         this.jiraLabel = jiraLabel;
+    }
+
+    /**
+     * 确认人
+     */
+    public String getConfirmUserId() {
+        return confirmUserId;
+    }
+
+    /**
+     * 确认人
+     */
+    public void setConfirmUserId(String confirmUserId) {
+        this.confirmUserId = confirmUserId;
     }
 
     /**

@@ -34,6 +34,9 @@ public class TaskEntity extends BaseEntity implements Serializable {
     /** JIRA标签 */
     private String jiraLabel;
 
+    /** 确认人 */
+    private String confirmUserId;
+
     /** 创建者 */
     private String createUserId;
 
@@ -172,6 +175,24 @@ public class TaskEntity extends BaseEntity implements Serializable {
     public void setJiraLabel(String jiraLabel) {
         this.jiraLabel = jiraLabel;
         addSettedField("jiraLabel");
+    }
+
+    /**
+     * 确认人
+     * @return confirmUserId
+     */
+    @Column(name = "confirm_user_id")
+    public String getConfirmUserId() {
+        return confirmUserId;
+    }
+
+    /**
+     * 确认人
+     * @param confirmUserId
+     */
+    public void setConfirmUserId(String confirmUserId) {
+        this.confirmUserId = confirmUserId;
+        addSettedField("confirmUserId");
     }
 
     /**

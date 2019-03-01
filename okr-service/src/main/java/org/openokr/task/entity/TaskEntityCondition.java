@@ -653,6 +653,76 @@ public class TaskEntityCondition extends BaseEntityCondition implements Serializ
             return (Criteria) this;
         }
 
+        public Criteria andConfirmUserIdIsNull() {
+            addCriterion("confirm_user_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmUserIdIsNotNull() {
+            addCriterion("confirm_user_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmUserIdEqualTo(String value) {
+            addCriterion("confirm_user_id =", value, "confirmUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmUserIdNotEqualTo(String value) {
+            addCriterion("confirm_user_id <>", value, "confirmUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmUserIdGreaterThan(String value) {
+            addCriterion("confirm_user_id >", value, "confirmUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmUserIdGreaterThanOrEqualTo(String value) {
+            addCriterion("confirm_user_id >=", value, "confirmUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmUserIdLessThan(String value) {
+            addCriterion("confirm_user_id <", value, "confirmUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmUserIdLessThanOrEqualTo(String value) {
+            addCriterion("confirm_user_id <=", value, "confirmUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmUserIdLike(String value) {
+            addCriterion("confirm_user_id like", value, "confirmUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmUserIdNotLike(String value) {
+            addCriterion("confirm_user_id not like", value, "confirmUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmUserIdIn(List<String> values) {
+            addCriterion("confirm_user_id in", values, "confirmUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmUserIdNotIn(List<String> values) {
+            addCriterion("confirm_user_id not in", values, "confirmUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmUserIdBetween(String value1, String value2) {
+            addCriterion("confirm_user_id between", value1, value2, "confirmUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmUserIdNotBetween(String value1, String value2) {
+            addCriterion("confirm_user_id not between", value1, value2, "confirmUserId");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateUserIdIsNull() {
             addCriterion("create_user_id is null");
             return (Criteria) this;
@@ -943,6 +1013,11 @@ public class TaskEntityCondition extends BaseEntityCondition implements Serializ
             return (Criteria) this;
         }
 
+        public Criteria andConfirmUserIdLikeInsensitive(String value) {
+            addCriterion("upper(confirm_user_id) like", value.toUpperCase(), "confirmUserId");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateUserIdLikeInsensitive(String value) {
             addCriterion("upper(create_user_id) like", value.toUpperCase(), "createUserId");
             return (Criteria) this;
@@ -1040,6 +1115,21 @@ public class TaskEntityCondition extends BaseEntityCondition implements Serializ
          */
         public Criteria andJiraLabelLikeIgnoreCase(String value) {
             addCriterion("upper(jira_label) like ", value.toUpperCase(), "jiraLabel");
+            return (Criteria) this;
+        }
+
+        /**
+         *(扩展Mybatis原生like的不足)
+         *忽略字段大小写的模糊查询
+         *Java编码如下：
+         *  criteria.andNameLikeIgnoreCase("%Abc%"); 前后模糊,A字母大写
+         *  criteria.andName2LikeIgnoreCase("%aBc"); 前模糊,B字母大写
+         *  criteria.andName3LikeIgnoreCase("abC%"); 后模糊,C字母大写
+         *执行时SQL如下:
+         *  where name like '%abc%' or name2 like '%abc' or name3 like 'abc%'
+         */
+        public Criteria andConfirmUserIdLikeIgnoreCase(String value) {
+            addCriterion("upper(confirm_user_id) like ", value.toUpperCase(), "confirmUserId");
             return (Criteria) this;
         }
 
