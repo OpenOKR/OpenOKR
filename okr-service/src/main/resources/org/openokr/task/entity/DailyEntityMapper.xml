@@ -5,9 +5,6 @@
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="report_user_id" jdbcType="VARCHAR" property="reportUserId" />
     <result column="task_id" jdbcType="VARCHAR" property="taskId" />
-    <result column="report_year" jdbcType="VARCHAR" property="reportYear" />
-    <result column="report_quarter" jdbcType="DATE" property="reportQuarter" />
-    <result column="report_month" jdbcType="DATE" property="reportMonth" />
     <result column="report_day" jdbcType="DATE" property="reportDay" />
     <result column="duration" jdbcType="NUMERIC" property="duration" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
@@ -75,8 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, report_user_id, task_id, report_year, report_quarter, report_month, report_day, 
-    duration, remark, create_user_id, create_ts, update_user_id, update_ts
+    id, report_user_id, task_id, report_day, duration, remark, create_user_id, create_ts, 
+    update_user_id, update_ts
   </sql>
   <select id="selectByCondition" parameterType="org.openokr.task.entity.DailyEntityCondition" resultMap="BaseResultMap">
     select
@@ -117,15 +114,6 @@
       <if test="record.taskId != null">
         task_id = #{record.taskId,jdbcType=VARCHAR},
       </if>
-      <if test="record.reportYear != null">
-        report_year = #{record.reportYear,jdbcType=VARCHAR},
-      </if>
-      <if test="record.reportQuarter != null">
-        report_quarter = #{record.reportQuarter,jdbcType=DATE},
-      </if>
-      <if test="record.reportMonth != null">
-        report_month = #{record.reportMonth,jdbcType=DATE},
-      </if>
       <if test="record.reportDay != null">
         report_day = #{record.reportDay,jdbcType=DATE},
       </if>
@@ -158,9 +146,9 @@
     </if>
   </sql>
   <insert id="insertList" parameterType="java.util.List">
-     insert into t_okr_daily ( id,report_user_id,task_id,report_year,report_quarter,report_month,report_day,duration,remark,create_user_id,create_ts,update_user_id,update_ts ) values
+     insert into t_okr_daily ( id,report_user_id,task_id,report_day,duration,remark,create_user_id,create_ts,update_user_id,update_ts ) values
     <foreach collection="list" index="index" item="item" separator=",">
-       ( #{item.id,jdbcType=VARCHAR},#{item.reportUserId,jdbcType=VARCHAR},#{item.taskId,jdbcType=VARCHAR},#{item.reportYear,jdbcType=VARCHAR},#{item.reportQuarter,jdbcType=DATE},#{item.reportMonth,jdbcType=DATE},#{item.reportDay,jdbcType=DATE},#{item.duration,jdbcType=NUMERIC},#{item.remark,jdbcType=VARCHAR},#{item.createUserId,jdbcType=VARCHAR},#{item.createTs,jdbcType=TIMESTAMP},#{item.updateUserId,jdbcType=VARCHAR},#{item.updateTs,jdbcType=TIMESTAMP} )
+       ( #{item.id,jdbcType=VARCHAR},#{item.reportUserId,jdbcType=VARCHAR},#{item.taskId,jdbcType=VARCHAR},#{item.reportDay,jdbcType=DATE},#{item.duration,jdbcType=NUMERIC},#{item.remark,jdbcType=VARCHAR},#{item.createUserId,jdbcType=VARCHAR},#{item.createTs,jdbcType=TIMESTAMP},#{item.updateUserId,jdbcType=VARCHAR},#{item.updateTs,jdbcType=TIMESTAMP} )
     </foreach>
   </insert>
 </mapper>

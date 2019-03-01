@@ -26,21 +26,6 @@ public class DailyVO extends BaseVO implements Serializable {
     private String taskId;
 
     /**
-     * 填报年度
-     */
-    private String reportYear;
-
-    /**
-     * 填报季度
-     */
-    private Date reportQuarter;
-
-    /**
-     * 填报月份
-     */
-    private Date reportMonth;
-
-    /**
      * 填报日期
      */
     private Date reportDay;
@@ -117,48 +102,6 @@ public class DailyVO extends BaseVO implements Serializable {
      */
     public void setTaskId(String taskId) {
         this.taskId = taskId;
-    }
-
-    /**
-     * 填报年度
-     */
-    public String getReportYear() {
-        return reportYear;
-    }
-
-    /**
-     * 填报年度
-     */
-    public void setReportYear(String reportYear) {
-        this.reportYear = reportYear;
-    }
-
-    /**
-     * 填报季度
-     */
-    public Date getReportQuarter() {
-        return reportQuarter;
-    }
-
-    /**
-     * 填报季度
-     */
-    public void setReportQuarter(Date reportQuarter) {
-        this.reportQuarter = reportQuarter;
-    }
-
-    /**
-     * 填报月份
-     */
-    public Date getReportMonth() {
-        return reportMonth;
-    }
-
-    /**
-     * 填报月份
-     */
-    public void setReportMonth(Date reportMonth) {
-        this.reportMonth = reportMonth;
     }
 
     /**

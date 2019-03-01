@@ -20,15 +20,6 @@ public class DailyEntity extends BaseEntity implements Serializable {
     /** 任务ID */
     private String taskId;
 
-    /** 填报年度 */
-    private String reportYear;
-
-    /** 填报季度 */
-    private Date reportQuarter;
-
-    /** 填报月份 */
-    private Date reportMonth;
-
     /** 填报日期 */
     private Date reportDay;
 
@@ -86,60 +77,6 @@ public class DailyEntity extends BaseEntity implements Serializable {
     public void setTaskId(String taskId) {
         this.taskId = taskId;
         addSettedField("taskId");
-    }
-
-    /**
-     * 填报年度
-     * @return reportYear
-     */
-    @Column(name = "report_year")
-    public String getReportYear() {
-        return reportYear;
-    }
-
-    /**
-     * 填报年度
-     * @param reportYear
-     */
-    public void setReportYear(String reportYear) {
-        this.reportYear = reportYear;
-        addSettedField("reportYear");
-    }
-
-    /**
-     * 填报季度
-     * @return reportQuarter
-     */
-    @Column(name = "report_quarter")
-    public Date getReportQuarter() {
-        return reportQuarter;
-    }
-
-    /**
-     * 填报季度
-     * @param reportQuarter
-     */
-    public void setReportQuarter(Date reportQuarter) {
-        this.reportQuarter = reportQuarter;
-        addSettedField("reportQuarter");
-    }
-
-    /**
-     * 填报月份
-     * @return reportMonth
-     */
-    @Column(name = "report_month")
-    public Date getReportMonth() {
-        return reportMonth;
-    }
-
-    /**
-     * 填报月份
-     * @param reportMonth
-     */
-    public void setReportMonth(Date reportMonth) {
-        this.reportMonth = reportMonth;
-        addSettedField("reportMonth");
     }
 
     /**
