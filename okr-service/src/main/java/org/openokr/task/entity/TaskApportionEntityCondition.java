@@ -253,73 +253,73 @@ public class TaskApportionEntityCondition extends BaseEntityCondition implements
             return (Criteria) this;
         }
 
-        public Criteria andProjectIdIsNull() {
-            addCriterion("project_id is null");
+        public Criteria andApportionIdIsNull() {
+            addCriterion("apportion_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andProjectIdIsNotNull() {
-            addCriterion("project_id is not null");
+        public Criteria andApportionIdIsNotNull() {
+            addCriterion("apportion_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andProjectIdEqualTo(String value) {
-            addCriterion("project_id =", value, "projectId");
+        public Criteria andApportionIdEqualTo(String value) {
+            addCriterion("apportion_id =", value, "apportionId");
             return (Criteria) this;
         }
 
-        public Criteria andProjectIdNotEqualTo(String value) {
-            addCriterion("project_id <>", value, "projectId");
+        public Criteria andApportionIdNotEqualTo(String value) {
+            addCriterion("apportion_id <>", value, "apportionId");
             return (Criteria) this;
         }
 
-        public Criteria andProjectIdGreaterThan(String value) {
-            addCriterion("project_id >", value, "projectId");
+        public Criteria andApportionIdGreaterThan(String value) {
+            addCriterion("apportion_id >", value, "apportionId");
             return (Criteria) this;
         }
 
-        public Criteria andProjectIdGreaterThanOrEqualTo(String value) {
-            addCriterion("project_id >=", value, "projectId");
+        public Criteria andApportionIdGreaterThanOrEqualTo(String value) {
+            addCriterion("apportion_id >=", value, "apportionId");
             return (Criteria) this;
         }
 
-        public Criteria andProjectIdLessThan(String value) {
-            addCriterion("project_id <", value, "projectId");
+        public Criteria andApportionIdLessThan(String value) {
+            addCriterion("apportion_id <", value, "apportionId");
             return (Criteria) this;
         }
 
-        public Criteria andProjectIdLessThanOrEqualTo(String value) {
-            addCriterion("project_id <=", value, "projectId");
+        public Criteria andApportionIdLessThanOrEqualTo(String value) {
+            addCriterion("apportion_id <=", value, "apportionId");
             return (Criteria) this;
         }
 
-        public Criteria andProjectIdLike(String value) {
-            addCriterion("project_id like", value, "projectId");
+        public Criteria andApportionIdLike(String value) {
+            addCriterion("apportion_id like", value, "apportionId");
             return (Criteria) this;
         }
 
-        public Criteria andProjectIdNotLike(String value) {
-            addCriterion("project_id not like", value, "projectId");
+        public Criteria andApportionIdNotLike(String value) {
+            addCriterion("apportion_id not like", value, "apportionId");
             return (Criteria) this;
         }
 
-        public Criteria andProjectIdIn(List<String> values) {
-            addCriterion("project_id in", values, "projectId");
+        public Criteria andApportionIdIn(List<String> values) {
+            addCriterion("apportion_id in", values, "apportionId");
             return (Criteria) this;
         }
 
-        public Criteria andProjectIdNotIn(List<String> values) {
-            addCriterion("project_id not in", values, "projectId");
+        public Criteria andApportionIdNotIn(List<String> values) {
+            addCriterion("apportion_id not in", values, "apportionId");
             return (Criteria) this;
         }
 
-        public Criteria andProjectIdBetween(String value1, String value2) {
-            addCriterion("project_id between", value1, value2, "projectId");
+        public Criteria andApportionIdBetween(String value1, String value2) {
+            addCriterion("apportion_id between", value1, value2, "apportionId");
             return (Criteria) this;
         }
 
-        public Criteria andProjectIdNotBetween(String value1, String value2) {
-            addCriterion("project_id not between", value1, value2, "projectId");
+        public Criteria andApportionIdNotBetween(String value1, String value2) {
+            addCriterion("apportion_id not between", value1, value2, "apportionId");
             return (Criteria) this;
         }
 
@@ -463,8 +463,8 @@ public class TaskApportionEntityCondition extends BaseEntityCondition implements
             return (Criteria) this;
         }
 
-        public Criteria andProjectIdLikeInsensitive(String value) {
-            addCriterion("upper(project_id) like", value.toUpperCase(), "projectId");
+        public Criteria andApportionIdLikeInsensitive(String value) {
+            addCriterion("upper(apportion_id) like", value.toUpperCase(), "apportionId");
             return (Criteria) this;
         }
 
@@ -513,8 +513,8 @@ public class TaskApportionEntityCondition extends BaseEntityCondition implements
          *执行时SQL如下:
          *  where name like '%abc%' or name2 like '%abc' or name3 like 'abc%'
          */
-        public Criteria andProjectIdLikeIgnoreCase(String value) {
-            addCriterion("upper(project_id) like ", value.toUpperCase(), "projectId");
+        public Criteria andApportionIdLikeIgnoreCase(String value) {
+            addCriterion("upper(apportion_id) like ", value.toUpperCase(), "apportionId");
             return (Criteria) this;
         }
 

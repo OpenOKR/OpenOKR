@@ -20,9 +20,9 @@ public class TaskApportionVO extends BaseVO implements Serializable {
     private String taskId;
 
     /**
-     * 项目ID
+     * 分摊ID
      */
-    private String projectId;
+    private String apportionId;
 
     /**
      * 类别ID
@@ -65,17 +65,17 @@ public class TaskApportionVO extends BaseVO implements Serializable {
     }
 
     /**
-     * 项目ID
+     * 分摊ID
      */
-    public String getProjectId() {
-        return projectId;
+    public String getApportionId() {
+        return apportionId;
     }
 
     /**
-     * 项目ID
+     * 分摊ID
      */
-    public void setProjectId(String projectId) {
-        this.projectId = projectId;
+    public void setApportionId(String apportionId) {
+        this.apportionId = apportionId;
     }
 
     /**
