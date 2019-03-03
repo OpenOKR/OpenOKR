@@ -4,6 +4,7 @@ package org.openokr.manage.service;
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.exception.BusinessException;
 import org.openokr.manage.vo.CheckinsExtVO;
+import org.openokr.manage.vo.MessagesExtVO;
 import org.openokr.manage.vo.ResultsExtVO;
 import org.openokr.sys.vo.UserVO;
 
@@ -64,4 +65,12 @@ public interface IOkrResultService {
      * @return
      */
     List<CheckinsExtVO> findCheckinList(Map<String, Object> params);
+
+    /**
+     * 协同人确认
+     * @param messagesExtVO
+     * @param userId
+     * @return
+     */
+    ResponseResult auditConfirm(MessagesExtVO messagesExtVO, String userId);
 }
