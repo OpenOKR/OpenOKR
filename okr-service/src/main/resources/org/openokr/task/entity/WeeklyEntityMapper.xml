@@ -6,7 +6,8 @@
     <result column="report_user_id" jdbcType="VARCHAR" property="reportUserId" />
     <result column="task_id" jdbcType="VARCHAR" property="taskId" />
     <result column="rel_task_id" jdbcType="VARCHAR" property="relTaskId" />
-    <result column="period" jdbcType="VARCHAR" property="period" />
+    <result column="report_start_date" jdbcType="DATE" property="reportStartDate" />
+    <result column="report_end_date" jdbcType="DATE" property="reportEndDate" />
     <result column="duration" jdbcType="NUMERIC" property="duration" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="audit_status" jdbcType="CHAR" property="auditStatus" />
@@ -75,8 +76,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, report_user_id, task_id, rel_task_id, period, duration, remark, audit_status, 
-    reject_reason, create_user_id, create_ts, update_user_id, update_ts
+    id, report_user_id, task_id, rel_task_id, report_start_date, report_end_date, duration, 
+    remark, audit_status, reject_reason, create_user_id, create_ts, update_user_id, update_ts
   </sql>
   <select id="selectByCondition" parameterType="org.openokr.task.entity.WeeklyEntityCondition" resultMap="BaseResultMap">
     select
@@ -120,8 +121,11 @@
       <if test="record.relTaskId != null">
         rel_task_id = #{record.relTaskId,jdbcType=VARCHAR},
       </if>
-      <if test="record.period != null">
-        period = #{record.period,jdbcType=VARCHAR},
+      <if test="record.reportStartDate != null">
+        report_start_date = #{record.reportStartDate,jdbcType=DATE},
+      </if>
+      <if test="record.reportEndDate != null">
+        report_end_date = #{record.reportEndDate,jdbcType=DATE},
       </if>
       <if test="record.duration != null">
         duration = #{record.duration,jdbcType=NUMERIC},
@@ -158,9 +162,9 @@
     </if>
   </sql>
   <insert id="insertList" parameterType="java.util.List">
-     insert into t_okr_weekly ( id,report_user_id,task_id,rel_task_id,period,duration,remark,audit_status,reject_reason,create_user_id,create_ts,update_user_id,update_ts ) values
+     insert into t_okr_weekly ( id,report_user_id,task_id,rel_task_id,report_start_date,report_end_date,duration,remark,audit_status,reject_reason,create_user_id,create_ts,update_user_id,update_ts ) values
     <foreach collection="list" index="index" item="item" separator=",">
-       ( #{item.id,jdbcType=VARCHAR},#{item.reportUserId,jdbcType=VARCHAR},#{item.taskId,jdbcType=VARCHAR},#{item.relTaskId,jdbcType=VARCHAR},#{item.period,jdbcType=VARCHAR},#{item.duration,jdbcType=NUMERIC},#{item.remark,jdbcType=VARCHAR},#{item.auditStatus,jdbcType=CHAR},#{item.rejectReason,jdbcType=VARCHAR},#{item.createUserId,jdbcType=VARCHAR},#{item.createTs,jdbcType=TIMESTAMP},#{item.updateUserId,jdbcType=VARCHAR},#{item.updateTs,jdbcType=TIMESTAMP} )
+       ( #{item.id,jdbcType=VARCHAR},#{item.reportUserId,jdbcType=VARCHAR},#{item.taskId,jdbcType=VARCHAR},#{item.relTaskId,jdbcType=VARCHAR},#{item.reportStartDate,jdbcType=DATE},#{item.reportEndDate,jdbcType=DATE},#{item.duration,jdbcType=NUMERIC},#{item.remark,jdbcType=VARCHAR},#{item.auditStatus,jdbcType=CHAR},#{item.rejectReason,jdbcType=VARCHAR},#{item.createUserId,jdbcType=VARCHAR},#{item.createTs,jdbcType=TIMESTAMP},#{item.updateUserId,jdbcType=VARCHAR},#{item.updateTs,jdbcType=TIMESTAMP} )
     </foreach>
   </insert>
 </mapper>

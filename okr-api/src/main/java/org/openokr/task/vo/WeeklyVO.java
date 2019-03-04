@@ -2,8 +2,8 @@ package org.openokr.task.vo;
 
 import com.zzheng.framework.base.vo.BaseVO;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
+import java.math.BigDecimal;
 
 public class WeeklyVO extends BaseVO implements Serializable {
 
@@ -31,9 +31,14 @@ public class WeeklyVO extends BaseVO implements Serializable {
     private String relTaskId;
 
     /**
-     * 填报周期
+     * 填报开始周期
      */
-    private String period;
+    private Date reportStartDate;
+
+    /**
+     * 填报结束周期
+     */
+    private Date reportEndDate;
 
     /**
      * 耗费总工时
@@ -134,17 +139,31 @@ public class WeeklyVO extends BaseVO implements Serializable {
     }
 
     /**
-     * 填报周期
+     * 填报开始周期
      */
-    public String getPeriod() {
-        return period;
+    public Date getReportStartDate() {
+        return reportStartDate;
     }
 
     /**
-     * 填报周期
+     * 填报开始周期
      */
-    public void setPeriod(String period) {
-        this.period = period;
+    public void setReportStartDate(Date reportStartDate) {
+        this.reportStartDate = reportStartDate;
+    }
+
+    /**
+     * 填报结束周期
+     */
+    public Date getReportEndDate() {
+        return reportEndDate;
+    }
+
+    /**
+     * 填报结束周期
+     */
+    public void setReportEndDate(Date reportEndDate) {
+        this.reportEndDate = reportEndDate;
     }
 
     /**

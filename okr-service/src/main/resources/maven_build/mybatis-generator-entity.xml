@@ -163,13 +163,13 @@
             <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
             <property name="domainVOName" value="task.vo.CustomerVO"/>
         </table>-->
-<!--        <table tableName="t_okr_weekly" domainObjectName="task.entity.WeeklyEntity">
+        <table tableName="t_okr_weekly" domainObjectName="task.entity.WeeklyEntity">
             <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
             <property name="domainVOName" value="task.vo.WeeklyVO"/>
-        </table>-->
-        <table tableName="t_okr_task_apportion" domainObjectName="task.entity.TaskApportionEntity">
+        </table>
+<!--        <table tableName="t_okr_task_apportion" domainObjectName="task.entity.TaskApportionEntity">
             <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
             <property name="domainVOName" value="task.vo.TaskApportionVO"/>
-        </table>
+        </table>-->
     </context>
 </generatorConfiguration>

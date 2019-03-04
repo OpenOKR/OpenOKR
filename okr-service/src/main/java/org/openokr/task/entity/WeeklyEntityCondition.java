@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 public class WeeklyEntityCondition extends BaseEntityCondition implements Serializable {
@@ -112,6 +113,32 @@ public class WeeklyEntityCondition extends BaseEntityCondition implements Serial
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
+        }
+
+        protected void addCriterionForJDBCDate(String condition, Date value, String property) {
+            if (value == null) {
+                throw new RuntimeException("Value for " + property + " cannot be null");
+            }
+            addCriterion(condition, new java.sql.Date(value.getTime()), property);
+        }
+
+        protected void addCriterionForJDBCDate(String condition, List<Date> values, String property) {
+            if (values == null || values.size() == 0) {
+                throw new RuntimeException("Value list for " + property + " cannot be null or empty");
+            }
+            List<java.sql.Date> dateList = new ArrayList<java.sql.Date>();
+            Iterator<Date> iter = values.iterator();
+            while (iter.hasNext()) {
+                dateList.add(new java.sql.Date(iter.next().getTime()));
+            }
+            addCriterion(condition, dateList, property);
+        }
+
+        protected void addCriterionForJDBCDate(String condition, Date value1, Date value2, String property) {
+            if (value1 == null || value2 == null) {
+                throw new RuntimeException("Between values for " + property + " cannot be null");
+            }
+            addCriterion(condition, new java.sql.Date(value1.getTime()), new java.sql.Date(value2.getTime()), property);
         }
 
         public Criteria andIdIsNull() {
@@ -394,73 +421,123 @@ public class WeeklyEntityCondition extends BaseEntityCondition implements Serial
             return (Criteria) this;
         }
 
-        public Criteria andPeriodIsNull() {
-            addCriterion("period is null");
+        public Criteria andReportStartDateIsNull() {
+            addCriterion("report_start_date is null");
             return (Criteria) this;
         }
 
-        public Criteria andPeriodIsNotNull() {
-            addCriterion("period is not null");
+        public Criteria andReportStartDateIsNotNull() {
+            addCriterion("report_start_date is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPeriodEqualTo(String value) {
-            addCriterion("period =", value, "period");
+        public Criteria andReportStartDateEqualTo(Date value) {
+            addCriterionForJDBCDate("report_start_date =", value, "reportStartDate");
             return (Criteria) this;
         }
 
-        public Criteria andPeriodNotEqualTo(String value) {
-            addCriterion("period <>", value, "period");
+        public Criteria andReportStartDateNotEqualTo(Date value) {
+            addCriterionForJDBCDate("report_start_date <>", value, "reportStartDate");
             return (Criteria) this;
         }
 
-        public Criteria andPeriodGreaterThan(String value) {
-            addCriterion("period >", value, "period");
+        public Criteria andReportStartDateGreaterThan(Date value) {
+            addCriterionForJDBCDate("report_start_date >", value, "reportStartDate");
             return (Criteria) this;
         }
 
-        public Criteria andPeriodGreaterThanOrEqualTo(String value) {
-            addCriterion("period >=", value, "period");
+        public Criteria andReportStartDateGreaterThanOrEqualTo(Date value) {
+            addCriterionForJDBCDate("report_start_date >=", value, "reportStartDate");
             return (Criteria) this;
         }
 
-        public Criteria andPeriodLessThan(String value) {
-            addCriterion("period <", value, "period");
+        public Criteria andReportStartDateLessThan(Date value) {
+            addCriterionForJDBCDate("report_start_date <", value, "reportStartDate");
             return (Criteria) this;
         }
 
-        public Criteria andPeriodLessThanOrEqualTo(String value) {
-            addCriterion("period <=", value, "period");
+        public Criteria andReportStartDateLessThanOrEqualTo(Date value) {
+            addCriterionForJDBCDate("report_start_date <=", value, "reportStartDate");
             return (Criteria) this;
         }
 
-        public Criteria andPeriodLike(String value) {
-            addCriterion("period like", value, "period");
+        public Criteria andReportStartDateIn(List<Date> values) {
+            addCriterionForJDBCDate("report_start_date in", values, "reportStartDate");
             return (Criteria) this;
         }
 
-        public Criteria andPeriodNotLike(String value) {
-            addCriterion("period not like", value, "period");
+        public Criteria andReportStartDateNotIn(List<Date> values) {
+            addCriterionForJDBCDate("report_start_date not in", values, "reportStartDate");
             return (Criteria) this;
         }
 
-        public Criteria andPeriodIn(List<String> values) {
-            addCriterion("period in", values, "period");
+        public Criteria andReportStartDateBetween(Date value1, Date value2) {
+            addCriterionForJDBCDate("report_start_date between", value1, value2, "reportStartDate");
             return (Criteria) this;
         }
 
-        public Criteria andPeriodNotIn(List<String> values) {
-            addCriterion("period not in", values, "period");
+        public Criteria andReportStartDateNotBetween(Date value1, Date value2) {
+            addCriterionForJDBCDate("report_start_date not between", value1, value2, "reportStartDate");
             return (Criteria) this;
         }
 
-        public Criteria andPeriodBetween(String value1, String value2) {
-            addCriterion("period between", value1, value2, "period");
+        public Criteria andReportEndDateIsNull() {
+            addCriterion("report_end_date is null");
             return (Criteria) this;
         }
 
-        public Criteria andPeriodNotBetween(String value1, String value2) {
-            addCriterion("period not between", value1, value2, "period");
+        public Criteria andReportEndDateIsNotNull() {
+            addCriterion("report_end_date is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportEndDateEqualTo(Date value) {
+            addCriterionForJDBCDate("report_end_date =", value, "reportEndDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportEndDateNotEqualTo(Date value) {
+            addCriterionForJDBCDate("report_end_date <>", value, "reportEndDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportEndDateGreaterThan(Date value) {
+            addCriterionForJDBCDate("report_end_date >", value, "reportEndDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportEndDateGreaterThanOrEqualTo(Date value) {
+            addCriterionForJDBCDate("report_end_date >=", value, "reportEndDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportEndDateLessThan(Date value) {
+            addCriterionForJDBCDate("report_end_date <", value, "reportEndDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportEndDateLessThanOrEqualTo(Date value) {
+            addCriterionForJDBCDate("report_end_date <=", value, "reportEndDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportEndDateIn(List<Date> values) {
+            addCriterionForJDBCDate("report_end_date in", values, "reportEndDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportEndDateNotIn(List<Date> values) {
+            addCriterionForJDBCDate("report_end_date not in", values, "reportEndDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportEndDateBetween(Date value1, Date value2) {
+            addCriterionForJDBCDate("report_end_date between", value1, value2, "reportEndDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportEndDateNotBetween(Date value1, Date value2) {
+            addCriterionForJDBCDate("report_end_date not between", value1, value2, "reportEndDate");
             return (Criteria) this;
         }
 
@@ -1014,11 +1091,6 @@ public class WeeklyEntityCondition extends BaseEntityCondition implements Serial
             return (Criteria) this;
         }
 
-        public Criteria andPeriodLikeInsensitive(String value) {
-            addCriterion("upper(period) like", value.toUpperCase(), "period");
-            return (Criteria) this;
-        }
-
         public Criteria andRemarkLikeInsensitive(String value) {
             addCriterion("upper(remark) like", value.toUpperCase(), "remark");
             return (Criteria) this;
@@ -1101,21 +1173,6 @@ public class WeeklyEntityCondition extends BaseEntityCondition implements Serial
          */
         public Criteria andRelTaskIdLikeIgnoreCase(String value) {
             addCriterion("upper(rel_task_id) like ", value.toUpperCase(), "relTaskId");
-            return (Criteria) this;
-        }
-
-        /**
-         *(扩展Mybatis原生like的不足)
-         *忽略字段大小写的模糊查询
-         *Java编码如下：
-         *  criteria.andNameLikeIgnoreCase("%Abc%"); 前后模糊,A字母大写
-         *  criteria.andName2LikeIgnoreCase("%aBc"); 前模糊,B字母大写
-         *  criteria.andName3LikeIgnoreCase("abC%"); 后模糊,C字母大写
-         *执行时SQL如下:
-         *  where name like '%abc%' or name2 like '%abc' or name3 like 'abc%'
-         */
-        public Criteria andPeriodLikeIgnoreCase(String value) {
-            addCriterion("upper(period) like ", value.toUpperCase(), "period");
             return (Criteria) this;
         }
 

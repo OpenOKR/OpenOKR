@@ -23,8 +23,11 @@ public class WeeklyEntity extends BaseEntity implements Serializable {
     /** 关联的任务 */
     private String relTaskId;
 
-    /** 填报周期 */
-    private String period;
+    /** 填报开始周期 */
+    private Date reportStartDate;
+
+    /** 填报结束周期 */
+    private Date reportEndDate;
 
     /** 耗费总工时 */
     private BigDecimal duration;
@@ -107,21 +110,39 @@ public class WeeklyEntity extends BaseEntity implements Serializable {
     }
 
     /**
-     * 填报周期
-     * @return period
+     * 填报开始周期
+     * @return reportStartDate
      */
-    @Column(name = "period")
-    public String getPeriod() {
-        return period;
+    @Column(name = "report_start_date")
+    public Date getReportStartDate() {
+        return reportStartDate;
     }
 
     /**
-     * 填报周期
-     * @param period
+     * 填报开始周期
+     * @param reportStartDate
      */
-    public void setPeriod(String period) {
-        this.period = period;
-        addSettedField("period");
+    public void setReportStartDate(Date reportStartDate) {
+        this.reportStartDate = reportStartDate;
+        addSettedField("reportStartDate");
+    }
+
+    /**
+     * 填报结束周期
+     * @return reportEndDate
+     */
+    @Column(name = "report_end_date")
+    public Date getReportEndDate() {
+        return reportEndDate;
+    }
+
+    /**
+     * 填报结束周期
+     * @param reportEndDate
+     */
+    public void setReportEndDate(Date reportEndDate) {
+        this.reportEndDate = reportEndDate;
+        addSettedField("reportEndDate");
     }
 
     /**
