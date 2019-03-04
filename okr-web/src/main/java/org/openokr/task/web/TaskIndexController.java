@@ -9,6 +9,7 @@ import org.openokr.application.web.BaseController;
 import org.openokr.common.vo.response.ResponseData;
 import org.openokr.sys.service.IMenuService;
 import org.openokr.task.service.ITaskManageService;
+import org.openokr.task.vo.DailyVO;
 import org.openokr.task.vo.MyTaskCountInfoVO;
 import org.openokr.task.request.TaskInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,9 +52,11 @@ public class TaskIndexController extends BaseController {
             result.setData(myTaskCountInfoVOS);
             result.setCode(0);
         }catch (BusinessException e){
+            logger.error("查询我的项目数据 异常", e.getMessage(), e);
             result.setCode(6000);
             result.setMessage(e.getMessage());
         }catch (Exception e){
+            logger.error("查询我的项目数据 异常", e.getMessage(), e);
             result.setCode(7000);
             result.setMessage(e.getMessage());
         }
@@ -76,9 +79,11 @@ public class TaskIndexController extends BaseController {
             result.setData(myMyManageTaskCountInfoVOS);
             result.setCode(0);
         }catch (BusinessException e){
+            logger.error("查询我管理的项目数据 异常", e.getMessage(), e);
             result.setCode(6000);
             result.setMessage(e.getMessage());
         }catch (Exception e){
+            logger.error("查询我管理的项目数据 异常", e.getMessage(), e);
             result.setCode(7000);
             result.setMessage(e.getMessage());
         }
@@ -93,9 +98,23 @@ public class TaskIndexController extends BaseController {
     )
     @RequestMapping(value = "/index/getRecentTaskInfoVO.json", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<List<TaskInfoVO>> getRecentTaskInfoVO() {
-        String userId = this.getCurrentUserId();
-        return null;
+    public ResponseData<List<DailyVO>> getRecentTaskInfoVO() {
+        ResponseData<List<DailyVO>> result = new ResponseData<>();
+        try{
+            String userId = this.getCurrentUserId();
+            List<DailyVO> dailyVOS = taskManageService.getMyRecentTaskInfo(userId);
+            result.setData(dailyVOS);
+            result.setCode(0);
+        }catch (BusinessException e){
+            logger.error("查询近期报工数据 异常", e.getMessage(), e);
+            result.setCode(6000);
+            result.setMessage(e.getMessage());
+        }catch (Exception e){
+            logger.error("查询近期报工数据 异常", e.getMessage(), e);
+            result.setCode(7000);
+            result.setMessage(e.getMessage());
+        }
+        return result;
     }
 
 

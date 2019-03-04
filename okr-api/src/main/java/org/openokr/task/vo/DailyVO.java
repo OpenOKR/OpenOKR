@@ -21,6 +21,9 @@ public class DailyVO extends BaseVO {
     @ApiModelProperty(value = "填写人id")
     private String reportUserId;
 
+    @ApiModelProperty(value = "填写人姓名")
+    private String reportUserName;
+
     @ApiModelProperty(value = "项目ID")
     private String taskId;
 

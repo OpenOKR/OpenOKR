@@ -104,5 +104,22 @@
                AND tta.project_id = #{projectId}
             </if>
     </select>
+    <select id="getMyRecentTaskInfo" parameterType="java.util.Map" resultType="org.openokr.task.vo.DailyVO">
+        SELECT
+            td.*,
+            TSU.user_name reportUserName
+        FROM
+            T_OKR_DAILY td
+            INNER JOIN t_okr_sys_user TSU td.report_user_id = TSU.ID
+        <where>
+            <if test="reportUserId != null and !reportUserId.isEmpty()">
+               AND td.report_user_id = #{reportUserId}
+            </if>
+        </where>
+        order by create_ts desc
+        <if test="page != null" >
+            <![CDATA[ limit 4 offset 0 ]]>
+        </if>
+    </select>
 
 </mapper>

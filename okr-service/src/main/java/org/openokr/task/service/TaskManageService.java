@@ -7,10 +7,7 @@ import com.zzheng.framework.mybatis.service.impl.BaseServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.openokr.task.entity.*;
 import org.openokr.task.request.TaskSearchVO;
-import org.openokr.task.vo.MyTaskCountInfoVO;
-import org.openokr.task.vo.TaskApportionVO;
-import org.openokr.task.vo.TaskSaveVO;
-import org.openokr.task.vo.TaskVO;
+import org.openokr.task.vo.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -340,6 +337,27 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
             throw new BusinessException("获取首页我管理的报工统计信息 失败");
         }
         return myTaskCountInfoVOS;
+    }
+
+    @Override
+    public List<DailyVO> getMyRecentTaskInfo(String userId) throws BusinessException {
+        List<DailyVO> myDailyVOS;
+        try{
+            //1:参数校验
+            if(StringUtils.isBlank(userId)){
+                throw new BusinessException("用户ID为空，请确认!");
+            }
+            Map<String,Object> paramMap = new HashMap<>();
+            paramMap.put("reportUserId",userId);
+            myDailyVOS = this.getMyBatisDao().selectListBySql(MAPPER_NAMSPACE+".getMyRecentTaskInfo",paramMap);
+        } catch (BusinessException e) {
+            logger.error("获取首页我的近期报工 busi-error:{}-->[userId]={}", e.getMessage(),userId, e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("获取首页我的近期报工 error:{}-->[userId]={}", e.getMessage(),userId, e);
+            throw new BusinessException("获取首页我的近期报工 失败");
+        }
+        return myDailyVOS;
     }
 
 }

@@ -3,6 +3,7 @@ package org.openokr.task.service;
 import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.dao.pojo.Page;
 import org.openokr.task.request.TaskSearchVO;
+import org.openokr.task.vo.DailyVO;
 import org.openokr.task.vo.MyTaskCountInfoVO;
 import org.openokr.task.vo.TaskSaveVO;
 import org.openokr.task.vo.TaskVO;
@@ -62,4 +63,13 @@ public interface ITaskManageService {
      * @throws BusinessException
      */
     List<MyTaskCountInfoVO> getMyManageTaskCountInfo(String userId) throws BusinessException;
+
+
+    /**
+     * 获取首页我的近期报工
+     * @param userId
+     * @return
+     * @throws BusinessException
+     */
+    List<DailyVO> getMyRecentTaskInfo(String userId) throws BusinessException;
 }
