@@ -1053,6 +1053,76 @@ public class TaskEntityCondition extends BaseEntityCondition implements Serializ
             return (Criteria) this;
         }
 
+        public Criteria andBelongTeamIsNull() {
+            addCriterion("belong_team is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBelongTeamIsNotNull() {
+            addCriterion("belong_team is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBelongTeamEqualTo(String value) {
+            addCriterion("belong_team =", value, "belongTeam");
+            return (Criteria) this;
+        }
+
+        public Criteria andBelongTeamNotEqualTo(String value) {
+            addCriterion("belong_team <>", value, "belongTeam");
+            return (Criteria) this;
+        }
+
+        public Criteria andBelongTeamGreaterThan(String value) {
+            addCriterion("belong_team >", value, "belongTeam");
+            return (Criteria) this;
+        }
+
+        public Criteria andBelongTeamGreaterThanOrEqualTo(String value) {
+            addCriterion("belong_team >=", value, "belongTeam");
+            return (Criteria) this;
+        }
+
+        public Criteria andBelongTeamLessThan(String value) {
+            addCriterion("belong_team <", value, "belongTeam");
+            return (Criteria) this;
+        }
+
+        public Criteria andBelongTeamLessThanOrEqualTo(String value) {
+            addCriterion("belong_team <=", value, "belongTeam");
+            return (Criteria) this;
+        }
+
+        public Criteria andBelongTeamLike(String value) {
+            addCriterion("belong_team like", value, "belongTeam");
+            return (Criteria) this;
+        }
+
+        public Criteria andBelongTeamNotLike(String value) {
+            addCriterion("belong_team not like", value, "belongTeam");
+            return (Criteria) this;
+        }
+
+        public Criteria andBelongTeamIn(List<String> values) {
+            addCriterion("belong_team in", values, "belongTeam");
+            return (Criteria) this;
+        }
+
+        public Criteria andBelongTeamNotIn(List<String> values) {
+            addCriterion("belong_team not in", values, "belongTeam");
+            return (Criteria) this;
+        }
+
+        public Criteria andBelongTeamBetween(String value1, String value2) {
+            addCriterion("belong_team between", value1, value2, "belongTeam");
+            return (Criteria) this;
+        }
+
+        public Criteria andBelongTeamNotBetween(String value1, String value2) {
+            addCriterion("belong_team not between", value1, value2, "belongTeam");
+            return (Criteria) this;
+        }
+
         public Criteria andIdLikeInsensitive(String value) {
             addCriterion("upper(id) like", value.toUpperCase(), "id");
             return (Criteria) this;
@@ -1100,6 +1170,11 @@ public class TaskEntityCondition extends BaseEntityCondition implements Serializ
 
         public Criteria andUpdateUserIdLikeInsensitive(String value) {
             addCriterion("upper(update_user_id) like", value.toUpperCase(), "updateUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBelongTeamLikeInsensitive(String value) {
+            addCriterion("upper(belong_team) like", value.toUpperCase(), "belongTeam");
             return (Criteria) this;
         }
 
@@ -1250,6 +1325,21 @@ public class TaskEntityCondition extends BaseEntityCondition implements Serializ
          */
         public Criteria andUpdateUserIdLikeIgnoreCase(String value) {
             addCriterion("upper(update_user_id) like ", value.toUpperCase(), "updateUserId");
+            return (Criteria) this;
+        }
+
+        /**
+         *(扩展Mybatis原生like的不足)
+         *忽略字段大小写的模糊查询
+         *Java编码如下：
+         *  criteria.andNameLikeIgnoreCase("%Abc%"); 前后模糊,A字母大写
+         *  criteria.andName2LikeIgnoreCase("%aBc"); 前模糊,B字母大写
+         *  criteria.andName3LikeIgnoreCase("abC%"); 后模糊,C字母大写
+         *执行时SQL如下:
+         *  where name like '%abc%' or name2 like '%abc' or name3 like 'abc%'
+         */
+        public Criteria andBelongTeamLikeIgnoreCase(String value) {
+            addCriterion("upper(belong_team) like ", value.toUpperCase(), "belongTeam");
             return (Criteria) this;
         }
     }

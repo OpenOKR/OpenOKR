@@ -15,7 +15,10 @@ public class TaskSearchVO extends PageRequest implements Serializable {
     @ApiModelProperty(value = "关键词")
     private String searchKey;
 
-    @ApiModelProperty(value = "创建日期")
-    private Date createDate;
+    @ApiModelProperty(value = "查询开始日期")
+    private Date queryStartDate;
+
+    @ApiModelProperty(value = "查询结束日期")
+    private Date queryEndDate;
 
 }

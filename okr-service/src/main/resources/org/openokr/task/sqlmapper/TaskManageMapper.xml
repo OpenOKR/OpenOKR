@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.openokr.task.sqlmapper.TaskManageMapper">
+
+    <select id="getTableData" parameterType="java.util.Map" resultType="org.openokr.task.vo.TaskVO">
+        SELECT
+        t1.id, t1.task_code, t1.task_name, t1.task_status, t1.task_remark, t1.is_deleted, t1.task_start_time,
+        t1.task_end_time, t1.jira_label, t1.confirm_user_id, t1.create_user_id, t1.create_ts,t1.update_user_id,
+        t1.update_ts
+        FROM t_okr_task t1
+        <where>
+            <if test="vo.searchKey != null and !vo.searchKey.isEmpty()">
+                and (ar.task_name LIKE CONCAT('%', #{vo.searchKey }, '%') or ar.task_remark LIKE CONCAT('%', #{vo.searchKey }, '%'))
+            </if>
+            <if test="vo.queryStartDate != null">
+                <![CDATA[AND ar.create_ts >= #{vo.queryStartDate}]]>
+            </if>
+            <if test="vo.endDate != null">
+                <![CDATA[AND ar.create_ts <= #{vo.queryEndDate}]]>
+            </if>
+        </where>
+        order by create_ts desc
+        <if test="page != null" >
+            <![CDATA[ limit #{page.pageSize} offset (#{page.recordStart}-1) ]]>
+        </if>
+    </select>
+
+    <select id="countTableData" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+          count(t1.*)
+        FROM t_okr_task t1
+        <where>
+            <if test="vo.searchKey != null and !vo.searchKey.isEmpty()">
+                and (ar.task_name LIKE CONCAT('%', #{vo.searchKey }, '%') or ar.task_remark LIKE CONCAT('%', #{vo.searchKey }, '%'))
+            </if>
+            <if test="vo.queryStartDate != null">
+                <![CDATA[AND ar.create_ts >= #{vo.queryStartDate}]]>
+            </if>
+            <if test="vo.endDate != null">
+                <![CDATA[AND ar.create_ts <= #{vo.queryEndDate}]]>
+            </if>
+        </where>
+    </select>
+
+</mapper>

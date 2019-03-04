@@ -15,6 +15,7 @@ import org.openokr.sys.service.IMenuService;
 import org.openokr.task.request.MyTaskInfoVO;
 import org.openokr.task.request.TaskInfoVO;
 import org.openokr.task.request.TaskSearchVO;
+import org.openokr.task.vo.TaskSaveVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -85,7 +86,7 @@ public class TaskManageController extends BaseController {
     @ApiOperation(value = "新增任务")
     @RequestMapping(value = "/saveTask.json",method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData saveTask(@RequestBody TaskInfoVO taskInfoVO){
+    public ResponseData saveTask(@RequestBody TaskSaveVO taskSaveVO){
         ResponseData responseData = new ResponseData();
         try {
             responseData.setCode(0);

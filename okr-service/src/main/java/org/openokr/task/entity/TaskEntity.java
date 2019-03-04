@@ -52,6 +52,9 @@ public class TaskEntity extends BaseEntity implements Serializable {
     /** 更新时间 */
     private Date updateTs;
 
+    /** 所属团队 */
+    private String belongTeam;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -286,6 +289,24 @@ public class TaskEntity extends BaseEntity implements Serializable {
     public void setUpdateTs(Date updateTs) {
         this.updateTs = updateTs;
         addSettedField("updateTs");
+    }
+
+    /**
+     * 所属团队
+     * @return belongTeam
+     */
+    @Column(name = "belong_team")
+    public String getBelongTeam() {
+        return belongTeam;
+    }
+
+    /**
+     * 所属团队
+     * @param belongTeam
+     */
+    public void setBelongTeam(String belongTeam) {
+        this.belongTeam = belongTeam;
+        addSettedField("belongTeam");
     }
 
     /**
