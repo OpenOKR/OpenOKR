@@ -1,4 +1,4 @@
-package org.openokr.task;
+package org.openokr.task.web;
 
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
