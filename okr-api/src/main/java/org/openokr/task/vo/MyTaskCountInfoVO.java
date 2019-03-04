@@ -1,4 +1,4 @@
-package org.openokr.task.request;
+package org.openokr.task.vo;
 
 import com.zzheng.framework.base.vo.BaseVO;
 import io.swagger.annotations.ApiModelProperty;
@@ -7,8 +7,11 @@ import lombok.Data;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+/**
+ * 报工首页-我的项目信息使用VO
+ */
 @Data
-public class MyTaskInfoVO extends BaseVO implements Serializable {
+public class MyTaskCountInfoVO extends BaseVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

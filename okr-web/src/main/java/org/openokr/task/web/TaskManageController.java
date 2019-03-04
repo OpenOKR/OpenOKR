@@ -1,7 +1,6 @@
 package org.openokr.task.web;
 
 import com.alibaba.fastjson.JSON;
-import com.zzheng.framework.base.utils.JSONUtils;
 import com.zzheng.framework.mybatis.dao.pojo.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -12,11 +11,10 @@ import org.openokr.application.web.BaseController;
 import org.openokr.common.vo.response.PageResponseData;
 import org.openokr.common.vo.response.ResponseData;
 import org.openokr.sys.service.IMenuService;
-import org.openokr.task.request.MyTaskInfoVO;
+import org.openokr.task.vo.MyTaskCountInfoVO;
 import org.openokr.task.request.TaskInfoVO;
 import org.openokr.task.request.TaskSearchVO;
 import org.openokr.task.vo.TaskSaveVO;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -51,7 +48,7 @@ public class TaskManageController extends BaseController {
     )
     @RequestMapping(value = "/index/getMyTaskInfoVO.json", method = RequestMethod.POST)
     @ResponseBody
-    public List<MyTaskInfoVO> getMyTaskInfoVO() {
+    public List<MyTaskCountInfoVO> getMyTaskInfoVO() {
         String userId = this.getCurrentUserId();
         return null;
     }

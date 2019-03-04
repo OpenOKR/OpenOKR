@@ -7,7 +7,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.openokr.application.web.BaseController;
 import org.openokr.common.vo.response.ResponseData;
 import org.openokr.sys.service.IMenuService;
-import org.openokr.task.request.MyTaskInfoVO;
+import org.openokr.task.vo.MyTaskCountInfoVO;
 import org.openokr.task.request.TaskInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,7 +39,7 @@ public class TaskIndexController extends BaseController {
     )
     @RequestMapping(value = "/index/getMyTaskInfoVO.json", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<List<MyTaskInfoVO>> getMyTaskInfoVO() {
+    public ResponseData<List<MyTaskCountInfoVO>> getMyTaskInfoVO() {
         String userId = this.getCurrentUserId();
         return null;
     }
@@ -52,7 +52,7 @@ public class TaskIndexController extends BaseController {
     )
     @RequestMapping(value = "/index/getMyManageTaskInfoVO.json", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<List<MyTaskInfoVO>> getMyManageTaskInfoVO() {
+    public ResponseData<List<MyTaskCountInfoVO>> getMyManageTaskInfoVO() {
         String userId = this.getCurrentUserId();
         return null;
     }

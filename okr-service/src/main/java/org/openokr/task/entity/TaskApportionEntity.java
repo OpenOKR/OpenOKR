@@ -16,8 +16,8 @@ public class TaskApportionEntity extends BaseEntity implements Serializable {
     /** 任务ID */
     private String taskId;
 
-    /** 分摊ID */
-    private String apportionId;
+    /** 项目ID */
+    private String projectId;
 
     /** 类别ID */
     private String categoryId;
@@ -46,21 +46,21 @@ public class TaskApportionEntity extends BaseEntity implements Serializable {
     }
 
     /**
-     * 分摊ID
-     * @return apportionId
+     * 项目ID
+     * @return projectId
      */
-    @Column(name = "apportion_id")
-    public String getApportionId() {
-        return apportionId;
+    @Column(name = "project_id")
+    public String getProjectId() {
+        return projectId;
     }
 
     /**
-     * 分摊ID
-     * @param apportionId
+     * 项目ID
+     * @param projectId
      */
-    public void setApportionId(String apportionId) {
-        this.apportionId = apportionId;
-        addSettedField("apportionId");
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+        addSettedField("projectId");
     }
 
     /**

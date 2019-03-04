@@ -7,6 +7,7 @@ import com.zzheng.framework.mybatis.service.impl.BaseServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.openokr.task.entity.*;
 import org.openokr.task.request.TaskSearchVO;
+import org.openokr.task.vo.MyTaskCountInfoVO;
 import org.openokr.task.vo.TaskApportionVO;
 import org.openokr.task.vo.TaskSaveVO;
 import org.openokr.task.vo.TaskVO;
@@ -14,6 +15,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static org.openokr.common.constant.AcTaskConstant.CURRENT_PAGE;
@@ -29,7 +31,7 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
     private static final String MAPPER_NAMSPACE = "org.openokr.task.sqlmapper.TaskManageMapper";
 
     @Override
-    public Page getTakListByPage(Page page, TaskSearchVO taskSearchVO) throws Exception{
+    public Page getTakListByPage(Page page, TaskSearchVO taskSearchVO) throws BusinessException{
         try{
             if(page == null){
                 page = new Page(CURRENT_PAGE,PAGE_SIZE);
@@ -54,7 +56,7 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
     }
 
     @Override
-    public TaskVO saveTaskInfo(TaskSaveVO taskSaveVO) throws Exception {
+    public TaskVO saveTaskInfo(TaskSaveVO taskSaveVO) throws BusinessException {
         TaskVO taskVO;
         try{
             //1:参数校验
@@ -156,7 +158,7 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
     }
 
     @Override
-    public void delTaskInfoById(String taskId) throws Exception {
+    public void delTaskInfoById(String taskId) throws BusinessException {
         try{
             //1:参数校验
             if(StringUtils.isBlank(taskId)){
@@ -176,7 +178,7 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
     }
 
     @Override
-    public TaskSaveVO getTaskDetailById(String taskId) throws Exception {
+    public TaskSaveVO getTaskDetailById(String taskId) throws BusinessException {
         TaskSaveVO taskSaveVO = new TaskSaveVO();
         try{
             //1:参数校验
@@ -231,4 +233,113 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
         }
         return taskSaveVO;
     }
+
+    @Override
+    public List<MyTaskCountInfoVO> getMyTaskCountInfo(String userId) throws BusinessException {
+        List<MyTaskCountInfoVO> myTaskCountInfoVOS = new ArrayList<>();
+        try{
+            //1:参数校验
+            if(StringUtils.isBlank(userId)){
+                throw new BusinessException("用户ID为空，请确认!");
+            }
+            Map<String,Object> paramMap = new HashMap<>();
+            paramMap.put("reportUserId",userId);
+            List<String> projectIds = this.getMyBatisDao().selectListBySql(MAPPER_NAMSPACE+".getMyRenectReportProjectIIds",paramMap);
+            if(projectIds==null && projectIds.size() >0){
+                MyTaskCountInfoVO myTaskCountInfoVO;
+                Map<String,Object> queryCountMap = new HashMap<>();
+                for(String projectId:projectIds){
+                    ProjectInfoEntity projectInfoEntity = this.selectByPrimaryKey(ProjectInfoEntity.class,projectId);
+                    if(projectInfoEntity == null){
+                        logger.error("获取不到项目{}的信息",projectId);
+                        continue;
+                    }
+                    SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+                    SimpleDateFormat formatTime = new SimpleDateFormat("yyyyMMddHHmmss");
+                    //获取当前月第一天：
+                    Calendar c = Calendar.getInstance();
+                    c.add(Calendar.MONTH, 0);
+                    c.set(Calendar.DAY_OF_MONTH,1);//设置为1号,当前日期既为本月第一天
+                    String firstDateStr = format.format(c.getTime()) + "000000";
+                    Date firstDate = formatTime.parse(firstDateStr);
+                    //获取前月的最后一天
+                    Calendar cale = Calendar.getInstance();
+                    cale.set(Calendar.DAY_OF_MONTH,0);//设置为1,当前日期既为本月最后一天
+                    String lastDayStr = format.format(cale.getTime()) + "235959";
+                    Date lastDate = formatTime.parse(lastDayStr);
+                    queryCountMap.put("reportUserId",userId);
+                    queryCountMap.put("projectId",projectId);
+                    queryCountMap.put("reportStartDate", firstDate);
+                    queryCountMap.put("reportEndDate",lastDate);
+                    myTaskCountInfoVO = this.getMyBatisDao().selectOneBySql(MAPPER_NAMSPACE+".getProjectRelTaskCountInfo",paramMap);
+                    myTaskCountInfoVOS.add(myTaskCountInfoVO);
+                }
+            }
+        } catch (BusinessException e) {
+            logger.error("获取首页我的报工统计信息 busi-error:{}-->[userId]={}", e.getMessage(),userId, e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("获取首页我的报工统计信息 error:{}-->[userId]={}", e.getMessage(),userId, e);
+            throw new BusinessException("获取首页我的报工统计信息 失败");
+        }
+        return myTaskCountInfoVOS;
+    }
+
+    @Override
+    public List<MyTaskCountInfoVO> getMyManageTaskCountInfo(String userId) throws BusinessException {
+        List<MyTaskCountInfoVO> myTaskCountInfoVOS = new ArrayList<>();
+        try{
+            //1:参数校验
+            if(StringUtils.isBlank(userId)){
+                throw new BusinessException("用户ID为空，请确认!");
+            }
+            Map<String,Object> paramMap = new HashMap<>();
+            paramMap.put("confirmUserId",userId);
+            List<String> projectIds = this.getMyBatisDao().selectListBySql(MAPPER_NAMSPACE+".getMyRenectReportProjectIIds",paramMap);
+            if(projectIds==null && projectIds.size() >0){
+                MyTaskCountInfoVO myTaskCountInfoVO;
+                Map<String,Object> queryCountMap = new HashMap<>();
+                for(String projectId:projectIds){
+                    ProjectInfoEntity projectInfoEntity = this.selectByPrimaryKey(ProjectInfoEntity.class,projectId);
+                    if(projectInfoEntity == null){
+                        logger.error("获取不到项目{}的信息",projectId);
+                        continue;
+                    }
+                    SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+                    SimpleDateFormat formatTime = new SimpleDateFormat("yyyyMMddHHmmss");
+                    //获取当前月第一天：
+                    Calendar c = Calendar.getInstance();
+                    c.add(Calendar.MONTH, 0);
+                    c.set(Calendar.DAY_OF_MONTH,1);//设置为1号,当前日期既为本月第一天
+                    String firstDateStr = format.format(c.getTime()) + "000000";
+                    Date firstDate = formatTime.parse(firstDateStr);
+                    //获取前月的最后一天
+                    Calendar cale = Calendar.getInstance();
+                    cale.set(Calendar.DAY_OF_MONTH,0);//设置为1,当前日期既为本月最后一天
+                    String lastDayStr = format.format(cale.getTime()) + "235959";
+                    Date lastDate = formatTime.parse(lastDayStr);
+                    queryCountMap.put("projectId",projectId);
+                    queryCountMap.put("reportStartDate", firstDate);
+                    queryCountMap.put("reportEndDate",lastDate);
+                    //获取关联任务数及已报工时
+                    myTaskCountInfoVO = this.getMyBatisDao().selectOneBySql(MAPPER_NAMSPACE+".getProjectRelTaskCountInfo",paramMap);
+                    if(myTaskCountInfoVO != null){
+                        //获取项目关联成员数
+                        Integer meemberNum = this.getMyBatisDao().selectOneBySql(MAPPER_NAMSPACE+".countProjectRelUserNum",paramMap);
+                        myTaskCountInfoVO.setMemberNum(meemberNum);
+                        myTaskCountInfoVOS.add(myTaskCountInfoVO);
+                    }
+
+                }
+            }
+        } catch (BusinessException e) {
+            logger.error("获取首页我管理的报工统计信息 busi-error:{}-->[userId]={}", e.getMessage(),userId, e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("获取首页我管理的报工统计信息 error:{}-->[userId]={}", e.getMessage(),userId, e);
+            throw new BusinessException("获取首页我管理的报工统计信息 失败");
+        }
+        return myTaskCountInfoVOS;
+    }
+
 }

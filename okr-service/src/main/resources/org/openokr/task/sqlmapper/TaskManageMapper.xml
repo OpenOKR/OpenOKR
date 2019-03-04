@@ -15,6 +15,9 @@
             <if test="vo.queryStartDate != null">
                 <![CDATA[AND ar.create_ts >= #{vo.queryStartDate}]]>
             </if>
+            <if test="vo.queryStartDate != null">
+                <![CDATA[AND ar.create_ts >= #{vo.queryStartDate}]]>
+            </if>
             <if test="vo.endDate != null">
                 <![CDATA[AND ar.create_ts <= #{vo.queryEndDate}]]>
             </if>
@@ -40,6 +43,66 @@
                 <![CDATA[AND ar.create_ts <= #{vo.queryEndDate}]]>
             </if>
         </where>
+    </select>
+
+    <select id="getMyRenectReportProjectIIds" parameterType="java.util.Map" resultType="java.lang.String">
+        SELECT DISTINCT
+	      t1.project_id
+        FROM
+            (
+        SELECT
+            tta.project_id
+        FROM
+            T_OKR_DAILY td
+            INNER JOIN T_OKR_TASK_APPORTION tta ON td.task_id = tta.task_id
+        	INNER JOIN t_okr_task TT ON TTA.task_id = TT.ID
+        <where>
+            <if test="reportUserId != null and !reportUserId.isEmpty()">
+                and td.report_user_id = #{reportUserId}
+            </if>
+            <if test="reportUserId != null and !reportUserId.isEmpty()">
+                and tt.confirm_user_id = #{confirmUserId}
+            </if>
+        </where>
+        ORDER BY
+            td.report_day DESC
+            ) t1
+        <if test="vo.endDate != null">
+            <![CDATA[AND ar.create_ts <= #{vo.queryEndDate}]]>
+        </if>
+    </select>
+    <select id="getProjectRelTaskCountInfo" parameterType="java.util.Map" resultType="org.openokr.task.vo.MyTaskCountInfoVO">
+        SELECT
+            COUNT ( td.* ) relTaskNum,
+            COALESCE ( SUM ( td.DURATION ), 0 ) totalDuration
+        FROM
+            T_OKR_DAILY td
+            INNER JOIN t_okr_task_apportion tta ON td.task_id = tta.task_id
+        <where>
+            <if test="reportUserId != null and !reportUserId.isEmpty()">
+               AND td.report_user_id = #{reportUserId}
+            </if>
+            <if test="projectId != null and !projectId.isEmpty()">
+               AND tta.project_id = #{projectId}
+            </if>
+            <if test="queryStartDate != null">
+                <![CDATA[AND td.report_day >= #{reportStartDate}]]>
+            </if>
+            <if test="endDate != null">
+                <![CDATA[AND td.report_day <= #{reportEndDate}]]>
+            </if>
+        </where>
+    </select>
+    <select id="countProjectRelUserNum" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+            COUNT ( ttur.* ) totalUserNum
+        FROM
+            t_okr_task_apportion tta
+            inner join T_OKR_TASK_USER_REL ttur on tta.task_id = ttur.task_id
+        WHERE
+            <if test="projectId != null and !projectId.isEmpty()">
+               AND tta.project_id = #{projectId}
+            </if>
     </select>
 
 </mapper>
