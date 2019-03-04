@@ -1,6 +1,7 @@
 package org.openokr.task.service;
 
 import com.zzheng.framework.exception.BusinessException;
+import com.zzheng.framework.mybatis.dao.pojo.Page;
 import org.openokr.task.request.DailySearchVO;
 import org.openokr.task.vo.DailyVO;
 
@@ -12,6 +13,15 @@ import java.util.List;
  * @create 2019/3/1
  */
 public interface IDailyManageService {
+
+    /**
+     * 查询日报分页
+     * @param condition
+     * @param page
+     * @return
+     * @throws BusinessException
+     */
+    Page queryPage(DailySearchVO condition,Page page) throws BusinessException;
 
     /**
      * 根据条件查询日报列表

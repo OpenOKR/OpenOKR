@@ -2,6 +2,7 @@ package org.openokr.task.service;
 
 import com.alibaba.fastjson.JSON;
 import com.zzheng.framework.exception.BusinessException;
+import com.zzheng.framework.mybatis.dao.pojo.Page;
 import com.zzheng.framework.mybatis.service.impl.BaseServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.openokr.db.service.IDailyDBService;
@@ -29,13 +30,41 @@ public class DailyManageService extends BaseServiceImpl implements IDailyManageS
     private IDailyDBService dailyDBService;
 
     @Override
+    public Page queryPage(DailySearchVO condition, Page page) throws BusinessException {
+        String methodName = "getDailyList-根据条件查询日报列表";
+        try {
+            if (condition == null) {
+                throw new BusinessException("查询条件对象为空");
+            }
+            if (page == null) {
+                page = new Page();
+            }
+
+            int count = dailyDBService.countDailyList(condition);
+            if (count >= 0) {
+                List<DailyVO> list = dailyDBService.getDailyList(condition,page);
+                page.setTotalRecord(count);
+                page.setRecords(list);
+            }
+
+            return page;
+        } catch (BusinessException e) {
+            logger.error("{} 失败，[condition]->{}",methodName, JSON.toJSONString(condition));
+            throw e;
+        } catch (Exception e) {
+            logger.error("{} 异常，[condition]->{}",methodName, JSON.toJSONString(condition));
+            throw new BusinessException(e);
+        }
+    }
+
+    @Override
     public List<DailyVO> getDailyList(DailySearchVO condition) throws BusinessException {
         String methodName = "getDailyList-根据条件查询日报列表";
         try {
             if (condition == null) {
                 throw new BusinessException("查询条件对象为空");
             }
-            return dailyDBService.getDailyList(condition);
+            return dailyDBService.getDailyList(condition,null);
         } catch (BusinessException e) {
             logger.error("{} 失败，[condition]->{}",methodName, JSON.toJSONString(condition));
             throw e;

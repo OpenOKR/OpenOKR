@@ -8,6 +8,27 @@
         id, report_user_id, task_id, report_day, duration, remark, create_user_id, create_ts,
         update_user_id, update_ts
     </sql>
+
+    <sql id="pageCondition">
+        FROM t_okr_daily t1
+        LEFT JOIN t_okr_task t2 ON t1.task_id = t2.id
+        WHERE
+            1 = 1
+        <if test="condition.reportDayStr != null and condition.reportDayStr != ''" >
+            AND to_char(t1.report_day,'yyyy-MM-dd') = #{condition.reportDayStr}
+        </if>
+        <if test="condition.reportUserId != null and condition.reportUserId != ''" >
+            AND t1.report_user_id = #{condition.reportUserId}
+        </if>
+        <if test="condition.taskId != null and condition.taskId != ''" >
+            AND t1.task_id = #{condition.taskId}
+        </if>
+    </sql>
+
+    <select id="countDailyList" resultType="Integer" parameterType="HashMap">
+        SELECT count(1)
+        <include refid="pageCondition" />
+    </select>
     
     <select id="getDailyList" resultType="org.openokr.task.vo.DailyVO" parameterType="HashMap">
         SELECT
@@ -20,19 +41,11 @@
             t1.create_user_id,
             t1.create_ts,
             t1.update_user_id,
-            t1.update_ts
-        FROM t_okr_daily t1
-        WHERE
-            1 = 1
-        <if test="condition.reportDayStr != null and condition.reportDayStr != ''" >
-            AND to_char(t1.report_day,'yyyy-MM-dd') = #{condition.reportDayStr}
-        </if>
-        <if test="condition.reportUserId != null and condition.reportUserId != ''" >
-            AND t1.report_user_id = #{condition.reportUserId}
-        </if>
-        <if test="condition.taskId != null and condition.taskId != ''" >
-            AND t1.task_id = #{condition.taskId}
-        </if>
+            t1.update_ts,
+            t1.task_name
+        <include refid="pageCondition"/>
+        ORDER BY t1.create_ts DESC
+        <include refid="PostgreSqlPaginationSuffix"/>
     </select>
     
     <sql id="PostgreSqlPaginationSuffix">

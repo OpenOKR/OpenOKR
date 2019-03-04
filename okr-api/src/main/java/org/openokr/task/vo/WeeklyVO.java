@@ -58,6 +58,9 @@ public class WeeklyVO extends BaseVO  {
     @ApiModelProperty(value = "更新时间")
     private Date updateTs;
 
+    @ApiModelProperty(value = "项目名称，展示用")
+    private String taskName;
+
     @ApiModelProperty(value = "审批状态名称，展示用")
     public String getAuditStatusStr(){
         return StringUtils.isBlank(auditStatus)?"": WeeklyConstants.AUDIT_STATUS_MAP.get(auditStatus);

@@ -48,4 +48,7 @@ public class DailyVO extends BaseVO {
     @ApiModelProperty(value = "更新时间，展示用")
     private Date updateTs;
 
+    @ApiModelProperty(value = "项目名称，展示用")
+    private String taskName;
+
 }

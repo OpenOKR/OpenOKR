@@ -9,23 +9,9 @@
         remark, audit_status, reject_reason, create_user_id, create_ts, update_user_id, update_ts
     </sql>
 
-    <select id="getWeeklyList" resultType="org.openokr.task.vo.WeeklyVO" parameterType="HashMap">
-        SELECT
-            t1.id,
-            t1.report_user_id,
-            t1.task_id,
-            t1.rel_task_id,
-            t1.report_start_date,
-            t1.report_end_date,
-            t1.duration,
-            t1.remark,
-            t1.audit_status,
-            t1.reject_reason,
-            t1.create_user_id,
-            t1.create_ts,
-            t1.update_user_id,
-            t1.update_ts
-        FROM T_OKR_WEEKLY t1
+    <sql id="pageCondition">
+        FROM t_okr_weekly t1
+        LEFT JOIN t_okr_task t2 ON t1.task_id = t2.id
         WHERE
             1 = 1
         <if test="condition.reportStartDateStr != null and condition.reportStartDateStr != ''">
@@ -60,6 +46,49 @@
         <if test="condition.auditStatus != null and condition.auditStatus != ''" >
             AND t1.audit_status = #{condition.auditStatus}
         </if>
+    </sql>
+
+    <select id="countWeeklyList" resultType="Integer" parameterType="HashMap">
+        SELECT count(1)
+        <include refid="pageCondition" />
+    </select>
+
+    <select id="getWeeklyList" resultType="org.openokr.task.vo.WeeklyVO" parameterType="HashMap">
+        SELECT
+            t1.id,
+            t1.report_user_id,
+            t1.task_id,
+            t1.rel_task_id,
+            t1.report_start_date,
+            t1.report_end_date,
+            t1.duration,
+            t1.remark,
+            t1.audit_status,
+            t1.reject_reason,
+            t1.create_user_id,
+            t1.create_ts,
+            t1.update_user_id,
+            t1.update_ts,
+            t2.task_name
+        <include refid="pageCondition" />
+        ORDER BY t1.update_ts DESC
+        <include refid="PostgreSqlPaginationSuffix" />
+    </select>
+
+    <select id="getWeeklyListFromDaily" resultType="org.openokr.task.vo.WeeklyVO" parameterType="HashMap">
+    <![CDATA[
+        SELECT
+            t1.task_id,
+            t2.task_name,
+            sum(t1.duration) "duration"
+        FROM t_okr_daily t1
+        LEFT JOIN t_okr_task t2 ON t1.task_id = t2.id
+        WHERE
+            t1.report_user_id = #{condition.reportUseId}
+        AND to_char(t1.report_day,'yyyy-MM-dd') <= #{condition.reportStartDateStr}
+        AND to_char(t1.report_day,'yyyy-MM-dd') >= #{condition.reportEndDateStr}
+        GROUP BY t1.task_id,t2.task_name
+        ]]>
     </select>
 
     <sql id="PostgreSqlPaginationSuffix">

@@ -2,6 +2,7 @@ package org.openokr.task.service;
 
 import com.alibaba.fastjson.JSON;
 import com.zzheng.framework.exception.BusinessException;
+import com.zzheng.framework.mybatis.dao.pojo.Page;
 import com.zzheng.framework.mybatis.service.impl.BaseServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.openokr.common.constant.WeeklyConstants;
@@ -28,6 +29,34 @@ public class WeeklyManageService extends BaseServiceImpl implements IWeeklyManag
     private IWeeklyDBService weeklyDBService;
 
     @Override
+    public Page queryPage(WeeklySearchVO condition, Page page) throws BusinessException {
+        String methodName = "getDailyList-根据条件查询周报分页";
+        try {
+            if (condition == null) {
+                throw new BusinessException("查询条件对象为空");
+            }
+            if (page == null) {
+                page = new Page();
+            }
+
+            int count = weeklyDBService.countWeeklyList(condition);
+            if (count >= 0) {
+                List<WeeklyVO> list = weeklyDBService.getWeeklyList(condition,page);
+                page.setTotalRecord(count);
+                page.setRecords(list);
+            }
+
+            return page;
+        } catch (BusinessException e) {
+            logger.error("{} 失败，[condition]->{}",methodName, JSON.toJSONString(condition),e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("{} 异常，[condition]->{}",methodName, JSON.toJSONString(condition),e);
+            throw new BusinessException(e);
+        }
+    }
+
+    @Override
     public List<WeeklyVO> getWeeklyList(WeeklySearchVO condition) throws BusinessException {
         String methodName = "getWeeklyList-根据条件查询周报列表";
         try {
@@ -35,12 +64,12 @@ public class WeeklyManageService extends BaseServiceImpl implements IWeeklyManag
                 throw new BusinessException("查询条件为空");
             }
 
-            return weeklyDBService.getWeeklyList(condition);
+            return weeklyDBService.getWeeklyList(condition,null);
         } catch (BusinessException e) {
-            logger.error("{} 失败，[condition]->{}",methodName, JSON.toJSONString(condition));
+            logger.error("{} 失败，[condition]->{}",methodName, JSON.toJSONString(condition),e);
             throw e;
         } catch (Exception e) {
-            logger.error("{} 异常，[condition]->{}",methodName, JSON.toJSONString(condition));
+            logger.error("{} 异常，[condition]->{}",methodName, JSON.toJSONString(condition),e);
             throw new BusinessException(e);
         }
     }
@@ -77,10 +106,37 @@ public class WeeklyManageService extends BaseServiceImpl implements IWeeklyManag
                 this.insertWeeklyData(weeklyVO);
             }
         } catch (BusinessException e) {
-            logger.error("{} 失败，[weeklyList]->{}，[userId]->{},[reportStartDayStr]->{},[reportEndDayStr]->{}",methodName, JSON.toJSONString(weeklyList),reportStartDayStr,reportEndDayStr);
+            logger.error("{} 失败，[weeklyList]->{}，[userId]->{},[reportStartDayStr]->{},[reportEndDayStr]->{}",methodName, JSON.toJSONString(weeklyList),reportStartDayStr,reportEndDayStr,e);
             throw e;
         } catch (Exception e) {
-            logger.error("{} 异常，[weeklyList]->{}，[userId]->{},[reportStartDayStr]->{},[reportEndDayStr]->{}",methodName, JSON.toJSONString(weeklyList),reportStartDayStr,reportEndDayStr);
+            logger.error("{} 异常，[weeklyList]->{}，[userId]->{},[reportStartDayStr]->{},[reportEndDayStr]->{}",methodName, JSON.toJSONString(weeklyList),reportStartDayStr,reportEndDayStr,e);
+            throw new BusinessException(e);
+        }
+    }
+
+    @Override
+    public List<WeeklyVO> getWeeklyListFromDaily(WeeklySearchVO condition) throws BusinessException {
+        String methodName = "getWeeklyListFromDaily-从日报中提炼出周期内的周报对象列表";
+        try {
+            if (condition == null) {
+                throw new BusinessException("查询条件为空");
+            }
+            if (StringUtils.isBlank(condition.getReportUserId())) {
+                throw new BusinessException("用户ID为空");
+            }
+            if (StringUtils.isBlank(condition.getReportStartDateStr())) {
+                throw new BusinessException("开始时间为空");
+            }
+            if (StringUtils.isBlank(condition.getReportEndDateStr())) {
+                throw new BusinessException("结束时间为空");
+            }
+
+            return weeklyDBService.getWeeklyListFromDaily(condition);
+        } catch (BusinessException e) {
+            logger.error("{} 失败，[condition]->{}",methodName, JSON.toJSONString(condition),e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("{} 异常，[condition]->{}",methodName, JSON.toJSONString(condition),e);
             throw new BusinessException(e);
         }
     }
@@ -110,10 +166,10 @@ public class WeeklyManageService extends BaseServiceImpl implements IWeeklyManag
             WeeklyEntity entity = new WeeklyEntity();
             this.insert(entity);
         } catch (BusinessException e) {
-            logger.error("{} 失败，[weeklyVO]->{}",methodName, JSON.toJSONString(weeklyVO));
+            logger.error("{} 失败，[weeklyVO]->{}",methodName, JSON.toJSONString(weeklyVO),e);
             throw e;
         } catch (Exception e) {
-            logger.error("{} 异常，[weeklyVO]->{}",methodName, JSON.toJSONString(weeklyVO));
+            logger.error("{} 异常，[weeklyVO]->{}",methodName, JSON.toJSONString(weeklyVO),e);
             throw new BusinessException(e);
         }
     }
