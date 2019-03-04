@@ -27,5 +27,5 @@ public interface IDailyManageService {
      * @param dailyList
      * @throws BusinessException
      */
-    void insertDailyList(List<DailyVO> dailyList) throws BusinessException;
+    void insertDailyList(List<DailyVO> dailyList,String dateStr,String userId) throws BusinessException;
 }

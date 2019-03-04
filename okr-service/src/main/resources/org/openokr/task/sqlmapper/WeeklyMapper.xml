@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.openokr.task.sqlmapper.WeeklyMapper">
+    <resultMap id="BaseResultMap" type="org.openokr.task.vo.WeeklyVO"
+       extends="org.openokr.task.entity.WeeklyEntityMapper.BaseResultMap">
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, report_user_id, task_id, rel_task_id, report_start_date, report_end_date, duration,
+        remark, audit_status, reject_reason, create_user_id, create_ts, update_user_id, update_ts
+    </sql>
+
+    <select id="getWeeklyList" resultType="org.openokr.task.vo.WeeklyVO" parameterType="HashMap">
+        SELECT
+            t1.id,
+            t1.report_user_id,
+            t1.task_id,
+            t1.rel_task_id,
+            t1.report_start_date,
+            t1.report_end_date,
+            t1.duration,
+            t1.remark,
+            t1.audit_status,
+            t1.reject_reason,
+            t1.create_user_id,
+            t1.create_ts,
+            t1.update_user_id,
+            t1.update_ts
+        FROM T_OKR_WEEKLY t1
+        WHERE
+            1 = 1
+        <if test="condition.reportStartDateStr != null and condition.reportStartDateStr != ''">
+            <![CDATA[
+                AND to_char(t1.report_start_date,'yyyy-MM-dd') > #{condition.reportStartDateStr}
+            ]]>
+        </if>
+        <if test="condition.reportEndDateStr != null and condition.reportEndDateStr != ''">
+            <![CDATA[
+                AND to_char(t1.report_end_date,'yyyy-MM-dd') < #{condition.reportEndDateStr}
+            ]]>
+        </if>
+        <if test="condition.reportStartDateStrEquals != null and condition.reportStartDateStrEquals != ''">
+            <![CDATA[
+                AND to_char(t1.report_start_date,'yyyy-MM-dd') = #{condition.reportStartDateStrEquals}
+            ]]>
+        </if>
+        <if test="condition.reportEndDateStrEquals != null and condition.reportEndDateStrEquals != ''">
+            <![CDATA[
+                AND to_char(t1.report_end_date,'yyyy-MM-dd') = #{condition.reportEndDateStrEquals}
+            ]]>
+        </if>
+        <if test="condition.reportUserId != null and condition.reportUserId != ''" >
+            AND t1.report_user_id = #{condition.reportUserId}
+        </if>
+        <if test="condition.taskId != null and condition.taskId != ''" >
+            AND t1.task_id = #{condition.taskId}
+        </if>
+        <if test="condition.relTaskId != null and condition.relTaskId != ''" >
+            AND t1.rel_task_id = #{condition.relTaskId}
+        </if>
+        <if test="condition.auditStatus != null and condition.auditStatus != ''" >
+            AND t1.audit_status = #{condition.auditStatus}
+        </if>
+    </select>
+
+    <sql id="PostgreSqlPaginationSuffix">
+        <if test="page != null">
+            <![CDATA[ limit #{page.pageSize} offset #{page.recordStartPrev} ]]>
+        </if>
+    </sql>
+</mapper>

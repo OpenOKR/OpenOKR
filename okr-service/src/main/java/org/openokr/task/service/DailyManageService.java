@@ -8,11 +8,13 @@ import org.openokr.db.service.IDailyDBService;
 import org.openokr.task.entity.DailyEntity;
 import org.openokr.task.request.DailySearchVO;
 import org.openokr.task.vo.DailyVO;
+import org.openokr.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -44,21 +46,43 @@ public class DailyManageService extends BaseServiceImpl implements IDailyManageS
     }
 
     @Override
-    public void insertDailyList(List<DailyVO> dailyList) throws BusinessException {
+    public void insertDailyList(List<DailyVO> dailyList,String dateStr,String userId) throws BusinessException {
         String methodName = "insertDailyList-批量保存日报记录";
         try {
             if (dailyList == null || dailyList.isEmpty()){
                 throw new BusinessException("没有需要保存的记录");
             }
+            if (StringUtils.isBlank(userId)) {
+                throw new BusinessException("用户ID为空");
+            }
+            if (StringUtils.isBlank(dateStr)) {
+                throw new BusinessException("日报时间为空");
+            }
+
+            // 先查询是否已经保存过当日日报
+            DailySearchVO searchVO = new DailySearchVO();
+            searchVO.setReportDayStr(dateStr);
+            searchVO.setReportUserId(userId);
+            List<DailyVO> dailyVOList = this.getDailyList(searchVO);
+            if (dailyVOList != null && !dailyVOList.isEmpty()) {
+                throw new BusinessException("今日已填写过日报");
+            }
 
             for (DailyVO dailyVO:dailyList) {
+                dailyVO.setId(null);
+                dailyVO.setReportDay(DateUtils.stringToDate(dateStr));
+                dailyVO.setReportUserId(userId);
+                dailyVO.setCreateUserId(userId);
+                dailyVO.setCreateTs(new Date());
+                dailyVO.setUpdateUserId(userId);
+                dailyVO.setUpdateTs(new Date());
                 this.insertDailyData(dailyVO);
             }
         } catch (BusinessException e) {
-            logger.error("{} 失败，[dailyList]->{}",methodName, JSON.toJSONString(dailyList));
+            logger.error("{} 失败，[dailyList]->{},[userId]->{},[dateStr]->{}",methodName, JSON.toJSONString(dailyList),userId,dateStr);
             throw e;
         } catch (Exception e) {
-            logger.error("{} 异常，[dailyList]->{}",methodName, JSON.toJSONString(dailyList));
+            logger.error("{} 异常，[dailyList]->{},[userId]->{},[dateStr]->{}",methodName, JSON.toJSONString(dailyList),userId,dateStr);
             throw new BusinessException(e);
         }
     }
@@ -78,7 +102,6 @@ public class DailyManageService extends BaseServiceImpl implements IDailyManageS
 
             DailyEntity entity = new DailyEntity();
             BeanUtils.copyProperties(dailyVO,entity);
-            entity.setId(null);
             this.insert(entity);
         } catch (BusinessException e) {
             logger.error("{} 失败，[dailyVO]->{}",methodName, JSON.toJSONString(dailyVO));

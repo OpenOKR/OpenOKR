@@ -27,6 +27,12 @@
         <if test="condition.reportDayStr != null and condition.reportDayStr != ''" >
             AND to_char(t1.report_day,'yyyy-MM-dd') = #{condition.reportDayStr}
         </if>
+        <if test="condition.reportUserId != null and condition.reportUserId != ''" >
+            AND t1.report_user_id = #{condition.reportUserId}
+        </if>
+        <if test="condition.taskId != null and condition.taskId != ''" >
+            AND t1.task_id = #{condition.taskId}
+        </if>
     </select>
     
     <sql id="PostgreSqlPaginationSuffix">
