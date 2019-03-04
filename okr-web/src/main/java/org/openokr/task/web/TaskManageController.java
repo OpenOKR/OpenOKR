@@ -37,22 +37,6 @@ public class TaskManageController extends BaseController {
 
     private final static int ERROR_CODE = 40;
 
-    @Autowired
-    private IMenuService menuService;
-
-    @RequiresPermissions("Role:view")
-    @ApiOperation(value = "查询我的项目数据", notes = "查询我的项目数据")
-    @ApiImplicitParams(
-            {
-            }
-    )
-    @RequestMapping(value = "/index/getMyTaskInfoVO.json", method = RequestMethod.POST)
-    @ResponseBody
-    public List<MyTaskCountInfoVO> getMyTaskInfoVO() {
-        String userId = this.getCurrentUserId();
-        return null;
-    }
-
     @ApiOperation(value = "分页查询任务列表数据", notes = "分页查询任务列表数据")
     @ApiImplicitParams(
             {
