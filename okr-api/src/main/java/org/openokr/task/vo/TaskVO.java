@@ -30,6 +30,11 @@ public class TaskVO extends BaseVO implements Serializable {
     private String taskStatus;
 
     /**
+     * 任务描述
+     */
+    private String taskRemark;
+
+    /**
      * 是否删除: 0 正常 1 删除
      */
     private String isDeleted;
@@ -130,6 +135,20 @@ public class TaskVO extends BaseVO implements Serializable {
      */
     public void setTaskStatus(String taskStatus) {
         this.taskStatus = taskStatus;
+    }
+
+    /**
+     * 任务描述
+     */
+    public String getTaskRemark() {
+        return taskRemark;
+    }
+
+    /**
+     * 任务描述
+     */
+    public void setTaskRemark(String taskRemark) {
+        this.taskRemark = taskRemark;
     }
 
     /**

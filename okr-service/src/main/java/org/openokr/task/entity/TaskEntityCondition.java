@@ -393,6 +393,76 @@ public class TaskEntityCondition extends BaseEntityCondition implements Serializ
             return (Criteria) this;
         }
 
+        public Criteria andTaskRemarkIsNull() {
+            addCriterion("task_remark is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskRemarkIsNotNull() {
+            addCriterion("task_remark is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskRemarkEqualTo(String value) {
+            addCriterion("task_remark =", value, "taskRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskRemarkNotEqualTo(String value) {
+            addCriterion("task_remark <>", value, "taskRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskRemarkGreaterThan(String value) {
+            addCriterion("task_remark >", value, "taskRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskRemarkGreaterThanOrEqualTo(String value) {
+            addCriterion("task_remark >=", value, "taskRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskRemarkLessThan(String value) {
+            addCriterion("task_remark <", value, "taskRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskRemarkLessThanOrEqualTo(String value) {
+            addCriterion("task_remark <=", value, "taskRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskRemarkLike(String value) {
+            addCriterion("task_remark like", value, "taskRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskRemarkNotLike(String value) {
+            addCriterion("task_remark not like", value, "taskRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskRemarkIn(List<String> values) {
+            addCriterion("task_remark in", values, "taskRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskRemarkNotIn(List<String> values) {
+            addCriterion("task_remark not in", values, "taskRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskRemarkBetween(String value1, String value2) {
+            addCriterion("task_remark between", value1, value2, "taskRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskRemarkNotBetween(String value1, String value2) {
+            addCriterion("task_remark not between", value1, value2, "taskRemark");
+            return (Criteria) this;
+        }
+
         public Criteria andIsDeletedIsNull() {
             addCriterion("is_deleted is null");
             return (Criteria) this;
@@ -1003,6 +1073,11 @@ public class TaskEntityCondition extends BaseEntityCondition implements Serializ
             return (Criteria) this;
         }
 
+        public Criteria andTaskRemarkLikeInsensitive(String value) {
+            addCriterion("upper(task_remark) like", value.toUpperCase(), "taskRemark");
+            return (Criteria) this;
+        }
+
         public Criteria andIsDeletedLikeInsensitive(String value) {
             addCriterion("upper(is_deleted) like", value.toUpperCase(), "isDeleted");
             return (Criteria) this;
@@ -1085,6 +1160,21 @@ public class TaskEntityCondition extends BaseEntityCondition implements Serializ
          */
         public Criteria andTaskStatusLikeIgnoreCase(String value) {
             addCriterion("upper(task_status) like ", value.toUpperCase(), "taskStatus");
+            return (Criteria) this;
+        }
+
+        /**
+         *(扩展Mybatis原生like的不足)
+         *忽略字段大小写的模糊查询
+         *Java编码如下：
+         *  criteria.andNameLikeIgnoreCase("%Abc%"); 前后模糊,A字母大写
+         *  criteria.andName2LikeIgnoreCase("%aBc"); 前模糊,B字母大写
+         *  criteria.andName3LikeIgnoreCase("abC%"); 后模糊,C字母大写
+         *执行时SQL如下:
+         *  where name like '%abc%' or name2 like '%abc' or name3 like 'abc%'
+         */
+        public Criteria andTaskRemarkLikeIgnoreCase(String value) {
+            addCriterion("upper(task_remark) like ", value.toUpperCase(), "taskRemark");
             return (Criteria) this;
         }
 

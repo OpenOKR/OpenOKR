@@ -22,6 +22,9 @@ public class TaskEntity extends BaseEntity implements Serializable {
     /** 项目状态：0 临时项目 1 正式项目 2 失效项目 */
     private String taskStatus;
 
+    /** 任务描述 */
+    private String taskRemark;
+
     /** 是否删除: 0 正常 1 删除 */
     private String isDeleted;
 
@@ -103,6 +106,24 @@ public class TaskEntity extends BaseEntity implements Serializable {
     public void setTaskStatus(String taskStatus) {
         this.taskStatus = taskStatus;
         addSettedField("taskStatus");
+    }
+
+    /**
+     * 任务描述
+     * @return taskRemark
+     */
+    @Column(name = "task_remark")
+    public String getTaskRemark() {
+        return taskRemark;
+    }
+
+    /**
+     * 任务描述
+     * @param taskRemark
+     */
+    public void setTaskRemark(String taskRemark) {
+        this.taskRemark = taskRemark;
+        addSettedField("taskRemark");
     }
 
     /**
