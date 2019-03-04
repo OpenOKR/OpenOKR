@@ -8,14 +8,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class weeklyEntityCondition extends BaseEntityCondition implements Serializable {
+public class WeeklyEntityCondition extends BaseEntityCondition implements Serializable {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public weeklyEntityCondition() {
+    public WeeklyEntityCondition() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -70,7 +70,7 @@ public class weeklyEntityCondition extends BaseEntityCondition implements Serial
 
     @Override
     public Class<? extends BaseEntity> getEntityClass() {
-        return weeklyEntity.class;
+        return WeeklyEntity.class;
     }
 
     protected abstract static class GeneratedCriteria {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.openokr.task.entity.weeklyEntityMapper">
-  <resultMap id="BaseResultMap" type="org.openokr.task.entity.weeklyEntity">
+<mapper namespace="org.openokr.task.entity.WeeklyEntityMapper">
+  <resultMap id="BaseResultMap" type="org.openokr.task.entity.WeeklyEntity">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="report_user_id" jdbcType="VARCHAR" property="reportUserId" />
     <result column="task_id" jdbcType="VARCHAR" property="taskId" />
@@ -78,7 +78,7 @@
     id, report_user_id, task_id, rel_task_id, period, duration, remark, audit_status, 
     reject_reason, create_user_id, create_ts, update_user_id, update_ts
   </sql>
-  <select id="selectByCondition" parameterType="org.openokr.task.entity.weeklyEntityCondition" resultMap="BaseResultMap">
+  <select id="selectByCondition" parameterType="org.openokr.task.entity.WeeklyEntityCondition" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -93,13 +93,13 @@
     </if>
     <include refid="PostgreSqlPaginationSuffix" />
   </select>
-  <delete id="deleteByCondition" parameterType="org.openokr.task.entity.weeklyEntityCondition">
+  <delete id="deleteByCondition" parameterType="org.openokr.task.entity.WeeklyEntityCondition">
     delete from t_okr_weekly
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <select id="countByCondition" parameterType="org.openokr.task.entity.weeklyEntityCondition" resultType="java.lang.Long">
+  <select id="countByCondition" parameterType="org.openokr.task.entity.WeeklyEntityCondition" resultType="java.lang.Long">
     select count(*) from t_okr_weekly
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
