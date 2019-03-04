@@ -1,9 +1,11 @@
 package org.openokr.task.web;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.openokr.application.web.BaseController;
+import org.openokr.common.vo.response.ResponseData;
 import org.openokr.sys.service.IMenuService;
 import org.openokr.task.request.MyTaskInfoVO;
 import org.openokr.task.request.TaskInfoVO;
@@ -23,6 +25,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/task")
+@Api(value = "日常报工首页控制器相关接口",description = "TaskIndexController")
 public class TaskIndexController extends BaseController {
 
     @Autowired
@@ -36,7 +39,7 @@ public class TaskIndexController extends BaseController {
     )
     @RequestMapping(value = "/index/getMyTaskInfoVO.json", method = RequestMethod.POST)
     @ResponseBody
-    public List<MyTaskInfoVO> getMyTaskInfoVO() {
+    public ResponseData<List<MyTaskInfoVO>> getMyTaskInfoVO() {
         String userId = this.getCurrentUserId();
         return null;
     }
@@ -49,7 +52,7 @@ public class TaskIndexController extends BaseController {
     )
     @RequestMapping(value = "/index/getMyManageTaskInfoVO.json", method = RequestMethod.POST)
     @ResponseBody
-    public List<MyTaskInfoVO> getMyManageTaskInfoVO() {
+    public ResponseData<List<MyTaskInfoVO>> getMyManageTaskInfoVO() {
         String userId = this.getCurrentUserId();
         return null;
     }
@@ -62,7 +65,7 @@ public class TaskIndexController extends BaseController {
     )
     @RequestMapping(value = "/index/getRecentTaskInfoVO.json", method = RequestMethod.POST)
     @ResponseBody
-    public List<TaskInfoVO> getRecentTaskInfoVO() {
+    public ResponseData<List<TaskInfoVO>> getRecentTaskInfoVO() {
         String userId = this.getCurrentUserId();
         return null;
     }
@@ -76,7 +79,7 @@ public class TaskIndexController extends BaseController {
     )
     @RequestMapping(value = "/index/getCustomerTaskInfoVO.json", method = RequestMethod.POST)
     @ResponseBody
-    public List<TaskInfoVO> getCustomerTaskInfoVO() {
+    public ResponseData<List<TaskInfoVO>> getCustomerTaskInfoVO() {
         String userId = this.getCurrentUserId();
         return null;
     }
