@@ -24,4 +24,7 @@
     <dubbo:reference interface="org.openokr.sys.service.IUserService" id="userService"/>
     <dubbo:reference interface="org.openokr.sys.service.IOrganizationService" id="organizationService"/>
 
+    <!-- task -->
+    <dubbo:reference interface="org.openokr.task.service.ITaskManageService" id="taskManageService"/>
+
 </beans>

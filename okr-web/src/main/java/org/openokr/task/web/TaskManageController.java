@@ -1,6 +1,8 @@
 package org.openokr.task.web;
 
 import com.alibaba.fastjson.JSON;
+import com.zzheng.framework.base.utils.JSONUtils;
+import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.dao.pojo.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -11,18 +13,23 @@ import org.openokr.application.web.BaseController;
 import org.openokr.common.vo.response.PageResponseData;
 import org.openokr.common.vo.response.ResponseData;
 import org.openokr.sys.service.IMenuService;
+import org.openokr.task.service.ITaskManageService;
 import org.openokr.task.vo.MyTaskCountInfoVO;
 import org.openokr.task.request.TaskInfoVO;
 import org.openokr.task.request.TaskSearchVO;
 import org.openokr.task.vo.TaskSaveVO;
+import org.openokr.task.vo.TaskVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import springfox.documentation.spring.web.json.Json;
 
 import java.util.List;
+
+import static org.openokr.common.constant.AcTaskConstant.ERROR_CODE;
 
 /**
  * OKR报工--任务管理控制器
@@ -35,7 +42,8 @@ import java.util.List;
 @Api(value = "任务管理控制器相关接口",description = "TaskManageController")
 public class TaskManageController extends BaseController {
 
-    private final static int ERROR_CODE = 40;
+    @Autowired
+    private ITaskManageService taskManageService;
 
     @ApiOperation(value = "分页查询任务列表数据", notes = "分页查询任务列表数据")
     @ApiImplicitParams(
@@ -44,21 +52,28 @@ public class TaskManageController extends BaseController {
     )
     @RequestMapping(value = "/getTaskListByPage.json", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<PageResponseData<List<TaskInfoVO>>> getTaskListByPage(@RequestBody TaskSearchVO vo) {
-        ResponseData<PageResponseData<List<TaskInfoVO>>> result = new ResponseData<>();
+    public ResponseData<PageResponseData<List<TaskVO>>> getTaskListByPage(@RequestBody TaskSearchVO vo) {
+        ResponseData<PageResponseData<List<TaskVO>>> result = new ResponseData<>();
         try {
             Page page = new Page(vo.getCurrentPage(), vo.getPageSize());
-            PageResponseData<List<TaskInfoVO>> pageData = new PageResponseData<>();
+            page = taskManageService.getTakListByPage(page,vo);
+            PageResponseData<List<TaskVO>> pageData = new PageResponseData<>();
             pageData.setCurrentPage(page.getCurrentPage());
             pageData.setPageSize(page.getPageSize());
             pageData.setTotalPage(page.getTotalPage());
-            //pageData.setTotalRecord(page.getRecords());
-            //List<TaskInfoVO> record = JSONUtils..cloneForList(page.getRecords(), TaskInfoVO.class);
-            //pageData.setData(record);
+            pageData.setTotalRecord(Long.valueOf(page.getTotalRecord()).intValue());
+            List<TaskVO> record = JSONUtils.objectToList(page.getRecords(), TaskVO.class);
+            pageData.setData(record);
             result.setData(pageData);
-        } catch (Exception e) {
-            logger.error("查询费项列表数据 异常：{},参数:[{}]", e.getMessage(), JSON.toJSONString(vo), e);
-            result.setCode(ERROR_CODE);
+            result.setCode(0);
+            result.setSuccess(true);
+        } catch (BusinessException e){
+            logger.error("分页查询任务列表数据 异常：{},参数:[{}]", e.getMessage(), JSON.toJSONString(vo), e);
+            result.setCode(6000);
+            result.setMessage(e.getMessage());
+        }catch (Exception e){
+            logger.error("分页查询任务列表数据 异常：{},参数:[{}]", e.getMessage(), JSON.toJSONString(vo), e);
+            result.setCode(7000);
             result.setMessage(e.getMessage());
         }
         return result;
@@ -67,16 +82,23 @@ public class TaskManageController extends BaseController {
     @ApiOperation(value = "新增任务")
     @RequestMapping(value = "/saveTask.json",method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData saveTask(@RequestBody TaskSaveVO taskSaveVO){
-        ResponseData responseData = new ResponseData();
+    public ResponseData<TaskVO> saveTask(@RequestBody TaskSaveVO taskSaveVO){
+        ResponseData<TaskVO> result = new ResponseData();
         try {
-            responseData.setCode(0);
-            responseData.setMessage("success");
-        } catch (Exception e) {
-            responseData.setCode(ERROR_CODE);
-            responseData.setMessage(e.getMessage());
+            TaskVO taskVO = taskManageService.saveTaskInfo(taskSaveVO);
+            result.setData(taskVO);
+            result.setCode(0);
+            result.setSuccess(true);
+        } catch (BusinessException e){
+            logger.error("新增任务 异常：{},参数:[{}]", e.getMessage(), JSON.toJSONString(taskSaveVO), e);
+            result.setCode(6000);
+            result.setMessage(e.getMessage());
+        }catch (Exception e){
+            logger.error("新增任务 异常：{},参数:[{}]", e.getMessage(), JSON.toJSONString(taskSaveVO), e);
+            result.setCode(7000);
+            result.setMessage(e.getMessage());
         }
-        return responseData;
+        return result;
     }
 
     @ApiOperation(value = "删除任务",notes = "根据任务id删除任务")
@@ -90,9 +112,16 @@ public class TaskManageController extends BaseController {
     public ResponseData deleteTask(String id){
         ResponseData result = new ResponseData();
         try {
+            taskManageService.delTaskInfoById(id);
             result.setCode(0);
-        }catch (Exception e) {
-            result.setCode(ERROR_CODE);
+            result.setSuccess(true);
+        } catch (BusinessException e){
+            logger.error("新增任务 异常：{},参数:[{}]", e.getMessage(), id, e);
+            result.setCode(6000);
+            result.setMessage(e.getMessage());
+        }catch (Exception e){
+            logger.error("新增任务 异常：{},参数:[{}]", e.getMessage(), id, e);
+            result.setCode(7000);
             result.setMessage(e.getMessage());
         }
         return result;
@@ -106,12 +135,20 @@ public class TaskManageController extends BaseController {
     )
     @RequestMapping(value = "/getTaskDetailInfo.json",method = RequestMethod.GET)
     @ResponseBody
-    public ResponseData<TaskInfoVO> getTaskDetailInfo(String id){
-        ResponseData<TaskInfoVO> result = new ResponseData();
+    public ResponseData<TaskSaveVO> getTaskDetailInfo(String id){
+        ResponseData result = new ResponseData();
         try {
+            TaskSaveVO taskSaveVO = taskManageService.getTaskDetailById(id);
+            result.setData(taskSaveVO);
             result.setCode(0);
-        }catch (Exception e) {
-            result.setCode(ERROR_CODE);
+            result.setSuccess(true);
+        } catch (BusinessException e){
+            logger.error("获取任务详情 异常：{},参数:[{}]", e.getMessage(), id, e);
+            result.setCode(6000);
+            result.setMessage(e.getMessage());
+        }catch (Exception e){
+            logger.error("获取任务详情 异常：{},参数:[{}]", e.getMessage(), id, e);
+            result.setCode(7000);
             result.setMessage(e.getMessage());
         }
         return result;
