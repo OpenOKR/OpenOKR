@@ -135,7 +135,7 @@
         </table>-->
 
         <!-- 报工相关 -->
-        <table tableName="t_okr_task_user_rel" domainObjectName="task.entity.TaskUserRelEntity">
+       <!-- <table tableName="t_okr_task_user_rel" domainObjectName="task.entity.TaskUserRelEntity">
             <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
             <property name="domainVOName" value="task.vo.TaskUserRelVO"/>
         </table>
@@ -170,7 +170,10 @@
         <table tableName="t_okr_customer" domainObjectName="task.entity.CustomerEntity">
             <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
             <property name="domainVOName" value="task.vo.CustomerVO"/>
-        </table>
-
+        </table>-->
+<!--        <table tableName="t_okr_weekly" domainObjectName="task.entity.weeklyEntity">
+            <property name="VOPath" value="${mybatisVOJavaFileDir}"/>
+            <property name="domainVOName" value="task.vo.weeklyVO"/>
+        </table>-->
     </context>
 </generatorConfiguration>
