@@ -1,7 +1,10 @@
 package org.openokr.application.web;
 
+import com.alibaba.fastjson.JSON;
 import com.zzheng.framework.base.utils.JSONUtils;
 import com.zzheng.framework.exception.BusinessException;
+import com.zzheng.framework.mybatis.dao.pojo.Page;
+import org.openokr.common.vo.response.PageResponseData;
 import org.openokr.manage.service.IOkrTimeSessionsService;
 import org.openokr.sys.vo.UserVOExt;
 import org.openokr.utils.UserUtils;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by zhengzheng on 2018/12/19.
@@ -63,6 +67,45 @@ public class BaseController {
      */
     public String getCurrentTimeSessionId() throws BusinessException {
         return okrTimeSessionsService.getDefaultTimeSession().getId();
+    }
+
+    /**
+     * 深度复制分页对象
+     * @param page
+     * @param targetClass
+     * @return
+     */
+    protected PageResponseData reBuildPageData(Page page, Class targetClass) {
+        PageResponseData<List<?>> pageData = new PageResponseData<>();
+        pageData.setCurrentPage(page.getCurrentPage());
+        pageData.setPageSize(page.getPageSize());
+        pageData.setTotalPage(page.getTotalPage());
+        pageData.setTotalRecord((int)page.getTotalRecord());
+        pageData.setData(cloneListObject(page.getRecords(), targetClass));
+        return pageData;
+    }
+
+    /**
+     * 深度复制对象
+     * @param source
+     * @param target
+     * @param <T>
+     * @return
+     */
+    protected <T> T cloneObject(Object source, Class target) {
+        String json = JSON.toJSONString(source);
+        return (T) JSON.parseObject(json, target);
+    }
+
+    /**
+     * 深度复制列表
+     * @param source
+     * @param targetClass
+     * @return
+     */
+    protected <T, E> List<E> cloneListObject(Object source, Class targetClass) {
+        String json = JSON.toJSONString(source);
+        return JSON.parseArray(json, targetClass);
     }
 
 }
