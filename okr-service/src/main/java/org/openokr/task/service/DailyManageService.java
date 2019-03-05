@@ -75,7 +75,7 @@ public class DailyManageService extends BaseServiceImpl implements IDailyManageS
     }
 
     @Override
-    public void insertDailyList(List<DailyVO> dailyList,String dateStr,String userId) throws BusinessException {
+    public void insertDailyList(List<DailyVO> dailyList,String userId,String dateStr) throws BusinessException {
         String methodName = "insertDailyList-批量保存日报记录";
         try {
             if (dailyList == null || dailyList.isEmpty()){

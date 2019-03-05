@@ -11,6 +11,7 @@ import org.openokr.common.vo.response.ResponseData;
 import org.openokr.task.request.DailySearchVO;
 import org.openokr.task.service.IDailyManageService;
 import org.openokr.task.vo.DailyVO;
+import org.openokr.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -52,6 +54,28 @@ public class DailyApiController extends BaseController {
             result.setMessage(e.getMessage());
         }catch (Exception e){
             logger.error("分页查询日报列表数据 异常：{},参数:[{}]", e.getMessage(), JSON.toJSONString(vo), e);
+            result.setCode(7000);
+            result.setMessage(e.getMessage());
+        }
+        return result;
+    }
+
+    @ApiOperation(value = "保存日报列表", notes = "保存日报列表")
+    @RequestMapping(value = "/saveDailyList.json", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<String> saveDailyList(@RequestBody List<DailyVO> dailyList) {
+        ResponseData<String> result = new ResponseData<>();
+        try {
+            dailyManageService.insertDailyList(dailyList,this.getCurrentUserId(), DateUtils.dateToString(new Date()));
+            result.setData("保存成功");
+            result.setCode(0);
+            result.setSuccess(true);
+        } catch (BusinessException e){
+            logger.error("保存日报列表 异常：{},参数:[{}]", e.getMessage(), JSON.toJSONString(dailyList), e);
+            result.setCode(6000);
+            result.setMessage(e.getMessage());
+        }catch (Exception e){
+            logger.error("保存日报列表 异常：{},参数:[{}]", e.getMessage(), JSON.toJSONString(dailyList), e);
             result.setCode(7000);
             result.setMessage(e.getMessage());
         }
