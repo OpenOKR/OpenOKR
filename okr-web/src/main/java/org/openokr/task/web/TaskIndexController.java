@@ -36,7 +36,6 @@ public class TaskIndexController extends BaseController {
     @Autowired
     private ITaskManageService taskManageService;
 
-    @RequiresPermissions("Role:view")
     @ApiOperation(value = "查询我的项目数据", notes = "查询我的项目数据")
     @ApiImplicitParams(
             {
@@ -63,7 +62,6 @@ public class TaskIndexController extends BaseController {
         return result;
     }
 
-    @RequiresPermissions("Role:view")
     @ApiOperation(value = "查询我管理的项目数据", notes = "查询我管理的项目数据")
     @ApiImplicitParams(
             {
@@ -90,7 +88,6 @@ public class TaskIndexController extends BaseController {
         return result;
     }
 
-    @RequiresPermissions("Role:view")
     @ApiOperation(value = "查询近期报工数据", notes = "查询近期报工数据")
     @ApiImplicitParams(
             {
@@ -117,8 +114,6 @@ public class TaskIndexController extends BaseController {
         return result;
     }
 
-
-    @RequiresPermissions("Role:view")
     @ApiOperation(value = "查询本季度客户数据", notes = "查询本季度客户耗能数据")
     @ApiImplicitParams(
             {
