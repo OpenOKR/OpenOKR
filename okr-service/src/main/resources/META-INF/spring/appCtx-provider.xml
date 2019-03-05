@@ -30,5 +30,7 @@
 
 	<!-- task -->
 	<dubbo:service interface="org.openokr.task.service.ITaskManageService" ref="taskManageService"/>
+	<dubbo:service interface="org.openokr.task.service.IDailyManageService" ref="dailyManageService"/>
+	<dubbo:service interface="org.openokr.task.service.IWeeklyManageService" ref="weeklyManageService"/>
 
 </beans>

@@ -1,9 +1,9 @@
 package org.openokr.task.request;
 
-import com.zzheng.framework.base.vo.BaseVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.openokr.common.vo.response.PageRequest;
 
 /**
  * 周报查询
@@ -12,7 +12,7 @@ import lombok.Data;
  */
 @Data
 @Api(value = "周报查询vo")
-public class WeeklySearchVO extends BaseVO {
+public class WeeklySearchVO extends PageRequest {
 
     private static final long serialVersionUID = -5140809906435092743L;
 

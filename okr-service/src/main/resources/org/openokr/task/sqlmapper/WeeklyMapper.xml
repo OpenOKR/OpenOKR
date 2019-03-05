@@ -76,18 +76,18 @@
     </select>
 
     <select id="getWeeklyListFromDaily" resultType="org.openokr.task.vo.WeeklyVO" parameterType="HashMap">
-    <![CDATA[
-        SELECT
-            t1.task_id,
-            t2.task_name,
-            sum(t1.duration) "duration"
-        FROM t_okr_daily t1
-        LEFT JOIN t_okr_task t2 ON t1.task_id = t2.id
-        WHERE
-            t1.report_user_id = #{condition.reportUseId}
-        AND to_char(t1.report_day,'yyyy-MM-dd') <= #{condition.reportStartDateStr}
-        AND to_char(t1.report_day,'yyyy-MM-dd') >= #{condition.reportEndDateStr}
-        GROUP BY t1.task_id,t2.task_name
+        <![CDATA[
+            SELECT
+                t1.task_id,
+                t2.task_name,
+                sum(t1.duration) "duration"
+            FROM t_okr_daily t1
+            LEFT JOIN t_okr_task t2 ON t1.task_id = t2.id
+            WHERE
+                t1.report_user_id = #{condition.reportUseId}
+            AND to_char(t1.report_day,'yyyy-MM-dd') <= #{condition.reportStartDateStr}
+            AND to_char(t1.report_day,'yyyy-MM-dd') >= #{condition.reportEndDateStr}
+            GROUP BY t1.task_id,t2.task_name
         ]]>
     </select>
 
