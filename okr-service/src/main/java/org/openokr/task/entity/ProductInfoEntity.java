@@ -10,13 +10,13 @@ import javax.persistence.Table;
  * 
  */
 @Entity
-@Table(name = "t_okr_project_info")
-public class ProjectInfoEntity extends BaseEntity implements Serializable {
+@Table(name = "t_okr_product_info")
+public class ProductInfoEntity extends BaseEntity implements Serializable {
     /** 项目名称 */
-    private String projectName;
+    private String productName;
 
     /** 父级项目ID */
-    private String parentProjectId;
+    private String parentProductId;
 
     /** 类别： 1 项目 2 其他 */
     private String categoryId;
@@ -25,38 +25,38 @@ public class ProjectInfoEntity extends BaseEntity implements Serializable {
 
     /**
      * 项目名称
-     * @return projectName
+     * @return productName
      */
-    @Column(name = "project_name")
-    public String getProjectName() {
-        return projectName;
+    @Column(name = "product_name")
+    public String getProductName() {
+        return productName;
     }
 
     /**
      * 项目名称
-     * @param projectName
+     * @param productName
      */
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
-        addSettedField("projectName");
+    public void setProductName(String productName) {
+        this.productName = productName;
+        addSettedField("productName");
     }
 
     /**
      * 父级项目ID
-     * @return parentProjectId
+     * @return parentProductId
      */
-    @Column(name = "parent_project_id")
-    public String getParentProjectId() {
-        return parentProjectId;
+    @Column(name = "parent_product_id")
+    public String getParentProductId() {
+        return parentProductId;
     }
 
     /**
      * 父级项目ID
-     * @param parentProjectId
+     * @param parentProductId
      */
-    public void setParentProjectId(String parentProjectId) {
-        this.parentProjectId = parentProjectId;
-        addSettedField("parentProjectId");
+    public void setParentProductId(String parentProductId) {
+        this.parentProductId = parentProductId;
+        addSettedField("parentProductId");
     }
 
     /**
@@ -83,6 +83,6 @@ public class ProjectInfoEntity extends BaseEntity implements Serializable {
      */
     @Override
     public Class<?> obtainEntityMapperClass() {
-        return ProjectInfoEntityMapper.class;
+        return ProductInfoEntityMapper.class;
     }
 }

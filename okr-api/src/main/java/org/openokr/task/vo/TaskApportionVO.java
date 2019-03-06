@@ -20,9 +20,14 @@ public class TaskApportionVO extends BaseVO implements Serializable {
     private String taskId;
 
     /**
-     * 项目ID
+     * 产品ID
      */
-    private String projectId;
+    private String productId;
+
+    /**
+     * 产品名称
+     */
+    private String productName;
 
     /**
      * 类别ID
@@ -65,17 +70,31 @@ public class TaskApportionVO extends BaseVO implements Serializable {
     }
 
     /**
-     * 项目ID
+     * 产品ID
      */
-    public String getProjectId() {
-        return projectId;
+    public String getProductId() {
+        return productId;
     }
 
     /**
-     * 项目ID
+     * 产品ID
      */
-    public void setProjectId(String projectId) {
-        this.projectId = projectId;
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    /**
+     * 产品名称
+     */
+    public String getProductName() {
+        return productName;
+    }
+
+    /**
+     * 产品名称
+     */
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     /**

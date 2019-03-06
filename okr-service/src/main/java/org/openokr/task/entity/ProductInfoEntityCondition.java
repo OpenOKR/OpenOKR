@@ -6,14 +6,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProjectInfoEntityCondition extends BaseEntityCondition implements Serializable {
+public class ProductInfoEntityCondition extends BaseEntityCondition implements Serializable {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public ProjectInfoEntityCondition() {
+    public ProductInfoEntityCondition() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -68,7 +68,7 @@ public class ProjectInfoEntityCondition extends BaseEntityCondition implements S
 
     @Override
     public Class<? extends BaseEntity> getEntityClass() {
-        return ProjectInfoEntity.class;
+        return ProductInfoEntity.class;
     }
 
     protected abstract static class GeneratedCriteria {
@@ -182,143 +182,143 @@ public class ProjectInfoEntityCondition extends BaseEntityCondition implements S
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameIsNull() {
-            addCriterion("project_name is null");
+        public Criteria andProductNameIsNull() {
+            addCriterion("product_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameIsNotNull() {
-            addCriterion("project_name is not null");
+        public Criteria andProductNameIsNotNull() {
+            addCriterion("product_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameEqualTo(String value) {
-            addCriterion("project_name =", value, "projectName");
+        public Criteria andProductNameEqualTo(String value) {
+            addCriterion("product_name =", value, "productName");
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameNotEqualTo(String value) {
-            addCriterion("project_name <>", value, "projectName");
+        public Criteria andProductNameNotEqualTo(String value) {
+            addCriterion("product_name <>", value, "productName");
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameGreaterThan(String value) {
-            addCriterion("project_name >", value, "projectName");
+        public Criteria andProductNameGreaterThan(String value) {
+            addCriterion("product_name >", value, "productName");
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameGreaterThanOrEqualTo(String value) {
-            addCriterion("project_name >=", value, "projectName");
+        public Criteria andProductNameGreaterThanOrEqualTo(String value) {
+            addCriterion("product_name >=", value, "productName");
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameLessThan(String value) {
-            addCriterion("project_name <", value, "projectName");
+        public Criteria andProductNameLessThan(String value) {
+            addCriterion("product_name <", value, "productName");
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameLessThanOrEqualTo(String value) {
-            addCriterion("project_name <=", value, "projectName");
+        public Criteria andProductNameLessThanOrEqualTo(String value) {
+            addCriterion("product_name <=", value, "productName");
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameLike(String value) {
-            addCriterion("project_name like", value, "projectName");
+        public Criteria andProductNameLike(String value) {
+            addCriterion("product_name like", value, "productName");
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameNotLike(String value) {
-            addCriterion("project_name not like", value, "projectName");
+        public Criteria andProductNameNotLike(String value) {
+            addCriterion("product_name not like", value, "productName");
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameIn(List<String> values) {
-            addCriterion("project_name in", values, "projectName");
+        public Criteria andProductNameIn(List<String> values) {
+            addCriterion("product_name in", values, "productName");
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameNotIn(List<String> values) {
-            addCriterion("project_name not in", values, "projectName");
+        public Criteria andProductNameNotIn(List<String> values) {
+            addCriterion("product_name not in", values, "productName");
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameBetween(String value1, String value2) {
-            addCriterion("project_name between", value1, value2, "projectName");
+        public Criteria andProductNameBetween(String value1, String value2) {
+            addCriterion("product_name between", value1, value2, "productName");
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameNotBetween(String value1, String value2) {
-            addCriterion("project_name not between", value1, value2, "projectName");
+        public Criteria andProductNameNotBetween(String value1, String value2) {
+            addCriterion("product_name not between", value1, value2, "productName");
             return (Criteria) this;
         }
 
-        public Criteria andParentProjectIdIsNull() {
-            addCriterion("parent_project_id is null");
+        public Criteria andParentProductIdIsNull() {
+            addCriterion("parent_product_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andParentProjectIdIsNotNull() {
-            addCriterion("parent_project_id is not null");
+        public Criteria andParentProductIdIsNotNull() {
+            addCriterion("parent_product_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andParentProjectIdEqualTo(String value) {
-            addCriterion("parent_project_id =", value, "parentProjectId");
+        public Criteria andParentProductIdEqualTo(String value) {
+            addCriterion("parent_product_id =", value, "parentProductId");
             return (Criteria) this;
         }
 
-        public Criteria andParentProjectIdNotEqualTo(String value) {
-            addCriterion("parent_project_id <>", value, "parentProjectId");
+        public Criteria andParentProductIdNotEqualTo(String value) {
+            addCriterion("parent_product_id <>", value, "parentProductId");
             return (Criteria) this;
         }
 
-        public Criteria andParentProjectIdGreaterThan(String value) {
-            addCriterion("parent_project_id >", value, "parentProjectId");
+        public Criteria andParentProductIdGreaterThan(String value) {
+            addCriterion("parent_product_id >", value, "parentProductId");
             return (Criteria) this;
         }
 
-        public Criteria andParentProjectIdGreaterThanOrEqualTo(String value) {
-            addCriterion("parent_project_id >=", value, "parentProjectId");
+        public Criteria andParentProductIdGreaterThanOrEqualTo(String value) {
+            addCriterion("parent_product_id >=", value, "parentProductId");
             return (Criteria) this;
         }
 
-        public Criteria andParentProjectIdLessThan(String value) {
-            addCriterion("parent_project_id <", value, "parentProjectId");
+        public Criteria andParentProductIdLessThan(String value) {
+            addCriterion("parent_product_id <", value, "parentProductId");
             return (Criteria) this;
         }
 
-        public Criteria andParentProjectIdLessThanOrEqualTo(String value) {
-            addCriterion("parent_project_id <=", value, "parentProjectId");
+        public Criteria andParentProductIdLessThanOrEqualTo(String value) {
+            addCriterion("parent_product_id <=", value, "parentProductId");
             return (Criteria) this;
         }
 
-        public Criteria andParentProjectIdLike(String value) {
-            addCriterion("parent_project_id like", value, "parentProjectId");
+        public Criteria andParentProductIdLike(String value) {
+            addCriterion("parent_product_id like", value, "parentProductId");
             return (Criteria) this;
         }
 
-        public Criteria andParentProjectIdNotLike(String value) {
-            addCriterion("parent_project_id not like", value, "parentProjectId");
+        public Criteria andParentProductIdNotLike(String value) {
+            addCriterion("parent_product_id not like", value, "parentProductId");
             return (Criteria) this;
         }
 
-        public Criteria andParentProjectIdIn(List<String> values) {
-            addCriterion("parent_project_id in", values, "parentProjectId");
+        public Criteria andParentProductIdIn(List<String> values) {
+            addCriterion("parent_product_id in", values, "parentProductId");
             return (Criteria) this;
         }
 
-        public Criteria andParentProjectIdNotIn(List<String> values) {
-            addCriterion("parent_project_id not in", values, "parentProjectId");
+        public Criteria andParentProductIdNotIn(List<String> values) {
+            addCriterion("parent_product_id not in", values, "parentProductId");
             return (Criteria) this;
         }
 
-        public Criteria andParentProjectIdBetween(String value1, String value2) {
-            addCriterion("parent_project_id between", value1, value2, "parentProjectId");
+        public Criteria andParentProductIdBetween(String value1, String value2) {
+            addCriterion("parent_product_id between", value1, value2, "parentProductId");
             return (Criteria) this;
         }
 
-        public Criteria andParentProjectIdNotBetween(String value1, String value2) {
-            addCriterion("parent_project_id not between", value1, value2, "parentProjectId");
+        public Criteria andParentProductIdNotBetween(String value1, String value2) {
+            addCriterion("parent_product_id not between", value1, value2, "parentProductId");
             return (Criteria) this;
         }
 
@@ -397,13 +397,13 @@ public class ProjectInfoEntityCondition extends BaseEntityCondition implements S
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameLikeInsensitive(String value) {
-            addCriterion("upper(project_name) like", value.toUpperCase(), "projectName");
+        public Criteria andProductNameLikeInsensitive(String value) {
+            addCriterion("upper(product_name) like", value.toUpperCase(), "productName");
             return (Criteria) this;
         }
 
-        public Criteria andParentProjectIdLikeInsensitive(String value) {
-            addCriterion("upper(parent_project_id) like", value.toUpperCase(), "parentProjectId");
+        public Criteria andParentProductIdLikeInsensitive(String value) {
+            addCriterion("upper(parent_product_id) like", value.toUpperCase(), "parentProductId");
             return (Criteria) this;
         }
 
@@ -437,8 +437,8 @@ public class ProjectInfoEntityCondition extends BaseEntityCondition implements S
          *执行时SQL如下:
          *  where name like '%abc%' or name2 like '%abc' or name3 like 'abc%'
          */
-        public Criteria andProjectNameLikeIgnoreCase(String value) {
-            addCriterion("upper(project_name) like ", value.toUpperCase(), "projectName");
+        public Criteria andProductNameLikeIgnoreCase(String value) {
+            addCriterion("upper(product_name) like ", value.toUpperCase(), "productName");
             return (Criteria) this;
         }
 
@@ -452,8 +452,8 @@ public class ProjectInfoEntityCondition extends BaseEntityCondition implements S
          *执行时SQL如下:
          *  where name like '%abc%' or name2 like '%abc' or name3 like 'abc%'
          */
-        public Criteria andParentProjectIdLikeIgnoreCase(String value) {
-            addCriterion("upper(parent_project_id) like ", value.toUpperCase(), "parentProjectId");
+        public Criteria andParentProductIdLikeIgnoreCase(String value) {
+            addCriterion("upper(parent_product_id) like ", value.toUpperCase(), "parentProductId");
             return (Criteria) this;
         }
 

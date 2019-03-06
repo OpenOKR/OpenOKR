@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.openokr.task.entity.ProjectInfoEntityMapper">
-  <resultMap id="BaseResultMap" type="org.openokr.task.entity.ProjectInfoEntity">
+<mapper namespace="org.openokr.task.entity.ProductInfoEntityMapper">
+  <resultMap id="BaseResultMap" type="org.openokr.task.entity.ProductInfoEntity">
     <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
-    <result column="parent_project_id" jdbcType="VARCHAR" property="parentProjectId" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="parent_product_id" jdbcType="VARCHAR" property="parentProductId" />
     <result column="category_id" jdbcType="VARCHAR" property="categoryId" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -66,15 +66,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, project_name, parent_project_id, category_id
+    id, product_name, parent_product_id, category_id
   </sql>
-  <select id="selectByCondition" parameterType="org.openokr.task.entity.ProjectInfoEntityCondition" resultMap="BaseResultMap">
+  <select id="selectByCondition" parameterType="org.openokr.task.entity.ProductInfoEntityCondition" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from t_okr_project_info
+    from t_okr_product_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -83,29 +83,29 @@
     </if>
     <include refid="PostgreSqlPaginationSuffix" />
   </select>
-  <delete id="deleteByCondition" parameterType="org.openokr.task.entity.ProjectInfoEntityCondition">
-    delete from t_okr_project_info
+  <delete id="deleteByCondition" parameterType="org.openokr.task.entity.ProductInfoEntityCondition">
+    delete from t_okr_product_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <select id="countByCondition" parameterType="org.openokr.task.entity.ProjectInfoEntityCondition" resultType="java.lang.Long">
-    select count(*) from t_okr_project_info
+  <select id="countByCondition" parameterType="org.openokr.task.entity.ProductInfoEntityCondition" resultType="java.lang.Long">
+    select count(*) from t_okr_product_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByCondition" parameterType="map">
-    update t_okr_project_info
+    update t_okr_product_info
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
       </if>
-      <if test="record.projectName != null">
-        project_name = #{record.projectName,jdbcType=VARCHAR},
+      <if test="record.productName != null">
+        product_name = #{record.productName,jdbcType=VARCHAR},
       </if>
-      <if test="record.parentProjectId != null">
-        parent_project_id = #{record.parentProjectId,jdbcType=VARCHAR},
+      <if test="record.parentProductId != null">
+        parent_product_id = #{record.parentProductId,jdbcType=VARCHAR},
       </if>
       <if test="record.categoryId != null">
         category_id = #{record.categoryId,jdbcType=VARCHAR},
@@ -121,9 +121,9 @@
     </if>
   </sql>
   <insert id="insertList" parameterType="java.util.List">
-     insert into t_okr_project_info ( id,project_name,parent_project_id,category_id ) values
+     insert into t_okr_product_info ( id,product_name,parent_product_id,category_id ) values
     <foreach collection="list" index="index" item="item" separator=",">
-       ( #{item.id,jdbcType=VARCHAR},#{item.projectName,jdbcType=VARCHAR},#{item.parentProjectId,jdbcType=VARCHAR},#{item.categoryId,jdbcType=VARCHAR} )
+       ( #{item.id,jdbcType=VARCHAR},#{item.productName,jdbcType=VARCHAR},#{item.parentProductId,jdbcType=VARCHAR},#{item.categoryId,jdbcType=VARCHAR} )
     </foreach>
   </insert>
 </mapper>

@@ -13,13 +13,13 @@
                 and (ar.task_name LIKE CONCAT('%', #{vo.searchKey }, '%') or ar.task_remark LIKE CONCAT('%', #{vo.searchKey }, '%'))
             </if>
             <if test="vo.queryStartDate != null">
-                <![CDATA[AND ar.create_ts >= #{vo.queryStartDate}]]>
+                <![CDATA[AND t1.create_ts >= #{vo.queryStartDate}]]>
             </if>
             <if test="vo.queryStartDate != null">
-                <![CDATA[AND ar.create_ts >= #{vo.queryStartDate}]]>
+                <![CDATA[AND t1.create_ts >= #{vo.queryStartDate}]]>
             </if>
-            <if test="vo.endDate != null">
-                <![CDATA[AND ar.create_ts <= #{vo.queryEndDate}]]>
+            <if test="vo.queryEndDate != null">
+                <![CDATA[AND t1.create_ts <= #{vo.queryEndDate}]]>
             </if>
         </where>
         order by create_ts desc
@@ -34,13 +34,13 @@
         FROM t_okr_task t1
         <where>
             <if test="vo.searchKey != null and !vo.searchKey.isEmpty()">
-                and (ar.task_name LIKE CONCAT('%', #{vo.searchKey }, '%') or ar.task_remark LIKE CONCAT('%', #{vo.searchKey }, '%'))
+                and (t1.task_name LIKE CONCAT('%', #{vo.searchKey }, '%') or t1.task_remark LIKE CONCAT('%', #{vo.searchKey }, '%'))
             </if>
             <if test="vo.queryStartDate != null">
-                <![CDATA[AND ar.create_ts >= #{vo.queryStartDate}]]>
+                <![CDATA[AND t1.create_ts >= #{vo.queryStartDate}]]>
             </if>
-            <if test="vo.endDate != null">
-                <![CDATA[AND ar.create_ts <= #{vo.queryEndDate}]]>
+            <if test="vo.queryEndDate != null">
+                <![CDATA[AND t1.create_ts <= #{vo.queryEndDate}]]>
             </if>
         </where>
     </select>

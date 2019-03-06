@@ -3,7 +3,7 @@ package org.openokr.task.vo;
 import com.zzheng.framework.base.vo.BaseVO;
 import java.io.Serializable;
 
-public class ProjectInfoVO extends BaseVO implements Serializable {
+public class ProductInfoVO extends BaseVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -16,12 +16,12 @@ public class ProjectInfoVO extends BaseVO implements Serializable {
     /**
      * 项目名称
      */
-    private String projectName;
+    private String productName;
 
     /**
      * 父级项目ID
      */
-    private String parentProjectId;
+    private String parentProductId;
 
     /**
      * 类别： 1 项目 2 其他
@@ -47,29 +47,29 @@ public class ProjectInfoVO extends BaseVO implements Serializable {
     /**
      * 项目名称
      */
-    public String getProjectName() {
-        return projectName;
+    public String getProductName() {
+        return productName;
     }
 
     /**
      * 项目名称
      */
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     /**
      * 父级项目ID
      */
-    public String getParentProjectId() {
-        return parentProjectId;
+    public String getParentProductId() {
+        return parentProductId;
     }
 
     /**
      * 父级项目ID
      */
-    public void setParentProjectId(String parentProjectId) {
-        this.parentProjectId = parentProjectId;
+    public void setParentProductId(String parentProductId) {
+        this.parentProductId = parentProductId;
     }
 
     /**
