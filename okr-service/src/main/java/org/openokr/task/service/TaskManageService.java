@@ -246,8 +246,8 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
                 MyTaskCountInfoVO myTaskCountInfoVO;
                 Map<String,Object> queryCountMap = new HashMap<>();
                 for(String projectId:projectIds){
-                    ProjectInfoEntity projectInfoEntity = this.selectByPrimaryKey(ProjectInfoEntity.class,projectId);
-                    if(projectInfoEntity == null){
+                    ProductInfoEntity productInfoEntity = this.selectByPrimaryKey(ProductInfoEntity.class,projectId);
+                    if(productInfoEntity == null){
                         logger.error("获取不到项目{}的信息",projectId);
                         continue;
                     }
@@ -297,8 +297,8 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
                 MyTaskCountInfoVO myTaskCountInfoVO;
                 Map<String,Object> queryCountMap = new HashMap<>();
                 for(String projectId:projectIds){
-                    ProjectInfoEntity projectInfoEntity = this.selectByPrimaryKey(ProjectInfoEntity.class,projectId);
-                    if(projectInfoEntity == null){
+                    ProductInfoEntity productInfoEntity = this.selectByPrimaryKey(ProductInfoEntity.class,projectId);
+                    if(productInfoEntity == null){
                         logger.error("获取不到项目{}的信息",projectId);
                         continue;
                     }
