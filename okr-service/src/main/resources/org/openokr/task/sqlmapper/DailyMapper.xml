@@ -42,7 +42,7 @@
             t1.create_ts,
             t1.update_user_id,
             t1.update_ts,
-            t1.task_name
+            t2.task_name
         <include refid="pageCondition"/>
         ORDER BY t1.create_ts DESC
         <include refid="PostgreSqlPaginationSuffix"/>
