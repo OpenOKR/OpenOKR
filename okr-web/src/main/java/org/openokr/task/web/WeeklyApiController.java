@@ -31,7 +31,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/api/daily")
-@Api(value = "周报相关接口",description = "DailyController")
+@Api(value = "周报相关接口",description = "WeeklyController")
 public class WeeklyApiController extends BaseController {
 
     private static final String MONDAY_DATE = "mondayDate";
