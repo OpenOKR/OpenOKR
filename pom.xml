@@ -100,6 +100,7 @@
                 <module>okr-api</module>
                 <module>okr-service</module>
                 <module>okr-web</module>
+                <module>okr-m-web</module>
             </modules>
             <activation>
                 <os>
@@ -114,6 +115,7 @@
                 <module>okr-api</module>
                 <module>okr-service</module>
                 <module>okr-web</module>
+                <module>okr-m-web</module>
             </modules>
             <activation>
                 <os>
