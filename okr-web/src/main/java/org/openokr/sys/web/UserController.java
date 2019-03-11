@@ -2,9 +2,13 @@ package org.openokr.sys.web;
 
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.mybatis.dao.pojo.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.openokr.application.framework.annotation.JsonPathParam;
 import org.openokr.application.web.BaseController;
+import org.openokr.common.vo.response.ResponseData;
 import org.openokr.sys.service.IUserService;
 import org.openokr.sys.vo.UserVOExt;
 import org.openokr.utils.UserUtils;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/sys")
+@Api(value = "用户管理相关接口",description = "UserController")
 public class UserController extends BaseController {
 
     @Autowired
@@ -71,5 +76,18 @@ public class UserController extends BaseController {
     @ResponseBody
     public ResponseResult updatePassword(String oldPassword, String newPassword, String confirmNewPassword) {
         return userService.updatePassword(this.getCurrentUserId(), oldPassword, newPassword, confirmNewPassword);
+    }
+
+    @ApiOperation(value = "确认用户是否登录", notes = "确认用户是否登录")
+    @RequestMapping(value = "/user/checkUserLogin.json", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData checkUserIsLogin() {
+        ResponseData result = new ResponseData();
+        if(StringUtils.isBlank(this.getCurrentUserId())){
+            result.setSuccess(false);
+        }else{
+            result.setSuccess(true);
+        }
+        return result;
     }
 }

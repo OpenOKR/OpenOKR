@@ -66,7 +66,16 @@ public class DailyApiController extends BaseController {
     public ResponseData<String> saveDailyList(@RequestBody List<DailyVO> dailyList) {
         ResponseData<String> result = new ResponseData<>();
         try {
-            dailyManageService.insertDailyList(dailyList,this.getCurrentUserId(), DateUtils.dateToString(new Date()));
+            Date date = new Date();
+            if(dailyList!=null && !dailyList.isEmpty()){
+                date = dailyList.get(0).getReportDay();
+            }else{
+                result.setCode(6000);
+                result.setMessage("参数为空");
+                result.setSuccess(false);
+                return result;
+            }
+            dailyManageService.insertDailyList(dailyList,this.getCurrentUserId(), DateUtils.dateToString(date));
             result.setData("保存成功");
             result.setCode(0);
             result.setSuccess(true);
@@ -74,10 +83,12 @@ public class DailyApiController extends BaseController {
             logger.error("保存日报列表 异常：{},参数:[{}]", e.getMessage(), JSON.toJSONString(dailyList), e);
             result.setCode(6000);
             result.setMessage(e.getMessage());
+            result.setSuccess(false);
         }catch (Exception e){
             logger.error("保存日报列表 异常：{},参数:[{}]", e.getMessage(), JSON.toJSONString(dailyList), e);
             result.setCode(7000);
             result.setMessage(e.getMessage());
+            result.setSuccess(false);
         }
         return result;
     }
