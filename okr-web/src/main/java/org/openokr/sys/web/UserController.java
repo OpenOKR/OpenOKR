@@ -1,6 +1,7 @@
 package org.openokr.sys.web;
 
 import com.zzheng.framework.adapter.vo.ResponseResult;
+import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.dao.pojo.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -11,6 +12,8 @@ import org.openokr.application.web.BaseController;
 import org.openokr.common.vo.response.ResponseData;
 import org.openokr.sys.service.IUserService;
 import org.openokr.sys.vo.UserVOExt;
+import org.openokr.sys.vo.request.UserSelectVO;
+import org.openokr.task.vo.MyTaskCountInfoVO;
 import org.openokr.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +22,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/sys")
@@ -87,6 +92,27 @@ public class UserController extends BaseController {
             result.setSuccess(false);
         }else{
             result.setSuccess(true);
+        }
+        return result;
+    }
+
+    @ApiOperation(value = "获取用户选择列表", notes = "获取用户选择列表")
+    @RequestMapping(value = "/user/getUserSelectInfo.json", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<UserSelectVO> getUserSelectInfo() {
+        ResponseData<UserSelectVO> result = new ResponseData<>();
+        try{
+            UserSelectVO userSelectVO = userService.getUserSelectInfo();
+            result.setData(userSelectVO);
+            result.setCode(0);
+        }catch (BusinessException e){
+            logger.error("获取用户选择列表 异常", e.getMessage(), e);
+            result.setCode(6000);
+            result.setMessage(e.getMessage());
+        }catch (Exception e){
+            logger.error("获取用户选择列表 异常", e.getMessage(), e);
+            result.setCode(7000);
+            result.setMessage(e.getMessage());
         }
         return result;
     }

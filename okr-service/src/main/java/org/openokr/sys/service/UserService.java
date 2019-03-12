@@ -1,8 +1,11 @@
 package org.openokr.sys.service;
 
+import com.alibaba.fastjson.JSON;
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.base.utils.BeanUtils;
+import com.zzheng.framework.base.utils.JSONUtils;
 import com.zzheng.framework.base.utils.StringUtils;
+import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.dao.pojo.Page;
 import com.zzheng.framework.mybatis.service.impl.BaseServiceImpl;
 import org.openokr.application.utils.PasswordUtil;
@@ -10,6 +13,10 @@ import org.openokr.sys.entity.UserEntity;
 import org.openokr.sys.entity.UserEntityCondition;
 import org.openokr.sys.vo.UserRoleVO;
 import org.openokr.sys.vo.UserVOExt;
+import org.openokr.sys.vo.request.UserSelectOgrVO;
+import org.openokr.sys.vo.request.UserSelectUserVO;
+import org.openokr.sys.vo.request.UserSelectVO;
+import org.openokr.task.vo.DailyVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -203,6 +210,32 @@ public class UserService extends BaseServiceImpl implements IUserService {
         params.put("teamId", teamId);
         UserVOExt userVOExt = this.getMyBatisDao().selectOneBySql(MAPPER_NAMESPACE + ".getTeamOwnerUserByTeamId", params);
         return userVOExt;
+    }
+
+    @Override
+    public UserSelectVO getUserSelectInfo() throws BusinessException {
+        UserSelectVO userSelectVO = new UserSelectVO();
+        try{
+            List<UserSelectOgrVO> ogrVOS = this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE + ".selectUserDeptInfoList", null);
+            if(ogrVOS != null && !ogrVOS.isEmpty()){
+                userSelectVO.setDeptList(ogrVOS);
+                Map<String, Object> params;
+                List<UserSelectUserVO> userVOS;
+                for(UserSelectOgrVO ogrVO:ogrVOS){
+                    params = new HashMap<>();
+                    params.put("orgId", ogrVO.getDeptId());
+                    userVOS = this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE + ".selectUserInfoListByDeptId", params);
+                    ogrVO.setUserList(userVOS);
+                }
+            }
+        } catch (BusinessException e) {
+            logger.error("获取用户选择列表 busi-error:{}", e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("获取用户选择列表 error:{}-->", e.getMessage(), e);
+            throw new BusinessException("获取用户选择列表 失败");
+        }
+        return userSelectVO;
     }
 
     private long countByUsername(String id, String username) {

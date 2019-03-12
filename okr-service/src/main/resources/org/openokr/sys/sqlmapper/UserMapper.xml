@@ -46,7 +46,7 @@
     </select>
 
     <!-- 获取团队负责人 -->
-    <select id="getTeamOwnerUserByTeamId" parameterType="java.util.Map" resultType="org.openokr.sys.vo.UserVOExt">
+    <select id="getTeamOwnerUserByTeamId" resultType="org.openokr.sys.vo.UserVOExt">
         select t1.id,
         t1.create_time,
         t1.password,
@@ -60,6 +60,18 @@
         from t_okr_sys_user t1
         left join t_okr_teams t2 on t2.owner_id = t1.id
         where t2.id = #{teamId}
+    </select>
+
+    <select id="selectUserDeptInfoList" parameterType="java.util.Map" resultType="org.openokr.sys.vo.request.UserSelectOgrVO">
+        select distinct t1.organization_id deptId, t2."name" deptName
+        from t_okr_sys_user t1
+        INNER JOIN t_okr_sys_organization t2 on t1.organization_id = t2.id
+    </select>
+
+    <select id="selectUserInfoListByDeptId" parameterType="java.util.Map" resultType="org.openokr.sys.vo.request.UserSelectUserVO">
+        select distinct t1.id userId, t1."real_name" userName
+        from t_okr_sys_user t1
+        where t1.organization_id = #{orgId}
     </select>
 
 </mapper>

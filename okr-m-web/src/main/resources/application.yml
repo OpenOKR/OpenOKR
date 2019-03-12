@@ -17,7 +17,7 @@ spring:
   mvc:
     view:
       prefix: /
-      suffix: .html
+      suffix: .jsp
   http:
     multipart:
       max-file-size: 10Mb
