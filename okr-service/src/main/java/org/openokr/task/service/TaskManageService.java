@@ -15,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static org.openokr.common.constant.AcTaskConstant.CURRENT_PAGE;
-import static org.openokr.common.constant.AcTaskConstant.PAGE_SIZE;
+import static org.openokr.common.constant.TaskConstant.CURRENT_PAGE;
+import static org.openokr.common.constant.TaskConstant.PAGE_SIZE;
 
 /**
  * Created by linaer on 2019/03/04.

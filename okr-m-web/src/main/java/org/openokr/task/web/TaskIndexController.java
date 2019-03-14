@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
-import static org.openokr.common.constant.AcTaskConstant.ERROR_CODE;
+import static org.openokr.common.constant.TaskConstant.ERROR_CODE;
 
 /**
  * OKR报工--日常报工首页控制器

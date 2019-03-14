@@ -12,10 +12,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "t_okr_product_info")
 public class ProductInfoEntity extends BaseEntity implements Serializable {
-    /** 项目名称 */
+    /** 产品名称 */
     private String productName;
 
-    /** 父级项目ID */
+    /** 父级产品ID */
     private String parentProductId;
 
     /** 类别： 1 项目 2 其他 */
@@ -24,7 +24,7 @@ public class ProductInfoEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 项目名称
+     * 产品名称
      * @return productName
      */
     @Column(name = "product_name")
@@ -33,7 +33,7 @@ public class ProductInfoEntity extends BaseEntity implements Serializable {
     }
 
     /**
-     * 项目名称
+     * 产品名称
      * @param productName
      */
     public void setProductName(String productName) {
@@ -42,7 +42,7 @@ public class ProductInfoEntity extends BaseEntity implements Serializable {
     }
 
     /**
-     * 父级项目ID
+     * 父级产品ID
      * @return parentProductId
      */
     @Column(name = "parent_product_id")
@@ -51,7 +51,7 @@ public class ProductInfoEntity extends BaseEntity implements Serializable {
     }
 
     /**
-     * 父级项目ID
+     * 父级产品ID
      * @param parentProductId
      */
     public void setParentProductId(String parentProductId) {

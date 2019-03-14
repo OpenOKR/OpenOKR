@@ -32,5 +32,8 @@
 	<dubbo:service interface="org.openokr.task.service.ITaskManageService" ref="taskManageService"/>
 	<dubbo:service interface="org.openokr.task.service.IDailyManageService" ref="dailyManageService"/>
 	<dubbo:service interface="org.openokr.task.service.IWeeklyManageService" ref="weeklyManageService"/>
+	<dubbo:service interface="org.openokr.task.service.ICustomerManageService" ref="customerManageService"/>
+	<dubbo:service interface="org.openokr.task.service.IProductInfoManageService" ref="productInfoManageService"/>
+	<dubbo:service interface="org.openokr.task.service.IApportionCategoryManageService" ref="apportionCategoryManageService"/>
 
 </beans>

@@ -4,9 +4,10 @@ import com.zzheng.framework.base.vo.BaseVO;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Data
-public class ApportionCategoryVO extends BaseVO implements Serializable {
+public class ApportionSelectVO extends BaseVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -17,8 +18,8 @@ public class ApportionCategoryVO extends BaseVO implements Serializable {
     private String id;
 
     /**
-     * 类别名称
+     * 名称
      */
-    private String categoryName;
+    private String name;
 
 }

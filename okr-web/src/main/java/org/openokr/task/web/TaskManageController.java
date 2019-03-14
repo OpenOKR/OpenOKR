@@ -13,12 +13,11 @@ import org.openokr.application.web.BaseController;
 import org.openokr.common.vo.response.PageResponseData;
 import org.openokr.common.vo.response.ResponseData;
 import org.openokr.sys.service.IMenuService;
+import org.openokr.task.service.IApportionCategoryManageService;
 import org.openokr.task.service.ITaskManageService;
-import org.openokr.task.vo.MyTaskCountInfoVO;
+import org.openokr.task.vo.*;
 import org.openokr.task.request.TaskInfoVO;
 import org.openokr.task.request.TaskSearchVO;
-import org.openokr.task.vo.TaskSaveVO;
-import org.openokr.task.vo.TaskVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +28,7 @@ import springfox.documentation.spring.web.json.Json;
 
 import java.util.List;
 
-import static org.openokr.common.constant.AcTaskConstant.ERROR_CODE;
+import static org.openokr.common.constant.TaskConstant.ERROR_CODE;
 
 /**
  * OKR报工--任务管理控制器
@@ -44,6 +43,9 @@ public class TaskManageController extends BaseController {
 
     @Autowired
     private ITaskManageService taskManageService;
+
+    @Autowired
+    private IApportionCategoryManageService apportionCategoryManageService;
 
     @ApiOperation(value = "分页查询任务列表数据", notes = "分页查询任务列表数据")
     @ApiImplicitParams(
@@ -148,6 +150,60 @@ public class TaskManageController extends BaseController {
             result.setMessage(e.getMessage());
         }catch (Exception e){
             logger.error("获取任务详情 异常：{},参数:[{}]", e.getMessage(), id, e);
+            result.setCode(7000);
+            result.setMessage(e.getMessage());
+        }
+        return result;
+    }
+
+    @ApiOperation(value = "获取分摊类别列表信息",notes = "获取分摊类别列表信息")
+    @ApiImplicitParams(
+            {
+            }
+    )
+    @RequestMapping(value = "/getApportionCategoryList.json",method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseData<List<ApportionCategoryVO>> getApportionCategoryList(){
+        ResponseData<List<ApportionCategoryVO>> result = new ResponseData();
+        try {
+            List<ApportionCategoryVO> apportionCategoryVOS = apportionCategoryManageService.getApportionCategoryList();
+            result.setData(apportionCategoryVOS);
+            result.setCode(0);
+            result.setSuccess(true);
+        } catch (BusinessException e){
+            logger.error("获取分摊类别列表信息 异常：{},参数:[{}]", e.getMessage(), e);
+            result.setCode(6000);
+            result.setMessage(e.getMessage());
+        }catch (Exception e){
+            logger.error("获取分摊类别列表信息 异常：{},参数:[{}]", e.getMessage(), e);
+            result.setCode(7000);
+            result.setMessage(e.getMessage());
+        }
+        return result;
+    }
+
+
+    @ApiOperation(value = "获取分摊下拉选择信息列表",notes = "获取分摊下拉选择信息列表")
+    @ApiImplicitParams(
+            {
+                    @ApiImplicitParam(name = "categoryId",value = "分摊列表ID",dataType = "string",paramType = "query")
+            }
+    )
+    @RequestMapping(value = "/getApportionSelectList.json",method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseData<List<ApportionSelectVO>> getApportionSelectList(String categoryId){
+        ResponseData<List<ApportionSelectVO>> result = new ResponseData();
+        try {
+            List<ApportionSelectVO> apportionSelectList = apportionCategoryManageService.getApportionSelectList(categoryId);
+            result.setData(apportionSelectList);
+            result.setCode(0);
+            result.setSuccess(true);
+        } catch (BusinessException e){
+            logger.error("获取分摊下拉选择信息列表 异常：{},参数:categoryId=[{}]", e.getMessage(), categoryId, e);
+            result.setCode(6000);
+            result.setMessage(e.getMessage());
+        }catch (Exception e){
+            logger.error("获取分摊下拉选择信息列表 异常：{},参数:categoryId=[{}]", e.getMessage(), categoryId, e);
             result.setCode(7000);
             result.setMessage(e.getMessage());
         }
