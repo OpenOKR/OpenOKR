@@ -1,5 +1,10 @@
 package org.openokr.application.web;
 
+import com.alibaba.fastjson.JSON;
+import com.zzheng.framework.exception.BusinessException;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -9,6 +14,8 @@ import org.openokr.application.shiro.RSAService;
 import org.openokr.application.shiro.ShiroConfiguration;
 import org.openokr.application.shiro.UsernamePasswordToken;
 import org.openokr.application.shiro.filter.FormAuthenticationFilter;
+import org.openokr.common.vo.response.ResponseData;
+import org.openokr.sys.vo.request.UserLoginVO;
 import org.openokr.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -123,27 +130,39 @@ public class LoginController extends BaseController {
      * @param response
      * @return
      */
-    @RequestMapping(value = "/devLogin.json",method = RequestMethod.GET)
+    @ApiOperation(value = "登录接口",notes = "登录接口")
+    @ApiImplicitParams(
+            {
+                    @ApiImplicitParam(name = "username",value = "用户名",dataType = "string"),
+                    @ApiImplicitParam(name = "password",value = "密码",dataType = "string")
+            }
+    )
+    @RequestMapping(value = "/devLogin.json",method = RequestMethod.POST)
     @ResponseBody
-    public String devLogin(HttpServletRequest request, HttpServletResponse response,String username) {
-        //得到Subject及创建用户名/密码身份验证Token（即用户身份/凭证）
-        Subject subject = SecurityUtils.getSubject();
-        char[] passwordArr = new char[]{'1','2','3','4','5','6'};
-        UsernamePasswordToken token = new UsernamePasswordToken(
-                username,  //登录用户名
-                passwordArr,false,"0:0:0:0:0:0:0:1",null,false); //登录密码
+    public ResponseData devLogin(HttpServletRequest request, HttpServletResponse response, @RequestBody UserLoginVO userLoginVO) {
+        ResponseData result = new ResponseData<>();
+        try {
+            //得到Subject及创建用户名/密码身份验证Token（即用户身份/凭证）
+            Subject subject = SecurityUtils.getSubject();
+            char[] passwordArr = new char[]{'1','2','3','4','5','6'};
+            UsernamePasswordToken token = new UsernamePasswordToken(
+                    userLoginVO.getUsername(),  //登录用户名
+                    passwordArr,false,"0:0:0:0:0:0:0:1",null,false); //登录密码
 /*        token.setRememberMe(false);
         token.setHost("0:0:0:0:0:0:0:1");*/
-        try{
             //登录，即身份验证
             subject.login(token);
+            result.setCode(0);
+            result.setSuccess(true);
+        } catch (BusinessException e){
+            logger.error("接口登录 异常：{},参数:[{}]", e.getMessage(), JSON.toJSONString(userLoginVO), e);
+            result.setCode(6000);
+            result.setMessage(e.getMessage());
         }catch (Exception e){
-            //登录失败
-            System.out.println(e);    //打印错误信息，测试阶段，找问题比较方便
-            System.out.println("用户信息验证失败");
-            token.clear();
-            return "error";  //这里是登录失败的页面
+            logger.error("接口登录 异常：{},参数:[{}]", e.getMessage(), JSON.toJSONString(userLoginVO), e);
+            result.setCode(7000);
+            result.setMessage(e.getMessage());
         }
-        return request.getSession().getId();
+        return result;
     }
 }
