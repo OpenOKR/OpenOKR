@@ -144,7 +144,8 @@ public class LoginController extends BaseController {
         try {
             //得到Subject及创建用户名/密码身份验证Token（即用户身份/凭证）
             Subject subject = SecurityUtils.getSubject();
-            char[] passwordArr = new char[]{'1','2','3','4','5','6'};
+            //char[] passwordArr = new char[]{'1','2','3','4','5','6'};
+            char[] passwordArr = userLoginVO.getPassword().toCharArray();
             UsernamePasswordToken token = new UsernamePasswordToken(
                     userLoginVO.getUsername(),  //登录用户名
                     passwordArr,false,"0:0:0:0:0:0:0:1",null,false); //登录密码
