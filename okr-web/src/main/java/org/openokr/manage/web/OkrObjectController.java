@@ -1,6 +1,9 @@
 package org.openokr.manage.web;
 
 import com.zzheng.framework.adapter.vo.ResponseResult;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.openokr.application.framework.annotation.JsonPathParam;
 import org.openokr.application.web.BaseController;
 import org.openokr.manage.service.IOkrMessageService;
@@ -11,6 +14,7 @@ import org.openokr.manage.vo.MessagesVO;
 import org.openokr.manage.vo.ObjectivesExtVO;
 import org.openokr.manage.vo.OkrObjectSearchVO;
 import org.openokr.manage.vo.TeamsExtVO;
+import org.openokr.sys.vo.request.TreeDataVO;
 import org.openokr.utils.StringUtils;
 import org.openokr.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +34,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/manage/okrObject")
+@Api(value = "OKR目标管理相关接口",description = "OkrObjectController")
 public class OkrObjectController extends BaseController {
 
     @Autowired
@@ -180,5 +185,14 @@ public class OkrObjectController extends BaseController {
     public ResponseResult auditConfirm(@JsonPathParam("vo") MessagesExtVO messagesExtVO) {
         ResponseResult result = okrObjectService.auditConfirm(messagesExtVO, getCurrentUserId());
         return result;
+    }
+
+    @ApiOperation(value = "获取当前用户所有OKR树状数据", notes = "获取当前用户所有OKR树状数据")
+    @RequiresPermissions("user")
+    @PostMapping(value = "/findAllOkrTreeData.json")
+    @ResponseBody
+    public List<TreeDataVO> findAllOkrTreeData() {
+        List<TreeDataVO> list = okrObjectService.findAllOkrTreeData(getCurrentUserId());
+        return list;
     }
 }

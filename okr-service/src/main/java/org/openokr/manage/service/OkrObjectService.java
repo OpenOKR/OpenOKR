@@ -7,44 +7,21 @@ import com.zzheng.framework.exception.BusinessException;
 import org.apache.commons.collections.ListUtils;
 import org.openokr.application.framework.service.OkrBaseService;
 import org.openokr.application.utils.GetChangeDateUtil;
-import org.openokr.manage.entity.CheckinsEntity;
-import org.openokr.manage.entity.CheckinsEntityCondition;
-import org.openokr.manage.entity.LogEntity;
-import org.openokr.manage.entity.LogEntityCondition;
-import org.openokr.manage.entity.MessagesEntity;
-import org.openokr.manage.entity.ObjectLabelRelaEntity;
-import org.openokr.manage.entity.ObjectLabelRelaEntityCondition;
-import org.openokr.manage.entity.ObjectTeamRelaEntity;
-import org.openokr.manage.entity.ObjectTeamRelaEntityCondition;
-import org.openokr.manage.entity.ObjectivesEntity;
-import org.openokr.manage.entity.ObjectivesEntityCondition;
-import org.openokr.manage.entity.ResultsEntity;
-import org.openokr.manage.entity.ResultsEntityCondition;
-import org.openokr.manage.entity.TeamsEntity;
+import org.openokr.manage.entity.*;
 import org.openokr.manage.enumerate.MessageMarkEnum;
 import org.openokr.manage.enumerate.MessageTypeEnum;
 import org.openokr.manage.enumerate.ObjectivesStatusEnum;
 import org.openokr.manage.enumerate.ObjectivesTypeEnum;
-import org.openokr.manage.vo.CheckinsExtVO;
-import org.openokr.manage.vo.LabelVO;
-import org.openokr.manage.vo.LogVO;
-import org.openokr.manage.vo.MessagesExtVO;
-import org.openokr.manage.vo.ObjectivesExtVO;
-import org.openokr.manage.vo.OkrObjectSearchVO;
-import org.openokr.manage.vo.ResultsExtVO;
-import org.openokr.manage.vo.TeamsVO;
+import org.openokr.manage.vo.*;
 import org.openokr.sys.service.IUserService;
 import org.openokr.sys.vo.UserVO;
 import org.openokr.sys.vo.UserVOExt;
+import org.openokr.sys.vo.request.TreeDataVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Transactional
@@ -394,6 +371,70 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         newMessageEntity.setCreateTs(new Date());
         this.save(newMessageEntity);
         return new ResponseResult(true, null, "操作成功");
+    }
+
+    @Override
+    public List<TreeDataVO> findAllOkrTreeData(String currentUserId) throws BusinessException {
+        List<TreeDataVO> treeDataVOS = new ArrayList<>();
+        try{
+            TreeDataVO treeDataVO;
+            OkrObjectSearchVO searchVO = new OkrObjectSearchVO();
+            searchVO.setUserId(currentUserId);
+            List<ObjectivesExtVO> okrDataList = this.getAllOkrList(searchVO);
+            if(okrDataList != null && !okrDataList.isEmpty()){
+/*                for(ObjectivesExtVO okr:okrDataList){
+                    if(org.apache.commons.lang3.StringUtils.isBlank(okr.getParentId())){
+                        treeDataVO = new TreeDataVO();
+                        treeDataVO.setId(okr.getId());
+                        treeDataVO.setLabel(okr.getName());
+                        treeDataVO.setChildren(findOkrChildrenData(okr,okrDataList));
+                        treeDataVOS.add(treeDataVO);
+                    }else{
+                        continue;
+                    }
+                }*/
+                if(treeDataVOS.isEmpty()){
+                    for(ObjectivesExtVO okr:okrDataList){
+                        treeDataVO = new TreeDataVO();
+                        treeDataVO.setId(okr.getId());
+                        treeDataVO.setLabel(okr.getName());
+                        treeDataVOS.add(treeDataVO);
+                    }
+                }
+            }
+        } catch (BusinessException e) {
+            logger.error("获取当前用户所有的OKR树状接口信息 busi-error:{}", e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("获取当前用户所有的OKR树状接口信息 error:{}-->", e.getMessage(), e);
+            throw new BusinessException("获取当前用户所有的OKR树状接口信息 失败");
+        }
+        return treeDataVOS;
+    }
+
+    private List<TreeDataVO> findOkrChildrenData(ObjectivesExtVO okr,List<ObjectivesExtVO> okrDataList) throws BusinessException {
+        List<TreeDataVO> treeDataVOS = new ArrayList<>();
+        try{
+            TreeDataVO treeDataVO;
+            if(okrDataList!=null && !okrDataList.isEmpty()){
+                for(ObjectivesExtVO okrData:okrDataList){
+                    if(okr.getId().equals(okr.getParentId())){
+                        treeDataVO = new TreeDataVO();
+                        treeDataVO.setId(okrData.getId());
+                        treeDataVO.setLabel(okrData.getName());
+                        treeDataVO.setChildren(findOkrChildrenData(okrData,okrDataList));
+                        treeDataVOS.add(treeDataVO);
+                    }
+                }
+            }
+        } catch (BusinessException e) {
+            logger.error("获取组织机构树 busi-error:{}", e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("获取组织机构树 error:{}-->", e.getMessage(), e);
+            throw new BusinessException("获取组织机构树 失败");
+        }
+        return treeDataVOS;
     }
 
     /**

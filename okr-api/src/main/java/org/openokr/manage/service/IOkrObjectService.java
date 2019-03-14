@@ -9,6 +9,7 @@ import org.openokr.manage.vo.ObjectivesExtVO;
 import org.openokr.manage.vo.OkrObjectSearchVO;
 import org.openokr.sys.vo.UserVO;
 import org.openokr.sys.vo.UserVOExt;
+import org.openokr.sys.vo.request.TreeDataVO;
 
 import java.util.List;
 
@@ -115,5 +116,13 @@ public interface IOkrObjectService {
      * @return
      */
     ResponseResult auditConfirm(MessagesExtVO messagesExtVO, String currentUserId);
+
+    /**
+     * 获取当前用户所有的OKR树状接口信息
+     * @param currentUserId
+     * @return
+     * @throws BusinessException
+     */
+    List<TreeDataVO> findAllOkrTreeData(String currentUserId) throws BusinessException;
 
 }
