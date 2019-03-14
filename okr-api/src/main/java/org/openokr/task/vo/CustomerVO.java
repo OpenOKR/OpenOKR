@@ -20,6 +20,11 @@ public class CustomerVO extends BaseVO implements Serializable {
     private String name;
 
     /**
+     * 类型： 00、规模性园区 01、政府开发区
+     */
+    private String type;
+
+    /**
      * 状态
      */
     private String status;
@@ -77,6 +82,20 @@ public class CustomerVO extends BaseVO implements Serializable {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * 类型： 00、规模性园区 01、政府开发区
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * 类型： 00、规模性园区 01、政府开发区
+     */
+    public void setType(String type) {
+        this.type = type;
     }
 
     /**

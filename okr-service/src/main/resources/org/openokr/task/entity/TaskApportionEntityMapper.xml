@@ -4,8 +4,7 @@
   <resultMap id="BaseResultMap" type="org.openokr.task.entity.TaskApportionEntity">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="task_id" jdbcType="VARCHAR" property="taskId" />
-    <result column="product_id" jdbcType="VARCHAR" property="productId" />
-    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="apportion_name_id" jdbcType="VARCHAR" property="apportionNameId" />
     <result column="category_id" jdbcType="VARCHAR" property="categoryId" />
     <result column="apportion_rate" jdbcType="NUMERIC" property="apportionRate" />
   </resultMap>
@@ -68,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, task_id, product_id, product_name, category_id, apportion_rate
+    id, task_id, apportion_name_id, category_id, apportion_rate
   </sql>
   <select id="selectByCondition" parameterType="org.openokr.task.entity.TaskApportionEntityCondition" resultMap="BaseResultMap">
     select
@@ -106,11 +105,8 @@
       <if test="record.taskId != null">
         task_id = #{record.taskId,jdbcType=VARCHAR},
       </if>
-      <if test="record.productId != null">
-        product_id = #{record.productId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.productName != null">
-        product_name = #{record.productName,jdbcType=VARCHAR},
+      <if test="record.apportionNameId != null">
+        apportion_name_id = #{record.apportionNameId,jdbcType=VARCHAR},
       </if>
       <if test="record.categoryId != null">
         category_id = #{record.categoryId,jdbcType=VARCHAR},
@@ -129,9 +125,9 @@
     </if>
   </sql>
   <insert id="insertList" parameterType="java.util.List">
-     insert into t_okr_task_apportion ( id,task_id,product_id,product_name,category_id,apportion_rate ) values
+     insert into t_okr_task_apportion ( id,task_id,apportion_name_id,category_id,apportion_rate ) values
     <foreach collection="list" index="index" item="item" separator=",">
-       ( #{item.id,jdbcType=VARCHAR},#{item.taskId,jdbcType=VARCHAR},#{item.productId,jdbcType=VARCHAR},#{item.productName,jdbcType=VARCHAR},#{item.categoryId,jdbcType=VARCHAR},#{item.apportionRate,jdbcType=NUMERIC} )
+       ( #{item.id,jdbcType=VARCHAR},#{item.taskId,jdbcType=VARCHAR},#{item.apportionNameId,jdbcType=VARCHAR},#{item.categoryId,jdbcType=VARCHAR},#{item.apportionRate,jdbcType=NUMERIC} )
     </foreach>
   </insert>
 </mapper>

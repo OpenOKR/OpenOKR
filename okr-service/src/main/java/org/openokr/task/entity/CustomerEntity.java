@@ -16,6 +16,9 @@ public class CustomerEntity extends BaseEntity implements Serializable {
     /** 名称 */
     private String name;
 
+    /** 类型： 00、规模性园区 01、政府开发区 */
+    private String type;
+
     /** 状态 */
     private String status;
 
@@ -52,6 +55,24 @@ public class CustomerEntity extends BaseEntity implements Serializable {
     public void setName(String name) {
         this.name = name;
         addSettedField("name");
+    }
+
+    /**
+     * 类型： 00、规模性园区 01、政府开发区
+     * @return type
+     */
+    @Column(name = "type")
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * 类型： 00、规模性园区 01、政府开发区
+     * @param type
+     */
+    public void setType(String type) {
+        this.type = type;
+        addSettedField("type");
     }
 
     /**

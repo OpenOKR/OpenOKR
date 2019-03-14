@@ -16,11 +16,8 @@ public class TaskApportionEntity extends BaseEntity implements Serializable {
     /** 任务ID */
     private String taskId;
 
-    /** 产品ID */
-    private String productId;
-
-    /** 产品名称 */
-    private String productName;
+    /** 分摊名称ID */
+    private String apportionNameId;
 
     /** 类别ID */
     private String categoryId;
@@ -49,39 +46,21 @@ public class TaskApportionEntity extends BaseEntity implements Serializable {
     }
 
     /**
-     * 产品ID
-     * @return productId
+     * 分摊名称ID
+     * @return apportionNameId
      */
-    @Column(name = "product_id")
-    public String getProductId() {
-        return productId;
+    @Column(name = "apportion_name_id")
+    public String getApportionNameId() {
+        return apportionNameId;
     }
 
     /**
-     * 产品ID
-     * @param productId
+     * 分摊名称ID
+     * @param apportionNameId
      */
-    public void setProductId(String productId) {
-        this.productId = productId;
-        addSettedField("productId");
-    }
-
-    /**
-     * 产品名称
-     * @return productName
-     */
-    @Column(name = "product_name")
-    public String getProductName() {
-        return productName;
-    }
-
-    /**
-     * 产品名称
-     * @param productName
-     */
-    public void setProductName(String productName) {
-        this.productName = productName;
-        addSettedField("productName");
+    public void setApportionNameId(String apportionNameId) {
+        this.apportionNameId = apportionNameId;
+        addSettedField("apportionNameId");
     }
 
     /**

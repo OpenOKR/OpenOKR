@@ -253,143 +253,73 @@ public class TaskApportionEntityCondition extends BaseEntityCondition implements
             return (Criteria) this;
         }
 
-        public Criteria andProductIdIsNull() {
-            addCriterion("product_id is null");
+        public Criteria andApportionNameIdIsNull() {
+            addCriterion("apportion_name_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andProductIdIsNotNull() {
-            addCriterion("product_id is not null");
+        public Criteria andApportionNameIdIsNotNull() {
+            addCriterion("apportion_name_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andProductIdEqualTo(String value) {
-            addCriterion("product_id =", value, "productId");
+        public Criteria andApportionNameIdEqualTo(String value) {
+            addCriterion("apportion_name_id =", value, "apportionNameId");
             return (Criteria) this;
         }
 
-        public Criteria andProductIdNotEqualTo(String value) {
-            addCriterion("product_id <>", value, "productId");
+        public Criteria andApportionNameIdNotEqualTo(String value) {
+            addCriterion("apportion_name_id <>", value, "apportionNameId");
             return (Criteria) this;
         }
 
-        public Criteria andProductIdGreaterThan(String value) {
-            addCriterion("product_id >", value, "productId");
+        public Criteria andApportionNameIdGreaterThan(String value) {
+            addCriterion("apportion_name_id >", value, "apportionNameId");
             return (Criteria) this;
         }
 
-        public Criteria andProductIdGreaterThanOrEqualTo(String value) {
-            addCriterion("product_id >=", value, "productId");
+        public Criteria andApportionNameIdGreaterThanOrEqualTo(String value) {
+            addCriterion("apportion_name_id >=", value, "apportionNameId");
             return (Criteria) this;
         }
 
-        public Criteria andProductIdLessThan(String value) {
-            addCriterion("product_id <", value, "productId");
+        public Criteria andApportionNameIdLessThan(String value) {
+            addCriterion("apportion_name_id <", value, "apportionNameId");
             return (Criteria) this;
         }
 
-        public Criteria andProductIdLessThanOrEqualTo(String value) {
-            addCriterion("product_id <=", value, "productId");
+        public Criteria andApportionNameIdLessThanOrEqualTo(String value) {
+            addCriterion("apportion_name_id <=", value, "apportionNameId");
             return (Criteria) this;
         }
 
-        public Criteria andProductIdLike(String value) {
-            addCriterion("product_id like", value, "productId");
+        public Criteria andApportionNameIdLike(String value) {
+            addCriterion("apportion_name_id like", value, "apportionNameId");
             return (Criteria) this;
         }
 
-        public Criteria andProductIdNotLike(String value) {
-            addCriterion("product_id not like", value, "productId");
+        public Criteria andApportionNameIdNotLike(String value) {
+            addCriterion("apportion_name_id not like", value, "apportionNameId");
             return (Criteria) this;
         }
 
-        public Criteria andProductIdIn(List<String> values) {
-            addCriterion("product_id in", values, "productId");
+        public Criteria andApportionNameIdIn(List<String> values) {
+            addCriterion("apportion_name_id in", values, "apportionNameId");
             return (Criteria) this;
         }
 
-        public Criteria andProductIdNotIn(List<String> values) {
-            addCriterion("product_id not in", values, "productId");
+        public Criteria andApportionNameIdNotIn(List<String> values) {
+            addCriterion("apportion_name_id not in", values, "apportionNameId");
             return (Criteria) this;
         }
 
-        public Criteria andProductIdBetween(String value1, String value2) {
-            addCriterion("product_id between", value1, value2, "productId");
+        public Criteria andApportionNameIdBetween(String value1, String value2) {
+            addCriterion("apportion_name_id between", value1, value2, "apportionNameId");
             return (Criteria) this;
         }
 
-        public Criteria andProductIdNotBetween(String value1, String value2) {
-            addCriterion("product_id not between", value1, value2, "productId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductNameIsNull() {
-            addCriterion("product_name is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductNameIsNotNull() {
-            addCriterion("product_name is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductNameEqualTo(String value) {
-            addCriterion("product_name =", value, "productName");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductNameNotEqualTo(String value) {
-            addCriterion("product_name <>", value, "productName");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductNameGreaterThan(String value) {
-            addCriterion("product_name >", value, "productName");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductNameGreaterThanOrEqualTo(String value) {
-            addCriterion("product_name >=", value, "productName");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductNameLessThan(String value) {
-            addCriterion("product_name <", value, "productName");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductNameLessThanOrEqualTo(String value) {
-            addCriterion("product_name <=", value, "productName");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductNameLike(String value) {
-            addCriterion("product_name like", value, "productName");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductNameNotLike(String value) {
-            addCriterion("product_name not like", value, "productName");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductNameIn(List<String> values) {
-            addCriterion("product_name in", values, "productName");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductNameNotIn(List<String> values) {
-            addCriterion("product_name not in", values, "productName");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductNameBetween(String value1, String value2) {
-            addCriterion("product_name between", value1, value2, "productName");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductNameNotBetween(String value1, String value2) {
-            addCriterion("product_name not between", value1, value2, "productName");
+        public Criteria andApportionNameIdNotBetween(String value1, String value2) {
+            addCriterion("apportion_name_id not between", value1, value2, "apportionNameId");
             return (Criteria) this;
         }
 
@@ -533,13 +463,8 @@ public class TaskApportionEntityCondition extends BaseEntityCondition implements
             return (Criteria) this;
         }
 
-        public Criteria andProductIdLikeInsensitive(String value) {
-            addCriterion("upper(product_id) like", value.toUpperCase(), "productId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductNameLikeInsensitive(String value) {
-            addCriterion("upper(product_name) like", value.toUpperCase(), "productName");
+        public Criteria andApportionNameIdLikeInsensitive(String value) {
+            addCriterion("upper(apportion_name_id) like", value.toUpperCase(), "apportionNameId");
             return (Criteria) this;
         }
 
@@ -588,23 +513,8 @@ public class TaskApportionEntityCondition extends BaseEntityCondition implements
          *执行时SQL如下:
          *  where name like '%abc%' or name2 like '%abc' or name3 like 'abc%'
          */
-        public Criteria andProductIdLikeIgnoreCase(String value) {
-            addCriterion("upper(product_id) like ", value.toUpperCase(), "productId");
-            return (Criteria) this;
-        }
-
-        /**
-         *(扩展Mybatis原生like的不足)
-         *忽略字段大小写的模糊查询
-         *Java编码如下：
-         *  criteria.andNameLikeIgnoreCase("%Abc%"); 前后模糊,A字母大写
-         *  criteria.andName2LikeIgnoreCase("%aBc"); 前模糊,B字母大写
-         *  criteria.andName3LikeIgnoreCase("abC%"); 后模糊,C字母大写
-         *执行时SQL如下:
-         *  where name like '%abc%' or name2 like '%abc' or name3 like 'abc%'
-         */
-        public Criteria andProductNameLikeIgnoreCase(String value) {
-            addCriterion("upper(product_name) like ", value.toUpperCase(), "productName");
+        public Criteria andApportionNameIdLikeIgnoreCase(String value) {
+            addCriterion("upper(apportion_name_id) like ", value.toUpperCase(), "apportionNameId");
             return (Criteria) this;
         }
 
