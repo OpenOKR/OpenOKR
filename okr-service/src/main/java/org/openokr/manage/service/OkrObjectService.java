@@ -17,6 +17,7 @@ import org.openokr.sys.service.IUserService;
 import org.openokr.sys.vo.UserVO;
 import org.openokr.sys.vo.UserVOExt;
 import org.openokr.sys.vo.request.TreeDataVO;
+import org.openokr.task.vo.TaskKrInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -410,6 +411,52 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
             throw new BusinessException("获取当前用户所有的OKR树状接口信息 失败");
         }
         return treeDataVOS;
+    }
+
+    @Override
+    public List<TaskKrInfoVO> getTaskObjectList(String taskId, String type) throws BusinessException {
+        try{
+            if(org.apache.commons.lang3.StringUtils.isBlank(taskId)){
+                throw new BusinessException("任务ID为空!");
+            }
+            if(org.apache.commons.lang3.StringUtils.isBlank(type)){
+                throw new BusinessException("类型为空!");
+            }
+            Map<String,Object> paramMap = new HashMap<>();
+            paramMap.put("taskId",taskId);
+            paramMap.put("type",type);
+            List<TaskKrInfoVO> taskKrInfoVOS =  this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE+".getTaskObjectList",paramMap);
+            if(taskKrInfoVOS != null && !taskKrInfoVOS.isEmpty()){
+                for(TaskKrInfoVO vo:taskKrInfoVOS){
+                    vo.setCount(this.countObjectRelUserNum(vo.getId()));
+                }
+            }
+            return taskKrInfoVOS;
+        } catch (BusinessException e) {
+            logger.error("获取任务目标列表 busi-error:{}", e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("获取任务目标列表 error:{}-->", e.getMessage(), e);
+            throw new BusinessException("获取任务目标列表 失败");
+        }
+    }
+
+    @Override
+    public Integer countObjectRelUserNum(String krId) throws BusinessException {
+        try{
+            if(org.apache.commons.lang3.StringUtils.isBlank(krId)){
+                throw new BusinessException("目标ID为空!");
+            }
+            Map<String,Object> paramMap = new HashMap<>();
+            paramMap.put("krId",krId);
+            return this.getMyBatisDao().selectOneBySql(MAPPER_NAMESPACE+".countObjectRelUserNum",paramMap);
+        } catch (BusinessException e) {
+            logger.error("获取目标协同人数 busi-error:{}", e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("获取目标协同人数 error:{}-->", e.getMessage(), e);
+            throw new BusinessException("获取目标协同人数 失败");
+        }
     }
 
     private List<TreeDataVO> findOkrChildrenData(ObjectivesExtVO okr,List<ObjectivesExtVO> okrDataList) throws BusinessException {

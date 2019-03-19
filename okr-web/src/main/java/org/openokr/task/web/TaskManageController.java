@@ -137,11 +137,11 @@ public class TaskManageController extends BaseController {
     )
     @RequestMapping(value = "/getTaskDetailInfo.json",method = RequestMethod.GET)
     @ResponseBody
-    public ResponseData<TaskSaveVO> getTaskDetailInfo(String id){
+    public ResponseData<TaskDetailVO> getTaskDetailInfo(String id){
         ResponseData result = new ResponseData();
         try {
-            TaskSaveVO taskSaveVO = taskManageService.getTaskDetailById(id);
-            result.setData(taskSaveVO);
+            TaskDetailVO taskDetailVO = taskManageService.getTaskDetailById(id);
+            result.setData(taskDetailVO);
             result.setCode(0);
             result.setSuccess(true);
         } catch (BusinessException e){

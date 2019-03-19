@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.openokr.task.sqlmapper.TaskApportionMapper">
+  <resultMap id="BaseResultMap" type="org.openokr.task.entity.TaskApportionEntity">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="task_id" jdbcType="VARCHAR" property="taskId" />
+    <result column="apportion_name_id" jdbcType="VARCHAR" property="apportionNameId" />
+    <result column="category_id" jdbcType="VARCHAR" property="categoryId" />
+    <result column="apportion_rate" jdbcType="NUMERIC" property="apportionRate" />
+  </resultMap>
+  <select id="getTaskApportionInfo" parameterType="java.util.Map" resultType="org.openokr.task.vo.TaskApportionVO">
+      select t1.*,COALESCE(t2.product_name,t3.name) as apportion_name from
+      t_okr_task_apportion t1
+      LEFT JOIN T_OKR_PRODUCT_INFO t2 on t1.apportion_name_id = t2.id
+      LEFT JOIN T_OKR_CUSTOMER t3 on t1.apportion_name_id = t3.id
+      where t1.task_id = #{taskId}
+  </select>
+</mapper>
