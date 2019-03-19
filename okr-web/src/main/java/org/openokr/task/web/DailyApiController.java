@@ -5,6 +5,7 @@ import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.dao.pojo.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.openokr.application.web.BaseController;
 import org.openokr.common.vo.response.PageResponseData;
 import org.openokr.common.vo.response.ResponseData;
@@ -41,7 +42,11 @@ public class DailyApiController extends BaseController {
     public ResponseData<PageResponseData<List<DailyVO>>> getDailyPage(@RequestBody DailySearchVO vo) {
         ResponseData<PageResponseData<List<DailyVO>>> result = new ResponseData<>();
         try {
-            Page page = new Page(vo.getCurrentPage(), vo.getPageSize());
+            Page page = null;
+            //如果getCurrentPage/getPageSize有一个为空就不分页
+            if (vo.getCurrentPage() !=null&&vo.getPageSize() !=null){
+                page = new Page(vo.getCurrentPage(), vo.getPageSize());
+            }
             vo.setReportUserId(this.getCurrentUserId());
             page = dailyManageService.queryPage(vo,page);
             PageResponseData<List<DailyVO>> pageData = this.reBuildPageData(page,DailyVO.class);
