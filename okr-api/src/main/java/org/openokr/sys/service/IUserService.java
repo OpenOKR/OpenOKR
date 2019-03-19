@@ -1,10 +1,14 @@
 package org.openokr.sys.service;
 
+import com.sun.javafx.tk.Toolkit;
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.dao.pojo.Page;
 import org.openokr.sys.vo.UserVOExt;
 import org.openokr.sys.vo.request.UserSelectVO;
+import org.openokr.task.vo.TaskUserInfoVO;
+
+import java.util.List;
 
 /**
  * Created by zhengzheng on 2018/12/18.
@@ -35,4 +39,12 @@ public interface IUserService {
      * @throws BusinessException
      */
     UserSelectVO getUserSelectInfo() throws BusinessException;
+
+    /**
+     * 获取任务关联人员信息
+     * @param taskId
+     * @return
+     * @throws BusinessException
+     */
+    List<TaskUserInfoVO> getTaskUserInfoList(String taskId) throws BusinessException;
 }

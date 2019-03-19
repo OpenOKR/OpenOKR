@@ -77,6 +77,12 @@ public class TaskVO extends BaseVO {
     private String createUserId;
 
     /**
+     * 创建者
+     */
+    @ApiModelProperty(value = "创建者名称")
+    private String createUserName;
+
+    /**
      * 创建时间
      */
     @ApiModelProperty(value = "创建时间")
@@ -98,4 +104,6 @@ public class TaskVO extends BaseVO {
     @ApiModelProperty(value = "所属团队")
     private String belongTeam;
 
+    @ApiModelProperty(value = "关联的kr数目")
+    private Integer count;
 }

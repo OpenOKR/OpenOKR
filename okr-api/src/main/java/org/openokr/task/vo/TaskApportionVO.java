@@ -1,9 +1,12 @@
 package org.openokr.task.vo;
 
 import com.zzheng.framework.base.vo.BaseVO;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+@Data
 public class TaskApportionVO extends BaseVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -23,6 +26,11 @@ public class TaskApportionVO extends BaseVO implements Serializable {
      * 分摊名称ID
      */
     private String apportionNameId;
+
+    /**
+     * 分摊名称
+     */
+    private String apportionName;
 
     /**
      * 类别ID
