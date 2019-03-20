@@ -60,6 +60,8 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
                 List<TaskVO> taskVOS = this.getMyBatisDao().selectListBySql(MAPPER_NAMSPACE+".getTableData",paramMap);
                 TaskKrRelEntityCondition condition = new TaskKrRelEntityCondition();
                 for(TaskVO vo:taskVOS){
+                    //3:当前累计耗费工时
+                    vo.setTotalWorkingHours(dailyDBService.getTotalWorkingHoursByTaskId(vo.getId()));
                     condition.clear();
                     condition.createCriteria().andTaskIdEqualTo(vo.getId());
                     Long countKR = this.countByCondition(condition);
@@ -217,12 +219,18 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
                 throw new BusinessException("获取不到任务详情!");
             }
             BeanUtils.copyProperties(taskEntity,taskVO);
+            if(StringUtils.isNotBlank(taskVO.getCreateUserId())){
+                UserEntity userEntity = this.selectByPrimaryKey(UserEntity.class,taskVO.getCreateUserId());
+                taskVO.setCreateUserName(userEntity!=null?userEntity.getRealName():null);
+            }
             taskDetailVO.setTaskVO(taskVO);
-            //3:获取分摊信息
-            taskDetailVO.setApportionVOS(getTaskApportionInfo(taskId));
-            //4:获取参与人员信息
+            //3:当前累计耗费工时
+            taskVO.setTotalWorkingHours(dailyDBService.getTotalWorkingHoursByTaskId(taskId));
+            //4:获取分摊信息
+            taskDetailVO.setApportionVOS(getTaskApportionInfo(taskVO));
+            //5:获取参与人员信息
             taskDetailVO.setUserInfoVOS(userService.getTaskUserInfoList(taskId));
-            //5:获取关联KR信息
+            //6:获取关联KR信息
             //个人
             taskDetailVO.setPersonKeys(okrObjectService.getTaskObjectList(taskId,"1"));
             //团队
@@ -348,30 +356,28 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
     }
 
     @Override
-    public List<TaskApportionVO> getTaskApportionInfo(String taskId) throws BusinessException {
+    public List<TaskApportionVO> getTaskApportionInfo(TaskVO taskVO) throws BusinessException {
         List<TaskApportionVO> taskApportionVOS;
         try{
             //1:参数校验
-            if(StringUtils.isBlank(taskId)){
-                throw new BusinessException("任务ID为空，请确认!");
+            if(taskVO== null || StringUtils.isBlank(taskVO.getId())){
+                throw new BusinessException("参数任务ID为空，请确认!");
             }
             Map<String,Object> paramMap = new HashMap<>();
-            paramMap.put("taskId",taskId);
+            paramMap.put("taskId",taskVO.getId());
             taskApportionVOS =  this.getMyBatisDao().selectListBySql(MAPPER_NAMSPACE_APPORTION+".getTaskApportionInfo",paramMap);
-            if(taskApportionVOS!=null && !taskApportionVOS.isEmpty()){
+            if(taskVO.getTotalWorkingHours() != null && taskApportionVOS!=null && !taskApportionVOS.isEmpty()){
                 BigDecimal hundred = new BigDecimal(100);
                 for(TaskApportionVO vo:taskApportionVOS){
-                    //获取任务总工时
-                    BigDecimal totalWorkingHours = dailyDBService.getTotalWorkingHoursByTaskId(vo.getTaskId());
                     //计算分摊占用总工时
-                    vo.setTotalWorkingHours(totalWorkingHours.multiply(vo.getApportionRate()).divide(hundred));
+                    vo.setTotalWorkingHours(taskVO.getTotalWorkingHours().multiply(vo.getApportionRate()).divide(hundred));
                 }
             }
         } catch (BusinessException e) {
-            logger.error("获取任务分摊信息 busi-error:{}-->[userId]={}", e.getMessage(),taskId, e);
+            logger.error("获取任务分摊信息 busi-error:{}-->[taskVO]={}", e.getMessage(),JSONUtils.objectToString(taskVO), e);
             throw e;
         } catch (Exception e) {
-            logger.error("获取任务分摊信息 error:{}-->[userId]={}", e.getMessage(),taskId, e);
+            logger.error("获取任务分摊信息 error:{}-->[taskVO]={}", e.getMessage(),JSONUtils.objectToString(taskVO), e);
             throw new BusinessException("获取任务分摊信息 失败");
         }
         return taskApportionVOS;

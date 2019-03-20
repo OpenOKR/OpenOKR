@@ -61,7 +61,7 @@
 
     <!--统计任务占用总工时-->
     <select id="getTotalWorkingHoursByTaskId" parameterType="java.util.Map" resultType="java.math.BigDecimal">
-        select sum(COALESCE(t1.duration,0)) from
+        select COALESCE(sum(COALESCE(t1.duration,0)),0) from
         t_okr_daily t1
         where t1.task_id = #{taskId}
   </select>

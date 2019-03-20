@@ -63,11 +63,11 @@ public interface ITaskManageService {
 
     /**
      * 获取任务分摊信息
-     * @param taskId
+     * @param taskVO
      * @return
      * @throws BusinessException
      */
-    List<TaskApportionVO> getTaskApportionInfo(String taskId) throws BusinessException;
+    List<TaskApportionVO> getTaskApportionInfo(TaskVO taskVO) throws BusinessException;
 
 
     /**

@@ -87,6 +87,11 @@ public class TaskManageController extends BaseController {
     public ResponseData<TaskVO> saveTask(@RequestBody TaskSaveVO taskSaveVO){
         ResponseData<TaskVO> result = new ResponseData();
         try {
+            if(taskSaveVO == null || taskSaveVO.getTaskVO() == null){
+                throw new BusinessException("保存参数为空!");
+            }
+            taskSaveVO.getTaskVO().setCreateUserId(this.getCurrentUserId());
+            taskSaveVO.getTaskVO().setUpdateUserId(this.getCurrentUserId());
             TaskVO taskVO = taskManageService.saveTaskInfo(taskSaveVO);
             result.setData(taskVO);
             result.setCode(0);
