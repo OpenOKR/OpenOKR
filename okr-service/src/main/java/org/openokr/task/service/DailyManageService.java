@@ -5,6 +5,7 @@ import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.dao.pojo.Page;
 import com.zzheng.framework.mybatis.service.impl.BaseServiceImpl;
 import org.apache.commons.lang3.StringUtils;
+import org.openokr.common.constant.DailyConstant;
 import org.openokr.db.service.IDailyDBService;
 import org.openokr.task.entity.DailyEntity;
 import org.openokr.task.request.DailySearchVO;
@@ -89,24 +90,43 @@ public class DailyManageService extends BaseServiceImpl implements IDailyManageS
             }
 
             // 先查询是否已经保存过当日日报
-            DailySearchVO searchVO = new DailySearchVO();
-            searchVO.setReportDayStr(dateStr);
-            searchVO.setReportUserId(userId);
-            List<DailyVO> dailyVOList = this.getDailyList(searchVO);
-            if (dailyVOList != null && !dailyVOList.isEmpty()) {
-                throw new BusinessException("今日已填写过日报");
-            }
-
+//            DailySearchVO searchVO = new DailySearchVO();
+//            searchVO.setReportDayStr(dateStr);
+//            searchVO.setReportUserId(userId);
+//            List<DailyVO> dailyVOList = this.getDailyList(searchVO);
+//            if (dailyVOList != null && !dailyVOList.isEmpty()) {
+//                throw new BusinessException("今日已填写过日报");
+//            }
+            logger.info("新增/更新日报 dailyList:{}",JSON.toJSONString(dailyList));
             for (DailyVO dailyVO:dailyList) {
-                dailyVO.setId(null);
-                dailyVO.setReportDay(DateUtils.stringToDate(dateStr));
-                dailyVO.setReportUserId(userId);
-                dailyVO.setCreateUserId(userId);
-                dailyVO.setCreateTs(new Date());
-                dailyVO.setUpdateUserId(userId);
-                dailyVO.setUpdateTs(new Date());
-                dailyVO.setAuditStatus("00");
-                this.insertDailyData(dailyVO);
+                if (StringUtils.isNotBlank(dailyVO.getId())){
+                    DailyEntity dailyEntity = this.selectByPrimaryKey(DailyEntity.class,dailyVO.getId());
+                    if (dailyEntity == null){
+                        throw new BusinessException("无法找到当前日报主键信息");
+                    }
+                    if (DailyConstant.DAILY_AUDIT_STATUS_PASS.equals(dailyEntity.getAuditStatus())){
+                        throw new BusinessException("该日报已审批通过不可编辑");
+                    }else {
+                        dailyEntity.setAuditStatus(DailyConstant.DAILY_AUDIT_STATUS_WAITING);
+                        dailyEntity.setRemark(dailyVO.getRemark());
+                        dailyEntity.setDuration(dailyVO.getDuration());
+                        dailyEntity.setReportDay(dailyVO.getReportDay());
+                        dailyEntity.setTaskId(dailyVO.getTaskId());
+                        dailyEntity.setUpdateUserId(userId);
+                        dailyEntity.setUpdateTs(new Date());
+                        this.update(dailyEntity);
+                    }
+                }else {
+                    dailyVO.setId(null);
+                    dailyVO.setReportDay(DateUtils.stringToDate(dateStr));
+                    dailyVO.setReportUserId(userId);
+                    dailyVO.setCreateUserId(userId);
+                    dailyVO.setCreateTs(new Date());
+                    dailyVO.setUpdateUserId(userId);
+                    dailyVO.setUpdateTs(new Date());
+                    dailyVO.setAuditStatus(DailyConstant.DAILY_AUDIT_STATUS_WAITING);
+                    this.insertDailyData(dailyVO);
+                }
             }
         } catch (BusinessException e) {
             logger.error("{} 失败，[dailyList]->{},[userId]->{},[dateStr]->{}",methodName, JSON.toJSONString(dailyList),userId,dateStr);
@@ -115,6 +135,37 @@ public class DailyManageService extends BaseServiceImpl implements IDailyManageS
             logger.error("{} 异常，[dailyList]->{},[userId]->{},[dateStr]->{}",methodName, JSON.toJSONString(dailyList),userId,dateStr);
             throw new BusinessException(e);
         }
+    }
+
+    @Override
+    public void deleteDailyList(DailyVO dailyVO) throws BusinessException {
+        String methodName = "deleteDailyList-删除日报记录";
+        try {
+            if (dailyVO == null){
+                throw new BusinessException("保存对象为空");
+            }
+            if (StringUtils.isBlank(dailyVO.getId())) {
+                throw new BusinessException("删除参数为空");
+            }
+            DailyEntity dailyEntity = this.selectByPrimaryKey(DailyEntity.class,dailyVO.getId());
+            if (dailyEntity!=null){
+                if (DailyConstant.DAILY_AUDIT_STATUS_PASS.equals(dailyEntity.getAuditStatus())){
+                    throw new BusinessException("当前日报已审批，无法删除");
+                }else {
+                    this.deleteByPrimaryKey(DailyEntity.class,dailyVO.getId());
+                }
+            }else {
+                logger.info("根据日报Id未查询到将要删除的日报信息 dailyVO:{}",JSON.toJSONString(dailyVO));
+            }
+
+        } catch (BusinessException e) {
+            logger.error("{} 失败，[dailyVO]->{}",methodName, JSON.toJSONString(dailyVO));
+            throw e;
+        } catch (Exception e) {
+            logger.error("{} 异常，[dailyVO]->{}",methodName, JSON.toJSONString(dailyVO));
+            throw new BusinessException(e);
+        }
+
     }
 
     private void insertDailyData(DailyVO dailyVO) throws BusinessException{

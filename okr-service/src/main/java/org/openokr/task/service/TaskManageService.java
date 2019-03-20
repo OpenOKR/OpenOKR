@@ -4,7 +4,6 @@ import com.zzheng.framework.base.utils.JSONUtils;
 import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.dao.pojo.Page;
 import com.zzheng.framework.mybatis.service.impl.BaseServiceImpl;
-import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.openokr.manage.service.IOkrObjectService;
 import org.openokr.sys.service.IUserService;
@@ -377,6 +376,37 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
             throw new BusinessException("获取首页我的近期报工 失败");
         }
         return myDailyVOS;
+    }
+
+    @Override
+    public Page getTakListByUser(Page page, TaskSearchVO taskSearchVO) throws BusinessException {
+        try {
+            if (taskSearchVO==null){
+                throw new BusinessException("查询参数为空");
+            }
+            Map<String,Object> paramMap = new HashMap<>();
+            paramMap.put("vo",taskSearchVO);
+            if (page!=null){
+                paramMap.put("page",page);
+            }else {
+                //page如果为空就不分页查询
+                paramMap.put("page",null);
+                page = new Page();
+            }
+            Integer count = this.getMyBatisDao().selectOneBySql(MAPPER_NAMSPACE+".countTaskListByUserData",paramMap);
+            page.setTotalRecord(count);
+            if(count>0){
+                List<TaskVO> taskVOS = this.getMyBatisDao().selectListBySql(MAPPER_NAMSPACE+".getTaskListByUserData",paramMap);
+                page.setRecords(taskVOS);
+            }
+        } catch (BusinessException e) {
+            logger.error("根据当前用户分页查询任务列表信息 busi-error:{}-->[page]={},[taskSearchVO]={}", e.getMessage(), JSONUtils.objectToString(page),JSONUtils.objectToString(taskSearchVO), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("根据当前用户分页查询任务列表信息 error:{}-->[page]={},[taskSearchVO]={}", e.getMessage(), JSONUtils.objectToString(page),JSONUtils.objectToString(taskSearchVO), e);
+            throw new BusinessException("根据当前用户分页查询任务列表信息 失败");
+        }
+        return page;
     }
 
 }

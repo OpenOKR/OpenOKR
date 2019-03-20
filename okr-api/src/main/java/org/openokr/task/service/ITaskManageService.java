@@ -77,4 +77,15 @@ public interface ITaskManageService {
      * @throws BusinessException
      */
     List<DailyVO> getMyRecentTaskInfo(String userId) throws BusinessException;
+
+
+    /**
+     * 根据当前用户分页查询任务列表信息
+     * @param page
+     * @param taskSearchVO
+     * @return
+     * @throws Exception
+     */
+    Page getTakListByUser(Page page, TaskSearchVO taskSearchVO) throws BusinessException;
+
 }
