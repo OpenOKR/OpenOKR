@@ -38,7 +38,7 @@
               and t1.owner_id= #{userId}
             </if>
             <if test="teamName!=null and teamName!='' ">
-              and t1.name LIKE CONCAT('%', #{vo.teamName }, '%')
+              and t1.name LIKE CONCAT('%', #{teamName }, '%')
             </if>
         </where>
     </select>
