@@ -8,10 +8,14 @@ import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.openokr.db.service.IDailyDBService;
 import org.openokr.manage.service.IOkrObjectService;
+import org.openokr.manage.service.IOkrTeamService;
+import org.openokr.manage.vo.TeamsExtVO;
 import org.openokr.sys.entity.UserEntity;
 import org.openokr.sys.service.IUserService;
+import org.openokr.sys.vo.UserVO;
 import org.openokr.task.entity.*;
 import org.openokr.task.request.TaskSearchVO;
+import org.openokr.task.request.TeamTaskSearchVO;
 import org.openokr.task.vo.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +48,9 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
 
     @Autowired
     IDailyDBService dailyDBService;
+
+    @Autowired
+    IOkrTeamService okrTeamService;
 
     @Override
     public Page getTakListByPage(Page page, TaskSearchVO taskSearchVO) throws BusinessException{
@@ -402,6 +409,48 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
             throw new BusinessException("获取首页我的近期报工 失败");
         }
         return myDailyVOS;
+    }
+
+    @Override
+    public List<TeamTaskCountInfoVO> getTeamTaskCountInfoVO(TeamTaskSearchVO teamTaskSearchVO) throws BusinessException {
+        List<TeamTaskCountInfoVO> teamTaskCountInfoVOS = new ArrayList<>();
+        try{
+            if(teamTaskSearchVO==null){
+                throw new BusinessException("查询参数为空，请确认!");
+            }
+            if(StringUtils.isBlank(teamTaskSearchVO.getUserId())){
+                throw new BusinessException("用户ID为空，请确认!");
+            }
+            //2:获取用户的所有团队信息(不包括公司团队)
+            List<TeamsExtVO> teamsExtVOS = okrTeamService.getTeamByUserIdOrTeamName(teamTaskSearchVO);
+            if(teamsExtVOS != null && !teamsExtVOS.isEmpty()){
+                TeamTaskCountInfoVO teamTaskCountInfoVO;
+                for(TeamsExtVO vo:teamsExtVOS){
+                    teamTaskCountInfoVO = new TeamTaskCountInfoVO();
+                    teamTaskCountInfoVO.setTeamName(vo.getName());
+                    //获取团队成员数
+                    List<UserVO> userVOS = okrTeamService.getUsersByTeamId(vo.getId());
+                    if(userVOS!=null && userVOS.size()>0){
+                        teamTaskCountInfoVO.setTeamMemberNum(userVOS.size());
+                    }else{
+                        teamTaskCountInfoVO.setTeamMemberNum(0);
+                    }
+                    teamTaskCountInfoVO.setTaskUserInfoVOS(userVOS);
+                    //获取关联任务数
+                    teamTaskCountInfoVO.setRelTaskNum(10);
+                    //当前累计耗费工时（h）
+                    teamTaskCountInfoVO.setTotalWorkingHours(new BigDecimal(100));
+                }
+
+            }
+        } catch (BusinessException e) {
+            logger.error("获取用户负责团队任务报工统计信息 busi-error:{}-->[userId]={}", e.getMessage(),JSONUtils.objectToString(teamTaskSearchVO), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("获取用户负责团队任务报工统计信息 error:{}-->[userId]={}", e.getMessage(),JSONUtils.objectToString(teamTaskSearchVO), e);
+            throw new BusinessException("获取用户负责团队任务报工统计信息 失败");
+        }
+        return teamTaskCountInfoVOS;
     }
 
 }

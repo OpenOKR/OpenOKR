@@ -2,6 +2,7 @@ package org.openokr.manage.service;
 
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.base.utils.BeanUtils;
+import com.zzheng.framework.base.utils.JSONUtils;
 import com.zzheng.framework.base.utils.StringUtils;
 import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.service.impl.BaseServiceImpl;
@@ -11,6 +12,7 @@ import org.openokr.manage.entity.TeamsEntity;
 import org.openokr.manage.vo.TeamsExtVO;
 import org.openokr.manage.vo.TeamsVO;
 import org.openokr.sys.vo.UserVO;
+import org.openokr.task.request.TeamTaskSearchVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +34,29 @@ public class OkrTeamService extends BaseServiceImpl implements IOkrTeamService {
         params.put("userId", userId);
         List<TeamsExtVO> teamsVOList = this.getDao().selectListBySql(MAPPER_NAMESPACE + ".getTeamByUserId", params);
         return teamsVOList;
+    }
+
+    @Override
+    public List<TeamsExtVO> getTeamByUserIdOrTeamName(TeamTaskSearchVO teamTaskSearchVO) throws BusinessException {
+        try{
+            if(teamTaskSearchVO==null){
+                throw new BusinessException("查询参数为空，请确认!");
+            }
+            if(StringUtils.isBlank(teamTaskSearchVO.getUserId())){
+                throw new BusinessException("用户ID为空，请确认!");
+            }
+            //2:获取用户的所有团队信息(不包括公司团队)
+            Map<String, Object> params = new HashMap<>();
+            params.put("userId", teamTaskSearchVO.getUserId());
+            params.put("teamName", teamTaskSearchVO.getSearchKey());
+            return this.getDao().selectListBySql(MAPPER_NAMESPACE + ".getTeamByUserIdOrTeamName", params);
+        } catch (BusinessException e) {
+            logger.error("获取用户负责团队任务报工统计信息 busi-error:{}-->[teamTaskSearchVO]={}", e.getMessage(), JSONUtils.objectToString(teamTaskSearchVO), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("获取用户负责团队任务报工统计信息 error:{}-->[teamTaskSearchVO]={}", e.getMessage(), JSONUtils.objectToString(teamTaskSearchVO), e);
+            throw new BusinessException("获取用户负责团队任务报工统计信息 失败");
+        }
     }
 
     @Override
