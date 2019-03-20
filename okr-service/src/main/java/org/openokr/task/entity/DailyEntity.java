@@ -1,12 +1,13 @@
 package org.openokr.task.entity;
 
 import com.zzheng.framework.mybatis.entity.BaseEntity;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 
@@ -40,6 +41,12 @@ public class DailyEntity extends BaseEntity implements Serializable {
 
     /** 更新时间 */
     private Date updateTs;
+
+    /** 日报审批状态：
+null/00  待审核
+01         已确认
+02         已驳回 */
+    private String auditStatus;
 
     private static final long serialVersionUID = 1L;
 
@@ -203,6 +210,30 @@ public class DailyEntity extends BaseEntity implements Serializable {
     public void setUpdateTs(Date updateTs) {
         this.updateTs = updateTs;
         addSettedField("updateTs");
+    }
+
+    /**
+     * 日报审批状态：
+null/00  待审核
+01         已确认
+02         已驳回
+     * @return auditStatus
+     */
+    @Column(name = "audit_status")
+    public String getAuditStatus() {
+        return auditStatus;
+    }
+
+    /**
+     * 日报审批状态：
+null/00  待审核
+01         已确认
+02         已驳回
+     * @param auditStatus
+     */
+    public void setAuditStatus(String auditStatus) {
+        this.auditStatus = auditStatus;
+        addSettedField("auditStatus");
     }
 
     /**

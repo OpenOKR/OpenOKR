@@ -39,13 +39,13 @@ public class DailyManageService extends BaseServiceImpl implements IDailyManageS
             if (condition == null) {
                 throw new BusinessException("查询条件对象为空");
             }
-            if (page == null) {
-                page = new Page();
-            }
 
             int count = dailyDBService.countDailyList(condition);
             if (count >= 0) {
                 List<DailyVO> list = dailyDBService.getDailyList(condition,page);
+                if (page == null) {
+                    page = new Page();
+                }
                 page.setTotalRecord(count);
                 page.setRecords(list);
             }
@@ -108,6 +108,7 @@ public class DailyManageService extends BaseServiceImpl implements IDailyManageS
                 dailyVO.setCreateTs(new Date());
                 dailyVO.setUpdateUserId(userId);
                 dailyVO.setUpdateTs(new Date());
+                dailyVO.setAuditStatus("00");
                 this.insertDailyData(dailyVO);
             }
         } catch (BusinessException e) {

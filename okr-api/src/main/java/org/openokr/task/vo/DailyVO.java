@@ -4,10 +4,10 @@ import com.zzheng.framework.base.vo.BaseVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.openokr.common.constant.DailyConstant;
 
-import java.io.Serializable;
-import java.util.Date;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Data
 @Api(value = "日报VO")
@@ -50,5 +50,20 @@ public class DailyVO extends BaseVO {
 
     @ApiModelProperty(value = "项目名称，展示用")
     private String taskName;
+
+    @ApiModelProperty(value = "审核状态，展示用")
+    private String auditStatusStr;
+
+    @ApiModelProperty(value = "审核状态 00待审核、01已确认、02已驳回")
+    private String auditStatus;
+
+
+    public String getAuditStatusStr() {
+        if (auditStatus!=null){
+            return DailyConstant.DAILY_AUDIT_STATUS_MAP.get(auditStatus);
+        }else {
+            return DailyConstant.DAILY_AUDIT_STATUS_MAP.get(DailyConstant.DAILY_AUDIT_STATUS_WAITING);
+        }
+    }
 
 }
