@@ -6,7 +6,9 @@ import com.zzheng.framework.mybatis.dao.pojo.Page;
 import com.zzheng.framework.mybatis.service.impl.BaseServiceImpl;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
+import org.openokr.db.service.IDailyDBService;
 import org.openokr.manage.service.IOkrObjectService;
+import org.openokr.sys.entity.UserEntity;
 import org.openokr.sys.service.IUserService;
 import org.openokr.task.entity.*;
 import org.openokr.task.request.TaskSearchVO;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -38,6 +41,9 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
 
     @Autowired
     IOkrObjectService okrObjectService;
+
+    @Autowired
+    IDailyDBService dailyDBService;
 
     @Override
     public Page getTakListByPage(Page page, TaskSearchVO taskSearchVO) throws BusinessException{
@@ -155,10 +161,13 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
         if(userIds!=null && userIds.size()>0){
             TaskUserRelEntity taskUserRelEntity;
             for(String userId:userIds){
-                taskUserRelEntity = new TaskUserRelEntity();
-                taskUserRelEntity.setTaskId(entity.getId());
-                taskUserRelEntity.setUserId(userId);
-                this.insert(taskUserRelEntity);
+                UserEntity userEntity =  this.selectByPrimaryKey(UserEntity.class,userId);
+                if(userEntity != null){
+                    taskUserRelEntity = new TaskUserRelEntity();
+                    taskUserRelEntity.setTaskId(entity.getId());
+                    taskUserRelEntity.setUserId(userId);
+                    this.insert(taskUserRelEntity);
+                }
             }
         }
         //3:保存kr关系信息
@@ -348,7 +357,16 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
             }
             Map<String,Object> paramMap = new HashMap<>();
             paramMap.put("taskId",taskId);
-            return this.getMyBatisDao().selectListBySql(MAPPER_NAMSPACE_APPORTION+".getTaskApportionInfo",paramMap);
+            taskApportionVOS =  this.getMyBatisDao().selectListBySql(MAPPER_NAMSPACE_APPORTION+".getTaskApportionInfo",paramMap);
+            if(taskApportionVOS!=null && !taskApportionVOS.isEmpty()){
+                BigDecimal hundred = new BigDecimal(100);
+                for(TaskApportionVO vo:taskApportionVOS){
+                    //获取任务总工时
+                    BigDecimal totalWorkingHours = dailyDBService.getTotalWorkingHoursByTaskId(vo.getTaskId());
+                    //计算分摊占用总工时
+                    vo.setTotalWorkingHours(totalWorkingHours.multiply(vo.getApportionRate()).divide(hundred));
+                }
+            }
         } catch (BusinessException e) {
             logger.error("获取任务分摊信息 busi-error:{}-->[userId]={}", e.getMessage(),taskId, e);
             throw e;
@@ -356,6 +374,7 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
             logger.error("获取任务分摊信息 error:{}-->[userId]={}", e.getMessage(),taskId, e);
             throw new BusinessException("获取任务分摊信息 失败");
         }
+        return taskApportionVOS;
     }
 
     @Override
