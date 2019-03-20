@@ -16,9 +16,6 @@
             <if test="vo.queryStartDate != null">
                 <![CDATA[AND t1.create_ts >= #{vo.queryStartDate}]]>
             </if>
-            <if test="vo.queryStartDate != null">
-                <![CDATA[AND t1.create_ts >= #{vo.queryStartDate}]]>
-            </if>
             <if test="vo.queryEndDate != null">
                 <![CDATA[AND t1.create_ts <= #{vo.queryEndDate}]]>
             </if>

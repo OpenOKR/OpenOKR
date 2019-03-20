@@ -440,6 +440,7 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
                     teamTaskCountInfoVO.setRelTaskNum(10);
                     //当前累计耗费工时（h）
                     teamTaskCountInfoVO.setTotalWorkingHours(new BigDecimal(100));
+                    teamTaskCountInfoVOS.add(teamTaskCountInfoVO);
                 }
 
             }
