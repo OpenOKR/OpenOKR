@@ -6,6 +6,7 @@ import com.zzheng.framework.exception.BusinessException;
 import org.openokr.manage.vo.TeamsExtVO;
 import org.openokr.manage.vo.TeamsVO;
 import org.openokr.sys.vo.UserVO;
+import org.openokr.task.request.TeamTaskSearchVO;
 
 import java.util.List;
 
@@ -22,6 +23,14 @@ public interface IOkrTeamService {
      * @throws BusinessException
      */
     List<TeamsExtVO> getTeamByUserId(String userId) throws BusinessException;
+
+    /**
+     * 根据用户ID/团队名获取团队信息(不包括公司团队)
+     * @param teamTaskSearchVO
+     * @return
+     * @throws BusinessException
+     */
+    List<TeamsExtVO> getTeamByUserIdOrTeamName(TeamTaskSearchVO teamTaskSearchVO) throws BusinessException;
 
     /**
      * 获取用户关联的团队(影响团队或者参与的团队)

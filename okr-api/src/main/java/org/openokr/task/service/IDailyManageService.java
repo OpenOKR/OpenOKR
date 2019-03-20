@@ -5,6 +5,7 @@ import com.zzheng.framework.mybatis.dao.pojo.Page;
 import org.openokr.task.request.DailySearchVO;
 import org.openokr.task.vo.DailyVO;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
