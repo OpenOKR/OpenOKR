@@ -167,7 +167,7 @@ public class OrganizationService extends BaseServiceImpl implements IOrganizatio
                     pId = (String)map.get("pId");
                     if(id.equals(pId)){
                         treeDataVO = new TreeDataVO();
-                        treeDataVO.setId(id);
+                        treeDataVO.setId((String)map.get("id"));
                         treeDataVO.setLabel((String)map.get("realName"));
                         treeDataVO.setChildren(findOrganizationChildrenData(map,mapDataList));
                         treeDataVO.setType("00");

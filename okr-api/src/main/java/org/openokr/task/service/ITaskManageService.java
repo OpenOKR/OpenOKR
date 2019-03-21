@@ -3,10 +3,8 @@ package org.openokr.task.service;
 import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.dao.pojo.Page;
 import org.openokr.task.request.TaskSearchVO;
-import org.openokr.task.vo.DailyVO;
-import org.openokr.task.vo.MyTaskCountInfoVO;
-import org.openokr.task.vo.TaskSaveVO;
-import org.openokr.task.vo.TaskVO;
+import org.openokr.task.request.TeamTaskSearchVO;
+import org.openokr.task.vo.*;
 
 import java.util.List;
 
@@ -46,7 +44,7 @@ public interface ITaskManageService {
      * @return
      * @throws Exception
      */
-    TaskSaveVO getTaskDetailById(String taskId) throws BusinessException;
+    TaskDetailVO getTaskDetailById(String taskId) throws BusinessException;
 
     /**
      * 获取首页我的报工统计信息
@@ -64,6 +62,14 @@ public interface ITaskManageService {
      */
     List<MyTaskCountInfoVO> getMyManageTaskCountInfo(String userId) throws BusinessException;
 
+    /**
+     * 获取任务分摊信息
+     * @param taskVO
+     * @return
+     * @throws BusinessException
+     */
+    List<TaskApportionVO> getTaskApportionInfo(TaskVO taskVO) throws BusinessException;
+
 
     /**
      * 获取首页我的近期报工
@@ -72,4 +78,23 @@ public interface ITaskManageService {
      * @throws BusinessException
      */
     List<DailyVO> getMyRecentTaskInfo(String userId) throws BusinessException;
+
+    /**
+     * 获取用户负责团队任务报工统计信息
+     * @param teamTaskSearchVO
+     * @return
+     * @throws BusinessException
+     */
+    List<TeamTaskCountInfoVO> getTeamTaskCountInfoVO(TeamTaskSearchVO teamTaskSearchVO) throws BusinessException;
+
+
+    /**
+     * 根据当前用户分页查询任务列表信息
+     * @param page
+     * @param taskSearchVO
+     * @return
+     * @throws Exception
+     */
+    Page getTakListByUser(Page page, TaskSearchVO taskSearchVO) throws BusinessException;
+
 }

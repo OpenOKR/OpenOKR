@@ -13,6 +13,7 @@ import org.openokr.application.web.BaseController;
 import org.openokr.common.vo.response.PageResponseData;
 import org.openokr.common.vo.response.ResponseData;
 import org.openokr.sys.service.IMenuService;
+import org.openokr.task.request.TeamTaskSearchVO;
 import org.openokr.task.service.IApportionCategoryManageService;
 import org.openokr.task.service.ITaskManageService;
 import org.openokr.task.vo.*;
@@ -87,6 +88,11 @@ public class TaskManageController extends BaseController {
     public ResponseData<TaskVO> saveTask(@RequestBody TaskSaveVO taskSaveVO){
         ResponseData<TaskVO> result = new ResponseData();
         try {
+            if(taskSaveVO == null || taskSaveVO.getTaskVO() == null){
+                throw new BusinessException("保存参数为空!");
+            }
+            taskSaveVO.getTaskVO().setCreateUserId(this.getCurrentUserId());
+            taskSaveVO.getTaskVO().setUpdateUserId(this.getCurrentUserId());
             TaskVO taskVO = taskManageService.saveTaskInfo(taskSaveVO);
             result.setData(taskVO);
             result.setCode(0);
@@ -137,11 +143,11 @@ public class TaskManageController extends BaseController {
     )
     @RequestMapping(value = "/getTaskDetailInfo.json",method = RequestMethod.GET)
     @ResponseBody
-    public ResponseData<TaskSaveVO> getTaskDetailInfo(String id){
+    public ResponseData<TaskDetailVO> getTaskDetailInfo(String id){
         ResponseData result = new ResponseData();
         try {
-            TaskSaveVO taskSaveVO = taskManageService.getTaskDetailById(id);
-            result.setData(taskSaveVO);
+            TaskDetailVO taskDetailVO = taskManageService.getTaskDetailById(id);
+            result.setData(taskDetailVO);
             result.setCode(0);
             result.setSuccess(true);
         } catch (BusinessException e){
@@ -204,6 +210,70 @@ public class TaskManageController extends BaseController {
             result.setMessage(e.getMessage());
         }catch (Exception e){
             logger.error("获取分摊下拉选择信息列表 异常：{},参数:categoryId=[{}]", e.getMessage(), categoryId, e);
+            result.setCode(7000);
+            result.setMessage(e.getMessage());
+        }
+        return result;
+    }
+
+    @ApiOperation(value = "获取用户负责团队任务报工统计信息",notes = "获取用户负责团队任务报工统计信息")
+    @ApiImplicitParams(
+            {
+                    @ApiImplicitParam(name = "searchKey",value = "搜索关键词",dataType = "string",paramType = "query")
+            }
+    )
+    @RequestMapping(value = "/getTeamTaskCountInfoVO.json",method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseData<List<TeamTaskCountInfoVO>> getTeamTaskCountInfoVO(String searchKey){
+        ResponseData<List<TeamTaskCountInfoVO>> result = new ResponseData();
+        try {
+            TeamTaskSearchVO teamTaskSearchVO =  new TeamTaskSearchVO();
+            teamTaskSearchVO.setSearchKey(searchKey);
+            teamTaskSearchVO.setUserId(this.getCurrentUserId());
+            List<TeamTaskCountInfoVO> teamTaskCountInfoVOS = taskManageService.getTeamTaskCountInfoVO(teamTaskSearchVO);
+            result.setData(teamTaskCountInfoVOS);
+            result.setCode(0);
+            result.setSuccess(true);
+        } catch (BusinessException e){
+            logger.error("获取用户负责团队任务报工统计信息 异常：{},参数:TaskSearchVO=[{}]", e.getMessage(), searchKey, e);
+            result.setCode(6000);
+            result.setMessage(e.getMessage());
+        }catch (Exception e){
+            logger.error("获取用户负责团队任务报工统计信息 异常：{},参数:TaskSearchVO=[{}]", e.getMessage(),  searchKey, e);
+            result.setCode(7000);
+            result.setMessage(e.getMessage());
+        }
+        return result;
+    }
+
+
+    @ApiOperation(value = "查询用户所属任务列表数据", notes = "查询用户所属任务列表数据")
+    @ApiImplicitParams(
+            {
+            }
+    )
+    @RequestMapping(value = "/getTaskListByUser.json", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<PageResponseData<List<TaskVO>>> getTaskListByUser(@RequestBody TaskSearchVO vo) {
+        ResponseData<PageResponseData<List<TaskVO>>> result = new ResponseData<>();
+        try {
+            Page page = null;
+            //如果getCurrentPage/getPageSize有一个为空就不分页
+            if (vo.getCurrentPage() !=null&&vo.getPageSize() !=null){
+                page = new Page(vo.getCurrentPage(), vo.getPageSize());
+            }
+            vo.setCurrentUserId(this.getCurrentUserId());
+            page = taskManageService.getTakListByUser(page,vo);
+            PageResponseData<List<TaskVO>> pageData = this.reBuildPageData(page,TaskVO.class);
+            result.setData(pageData);
+            result.setCode(0);
+            result.setSuccess(true);
+        } catch (BusinessException e){
+            logger.error("查询用户所属任务列表数据 异常：{},参数:[{}]", e.getMessage(), JSON.toJSONString(vo), e);
+            result.setCode(6000);
+            result.setMessage(e.getMessage());
+        }catch (Exception e){
+            logger.error("查询用户所属任务列表数据 异常：{},参数:[{}]", e.getMessage(), JSON.toJSONString(vo), e);
             result.setCode(7000);
             result.setMessage(e.getMessage());
         }

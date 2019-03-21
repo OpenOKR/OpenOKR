@@ -801,6 +801,76 @@ public class DailyEntityCondition extends BaseEntityCondition implements Seriali
             return (Criteria) this;
         }
 
+        public Criteria andAuditStatusIsNull() {
+            addCriterion("audit_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditStatusIsNotNull() {
+            addCriterion("audit_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditStatusEqualTo(String value) {
+            addCriterion("audit_status =", value, "auditStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditStatusNotEqualTo(String value) {
+            addCriterion("audit_status <>", value, "auditStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditStatusGreaterThan(String value) {
+            addCriterion("audit_status >", value, "auditStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditStatusGreaterThanOrEqualTo(String value) {
+            addCriterion("audit_status >=", value, "auditStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditStatusLessThan(String value) {
+            addCriterion("audit_status <", value, "auditStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditStatusLessThanOrEqualTo(String value) {
+            addCriterion("audit_status <=", value, "auditStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditStatusLike(String value) {
+            addCriterion("audit_status like", value, "auditStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditStatusNotLike(String value) {
+            addCriterion("audit_status not like", value, "auditStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditStatusIn(List<String> values) {
+            addCriterion("audit_status in", values, "auditStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditStatusNotIn(List<String> values) {
+            addCriterion("audit_status not in", values, "auditStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditStatusBetween(String value1, String value2) {
+            addCriterion("audit_status between", value1, value2, "auditStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditStatusNotBetween(String value1, String value2) {
+            addCriterion("audit_status not between", value1, value2, "auditStatus");
+            return (Criteria) this;
+        }
+
         public Criteria andIdLikeInsensitive(String value) {
             addCriterion("upper(id) like", value.toUpperCase(), "id");
             return (Criteria) this;
@@ -828,6 +898,11 @@ public class DailyEntityCondition extends BaseEntityCondition implements Seriali
 
         public Criteria andUpdateUserIdLikeInsensitive(String value) {
             addCriterion("upper(update_user_id) like", value.toUpperCase(), "updateUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditStatusLikeInsensitive(String value) {
+            addCriterion("upper(audit_status) like", value.toUpperCase(), "auditStatus");
             return (Criteria) this;
         }
 
@@ -918,6 +993,21 @@ public class DailyEntityCondition extends BaseEntityCondition implements Seriali
          */
         public Criteria andUpdateUserIdLikeIgnoreCase(String value) {
             addCriterion("upper(update_user_id) like ", value.toUpperCase(), "updateUserId");
+            return (Criteria) this;
+        }
+
+        /**
+         *(扩展Mybatis原生like的不足)
+         *忽略字段大小写的模糊查询
+         *Java编码如下：
+         *  criteria.andNameLikeIgnoreCase("%Abc%"); 前后模糊,A字母大写
+         *  criteria.andName2LikeIgnoreCase("%aBc"); 前模糊,B字母大写
+         *  criteria.andName3LikeIgnoreCase("abC%"); 后模糊,C字母大写
+         *执行时SQL如下:
+         *  where name like '%abc%' or name2 like '%abc' or name3 like 'abc%'
+         */
+        public Criteria andAuditStatusLikeIgnoreCase(String value) {
+            addCriterion("upper(audit_status) like ", value.toUpperCase(), "auditStatus");
             return (Criteria) this;
         }
     }

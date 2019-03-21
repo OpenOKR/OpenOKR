@@ -28,6 +28,21 @@
         and t2.user_id= #{userId}
     </select>
 
+    <!--根据用户ID/团队名获取团队信息(不包括公司团队)-->
+    <select id="getTeamByUserIdOrTeamName" parameterType="java.util.Map" resultMap="TeamsExtVO">
+        select t1.id, t1.name, t1.owner_id, t1.create_ts
+        from t_okr_teams t1
+        <where>
+            AND t1.type='2'
+            <if test="userId!=null and userId!='' ">
+              and t1.owner_id= #{userId}
+            </if>
+            <if test="teamName!=null and teamName!='' ">
+              and t1.name LIKE CONCAT('%', #{teamName }, '%')
+            </if>
+        </where>
+    </select>
+
     <!--复杂查询 根据团队id查找团队内所有成员-->
     <select id="collectionUserListByTeamId" parameterType="java.lang.String" resultType="org.openokr.sys.vo.UserVO">
         select t1.id, t1.user_name, t1.real_name, t1.photo_url from t_okr_sys_user t1

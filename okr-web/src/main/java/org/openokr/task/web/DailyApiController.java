@@ -5,6 +5,7 @@ import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.dao.pojo.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.openokr.application.web.BaseController;
 import org.openokr.common.vo.response.PageResponseData;
 import org.openokr.common.vo.response.ResponseData;
@@ -41,7 +42,11 @@ public class DailyApiController extends BaseController {
     public ResponseData<PageResponseData<List<DailyVO>>> getDailyPage(@RequestBody DailySearchVO vo) {
         ResponseData<PageResponseData<List<DailyVO>>> result = new ResponseData<>();
         try {
-            Page page = new Page(vo.getCurrentPage(), vo.getPageSize());
+            Page page = null;
+            //如果getCurrentPage/getPageSize有一个为空就不分页
+            if (vo.getCurrentPage() !=null&&vo.getPageSize() !=null){
+                page = new Page(vo.getCurrentPage(), vo.getPageSize());
+            }
             vo.setReportUserId(this.getCurrentUserId());
             page = dailyManageService.queryPage(vo,page);
             PageResponseData<List<DailyVO>> pageData = this.reBuildPageData(page,DailyVO.class);
@@ -86,6 +91,39 @@ public class DailyApiController extends BaseController {
             result.setSuccess(false);
         }catch (Exception e){
             logger.error("保存日报列表 异常：{},参数:[{}]", e.getMessage(), JSON.toJSONString(dailyList), e);
+            result.setCode(7000);
+            result.setMessage(e.getMessage());
+            result.setSuccess(false);
+        }
+        return result;
+    }
+
+    @ApiOperation(value = "删除日报列表", notes = "删除日报列表")
+    @RequestMapping(value = "/deleteDailyList.json", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseData<String> deleteDailyList(String id) {
+        ResponseData<String> result = new ResponseData<>();
+        try {
+            Date date = new Date();
+            if(id ==null || id.isEmpty()){
+                result.setCode(6000);
+                result.setMessage("参数为空");
+                result.setSuccess(false);
+                return result;
+            }
+            DailyVO dailyVO = new DailyVO();
+            dailyVO.setId(id);
+            dailyManageService.deleteDailyList(dailyVO);
+            result.setData("删除成功");
+            result.setCode(0);
+            result.setSuccess(true);
+        } catch (BusinessException e){
+            logger.error("删除日报列表 异常：{},参数:[{}]", e.getMessage(), id, e);
+            result.setCode(6000);
+            result.setMessage(e.getMessage());
+            result.setSuccess(false);
+        }catch (Exception e){
+            logger.error("删除日报列表 异常：{},参数:[{}]", e.getMessage(), id, e);
             result.setCode(7000);
             result.setMessage(e.getMessage());
             result.setSuccess(false);

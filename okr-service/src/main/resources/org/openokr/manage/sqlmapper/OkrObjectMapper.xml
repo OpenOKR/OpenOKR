@@ -138,4 +138,19 @@
         order by t1.create_ts desc
     </select>
 
+
+    <!--获取任务OKR-->
+    <select id="getTaskObjectList" parameterType="java.util.Map" resultType="org.openokr.task.vo.TaskKrInfoVO">
+        select t1.id,t1.name AS text  from T_OKR_MANAGE_OBJECTIVES t1
+        INNER JOIN t_okr_task_kr_rel t2 on t1.id = t2.kr_id
+        where t2.task_id = #{taskId}
+        and t1.type = #{type}
+    </select>
+
+    <select id="countObjectRelUserNum" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT  count(distinct t3.user_id) FROM t_okr_task_kr_rel T1
+        INNER JOIN T_OKR_TASK T2 ON T1.task_id = T2.ID
+        INNER JOIN t_okr_task_user_rel T3 ON T2.ID = T3.task_id
+        where t1.kr_id = #{krId}
+    </select>
 </mapper>

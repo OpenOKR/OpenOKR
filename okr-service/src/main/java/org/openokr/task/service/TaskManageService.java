@@ -5,13 +5,23 @@ import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.dao.pojo.Page;
 import com.zzheng.framework.mybatis.service.impl.BaseServiceImpl;
 import org.apache.commons.lang3.StringUtils;
+import org.openokr.db.service.IDailyDBService;
+import org.openokr.manage.service.IOkrObjectService;
+import org.openokr.manage.service.IOkrTeamService;
+import org.openokr.manage.vo.TeamsExtVO;
+import org.openokr.sys.entity.UserEntity;
+import org.openokr.sys.service.IUserService;
+import org.openokr.sys.vo.UserVO;
 import org.openokr.task.entity.*;
 import org.openokr.task.request.TaskSearchVO;
+import org.openokr.task.request.TeamTaskSearchVO;
 import org.openokr.task.vo.*;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -26,6 +36,20 @@ import static org.openokr.common.constant.TaskConstant.PAGE_SIZE;
 public class TaskManageService extends BaseServiceImpl implements ITaskManageService {
 
     private static final String MAPPER_NAMSPACE = "org.openokr.task.sqlmapper.TaskManageMapper";
+    private static final String MAPPER_NAMSPACE_APPORTION = "org.openokr.task.sqlmapper.TaskApportionMapper";
+
+
+    @Autowired
+    IUserService userService;
+
+    @Autowired
+    IOkrObjectService okrObjectService;
+
+    @Autowired
+    IDailyDBService dailyDBService;
+
+    @Autowired
+    IOkrTeamService okrTeamService;
 
     @Override
     public Page getTakListByPage(Page page, TaskSearchVO taskSearchVO) throws BusinessException{
@@ -40,6 +64,15 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
             page.setTotalRecord(count);
             if(count > 0){
                 List<TaskVO> taskVOS = this.getMyBatisDao().selectListBySql(MAPPER_NAMSPACE+".getTableData",paramMap);
+                TaskKrRelEntityCondition condition = new TaskKrRelEntityCondition();
+                for(TaskVO vo:taskVOS){
+                    //3:当前累计耗费工时
+                    vo.setTotalWorkingHours(dailyDBService.getTotalWorkingHoursByTaskId(vo.getId()));
+                    condition.clear();
+                    condition.createCriteria().andTaskIdEqualTo(vo.getId());
+                    Long countKR = this.countByCondition(condition);
+                    vo.setCount(countKR.intValue());
+                }
                 page.setRecords(taskVOS);
             }
         } catch (BusinessException e) {
@@ -129,17 +162,20 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
         for(TaskApportionVO apportionVO:apportionVOS){
             taskApportionEntity = new TaskApportionEntity();
             BeanUtils.copyProperties(apportionVO,taskApportionEntity);
-            apportionVO.setTaskId(entity.getId());
+            taskApportionEntity.setTaskId(entity.getId());
             this.insert(taskApportionEntity);
         }
         //2:保存参与人员信息
         if(userIds!=null && userIds.size()>0){
             TaskUserRelEntity taskUserRelEntity;
             for(String userId:userIds){
-                taskUserRelEntity = new TaskUserRelEntity();
-                taskUserRelEntity.setTaskId(entity.getId());
-                taskUserRelEntity.setUserId(userId);
-                this.insert(taskUserRelEntity);
+                UserEntity userEntity =  this.selectByPrimaryKey(UserEntity.class,userId);
+                if(userEntity != null){
+                    taskUserRelEntity = new TaskUserRelEntity();
+                    taskUserRelEntity.setTaskId(entity.getId());
+                    taskUserRelEntity.setUserId(userId);
+                    this.insert(taskUserRelEntity);
+                }
             }
         }
         //3:保存kr关系信息
@@ -175,8 +211,8 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
     }
 
     @Override
-    public TaskSaveVO getTaskDetailById(String taskId) throws BusinessException {
-        TaskSaveVO taskSaveVO = new TaskSaveVO();
+    public TaskDetailVO getTaskDetailById(String taskId) throws BusinessException {
+        TaskDetailVO taskDetailVO = new TaskDetailVO();
         try{
             //1:参数校验
             if(StringUtils.isBlank(taskId)){
@@ -189,38 +225,24 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
                 throw new BusinessException("获取不到任务详情!");
             }
             BeanUtils.copyProperties(taskEntity,taskVO);
-            taskSaveVO.setTaskVO(taskVO);
-            //3:获取分摊信息
-            TaskApportionEntityCondition taskApportionEntityCondition = new TaskApportionEntityCondition();
-            taskApportionEntityCondition.createCriteria().andTaskIdEqualTo(taskId);
-            List<TaskApportionEntity> taskApportionEntities = this.selectByCondition(taskApportionEntityCondition);
-            if(taskApportionEntities!=null && taskApportionEntities.size() >0){
-                List<TaskApportionVO> taskApportionVOS = JSONUtils.objectToList(taskApportionEntities,TaskApportionVO.class);
-                taskSaveVO.setApportionVOS(taskApportionVOS);
+            if(StringUtils.isNotBlank(taskVO.getCreateUserId())){
+                UserEntity userEntity = this.selectByPrimaryKey(UserEntity.class,taskVO.getCreateUserId());
+                taskVO.setCreateUserName(userEntity!=null?userEntity.getRealName():null);
             }
-            //4:获取参与人员信息
-            TaskUserRelEntityCondition taskUserRelEntityCondition = new TaskUserRelEntityCondition();
-            taskUserRelEntityCondition.createCriteria().andTaskIdEqualTo(taskId);
-            List<TaskUserRelEntity> taskUserRelEntities = this.selectByCondition(taskUserRelEntityCondition);
-            if(taskUserRelEntities!=null && taskUserRelEntities.size() >0){
-                List<String> userIds = new ArrayList<>();
-                for(TaskUserRelEntity entity:taskUserRelEntities){
-                    userIds.add(entity.getUserId());
-                }
-                taskSaveVO.setUserIds(userIds);
-            }
-            //5:获取关联KR信息
-            this.delTaskOtherInfo(taskId);
-            TaskKrRelEntityCondition taskKrRelEntityCondition = new TaskKrRelEntityCondition();
-            taskKrRelEntityCondition.createCriteria().andTaskIdEqualTo(taskId);
-            List<TaskKrRelEntity> taskKrRelEntities = this.selectByCondition(taskKrRelEntityCondition);
-            if(taskKrRelEntities!=null && taskKrRelEntities.size() >0){
-                List<String> krIds = new ArrayList<>();
-                for(TaskKrRelEntity entity:taskKrRelEntities){
-                    krIds.add(entity.getKrId());
-                }
-                taskSaveVO.setKrIds(krIds);
-            }
+            taskDetailVO.setTaskVO(taskVO);
+            //3:当前累计耗费工时
+            taskVO.setTotalWorkingHours(dailyDBService.getTotalWorkingHoursByTaskId(taskId));
+            //4:获取分摊信息
+            taskDetailVO.setApportionVOS(getTaskApportionInfo(taskVO));
+            //5:获取参与人员信息
+            taskDetailVO.setUserInfoVOS(userService.getTaskUserInfoList(taskId));
+            //6:获取关联KR信息
+            //个人
+            taskDetailVO.setPersonKeys(okrObjectService.getTaskObjectList(taskId,"1"));
+            //团队
+            taskDetailVO.setTeamKeys(okrObjectService.getTaskObjectList(taskId,"2"));
+            //企业
+            taskDetailVO.setCompanyKeys(okrObjectService.getTaskObjectList(taskId,"3"));
         } catch (BusinessException e) {
             logger.error("根据ID获取任务详情 busi-error:{}-->[taskId]={}", e.getMessage(),taskId, e);
             throw e;
@@ -228,7 +250,7 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
             logger.error("根据ID获取任务详情 error:{}-->[id]={}", e.getMessage(),taskId, e);
             throw new BusinessException("根据ID获取任务详情 失败");
         }
-        return taskSaveVO;
+        return taskDetailVO;
     }
 
     @Override
@@ -340,6 +362,34 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
     }
 
     @Override
+    public List<TaskApportionVO> getTaskApportionInfo(TaskVO taskVO) throws BusinessException {
+        List<TaskApportionVO> taskApportionVOS;
+        try{
+            //1:参数校验
+            if(taskVO== null || StringUtils.isBlank(taskVO.getId())){
+                throw new BusinessException("参数任务ID为空，请确认!");
+            }
+            Map<String,Object> paramMap = new HashMap<>();
+            paramMap.put("taskId",taskVO.getId());
+            taskApportionVOS =  this.getMyBatisDao().selectListBySql(MAPPER_NAMSPACE_APPORTION+".getTaskApportionInfo",paramMap);
+            if(taskVO.getTotalWorkingHours() != null && taskApportionVOS!=null && !taskApportionVOS.isEmpty()){
+                BigDecimal hundred = new BigDecimal(100);
+                for(TaskApportionVO vo:taskApportionVOS){
+                    //计算分摊占用总工时
+                    vo.setTotalWorkingHours(taskVO.getTotalWorkingHours().multiply(vo.getApportionRate()).divide(hundred));
+                }
+            }
+        } catch (BusinessException e) {
+            logger.error("获取任务分摊信息 busi-error:{}-->[taskVO]={}", e.getMessage(),JSONUtils.objectToString(taskVO), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("获取任务分摊信息 error:{}-->[taskVO]={}", e.getMessage(),JSONUtils.objectToString(taskVO), e);
+            throw new BusinessException("获取任务分摊信息 失败");
+        }
+        return taskApportionVOS;
+    }
+
+    @Override
     public List<DailyVO> getMyRecentTaskInfo(String userId) throws BusinessException {
         List<DailyVO> myDailyVOS;
         try{
@@ -358,6 +408,80 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
             throw new BusinessException("获取首页我的近期报工 失败");
         }
         return myDailyVOS;
+    }
+
+    @Override
+    public List<TeamTaskCountInfoVO> getTeamTaskCountInfoVO(TeamTaskSearchVO teamTaskSearchVO) throws BusinessException {
+        List<TeamTaskCountInfoVO> teamTaskCountInfoVOS = new ArrayList<>();
+        try{
+            if(teamTaskSearchVO==null){
+                throw new BusinessException("查询参数为空，请确认!");
+            }
+            if(StringUtils.isBlank(teamTaskSearchVO.getUserId())){
+                throw new BusinessException("用户ID为空，请确认!");
+            }
+            //2:获取用户的所有团队信息(不包括公司团队)
+            List<TeamsExtVO> teamsExtVOS = okrTeamService.getTeamByUserIdOrTeamName(teamTaskSearchVO);
+            if(teamsExtVOS != null && !teamsExtVOS.isEmpty()){
+                TeamTaskCountInfoVO teamTaskCountInfoVO;
+                for(TeamsExtVO vo:teamsExtVOS){
+                    teamTaskCountInfoVO = new TeamTaskCountInfoVO();
+                    teamTaskCountInfoVO.setTeamName(vo.getName());
+                    //获取团队成员数
+                    List<UserVO> userVOS = okrTeamService.getUsersByTeamId(vo.getId());
+                    if(userVOS!=null && userVOS.size()>0){
+                        teamTaskCountInfoVO.setTeamMemberNum(userVOS.size());
+                    }else{
+                        teamTaskCountInfoVO.setTeamMemberNum(0);
+                    }
+                    teamTaskCountInfoVO.setTaskUserInfoVOS(userVOS);
+                    //获取关联任务数
+                    teamTaskCountInfoVO.setRelTaskNum(10);
+                    //当前累计耗费工时（h）
+                    teamTaskCountInfoVO.setTotalWorkingHours(new BigDecimal(100));
+                    teamTaskCountInfoVOS.add(teamTaskCountInfoVO);
+                }
+
+            }
+        } catch (BusinessException e) {
+            logger.error("获取用户负责团队任务报工统计信息 busi-error:{}-->[userId]={}", e.getMessage(),JSONUtils.objectToString(teamTaskSearchVO), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("获取用户负责团队任务报工统计信息 error:{}-->[userId]={}", e.getMessage(),JSONUtils.objectToString(teamTaskSearchVO), e);
+            throw new BusinessException("获取用户负责团队任务报工统计信息 失败");
+        }
+        return teamTaskCountInfoVOS;
+    }
+
+    @Override
+    public Page getTakListByUser(Page page, TaskSearchVO taskSearchVO) throws BusinessException {
+        try {
+            if (taskSearchVO==null){
+                throw new BusinessException("查询参数为空");
+            }
+            Map<String,Object> paramMap = new HashMap<>();
+            paramMap.put("vo",taskSearchVO);
+            if (page!=null){
+                paramMap.put("page",page);
+            }else {
+                //page如果为空就不分页查询
+                paramMap.put("page",null);
+                page = new Page();
+            }
+            Integer count = this.getMyBatisDao().selectOneBySql(MAPPER_NAMSPACE+".countTaskListByUserData",paramMap);
+            page.setTotalRecord(count);
+            if(count>0){
+                List<TaskVO> taskVOS = this.getMyBatisDao().selectListBySql(MAPPER_NAMSPACE+".getTaskListByUserData",paramMap);
+                page.setRecords(taskVOS);
+            }
+        } catch (BusinessException e) {
+            logger.error("根据当前用户分页查询任务列表信息 busi-error:{}-->[page]={},[taskSearchVO]={}", e.getMessage(), JSONUtils.objectToString(page),JSONUtils.objectToString(taskSearchVO), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("根据当前用户分页查询任务列表信息 error:{}-->[page]={},[taskSearchVO]={}", e.getMessage(), JSONUtils.objectToString(page),JSONUtils.objectToString(taskSearchVO), e);
+            throw new BusinessException("根据当前用户分页查询任务列表信息 失败");
+        }
+        return page;
     }
 
 }

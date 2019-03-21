@@ -3,6 +3,8 @@ package org.openokr.task.vo;
 import com.zzheng.framework.base.vo.BaseVO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -77,6 +79,12 @@ public class TaskVO extends BaseVO {
     private String createUserId;
 
     /**
+     * 创建者
+     */
+    @ApiModelProperty(value = "创建者名称")
+    private String createUserName;
+
+    /**
      * 创建时间
      */
     @ApiModelProperty(value = "创建时间")
@@ -98,4 +106,12 @@ public class TaskVO extends BaseVO {
     @ApiModelProperty(value = "所属团队")
     private String belongTeam;
 
+    @ApiModelProperty(value = "关联的kr数目")
+    private Integer count;
+
+    /**
+     * 当前累计耗费工时（h）
+     */
+    @ApiModelProperty(value = "当前累计耗费工时（h）")
+    private BigDecimal totalWorkingHours;
 }

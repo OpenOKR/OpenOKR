@@ -17,6 +17,7 @@ import org.openokr.sys.vo.request.UserSelectOgrVO;
 import org.openokr.sys.vo.request.UserSelectUserVO;
 import org.openokr.sys.vo.request.UserSelectVO;
 import org.openokr.task.vo.DailyVO;
+import org.openokr.task.vo.TaskUserInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -236,6 +237,27 @@ public class UserService extends BaseServiceImpl implements IUserService {
             throw new BusinessException("获取用户选择列表 失败");
         }
         return userSelectVO;
+    }
+
+    @Override
+    public List<TaskUserInfoVO> getTaskUserInfoList(String taskId) throws BusinessException {
+        List<TaskUserInfoVO> taskUserInfoVOS;
+        try{
+            //1:参数校验
+            if(StringUtils.isBlank(taskId)){
+                throw new BusinessException("任务ID为空，请确认!");
+            }
+            Map<String, Object> params = new HashMap<>();
+            params.put("taskId", taskId);
+            taskUserInfoVOS = this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE + ".selectTaskUserInfoList", params);
+        } catch (BusinessException e) {
+            logger.error("获取任务关联人员信息 busi-error:{}-->[taskId]={}", e.getMessage(),taskId, e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("获取任务关联人员信息 error:{}-->[taskId]={}", e.getMessage(),taskId, e);
+            throw new BusinessException("获取任务关联人员信息 失败");
+        }
+        return taskUserInfoVOS;
     }
 
     private long countByUsername(String id, String username) {

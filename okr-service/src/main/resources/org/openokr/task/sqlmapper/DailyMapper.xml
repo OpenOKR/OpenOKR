@@ -23,6 +23,10 @@
         <if test="condition.taskId != null and condition.taskId != ''" >
             AND t1.task_id = #{condition.taskId}
         </if>
+        <if test="condition.reportStartDayStr != null and condition.reportStartDayStr != ''
+                    and condition.reportEndDayStr != null and condition.reportEndDayStr != ''" >
+            AND to_char(t1.report_day,'yyyy-MM-dd') BETWEEN #{condition.reportStartDayStr} AND #{condition.reportEndDayStr}
+        </if>
     </sql>
 
     <select id="countDailyList" resultType="Integer" parameterType="HashMap">
@@ -38,13 +42,14 @@
             t1.report_day,
             t1.duration,
             t1.remark,
+            t1.audit_status,
             t1.create_user_id,
             t1.create_ts,
             t1.update_user_id,
             t1.update_ts,
             t2.task_name
         <include refid="pageCondition"/>
-        ORDER BY t1.create_ts DESC
+        ORDER BY t1.report_day DESC ,t1.create_ts DESC
         <include refid="PostgreSqlPaginationSuffix"/>
     </select>
     
@@ -53,4 +58,11 @@
             <![CDATA[ limit #{page.pageSize} offset #{page.recordStartPrev} ]]>
         </if>
     </sql>
+
+    <!--统计任务占用总工时-->
+    <select id="getTotalWorkingHoursByTaskId" parameterType="java.util.Map" resultType="java.math.BigDecimal">
+        select COALESCE(sum(COALESCE(t1.duration,0)),0) from
+        t_okr_daily t1
+        where t1.task_id = #{taskId}
+  </select>
 </mapper>

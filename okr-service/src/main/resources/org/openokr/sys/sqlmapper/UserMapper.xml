@@ -74,4 +74,11 @@
         where t1.organization_id = #{orgId}
     </select>
 
+    <select id="selectTaskUserInfoList" parameterType="java.util.Map" resultType="org.openokr.task.vo.TaskUserInfoVO">
+        select distinct t1.id, t1."real_name" realName
+        from t_okr_sys_user t1
+        inner join t_okr_task_user_rel t2 on t1.id = t2.user_id
+        where t2.task_id = #{taskId}
+    </select>
+
 </mapper>

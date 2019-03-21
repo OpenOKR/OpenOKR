@@ -21,4 +21,7 @@ public class TaskSearchVO extends PageRequest implements Serializable {
     @ApiModelProperty(value = "查询结束日期")
     private Date queryEndDate;
 
+    @ApiModelProperty(value = "当前用户id，前台不用传")
+    private String currentUserId;
+
 }

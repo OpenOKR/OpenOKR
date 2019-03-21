@@ -8,15 +8,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.openokr.application.web.BaseController;
 import org.openokr.common.vo.response.PageResponseData;
 import org.openokr.common.vo.response.ResponseData;
-import org.openokr.sys.service.IMenuService;
-import org.openokr.task.service.ITaskManageService;
-import org.openokr.task.vo.MyTaskCountInfoVO;
-import org.openokr.task.request.TaskInfoVO;
 import org.openokr.task.request.TaskSearchVO;
+import org.openokr.task.service.ITaskManageService;
+import org.openokr.task.vo.TaskDetailVO;
 import org.openokr.task.vo.TaskSaveVO;
 import org.openokr.task.vo.TaskVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import springfox.documentation.spring.web.json.Json;
 
 import java.util.List;
-
-import static org.openokr.common.constant.TaskConstant.ERROR_CODE;
 
 /**
  * OKR报工--任务管理控制器
@@ -135,11 +129,11 @@ public class TaskManageController extends BaseController {
     )
     @RequestMapping(value = "/getTaskDetailInfo.json",method = RequestMethod.GET)
     @ResponseBody
-    public ResponseData<TaskSaveVO> getTaskDetailInfo(String id){
+    public ResponseData<TaskDetailVO> getTaskDetailInfo(String id){
         ResponseData result = new ResponseData();
         try {
-            TaskSaveVO taskSaveVO = taskManageService.getTaskDetailById(id);
-            result.setData(taskSaveVO);
+            TaskDetailVO taskDetailVO = taskManageService.getTaskDetailById(id);
+            result.setData(taskDetailVO);
             result.setCode(0);
             result.setSuccess(true);
         } catch (BusinessException e){
