@@ -244,6 +244,11 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
             taskDetailVO.setTeamKeys(okrObjectService.getTaskObjectList(taskId,"2"));
             //企业
             taskDetailVO.setCompanyKeys(okrObjectService.getTaskObjectList(taskId,"3"));
+            List<TaskKrInfoVO> keys = new ArrayList<>();
+            keys.addAll(taskDetailVO.getPersonKeys());
+            keys.addAll(taskDetailVO.getTeamKeys());
+            keys.addAll(taskDetailVO.getCompanyKeys());
+            taskDetailVO.setKeys(keys);
         } catch (BusinessException e) {
             logger.error("根据ID获取任务详情 busi-error:{}-->[taskId]={}", e.getMessage(),taskId, e);
             throw e;

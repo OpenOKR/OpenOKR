@@ -21,6 +21,9 @@ public class TaskDetailVO extends BaseVO implements Serializable {
     @ApiModelProperty(value = "参与人员信息")
     private List<TaskUserInfoVO> userInfoVOS;
 
+    @ApiModelProperty(value = "KR信息（总的）")
+    private List<TaskKrInfoVO> keys;
+
     @ApiModelProperty(value = "个人KR信息")
     private List<TaskKrInfoVO> personKeys;
 
