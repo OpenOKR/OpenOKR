@@ -56,7 +56,7 @@ public class WeeklyStatisticController extends BaseController {
         return result;
     }
 
-    @ApiOperation(value = "按产品类别查询图表", notes = "周-饼图，月-周折线图，年-月折线图(空)")
+    @ApiOperation(value = "按产品类别查询图表", notes = "周-饼图（有），月-周折线图，年-月折线图(空)")
     @RequestMapping(value = "/getWeeklyChartByTask.json", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<WeeklyChartVO> getWeeklyChartByTask(@RequestBody WeeklyStaSearchVO vo) {
@@ -103,11 +103,11 @@ public class WeeklyStatisticController extends BaseController {
         return result;
     }
 
-    @ApiOperation(value = "按人员所属查询图表", notes = "周-饼图，月-周折线图，年-月折线图(空)")
+    @ApiOperation(value = "按人员所属查询图表", notes = "周-饼图（有），月-周折线图，年-月折线图(空)")
     @RequestMapping(value = "/getWeeklyChartByOrg.json", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<List<WeeklyStatisticVO>> getWeeklyChartByOrg(@RequestBody WeeklyStaSearchVO vo) {
-        ResponseData<List<WeeklyStatisticVO>> result = new ResponseData<>();
+    public ResponseData<WeeklyChartVO> getWeeklyChartByOrg(@RequestBody WeeklyStaSearchVO vo) {
+        ResponseData<WeeklyChartVO> result = new ResponseData<>();
         try {
             switch (vo.getSearchType()) {
                 case WeeklyStatisticConstants.SEARCH_TYPE_WEEK:
@@ -123,10 +123,10 @@ public class WeeklyStatisticController extends BaseController {
                     break;
             }
 
-            List<WeeklyStatisticVO> list = Lists.newArrayList();
+            WeeklyChartVO data = new WeeklyChartVO();
             // todo
 
-            result.setData(list);
+            result.setData(data);
             result.setCode(0);
             result.setSuccess(true);
         } catch (BusinessException e){

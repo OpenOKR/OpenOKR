@@ -32,7 +32,7 @@ public class WeeklyChartVO extends BaseVO {
             "示例:<br>" +
             "[\n" +
             "    {value:10, name:'客户定制'},\n" +
-            "    {value:9, name:'产品规划'},\n" +
+            "    {value:9, name:'产品规划'}\n" +
             "]")
     private List<PieDataVO> pieSeriesData;
 }
