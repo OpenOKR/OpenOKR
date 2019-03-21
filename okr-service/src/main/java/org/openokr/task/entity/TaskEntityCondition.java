@@ -3,6 +3,7 @@ package org.openokr.task.entity;
 import com.zzheng.framework.mybatis.entity.BaseEntity;
 import com.zzheng.framework.mybatis.entity.condition.BaseEntityCondition;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -1120,6 +1121,66 @@ public class TaskEntityCondition extends BaseEntityCondition implements Serializ
 
         public Criteria andBelongTeamNotBetween(String value1, String value2) {
             addCriterion("belong_team not between", value1, value2, "belongTeam");
+            return (Criteria) this;
+        }
+
+        public Criteria andEstimateTimeIsNull() {
+            addCriterion("estimate_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEstimateTimeIsNotNull() {
+            addCriterion("estimate_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEstimateTimeEqualTo(BigDecimal value) {
+            addCriterion("estimate_time =", value, "estimateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEstimateTimeNotEqualTo(BigDecimal value) {
+            addCriterion("estimate_time <>", value, "estimateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEstimateTimeGreaterThan(BigDecimal value) {
+            addCriterion("estimate_time >", value, "estimateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEstimateTimeGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("estimate_time >=", value, "estimateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEstimateTimeLessThan(BigDecimal value) {
+            addCriterion("estimate_time <", value, "estimateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEstimateTimeLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("estimate_time <=", value, "estimateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEstimateTimeIn(List<BigDecimal> values) {
+            addCriterion("estimate_time in", values, "estimateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEstimateTimeNotIn(List<BigDecimal> values) {
+            addCriterion("estimate_time not in", values, "estimateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEstimateTimeBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("estimate_time between", value1, value2, "estimateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEstimateTimeNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("estimate_time not between", value1, value2, "estimateTime");
             return (Criteria) this;
         }
 

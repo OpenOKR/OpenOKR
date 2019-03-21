@@ -114,4 +114,8 @@ public class TaskVO extends BaseVO {
      */
     @ApiModelProperty(value = "当前累计耗费工时（h）")
     private BigDecimal totalWorkingHours;
+
+    /** 预计耗时 */
+    @ApiModelProperty(value = "预计耗时（h）")
+    private BigDecimal estimateTime;
 }

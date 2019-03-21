@@ -17,6 +17,7 @@
     <result column="update_user_id" jdbcType="VARCHAR" property="updateUserId" />
     <result column="update_ts" jdbcType="TIMESTAMP" property="updateTs" />
     <result column="belong_team" jdbcType="VARCHAR" property="belongTeam" />
+    <result column="estimate_time" jdbcType="NUMERIC" property="estimateTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -79,7 +80,7 @@
   <sql id="Base_Column_List">
     id, task_code, task_name, task_status, task_remark, is_deleted, task_start_time, 
     task_end_time, jira_label, confirm_user_id, create_user_id, create_ts, update_user_id, 
-    update_ts, belong_team
+    update_ts, belong_team, estimate_time
   </sql>
   <select id="selectByCondition" parameterType="org.openokr.task.entity.TaskEntityCondition" resultMap="BaseResultMap">
     select
@@ -156,6 +157,9 @@
       <if test="record.belongTeam != null">
         belong_team = #{record.belongTeam,jdbcType=VARCHAR},
       </if>
+      <if test="record.estimateTime != null">
+        estimate_time = #{record.estimateTime,jdbcType=NUMERIC},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -167,9 +171,9 @@
     </if>
   </sql>
   <insert id="insertList" parameterType="java.util.List">
-     insert into t_okr_task ( id,task_code,task_name,task_status,task_remark,is_deleted,task_start_time,task_end_time,jira_label,confirm_user_id,create_user_id,create_ts,update_user_id,update_ts,belong_team ) values
+     insert into t_okr_task ( id,task_code,task_name,task_status,task_remark,is_deleted,task_start_time,task_end_time,jira_label,confirm_user_id,create_user_id,create_ts,update_user_id,update_ts,belong_team,estimate_time ) values
     <foreach collection="list" index="index" item="item" separator=",">
-       ( #{item.id,jdbcType=VARCHAR},#{item.taskCode,jdbcType=VARCHAR},#{item.taskName,jdbcType=VARCHAR},#{item.taskStatus,jdbcType=CHAR},#{item.taskRemark,jdbcType=VARCHAR},#{item.isDeleted,jdbcType=CHAR},#{item.taskStartTime,jdbcType=TIMESTAMP},#{item.taskEndTime,jdbcType=TIMESTAMP},#{item.jiraLabel,jdbcType=VARCHAR},#{item.confirmUserId,jdbcType=VARCHAR},#{item.createUserId,jdbcType=VARCHAR},#{item.createTs,jdbcType=TIMESTAMP},#{item.updateUserId,jdbcType=VARCHAR},#{item.updateTs,jdbcType=TIMESTAMP},#{item.belongTeam,jdbcType=VARCHAR} )
+       ( #{item.id,jdbcType=VARCHAR},#{item.taskCode,jdbcType=VARCHAR},#{item.taskName,jdbcType=VARCHAR},#{item.taskStatus,jdbcType=CHAR},#{item.taskRemark,jdbcType=VARCHAR},#{item.isDeleted,jdbcType=CHAR},#{item.taskStartTime,jdbcType=TIMESTAMP},#{item.taskEndTime,jdbcType=TIMESTAMP},#{item.jiraLabel,jdbcType=VARCHAR},#{item.confirmUserId,jdbcType=VARCHAR},#{item.createUserId,jdbcType=VARCHAR},#{item.createTs,jdbcType=TIMESTAMP},#{item.updateUserId,jdbcType=VARCHAR},#{item.updateTs,jdbcType=TIMESTAMP},#{item.belongTeam,jdbcType=VARCHAR},#{item.estimateTime,jdbcType=NUMERIC} )
     </foreach>
   </insert>
 </mapper>
