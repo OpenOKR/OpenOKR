@@ -4,10 +4,13 @@ package org.openokr.manage.service;
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.exception.BusinessException;
 import org.openokr.manage.vo.TeamsExtVO;
+import org.openokr.manage.vo.TeamsSearchVO;
 import org.openokr.manage.vo.TeamsVO;
 import org.openokr.sys.vo.UserVO;
 import org.openokr.task.request.TeamTaskSearchVO;
+import org.openokr.task.vo.TeamTaskCountInfoVO;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -87,4 +90,12 @@ public interface IOkrTeamService {
     TeamsExtVO getByTeamId(String id);
 
     List<UserVO> getUsersByTeamId(String teamId);
+
+    /**
+     * 获取团队成员数、累计占用工时、关联任务数
+     * @param teamsSearchVO
+     * @return
+     * @throws BusinessException
+     */
+    TeamTaskCountInfoVO getTeamTaskCountInfo(TeamsSearchVO teamsSearchVO) throws BusinessException;
 }

@@ -9,6 +9,7 @@ import org.openokr.db.service.IDailyDBService;
 import org.openokr.manage.service.IOkrObjectService;
 import org.openokr.manage.service.IOkrTeamService;
 import org.openokr.manage.vo.TeamsExtVO;
+import org.openokr.manage.vo.TeamsSearchVO;
 import org.openokr.sys.entity.UserEntity;
 import org.openokr.sys.service.IUserService;
 import org.openokr.sys.vo.UserVO;
@@ -425,25 +426,28 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
             if(StringUtils.isBlank(teamTaskSearchVO.getUserId())){
                 throw new BusinessException("用户ID为空，请确认!");
             }
+            SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+            //获取前月的第一天
+            Calendar  cal=Calendar.getInstance();//获取当前日期
+            //cal.add(Calendar.MONTH, -1);
+            cal.set(Calendar.DAY_OF_MONTH,1);//设置为1号,当前日期既为本月第一天
+            String fristDayStr = format.format(cal.getTime());
+            Date firstDay = format.parse(fristDayStr.substring(0,8)+"000000");
+            Date now = new Date();
             //2:获取用户的所有团队信息(不包括公司团队)
             List<TeamsExtVO> teamsExtVOS = okrTeamService.getTeamByUserIdOrTeamName(teamTaskSearchVO);
             if(teamsExtVOS != null && !teamsExtVOS.isEmpty()){
                 TeamTaskCountInfoVO teamTaskCountInfoVO;
                 for(TeamsExtVO vo:teamsExtVOS){
-                    teamTaskCountInfoVO = new TeamTaskCountInfoVO();
+                    TeamsSearchVO teamsSearchVO = new TeamsSearchVO();
+                    teamsSearchVO.setId(vo.getId());
+                    teamTaskCountInfoVO = okrTeamService.getTeamTaskCountInfo(teamsSearchVO);
                     teamTaskCountInfoVO.setTeamName(vo.getName());
-                    //获取团队成员数
-                    List<UserVO> userVOS = okrTeamService.getUsersByTeamId(vo.getId());
-                    if(userVOS!=null && userVOS.size()>0){
-                        teamTaskCountInfoVO.setTeamMemberNum(userVOS.size());
-                    }else{
-                        teamTaskCountInfoVO.setTeamMemberNum(0);
-                    }
-                    teamTaskCountInfoVO.setTaskUserInfoVOS(userVOS);
-                    //获取关联任务数
-                    teamTaskCountInfoVO.setRelTaskNum(10);
-                    //当前累计耗费工时（h）
-                    teamTaskCountInfoVO.setTotalWorkingHours(new BigDecimal(100));
+                    //获取当月当前累计耗费工时（h）,需要加上时间限制
+                    teamsSearchVO.setQueryStartTime(firstDay);
+                    teamsSearchVO.setQueryEndTime(now);
+                    TeamTaskCountInfoVO currentMonCountVO = okrTeamService.getTeamTaskCountInfo(teamsSearchVO);
+                    teamTaskCountInfoVO.setTotalWorkingHours(currentMonCountVO.getTotalWorkingHours());
                     teamTaskCountInfoVOS.add(teamTaskCountInfoVO);
                 }
 

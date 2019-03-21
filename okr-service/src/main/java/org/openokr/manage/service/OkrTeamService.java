@@ -10,9 +10,11 @@ import org.openokr.manage.entity.TeamUserRelaEntity;
 import org.openokr.manage.entity.TeamUserRelaEntityCondition;
 import org.openokr.manage.entity.TeamsEntity;
 import org.openokr.manage.vo.TeamsExtVO;
+import org.openokr.manage.vo.TeamsSearchVO;
 import org.openokr.manage.vo.TeamsVO;
 import org.openokr.sys.vo.UserVO;
 import org.openokr.task.request.TeamTaskSearchVO;
+import org.openokr.task.vo.TeamTaskCountInfoVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -198,5 +200,28 @@ public class OkrTeamService extends BaseServiceImpl implements IOkrTeamService {
         Map<String, Object> params = new HashMap<>();
         params.put("teamId", teamId);
         return this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE + ".findUserListByTeamId", params);
+    }
+
+    @Override
+    public TeamTaskCountInfoVO getTeamTaskCountInfo(TeamsSearchVO teamsSearchVO) throws BusinessException {
+        try {
+            if(teamsSearchVO == null){
+                throw new BusinessException("查询参数为空");
+            }
+            if (org.apache.commons.lang3.StringUtils.isBlank(teamsSearchVO.getId())){
+                throw new BusinessException("查询参数团队ID为空");
+            }
+            Map<String,Object> paramMap = new HashMap<>();
+            paramMap.put("teamId",teamsSearchVO.getId());
+            paramMap.put("queryStartTime",teamsSearchVO.getQueryStartTime());
+            paramMap.put("queryEndTime",teamsSearchVO.getQueryEndTime());
+            return this.getMyBatisDao().selectOneBySql(MAPPER_NAMESPACE+".getTeamTaskCountInfo",paramMap);
+        } catch (BusinessException e) {
+            logger.error(" 获取团队成员数、累计占用工时、关联任务数 busi-error:{}-->[teamsSearchVO]={}", e.getMessage(),JSONUtils.objectToString(teamsSearchVO), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error(" 获取团队成员数、累计占用工时、关联任务数 error:{}-->[teamsSearchVO]={}", e.getMessage(), JSONUtils.objectToString(teamsSearchVO), e);
+            throw new BusinessException(" 获取团队成员数、累计占用工时、关联任务数 失败");
+        }
     }
 }
