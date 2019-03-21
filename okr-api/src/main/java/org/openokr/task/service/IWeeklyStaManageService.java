@@ -2,6 +2,7 @@ package org.openokr.task.service;
 
 import com.zzheng.framework.exception.BusinessException;
 import org.openokr.task.request.WeeklyStaSearchVO;
+import org.openokr.task.vo.WeeklyChartVO;
 import org.openokr.task.vo.WeeklyStatisticVO;
 
 import java.util.List;
@@ -21,10 +22,26 @@ public interface IWeeklyStaManageService {
     List<WeeklyStatisticVO> getStatisticByTask(WeeklyStaSearchVO condition) throws BusinessException;
 
     /**
+     * 按产品类别查询图表
+     * @param condition
+     * @return
+     * @throws BusinessException
+     */
+    WeeklyChartVO getChartByTask(WeeklyStaSearchVO condition) throws BusinessException;
+
+    /**
      * 按人员所属查询列表
      * @param condition
      * @return
      * @throws BusinessException
      */
     List<WeeklyStatisticVO> getStatisticByOrg(WeeklyStaSearchVO condition) throws BusinessException;
+
+    /**
+     * 按人员所属查询图表
+     * @param condition
+     * @return
+     * @throws BusinessException
+     */
+    WeeklyChartVO getChartByOrg(WeeklyStaSearchVO condition) throws BusinessException;
 }

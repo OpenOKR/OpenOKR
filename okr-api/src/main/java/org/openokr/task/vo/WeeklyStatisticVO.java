@@ -5,6 +5,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 /**
  * @author yuxinzh
  * @create 2019/3/20
@@ -32,6 +34,6 @@ public class WeeklyStatisticVO extends BaseVO {
     private String categoryName;
 
     @ApiModelProperty(value = "工时")
-    private Double duration;
+    private BigDecimal duration;
 
 }

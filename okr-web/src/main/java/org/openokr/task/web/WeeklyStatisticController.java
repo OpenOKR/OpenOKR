@@ -10,6 +10,7 @@ import org.openokr.common.constant.WeeklyStatisticConstants;
 import org.openokr.common.vo.response.ResponseData;
 import org.openokr.task.request.WeeklyStaSearchVO;
 import org.openokr.task.service.IWeeklyStaManageService;
+import org.openokr.task.vo.WeeklyChartVO;
 import org.openokr.task.vo.WeeklyStatisticVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -58,27 +59,13 @@ public class WeeklyStatisticController extends BaseController {
     @ApiOperation(value = "按产品类别查询图表", notes = "周-饼图，月-周折线图，年-月折线图(空)")
     @RequestMapping(value = "/getWeeklyChartByTask.json", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<List<WeeklyStatisticVO>> getWeeklyChartByTask(@RequestBody WeeklyStaSearchVO vo) {
-        ResponseData<List<WeeklyStatisticVO>> result = new ResponseData<>();
+    public ResponseData<WeeklyChartVO> getWeeklyChartByTask(@RequestBody WeeklyStaSearchVO vo) {
+        ResponseData<WeeklyChartVO> result = new ResponseData<>();
         try {
-            switch (vo.getSearchType()) {
-                case WeeklyStatisticConstants.SEARCH_TYPE_WEEK:
-                    // 周 饼图 todo
-                    break;
-                case WeeklyStatisticConstants.SEARCH_TYPE_MONTH:
-                    // 月 todo
-                    break;
-                case WeeklyStatisticConstants.SEARCH_TYPE_YEAR:
-                    // 年 todo
-                    break;
-                default:
-                    break;
-            }
-
-            List<WeeklyStatisticVO> list = Lists.newArrayList();
+            WeeklyChartVO chartVO = new WeeklyChartVO();
             // todo
 
-            result.setData(list);
+            result.setData(chartVO);
             result.setCode(0);
             result.setSuccess(true);
         } catch (BusinessException e){
