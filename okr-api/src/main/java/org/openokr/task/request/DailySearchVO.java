@@ -28,11 +28,23 @@ public class DailySearchVO extends PageRequest {
     @ApiModelProperty(value = "填写人ID，不用传，后台自动填入当前登录人ID")
     private String reportUserId;
 
-    @ApiModelProperty(value = "项目ID")
+    @ApiModelProperty(value = "项目ID，不筛选不用传")
     private String taskId;
 
     @ApiModelProperty(value = "审核状态，不筛选不用传")
     private String auditStatus;
 
+    @ApiModelProperty(value = "产品id，不筛选不用传")
+    private String productId;
+
+    @ApiModelProperty(value = "分摊id，不筛选不用传")
+    private String apportionId;
+
+
+    @ApiModelProperty(value = "团队id，不筛选不用传")
+    private String teamId;
+
+    @ApiModelProperty(value = "okrId，不筛选不用传")
+    private String okrId;
 
 }

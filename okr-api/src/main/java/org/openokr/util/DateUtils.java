@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -49,7 +50,7 @@ public class DateUtils {
      * 获取当前时间
      * @return
      */
-    public static final Date getCurrentTime(){
+    public static Date getCurrentTime(){
         return new Date();
     }
 
@@ -57,7 +58,7 @@ public class DateUtils {
      * 获取当前日期字符串
      * @return
      */
-    public static final String getCurrentDateStr(){
+    public static String getCurrentDateStr(){
         return dateToString(getCurrentTime());
     }
 
@@ -65,8 +66,24 @@ public class DateUtils {
      * 获取当前时间字符串
      * @return
      */
-    public static final String getCurrentTimeStr(){
+    public static String getCurrentTimeStr(){
         return timeToString(getCurrentTime());
+    }
+
+    /**
+     * 按时间字符串，将时间加N天后，返回新的时间字符串
+     * @param beginDateStr
+     * @param pattern
+     * @param day
+     * @return
+     */
+    public static String addDay(String beginDateStr,String pattern,int day) throws ParseException{
+        if (StringUtils.isBlank(beginDateStr) || StringUtils.isBlank(pattern)) {
+            return null;
+        }
+        Date beginDate = stringToDate(beginDateStr,pattern);
+        Date endDate = addDay(beginDate,day);
+        return dateToString(endDate,pattern);
     }
 
     /**
@@ -95,6 +112,22 @@ public class DateUtils {
      */
     public static Date stringToDate(String strDate) throws ParseException{
         return stringToDate(strDate,FORMAT_SHORT);
+    }
+
+    /**
+     * 将日期增加几天
+     * @param beginDate
+     * @param day
+     * @return
+     */
+    public static Date addDay(Date beginDate,int day) {
+        if (beginDate == null) {
+            return null;
+        }
+        Calendar ca = Calendar.getInstance();
+        ca.setTime(beginDate);
+        ca.add(Calendar.DATE, day);
+        return ca.getTime();
     }
 
 }

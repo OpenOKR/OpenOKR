@@ -49,7 +49,7 @@
             t1.update_ts,
             t2.task_name
         <include refid="pageCondition"/>
-        ORDER BY t1.create_ts DESC
+        ORDER BY t1.report_day DESC ,t1.create_ts DESC
         <include refid="PostgreSqlPaginationSuffix"/>
     </select>
     

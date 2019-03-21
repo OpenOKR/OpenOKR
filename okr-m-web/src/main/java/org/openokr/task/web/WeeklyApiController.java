@@ -30,7 +30,7 @@ import java.util.Map;
  * @create 2019/3/5
  */
 @Controller
-@RequestMapping("/api/daily")
+@RequestMapping("/api/weekly")
 @Api(value = "周报相关接口",description = "WeeklyController")
 public class WeeklyApiController extends BaseController {
 

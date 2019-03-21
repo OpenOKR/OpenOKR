@@ -34,9 +34,16 @@ public interface IDailyManageService {
 
     /**
      * 批量新增日报
-     * 日报无更新操作
+     *
      * @param dailyList
      * @throws BusinessException
      */
     void insertDailyList(List<DailyVO> dailyList,String userId,String dateStr) throws BusinessException;
+
+    /**
+     * 删除日报
+     * @param dailyVO
+     * @throws BusinessException
+     */
+    void deleteDailyList(DailyVO dailyVO)throws BusinessException;
 }

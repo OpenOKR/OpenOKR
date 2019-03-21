@@ -98,4 +98,37 @@ public class DailyApiController extends BaseController {
         return result;
     }
 
+    @ApiOperation(value = "删除日报列表", notes = "删除日报列表")
+    @RequestMapping(value = "/deleteDailyList.json", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseData<String> deleteDailyList(String id) {
+        ResponseData<String> result = new ResponseData<>();
+        try {
+            Date date = new Date();
+            if(id ==null || id.isEmpty()){
+                result.setCode(6000);
+                result.setMessage("参数为空");
+                result.setSuccess(false);
+                return result;
+            }
+            DailyVO dailyVO = new DailyVO();
+            dailyVO.setId(id);
+            dailyManageService.deleteDailyList(dailyVO);
+            result.setData("删除成功");
+            result.setCode(0);
+            result.setSuccess(true);
+        } catch (BusinessException e){
+            logger.error("删除日报列表 异常：{},参数:[{}]", e.getMessage(), id, e);
+            result.setCode(6000);
+            result.setMessage(e.getMessage());
+            result.setSuccess(false);
+        }catch (Exception e){
+            logger.error("删除日报列表 异常：{},参数:[{}]", e.getMessage(), id, e);
+            result.setCode(7000);
+            result.setMessage(e.getMessage());
+            result.setSuccess(false);
+        }
+        return result;
+    }
+
 }

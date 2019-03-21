@@ -246,4 +246,38 @@ public class TaskManageController extends BaseController {
         return result;
     }
 
+
+    @ApiOperation(value = "查询用户所属任务列表数据", notes = "查询用户所属任务列表数据")
+    @ApiImplicitParams(
+            {
+            }
+    )
+    @RequestMapping(value = "/getTaskListByUser.json", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<PageResponseData<List<TaskVO>>> getTaskListByUser(@RequestBody TaskSearchVO vo) {
+        ResponseData<PageResponseData<List<TaskVO>>> result = new ResponseData<>();
+        try {
+            Page page = null;
+            //如果getCurrentPage/getPageSize有一个为空就不分页
+            if (vo.getCurrentPage() !=null&&vo.getPageSize() !=null){
+                page = new Page(vo.getCurrentPage(), vo.getPageSize());
+            }
+            vo.setCurrentUserId(this.getCurrentUserId());
+            page = taskManageService.getTakListByUser(page,vo);
+            PageResponseData<List<TaskVO>> pageData = this.reBuildPageData(page,TaskVO.class);
+            result.setData(pageData);
+            result.setCode(0);
+            result.setSuccess(true);
+        } catch (BusinessException e){
+            logger.error("查询用户所属任务列表数据 异常：{},参数:[{}]", e.getMessage(), JSON.toJSONString(vo), e);
+            result.setCode(6000);
+            result.setMessage(e.getMessage());
+        }catch (Exception e){
+            logger.error("查询用户所属任务列表数据 异常：{},参数:[{}]", e.getMessage(), JSON.toJSONString(vo), e);
+            result.setCode(7000);
+            result.setMessage(e.getMessage());
+        }
+        return result;
+    }
+
 }

@@ -22,7 +22,7 @@
     }
     //如果不是pc端，则跳转到移动端登录
     if(!isPC()){
-        window.location.href = 'http://test.okr.onlyou.com/m/login';
+        window.location.href = window.location.host+'/okrApp/Login';
     }
 </script>
 <body class="login-body">
