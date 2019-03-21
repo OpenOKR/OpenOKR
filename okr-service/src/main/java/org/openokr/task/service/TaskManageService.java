@@ -5,6 +5,7 @@ import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.dao.pojo.Page;
 import com.zzheng.framework.mybatis.service.impl.BaseServiceImpl;
 import org.apache.commons.lang3.StringUtils;
+import org.openokr.db.service.IBasicDBService;
 import org.openokr.db.service.IDailyDBService;
 import org.openokr.manage.service.IOkrObjectService;
 import org.openokr.manage.service.IOkrTeamService;
@@ -51,6 +52,9 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
 
     @Autowired
     IOkrTeamService okrTeamService;
+
+    @Autowired
+    IBasicDBService basicDBService;
 
     @Override
     public Page getTakListByPage(Page page, TaskSearchVO taskSearchVO) throws BusinessException{
@@ -491,6 +495,32 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
             throw new BusinessException("根据当前用户分页查询任务列表信息 失败");
         }
         return page;
+    }
+
+    @Override
+    public List<SearchConditionVO> getSearchCondition(SearchConditionVO conditionVO) throws BusinessException {
+        try {
+            if (conditionVO == null || StringUtils.isBlank(conditionVO.getUserId())){
+                throw new BusinessException("查询参数为空");
+            }
+            UserVO userVO = new UserVO();
+            userVO.setId(conditionVO.getUserId());
+            List<UserVO> userVOList = userService.getUserRole(userVO);
+            //0开头的是管理员 00：超级管理员 01：系统管理员 02：普通管理员   10：用户
+            for (UserVO user:userVOList){
+                if ("0".equals(user.getRoleType().substring(1,1))){
+                    //管理员返回所有任务
+                    conditionVO.setUserId(null);
+                }
+            }
+            return basicDBService.getSearchCondition(conditionVO);
+        } catch (BusinessException e) {
+            logger.error("搜索条件查询异常 busi-error:{}-->[conditionVO]={}", e.getMessage(), JSONUtils.objectToString(conditionVO), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("搜索条件查询异常 error:{}-->[conditionVO]={}", e.getMessage(), JSONUtils.objectToString(conditionVO), e);
+            throw new BusinessException("搜索条件查询异常 失败");
+        }
     }
 
 }

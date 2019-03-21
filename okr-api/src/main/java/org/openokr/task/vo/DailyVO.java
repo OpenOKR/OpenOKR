@@ -57,6 +57,30 @@ public class DailyVO extends BaseVO {
     @ApiModelProperty(value = "审核状态 00待审核、01已确认、02已驳回")
     private String auditStatus;
 
+    @ApiModelProperty(value = "产品名称")
+    private String productName;
+    @ApiModelProperty(value = "产品Id")
+    private String productId;
+    @ApiModelProperty(value = "分摊类别名称")
+    private String categoryName;
+    @ApiModelProperty(value = "分摊类别id")
+    private String categoryId;
+    @ApiModelProperty(value = "填报人名")
+    private String userName;
+    @ApiModelProperty(value = "填报人Id")
+    private String userId;
+    @ApiModelProperty(value = "团队名称")
+    private String teamName;
+    @ApiModelProperty(value = "团队id")
+    private String teamId;
+    @ApiModelProperty(value = "okr_id")
+    private String okrId;
+
+    @ApiModelProperty(value = "okr名称")
+    private String okrName;
+
+    @ApiModelProperty(value = "人员岗位类型")
+    private String jobType;
 
     public String getAuditStatusStr() {
         if (auditStatus!=null){

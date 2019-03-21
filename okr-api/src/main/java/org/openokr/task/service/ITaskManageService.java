@@ -97,4 +97,12 @@ public interface ITaskManageService {
      */
     Page getTakListByUser(Page page, TaskSearchVO taskSearchVO) throws BusinessException;
 
+    /**
+     * 全部报工头部搜索条件查询
+     * @param conditionVO
+     * @return
+     * @throws BusinessException
+     */
+    List<SearchConditionVO> getSearchCondition(SearchConditionVO conditionVO)throws BusinessException;
+
 }

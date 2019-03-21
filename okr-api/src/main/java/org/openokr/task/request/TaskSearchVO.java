@@ -24,4 +24,18 @@ public class TaskSearchVO extends PageRequest implements Serializable {
     @ApiModelProperty(value = "当前用户id，前台不用传")
     private String currentUserId;
 
+    @ApiModelProperty(value = "产品Id-全部报工页用")
+    private String productId;
+
+    @ApiModelProperty(value = "分摊类别id-全部报工页用")
+    private String categoryId;
+
+    @ApiModelProperty(value = "团队id-全部报工页用")
+    private String teamId;
+
+    @ApiModelProperty(value = "项目Id-全部报工页用")
+    private String taskId;
+
+    @ApiModelProperty(value = "okrId-全部报工页用")
+    private String okrId;
 }

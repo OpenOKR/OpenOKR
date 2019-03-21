@@ -1,9 +1,11 @@
 package org.openokr.sys.vo;
 
 import com.zzheng.framework.base.vo.BaseVO;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
-
+@Data
 public class UserVO extends BaseVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -84,216 +86,21 @@ public class UserVO extends BaseVO implements Serializable {
      */
     private String photoUrl;
 
-
-
     /**
-     * 
+     * 角色Id
      */
-    public String getId() {
-        return id;
-    }
-
+    private String roleId;
     /**
-     * 
+     * 角色Id
      */
-    public void setId(String id) {
-        this.id = id;
-    }
-
+    private String roleName;
     /**
-     * 创建时间
+     * 角色类型  00：超级管理员 01：系统管理员 02：普通管理员   10：用户
      */
-    public Date getCreateTime() {
-        return createTime;
-    }
+    private String roleType;
 
-    /**
-     * 创建时间
-     */
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
 
-    /**
-     * 密码
-     */
-    public String getPassword() {
-        return password;
-    }
 
-    /**
-     * 密码
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
-    /**
-     * 密码加密 盐
-     */
-    public String getSalt() {
-        return salt;
-    }
-
-    /**
-     * 密码加密 盐
-     */
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
-
-    /**
-     * 是否激活 1-激活，0-失效
-     */
-    public Boolean getActive() {
-        return active;
-    }
-
-    /**
-     * 是否激活 1-激活，0-失效
-     */
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
-    /**
-     * 用户名
-     */
-    public String getUserName() {
-        return userName;
-    }
-
-    /**
-     * 用户名
-     */
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    /**
-     * 邮件
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * 邮件
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    /**
-     * 真是姓名
-     */
-    public String getRealName() {
-        return realName;
-    }
-
-    /**
-     * 真是姓名
-     */
-    public void setRealName(String realName) {
-        this.realName = realName;
-    }
-
-    /**
-     * 手机号
-     */
-    public String getPhone() {
-        return phone;
-    }
-
-    /**
-     * 手机号
-     */
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    /**
-     * 机构Id
-     */
-    public String getOrganizationId() {
-        return organizationId;
-    }
-
-    /**
-     * 机构Id
-     */
-    public void setOrganizationId(String organizationId) {
-        this.organizationId = organizationId;
-    }
-
-    /**
-     * 创建人id
-     */
-    public String getCreateUserId() {
-        return createUserId;
-    }
-
-    /**
-     * 创建人id
-     */
-    public void setCreateUserId(String createUserId) {
-        this.createUserId = createUserId;
-    }
-
-    /**
-     * 创建日期
-     */
-    public Date getCreateTs() {
-        return createTs;
-    }
-
-    /**
-     * 创建日期
-     */
-    public void setCreateTs(Date createTs) {
-        this.createTs = createTs;
-    }
-
-    /**
-     * 更新人id
-     */
-    public String getUpdateUserId() {
-        return updateUserId;
-    }
-
-    /**
-     * 更新人id
-     */
-    public void setUpdateUserId(String updateUserId) {
-        this.updateUserId = updateUserId;
-    }
-
-    /**
-     * 更新日期
-     */
-    public Date getUpdateTs() {
-        return updateTs;
-    }
-
-    /**
-     * 更新日期
-     */
-    public void setUpdateTs(Date updateTs) {
-        this.updateTs = updateTs;
-    }
-
-    /**
-     * 个人头像URL地址
-     */
-    public String getPhotoUrl() {
-        return photoUrl;
-    }
-
-    /**
-     * 个人头像URL地址
-     */
-    public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
-    }
 
 }

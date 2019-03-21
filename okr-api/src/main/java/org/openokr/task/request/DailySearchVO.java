@@ -47,4 +47,7 @@ public class DailySearchVO extends PageRequest {
     @ApiModelProperty(value = "okrId，不筛选不用传")
     private String okrId;
 
+    @ApiModelProperty(value = "分摊类别id")
+    private String categoryId;
+
 }

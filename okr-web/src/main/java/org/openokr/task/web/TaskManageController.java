@@ -280,4 +280,39 @@ public class TaskManageController extends BaseController {
         return result;
     }
 
+
+    @ApiOperation(value = "查询用户所属任务列表数据", notes = "查询用户所属任务列表数据")
+    @ApiImplicitParams(
+            {
+            }
+    )
+    @RequestMapping(value = "/getSearchConditionList.json", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<List<SearchConditionVO>> getSearchConditionList(@RequestBody SearchConditionVO vo) {
+        ResponseData<List<SearchConditionVO>> result = new ResponseData<>();
+        try {
+            if (vo==null){
+                result.setCode(6000);
+                result.setMessage("参数为空");
+                result.setSuccess(false);
+                return result;
+            }
+            vo.setUserId(this.getCurrentUserId());
+            List<SearchConditionVO> conditionVOList = taskManageService.getSearchCondition(vo);
+            result.setData(conditionVOList);
+            result.setCode(0);
+            result.setSuccess(true);
+        } catch (BusinessException e){
+            logger.error("查询用户所属任务列表数据 异常：{},参数:[{}]", e.getMessage(), JSON.toJSONString(vo), e);
+            result.setCode(6000);
+            result.setMessage(e.getMessage());
+        }catch (Exception e){
+            logger.error("查询用户所属任务列表数据 异常：{},参数:[{}]", e.getMessage(), JSON.toJSONString(vo), e);
+            result.setCode(7000);
+            result.setMessage(e.getMessage());
+        }
+        return result;
+    }
+
+
 }

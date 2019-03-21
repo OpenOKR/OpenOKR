@@ -81,4 +81,27 @@
         where t2.task_id = #{taskId}
     </select>
 
+
+    <select id="getUserRole" parameterType="java.util.Map" resultType="org.openokr.sys.vo.UserVO">
+        SELECT
+            osu.id
+        ,osu.user_name
+        ,osu.email
+        ,osu.real_name
+        ,osu.phone
+        ,osu.organization_id
+        ,osu.photo_url
+        ,osu.active
+        ,osr.id role_id
+        ,osr.name role_name
+        ,osr.role_type
+        FROM
+            t_okr_sys_user osu
+        LEFT JOIN t_okr_sys_user_role osur on osu.id = osur.user_id
+        LEFT join t_okr_sys_role osr on osur.role_id = osr.id
+        <if test="userId != null and !userId.isEmpty() ">
+            where osu.id = #{userId}
+        </if>
+    </select>
+
 </mapper>

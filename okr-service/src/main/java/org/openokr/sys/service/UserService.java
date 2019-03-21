@@ -3,7 +3,6 @@ package org.openokr.sys.service;
 import com.alibaba.fastjson.JSON;
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.base.utils.BeanUtils;
-import com.zzheng.framework.base.utils.JSONUtils;
 import com.zzheng.framework.base.utils.StringUtils;
 import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.dao.pojo.Page;
@@ -12,18 +11,21 @@ import org.openokr.application.utils.PasswordUtil;
 import org.openokr.sys.entity.UserEntity;
 import org.openokr.sys.entity.UserEntityCondition;
 import org.openokr.sys.vo.UserRoleVO;
+import org.openokr.sys.vo.UserVO;
 import org.openokr.sys.vo.UserVOExt;
 import org.openokr.sys.vo.request.UserSelectOgrVO;
 import org.openokr.sys.vo.request.UserSelectUserVO;
 import org.openokr.sys.vo.request.UserSelectVO;
-import org.openokr.task.vo.DailyVO;
 import org.openokr.task.vo.TaskUserInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhengzheng on 2018/12/18.
@@ -258,6 +260,26 @@ public class UserService extends BaseServiceImpl implements IUserService {
             throw new BusinessException("获取任务关联人员信息 失败");
         }
         return taskUserInfoVOS;
+    }
+
+    @Override
+    public List<UserVO> getUserRole(UserVO userVO) throws BusinessException {
+        try {
+            Map<String, Object> params = new HashMap<>();
+            if (userVO!=null && org.apache.commons.lang3.StringUtils.isNotBlank(userVO.getId())){
+                params.put("userId", userVO.getId());
+            } else {
+                params.put("userId", null);
+            }
+            List<UserVO> userVOList = this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE+".getUserRole", params);
+            return userVOList;
+        } catch (BusinessException e) {
+            logger.error("获取用户权限列表异常 busi-error:{}-->[userVO]={}", e.getMessage(), JSON.toJSONString(userVO), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("获取用户权限列表异常 error:{}-->[userVO]={}", e.getMessage(),JSON.toJSONString(userVO), e);
+            throw new BusinessException("获取用户权限列表 失败");
+        }
     }
 
     private long countByUsername(String id, String username) {
