@@ -1,4 +1,4 @@
-package org.openokr.db.service;
+package org.openokr.task.service;
 
 import com.zzheng.framework.exception.BusinessException;
 import org.openokr.task.request.WeeklyStaSearchVO;
@@ -7,11 +7,10 @@ import org.openokr.task.vo.WeeklyStatisticVO;
 import java.util.List;
 
 /**
- * 周报统计db-service
  * @author yuxinzh
- * @create 2019/3/20
+ * @create 2019/3/21
  */
-public interface IWeeklyStaDBService {
+public interface IWeeklyStaManageService {
 
     /**
      * 按产品类别查询列表
@@ -22,26 +21,10 @@ public interface IWeeklyStaDBService {
     List<WeeklyStatisticVO> getStatisticByTask(WeeklyStaSearchVO condition) throws BusinessException;
 
     /**
-     * 按产品类别查询周报饼图
-     * @param condition
-     * @return
-     * @throws BusinessException
-     */
-    List<WeeklyStatisticVO> getWeeklyPieByTask(WeeklyStaSearchVO condition) throws BusinessException;
-
-    /**
      * 按人员所属查询列表
      * @param condition
      * @return
      * @throws BusinessException
      */
     List<WeeklyStatisticVO> getStatisticByOrg(WeeklyStaSearchVO condition) throws BusinessException;
-
-    /**
-     * 按人员所属查询周报饼图
-     * @param condition
-     * @return
-     * @throws BusinessException
-     */
-    List<WeeklyStatisticVO> getWeeklyPieByOrg(WeeklyStaSearchVO condition) throws BusinessException;
 }

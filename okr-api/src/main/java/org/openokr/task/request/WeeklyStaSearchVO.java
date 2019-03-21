@@ -19,6 +19,9 @@ import java.util.Calendar;
 @Api(value = "周报统计查询vo")
 public class WeeklyStaSearchVO extends BaseVO {
 
+    @ApiModelProperty(value = "团队ID")
+    private String teamId;
+
     @ApiModelProperty(value = "开始时间字符串，格式yyyy-MM-dd<br>" +
             "约定:<br>" +
             "周：周一日期<br>" +

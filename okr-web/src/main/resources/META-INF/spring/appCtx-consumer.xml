@@ -30,6 +30,7 @@
     <dubbo:reference interface="org.openokr.task.service.IWeeklyManageService" id="weeklyManageService"/>
     <dubbo:reference interface="org.openokr.task.service.ICustomerManageService" id="customerManageService"/>
 	<dubbo:reference interface="org.openokr.task.service.IProductInfoManageService" id="productManageService"/>
-	<dubbo:reference interface="org.openokr.task.service.IApportionCategoryManageService" id="apportionCategoryManageService"/>
+    <dubbo:reference interface="org.openokr.task.service.IApportionCategoryManageService" id="apportionCategoryManageService"/>
+    <dubbo:reference interface="org.openokr.task.service.IWeeklyStaManageService" id="weeklyStaManageService"/>
 
 </beans>

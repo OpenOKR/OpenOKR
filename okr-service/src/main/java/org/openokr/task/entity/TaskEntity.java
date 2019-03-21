@@ -2,6 +2,7 @@ package org.openokr.task.entity;
 
 import com.zzheng.framework.mybatis.entity.BaseEntity;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -54,6 +55,9 @@ public class TaskEntity extends BaseEntity implements Serializable {
 
     /** 所属团队 */
     private String belongTeam;
+
+    /** 预计耗时 */
+    private BigDecimal estimateTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -307,6 +311,24 @@ public class TaskEntity extends BaseEntity implements Serializable {
     public void setBelongTeam(String belongTeam) {
         this.belongTeam = belongTeam;
         addSettedField("belongTeam");
+    }
+
+    /**
+     * 预计耗时
+     * @return estimateTime
+     */
+    @Column(name = "estimate_time")
+    public BigDecimal getEstimateTime() {
+        return estimateTime;
+    }
+
+    /**
+     * 预计耗时
+     * @param estimateTime
+     */
+    public void setEstimateTime(BigDecimal estimateTime) {
+        this.estimateTime = estimateTime;
+        addSettedField("estimateTime");
     }
 
     /**

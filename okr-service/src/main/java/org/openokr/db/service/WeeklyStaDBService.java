@@ -24,12 +24,12 @@ public class WeeklyStaDBService extends BaseServiceImpl implements IWeeklyStaDBS
     private static final String CONDITION = "condition";
 
     @Override
-    public List<WeeklyStatisticVO> getStatisticByProduct(WeeklyStaSearchVO condition) throws BusinessException {
-        String methodName = "getStatisticByProduct-按产品类别查询列表";
+    public List<WeeklyStatisticVO> getStatisticByTask(WeeklyStaSearchVO condition) throws BusinessException {
+        String methodName = "getStatisticByTask-按产品类别查询列表";
         try {
             Map<String,Object> params = Maps.newHashMap();
             params.put(CONDITION,condition);
-            return this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE + "getStatisticByProduct",params);
+            return this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE + "getStatisticByTask",params);
         } catch (BusinessException e) {
             logger.error("{} 失败，[condition]->{}",methodName, JSON.toJSONString(condition),e);
             throw e;
@@ -40,12 +40,12 @@ public class WeeklyStaDBService extends BaseServiceImpl implements IWeeklyStaDBS
     }
 
     @Override
-    public List<WeeklyStatisticVO> getWeeklyPieByProduct(WeeklyStaSearchVO condition) throws BusinessException {
-        String methodName = "getWeeklyPieByProduct-按产品类别查询周报饼图";
+    public List<WeeklyStatisticVO> getWeeklyPieByTask(WeeklyStaSearchVO condition) throws BusinessException {
+        String methodName = "getWeeklyPieByTask-按产品类别查询周报饼图";
         try {
             Map<String,Object> params = Maps.newHashMap();
             params.put(CONDITION,condition);
-            return this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE + "getWeeklyPieByProduct",params);
+            return this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE + "getWeeklyPieByTask",params);
         } catch (BusinessException e) {
             logger.error("{} 失败，[condition]->{}",methodName, JSON.toJSONString(condition),e);
             throw e;
@@ -56,12 +56,12 @@ public class WeeklyStaDBService extends BaseServiceImpl implements IWeeklyStaDBS
     }
 
     @Override
-    public List<WeeklyStatisticVO> getStatisticByPerson(WeeklyStaSearchVO condition) throws BusinessException {
-        String methodName = "getStatisticByPerson-按人员所属查询列表";
+    public List<WeeklyStatisticVO> getStatisticByOrg(WeeklyStaSearchVO condition) throws BusinessException {
+        String methodName = "getStatisticByOrg-按人员所属查询列表";
         try {
             Map<String,Object> params = Maps.newHashMap();
             params.put(CONDITION,condition);
-            return this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE + "getStatisticByPerson",params);
+            return this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE + "getStatisticByOrg",params);
         } catch (BusinessException e) {
             logger.error("{} 失败，[condition]->{}",methodName, JSON.toJSONString(condition),e);
             throw e;
@@ -72,12 +72,12 @@ public class WeeklyStaDBService extends BaseServiceImpl implements IWeeklyStaDBS
     }
 
     @Override
-    public List<WeeklyStatisticVO> getWeeklyPieByPerson(WeeklyStaSearchVO condition) throws BusinessException {
-        String methodName = "getWeeklyPieByPerson-按人员所属查询周报饼图";
+    public List<WeeklyStatisticVO> getWeeklyPieByOrg(WeeklyStaSearchVO condition) throws BusinessException {
+        String methodName = "getWeeklyPieByOrg-按人员所属查询周报饼图";
         try {
             Map<String,Object> params = Maps.newHashMap();
             params.put(CONDITION,condition);
-            return this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE + "getWeeklyPieByPerson",params);
+            return this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE + "getWeeklyPieByOrg",params);
         } catch (BusinessException e) {
             logger.error("{} 失败，[condition]->{}",methodName, JSON.toJSONString(condition),e);
             throw e;
