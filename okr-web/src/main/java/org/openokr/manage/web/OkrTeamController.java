@@ -2,8 +2,13 @@ package org.openokr.manage.web;
 
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.base.utils.JSONUtils;
+import com.zzheng.framework.exception.BusinessException;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.openokr.application.framework.annotation.JsonPathParam;
 import org.openokr.application.web.BaseController;
+import org.openokr.common.vo.response.ResponseData;
 import org.openokr.manage.service.IOkrTeamService;
 import org.openokr.manage.vo.TeamsExtVO;
 import org.openokr.sys.vo.UserVO;
@@ -24,6 +29,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/manage/okrTeam")
+@Api(value = "团队管理控制器相关接口",description = "OkrTeamController")
 public class OkrTeamController extends BaseController {
 
     @Autowired
@@ -110,4 +116,32 @@ public class OkrTeamController extends BaseController {
     public List<UserVO> getUsersByTeamId(String teamId) {
         return okrTeamService.getUsersByTeamId(teamId);
     }
+
+
+    @ApiOperation(value = "查询用户所属团队列表数据", notes = "查询用户所属团队列表数据")
+    @ApiImplicitParams(
+            {
+            }
+    )
+    @RequestMapping(value = "/getTaskListByUser.json", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseData<List<TeamsExtVO>> getTaskListByUser() {
+        ResponseData<List<TeamsExtVO>> result = new ResponseData<>();
+        try {
+            List<TeamsExtVO> teamsExtVOS = okrTeamService.getTeamByUserId(this.getCurrentUserId());
+            result.setData(teamsExtVOS);
+            result.setCode(0);
+            result.setSuccess(true);
+        } catch (BusinessException e){
+            logger.error("查询用户所属团队列表数据 异常：{},参数:[{}]", e.getMessage() , e);
+            result.setCode(6000);
+            result.setMessage(e.getMessage());
+        }catch (Exception e){
+            logger.error("查询用户所属团队列表数据 异常：{},参数:[{}]", e.getMessage(), e);
+            result.setCode(7000);
+            result.setMessage(e.getMessage());
+        }
+        return result;
+    }
+
 }

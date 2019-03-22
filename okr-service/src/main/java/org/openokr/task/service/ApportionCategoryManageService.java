@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import springfox.documentation.spring.web.json.Json;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,10 +44,12 @@ public class ApportionCategoryManageService extends BaseServiceImpl implements I
                 //产品规划
                 ProductInfoVO productInfoVO = new ProductInfoVO();
                 return productInfoManageService.getProductInfoList(productInfoVO);
-            }else{
+            }else if(TaskConstant.CATEGORY_CUSTOMER.equals(categoryId)){
                 //客户定制
                 CustomerVO customerVO = new CustomerVO();
                 return customerManageService.getCutomerInfoList(customerVO);
+            }else{
+                return new ArrayList<>();
             }
         } catch (BusinessException e) {
             logger.error("获取分摊下拉选择信息列表 busi-error:{}-->[categoryId]={}", e.getMessage(), categoryId, e);
