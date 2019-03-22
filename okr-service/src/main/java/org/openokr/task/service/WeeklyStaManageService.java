@@ -89,27 +89,17 @@ public class WeeklyStaManageService extends BaseServiceImpl implements IWeeklySt
                     // 月 折线图 粒度精确到每周，横坐标显示每周一日期
                     // 先获取1号所在周的周一，按周取数据，然后加七天继续，直到周一日期大于本月最后一天
                     // 对结果进行循环，然后分组
-                    List<LineDataVO> monthDataList = Lists.newArrayList();
-                    List<String> monthXAxis = Lists.newArrayList();
-
-                    // 获取本月最后一天
-                    Date lastDay = DateUtils.stringToDate(condition.getReportEndDateStr());
-
-                    // 周一与周日
-                    Date monday = getMonday(DateUtils.stringToDate(condition.getReportStartDateStr()));
-
-                    // 查询并循环处理
-                    this.handleTaskMonthData(condition, chartVO, monthDataList, monthXAxis, lastDay, monday);
+                    this.handleTaskMonthData(condition, chartVO);
                     break;
                 case WeeklyStatisticConstants.SEARCH_TYPE_YEAR:
-                    // 年 todo
+                    // 年 折线图 粒度到月
                     // 按月取数据，然后加一个月继续，直到十二月为止
                     // 对结果进行循环，然后分组
+                    this.handleTaskYearData(condition, chartVO);
                     break;
                 default:
                     break;
             }
-
 
             return chartVO;
         } catch (BusinessException e) {
@@ -170,20 +160,13 @@ public class WeeklyStaManageService extends BaseServiceImpl implements IWeeklySt
                     // 月 折线图 粒度精确到每周，横坐标显示每周一日期
                     // 先获取1号所在周的周一，按周取数据，然后加七天继续，直到周一日期大于本月最后一天
                     // 对结果进行循环，然后分组
-                    List<LineDataVO> monthDataList = Lists.newArrayList();
-                    List<String> monthXAxis = Lists.newArrayList();
-
-                    // 获取本月最后一天
-                    Date lastDay = DateUtils.stringToDate(condition.getReportEndDateStr());
-
-                    // 周一
-                    Date monday = getMonday(DateUtils.stringToDate(condition.getReportStartDateStr()));
-
-                    // 查询并循环处理
-                    this.handleOrgMonthData(condition, chartVO, monthDataList, monthXAxis, lastDay, monday);
+                    this.handleOrgMonthData(condition, chartVO);
                     break;
                 case WeeklyStatisticConstants.SEARCH_TYPE_YEAR:
-                    // 年 todo
+                    // 年 折线图 粒度到月
+                    // 按月取数据，然后加一个月继续，直到十二月为止
+                    // 对结果进行循环，然后分组
+                    this.handleOrgYearData(condition, chartVO);
                     break;
                 default:
                     break;
@@ -230,7 +213,16 @@ public class WeeklyStaManageService extends BaseServiceImpl implements IWeeklySt
         return cal.getTime();
     }
 
-    private void handleTaskMonthData(WeeklyStaSearchVO condition, WeeklyChartVO chartVO, List<LineDataVO> monthDataList, List<String> monthXAxis, Date lastDay, Date monday) {
+    private void handleTaskMonthData(WeeklyStaSearchVO condition, WeeklyChartVO chartVO) throws ParseException {
+        List<LineDataVO> monthDataList = Lists.newArrayList();
+        List<String> monthXAxis = Lists.newArrayList();
+
+        // 获取本月最后一天
+        Date lastDay = DateUtils.stringToDate(condition.getReportEndDateStr());
+
+        // 周一与周日
+        Date monday = getMonday(DateUtils.stringToDate(condition.getReportStartDateStr()));
+
         WeeklyStaSearchVO weekCondition = new WeeklyStaSearchVO();
         weekCondition.setTeamId(condition.getTeamId());
         List<WeeklyStatisticVO> weekData;
@@ -276,7 +268,16 @@ public class WeeklyStaManageService extends BaseServiceImpl implements IWeeklySt
         chartVO.setLineSeriesData(monthDataList);
     }
 
-    private void handleOrgMonthData(WeeklyStaSearchVO condition, WeeklyChartVO chartVO, List<LineDataVO> monthDataList, List<String> monthXAxis, Date lastDay, Date monday) {
+    private void handleOrgMonthData(WeeklyStaSearchVO condition, WeeklyChartVO chartVO) throws ParseException {
+        List<LineDataVO> monthDataList = Lists.newArrayList();
+        List<String> monthXAxis = Lists.newArrayList();
+
+        // 获取本月最后一天
+        Date lastDay = DateUtils.stringToDate(condition.getReportEndDateStr());
+
+        // 周一
+        Date monday = getMonday(DateUtils.stringToDate(condition.getReportStartDateStr()));
+
         WeeklyStaSearchVO weekCondition = new WeeklyStaSearchVO();
         weekCondition.setTeamId(condition.getTeamId());
         List<WeeklyStatisticVO> weekData;
@@ -342,6 +343,110 @@ public class WeeklyStaManageService extends BaseServiceImpl implements IWeeklySt
             line.setData(dataList);
             monthDataList.add(line);
         }
+    }
+
+    private void handleTaskYearData(WeeklyStaSearchVO condition, WeeklyChartVO chartVO) throws ParseException {
+        List<LineDataVO> yearDataList = Lists.newArrayList();
+        List<String> yearXAxis = Lists.newArrayList();
+
+        // 时间，约定传进来的是当年1月1日的日期
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(DateUtils.stringToDate(condition.getReportStartDateStr()));
+
+        WeeklyStaSearchVO monthCondition = new WeeklyStaSearchVO();
+        monthCondition.setTeamId(condition.getTeamId());
+        List<WeeklyStatisticVO> monthData;
+        monthCondition.setSearchType(WeeklyStatisticConstants.SEARCH_TYPE_MONTH);
+        Date beginDate ;
+        for (int month = 1;month <= 12 ;month ++) {
+            cal.set(Calendar.MONTH, month-1 );
+            beginDate = cal.getTime();
+
+            yearXAxis.add(month+"月");
+            monthCondition.setReportStartDateStr(DateUtils.dateToString(beginDate));
+            monthData = weeklyStaDBService.getStatisticByTask(monthCondition);
+
+            if (monthData != null && !monthData.isEmpty()) {
+                for (WeeklyStatisticVO data:monthData) {
+                    LineDataVO line = new LineDataVO();
+                    line.setName(data.getTaskName());
+                    boolean flag = false;
+                    for (LineDataVO lineVO:yearDataList){
+                        if (lineVO.getName().equals(line.getName())) {
+                            line = lineVO;
+                            flag = true;
+                            break;
+                        }
+                    }
+                    this.handleLine(yearDataList, month-1, data, line, flag);
+                }
+            }
+        }
+
+        // 结尾补0，以防万一
+        for (LineDataVO lineVO:yearDataList) {
+            List<BigDecimal> dataList = lineVO.getData();
+            if (dataList.size()<12) {
+                for (int i = dataList.size(); i < 12; i++) {
+                    dataList.add(BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP));
+                }
+            }
+        }
+
+        chartVO.setXAxisData(yearXAxis);
+        chartVO.setLineSeriesData(yearDataList);
+    }
+
+    private void handleOrgYearData(WeeklyStaSearchVO condition, WeeklyChartVO chartVO) throws ParseException {
+        List<LineDataVO> yearDataList = Lists.newArrayList();
+        List<String> yearXAxis = Lists.newArrayList();
+
+        // 时间，约定传进来的是当年1月1日的日期
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(DateUtils.stringToDate(condition.getReportStartDateStr()));
+
+        WeeklyStaSearchVO monthCondition = new WeeklyStaSearchVO();
+        monthCondition.setTeamId(condition.getTeamId());
+        List<WeeklyStatisticVO> monthData;
+        monthCondition.setSearchType(WeeklyStatisticConstants.SEARCH_TYPE_MONTH);
+        Date beginDate ;
+        for (int month = 1;month <= 12 ;month ++) {
+            cal.set(Calendar.MONTH, month-1 );
+            beginDate = cal.getTime();
+
+            yearXAxis.add(month+"月");
+            monthCondition.setReportStartDateStr(DateUtils.dateToString(beginDate));
+            monthData = weeklyStaDBService.getStatisticByOrg(monthCondition);
+
+            if (monthData != null && !monthData.isEmpty()) {
+                for (WeeklyStatisticVO data:monthData) {
+                    LineDataVO line = new LineDataVO();
+                    line.setName(data.getOrgName());
+                    boolean flag = false;
+                    for (LineDataVO lineVO:yearDataList){
+                        if (lineVO.getName().equals(line.getName())) {
+                            line = lineVO;
+                            flag = true;
+                            break;
+                        }
+                    }
+                    this.handleLine(yearDataList, month-1, data, line, flag);
+                }
+            }
+        }
+
+        // 结尾补0，以防万一
+        for (LineDataVO lineVO:yearDataList) {
+            List<BigDecimal> dataList = lineVO.getData();
+            if (dataList.size()<12) {
+                for (int i = dataList.size(); i < 12; i++) {
+                    dataList.add(BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP));
+                }
+            }
+        }
+
+        chartVO.setXAxisData(yearXAxis);
+        chartVO.setLineSeriesData(yearDataList);
     }
 
 }

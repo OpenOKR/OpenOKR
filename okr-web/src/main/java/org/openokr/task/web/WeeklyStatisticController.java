@@ -56,7 +56,7 @@ public class WeeklyStatisticController extends BaseController {
         return result;
     }
 
-    @ApiOperation(value = "按产品类别查询图表", notes = "周-饼图（有），月-周折线图，年-月折线图(空)")
+    @ApiOperation(value = "按产品类别查询图表", notes = "周-饼图，月-周折线图，年-月折线图")
     @RequestMapping(value = "/getWeeklyChartByTask.json", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<WeeklyChartVO> getWeeklyChartByTask(@RequestBody WeeklyStaSearchVO vo) {
@@ -102,7 +102,7 @@ public class WeeklyStatisticController extends BaseController {
         return result;
     }
 
-    @ApiOperation(value = "按人员所属查询图表", notes = "周-饼图（有），月-周折线图，年-月折线图(空)")
+    @ApiOperation(value = "按人员所属查询图表", notes = "周-饼图，月-周折线图，年-月折线图")
     @RequestMapping(value = "/getWeeklyChartByOrg.json", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<WeeklyChartVO> getWeeklyChartByOrg(@RequestBody WeeklyStaSearchVO vo) {
