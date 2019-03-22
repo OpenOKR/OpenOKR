@@ -248,6 +248,12 @@ public class TaskManageController extends BaseController {
     }
 
 
+    /**
+     * 筛选过期的任务
+     * 根据任务-人员关系表查出的我拥有的任务列表
+     * @param vo
+     * @return
+     */
     @ApiOperation(value = "查询用户所属任务列表数据", notes = "查询用户所属任务列表数据")
     @ApiImplicitParams(
             {
@@ -314,6 +320,12 @@ public class TaskManageController extends BaseController {
         }
         return result;
     }
+
+    /**
+     * 主要是为了筛选过期的任务时间
+     * @param vo
+     * @return
+     */
     @ApiOperation(value = "根据条件分页查询任务列表数据", notes = "根据条件分页查询任务列表数据")
     @ApiImplicitParams(
             {

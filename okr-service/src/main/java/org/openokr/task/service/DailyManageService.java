@@ -6,6 +6,7 @@ import com.zzheng.framework.mybatis.dao.pojo.Page;
 import com.zzheng.framework.mybatis.service.impl.BaseServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.openokr.common.constant.DailyConstant;
+import org.openokr.db.service.IBasicDBService;
 import org.openokr.db.service.IDailyDBService;
 import org.openokr.task.entity.DailyEntity;
 import org.openokr.task.request.DailySearchVO;
@@ -16,11 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author yuxinzh
@@ -32,6 +30,8 @@ public class DailyManageService extends BaseServiceImpl implements IDailyManageS
 
     @Autowired
     private IDailyDBService dailyDBService;
+    @Autowired
+    private IBasicDBService basicDBService;
 
     @Override
     public Page queryPage(DailySearchVO condition, Page page) throws BusinessException {
@@ -40,7 +40,12 @@ public class DailyManageService extends BaseServiceImpl implements IDailyManageS
             if (condition == null) {
                 throw new BusinessException("查询条件对象为空");
             }
-
+            //如果是管理员，并且要查所有人的日报
+            if (StringUtils.isNotBlank(condition.getIsAdmin())){
+                List<String> userIdList = basicDBService.getUserIdListByAdminTeam(condition.getReportUserId());
+                condition.setReportUserId(null);
+                condition.setReportUserIdList(userIdList);
+            }
             int count = dailyDBService.countDailyList(condition);
             if (count >= 0) {
                 List<DailyVO> list = dailyDBService.getDailyList(condition,page);

@@ -169,6 +169,7 @@
             AND otur.user_id = #{condition.userId}
         </if>
         <if test="(condition.userId == null or condition.userId == '') and condition.userIdList != null">
+            AND otur.user_id in
             <foreach collection="condition.userIdList" item="userId" open="(" separator="," close=")">
                 #{userId}
             </foreach>
@@ -216,6 +217,7 @@
         <if test="vo.currentUserId != null and !vo.currentUserId.isEmpty()">
             and (t2.user_id = #{vo.currentUserId})
         </if>
+        and (now() BETWEEN t1.task_start_time and t1.task_end_time)
         order by create_ts desc
     </sql>
 

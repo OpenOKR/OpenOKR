@@ -17,4 +17,11 @@ public class TaskConstant {
      */
     public final static String CATEGORY_PRODUCT = "00";
     public final static String CATEGORY_CUSTOMER = "01";
+
+    /**
+     * 是否是管理员查询
+     */
+    public final static String IS_ADMIN = "1";
+
+
 }

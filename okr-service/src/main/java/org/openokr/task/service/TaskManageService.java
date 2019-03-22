@@ -6,6 +6,7 @@ import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.dao.pojo.Page;
 import com.zzheng.framework.mybatis.service.impl.BaseServiceImpl;
 import org.apache.commons.lang3.StringUtils;
+import org.openokr.common.constant.TaskConstant;
 import org.openokr.db.service.IBasicDBService;
 import org.openokr.db.service.IDailyDBService;
 import org.openokr.manage.entity.TeamUserRelaEntityCondition;
@@ -507,35 +508,36 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
             if (conditionVO == null || StringUtils.isBlank(conditionVO.getUserId())){
                 throw new BusinessException("查询参数为空");
             }
-            UserVO userVO = new UserVO();
-            userVO.setId(conditionVO.getUserId());
-            List<UserVO> userVOList = userService.getUserRole(userVO);
             //0开头的是管理员 00：超级管理员 01：系统管理员 02：普通管理员   10：用户
             //只要他是管理员就查，仅查一次
-            for (UserVO user:userVOList){
-                if ("0".equals(user.getRoleType().substring(1,1))){
-                    logger.info("当前用户为管理员 userId:{}"+user.getId());
-                    //管理员返回所有任务
-                    conditionVO.setUserId(null);
-                    TeamsVO teamsVO = new TeamsVO();
-                    teamsVO.setOwnerId(user.getId());
-                    List<TeamsVO> teamsVOS  = okrTeamService.getTeamListByUserOrType(teamsVO);
-                    if (teamsVOS==null){
-                        logger.info("当前管理员用户查询负责的团队为空");
+            if (TaskConstant.IS_ADMIN.equals(conditionVO.getIsAdmin())){
+                UserVO userVO = new UserVO();
+                userVO.setId(conditionVO.getUserId());
+                List<UserVO> userVOList = userService.getUserRole(userVO);
+                for (UserVO user:userVOList){
+                    if ("0".equals(user.getRoleType().substring(1,1))){
+                        logger.info("当前用户是管理员 userId:{}"+user.getId());
+                        //管理员返回所有任务
+                        conditionVO.setUserId(null);
+                        TeamsVO teamsVO = new TeamsVO();
+                        teamsVO.setOwnerId(user.getId());
+                        List<TeamsVO> teamsVOS  = okrTeamService.getTeamListByUserOrType(teamsVO);
+                        if (teamsVOS==null){
+                            logger.info("当前管理员用户查询负责的团队为空");
+                        }
+                        List<String> teamIdList = Lists.newArrayList();
+                        for (TeamsVO vo : teamsVOS){
+                            teamIdList.add(vo.getId());
+                        }
+                        TeamUserRelaEntityCondition teamUserRelaEntityCondition =new TeamUserRelaEntityCondition();
+                        teamUserRelaEntityCondition.createCriteria().andTeamIdIn(teamIdList);
+                        List<UserVO> teamUserList = JSONCloneObject.cloneListObject(this.selectByCondition(teamUserRelaEntityCondition),UserVO.class);
+                        List<String> userIdList = Lists.newArrayList();
+                        for (UserVO vo : teamUserList){
+                            userIdList.add(vo.getId());
+                        }
+                        return basicDBService.getSearchCondition(conditionVO);
                     }
-                    List<String> teamIdList = Lists.newArrayList();
-                    for (TeamsVO vo : teamsVOS){
-                        teamIdList.add(vo.getId());
-                    }
-                    TeamUserRelaEntityCondition teamUserRelaEntityCondition =new TeamUserRelaEntityCondition();
-                    teamUserRelaEntityCondition.createCriteria().andTeamIdIn(teamIdList);
-                    List<UserVO> teamUserList = JSONCloneObject.cloneListObject(this.selectByCondition(teamUserRelaEntityCondition),UserVO.class);
-                    List<String> userIdList = Lists.newArrayList();
-                    for (UserVO vo : teamUserList){
-                        userIdList.add(vo.getId());
-                    }
-                    conditionVO.setUserId(null);
-                    return basicDBService.getSearchCondition(conditionVO);
                 }
             }
             return basicDBService.getSearchCondition(conditionVO);

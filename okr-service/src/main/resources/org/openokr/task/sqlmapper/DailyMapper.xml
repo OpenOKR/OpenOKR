@@ -51,6 +51,13 @@
         <if test="condition.reportUserId != null and condition.reportUserId != ''" >
             AND t1.report_user_id = #{condition.reportUserId}
         </if>
+        <if test="(condition.reportUserId == null or condition.reportUserId == '') and condition.reportUserIdList !=null" >
+            AND t1.report_user_id in
+            <foreach collection="condition.reportUserIdList" item="userId" open="(" separator="," close=")">
+                AND t1.report_user_id = #{userId}
+            </foreach>
+
+        </if>
         <if test="condition.taskId != null and condition.taskId != ''" >
             AND t1.task_id = #{condition.taskId}
         </if>

@@ -1,13 +1,23 @@
 package org.openokr.db.service;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.zzheng.framework.base.utils.JSONUtils;
+import com.zzheng.framework.base.utils.StringUtils;
 import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.service.impl.BaseServiceImpl;
+import org.openokr.manage.entity.TeamUserRelaEntityCondition;
+import org.openokr.manage.service.IOkrTeamService;
+import org.openokr.manage.vo.TeamsVO;
+import org.openokr.sys.service.IUserService;
+import org.openokr.sys.vo.UserVO;
 import org.openokr.task.vo.SearchConditionVO;
+import org.openokr.util.JSONCloneObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -44,5 +54,45 @@ public class BasicDBService extends BaseServiceImpl implements IBasicDBService {
             logger.error("搜索条件查询异常 error:{}-->[conditionVO]={}", e.getMessage(), JSONUtils.objectToString(conditionVO), e);
             throw new BusinessException("搜索条件查询异常 失败");
         }
+    }
+
+    @Autowired
+    IUserService userService;
+
+    @Autowired
+    IOkrTeamService okrTeamService;
+    @Override
+    public List<String> getUserIdListByAdminTeam(String userId) throws BusinessException {
+        if (StringUtils.isEmpty(userId)){
+            throw new BusinessException("用户查询参数为空");
+        }
+        UserVO userVO = new UserVO();
+        userVO.setId(userId);
+        List<UserVO> userVOList = userService.getUserRole(userVO);
+        for (UserVO user:userVOList){
+            if ("0".equals(user.getRoleType().substring(1,1))){
+                logger.info("当前用户是管理员 userId:{}"+user.getId());
+                //管理员返回所有任务
+                TeamsVO teamsVO = new TeamsVO();
+                teamsVO.setOwnerId(user.getId());
+                List<TeamsVO> teamsVOS  = okrTeamService.getTeamListByUserOrType(teamsVO);
+                if (teamsVOS==null){
+                    logger.info("当前管理员用户查询负责的团队为空");
+                }
+                List<String> teamIdList = Lists.newArrayList();
+                for (TeamsVO vo : teamsVOS){
+                    teamIdList.add(vo.getId());
+                }
+                TeamUserRelaEntityCondition teamUserRelaEntityCondition =new TeamUserRelaEntityCondition();
+                teamUserRelaEntityCondition.createCriteria().andTeamIdIn(teamIdList);
+                List<UserVO> teamUserList = JSONCloneObject.cloneListObject(this.selectByCondition(teamUserRelaEntityCondition),UserVO.class);
+                List<String> userIdList = Lists.newArrayList();
+                for (UserVO vo : teamUserList){
+                    userIdList.add(vo.getId());
+                }
+                return userIdList;
+            }
+        }
+        return new ArrayList<>();
     }
 }
