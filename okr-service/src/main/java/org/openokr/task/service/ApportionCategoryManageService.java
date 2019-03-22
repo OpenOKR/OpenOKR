@@ -44,7 +44,7 @@ public class ApportionCategoryManageService extends BaseServiceImpl implements I
                 //产品规划
                 ProductInfoVO productInfoVO = new ProductInfoVO();
                 return productInfoManageService.getProductInfoList(productInfoVO);
-            }else if(TaskConstant.CATEGORY_CUSTOMER.equals(categoryId)){
+            }else if(TaskConstant.CATEGORY_CUSTOMER.equals(categoryId) || TaskConstant.CATEGORY_IMPLEMENT.equals(categoryId)){
                 //客户定制
                 CustomerVO customerVO = new CustomerVO();
                 return customerManageService.getCutomerInfoList(customerVO);
