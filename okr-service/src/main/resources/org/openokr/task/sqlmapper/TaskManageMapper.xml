@@ -13,6 +13,9 @@
             <if test="vo.searchKey != null and !vo.searchKey.isEmpty()">
                 and (t1.task_name LIKE CONCAT('%', #{vo.searchKey }, '%') or t1.task_remark LIKE CONCAT('%', #{vo.searchKey }, '%'))
             </if>
+            <if test="vo.teamId != null and !vo.teamId.isEmpty()">
+                and t1.belong_team = #{vo.teamId}
+            </if>
             <if test="vo.queryStartDate != null">
                 <![CDATA[AND t1.create_ts >= #{vo.queryStartDate}]]>
             </if>
@@ -34,6 +37,9 @@
         <where>
             <if test="vo.searchKey != null and !vo.searchKey.isEmpty()">
                 and (t1.task_name LIKE CONCAT('%', #{vo.searchKey }, '%') or t1.task_remark LIKE CONCAT('%', #{vo.searchKey }, '%'))
+            </if>
+            <if test="vo.teamId != null and !vo.teamId.isEmpty()">
+                and t1.belong_team = #{vo.teamId}
             </if>
             <if test="vo.queryStartDate != null">
                 <![CDATA[AND t1.create_ts >= #{vo.queryStartDate}]]>
