@@ -168,6 +168,11 @@
         <if test="condition.userId != null and condition.userId != ''" >
             AND otur.user_id = #{condition.userId}
         </if>
+        <if test="(condition.userId == null or condition.userId == '') and condition.userIdList != null">
+            <foreach collection="condition.userIdList" item="userId" open="(" separator="," close=")">
+                #{userId}
+            </foreach>
+        </if>
         <if test="condition.categoryId != null and condition.categoryId != ''" >
             AND oac.id = #{condition.categoryId}
         </if>
@@ -210,6 +215,44 @@
         where 1=1
         <if test="vo.currentUserId != null and !vo.currentUserId.isEmpty()">
             and (t2.user_id = #{vo.currentUserId})
+        </if>
+        order by create_ts desc
+    </sql>
+
+    <select id="getTaskList" parameterType="java.util.Map" resultType="org.openokr.task.vo.TaskVO">
+        <include refid="queryTaskListSql" />
+        <if test="page != null" >
+            <![CDATA[ limit #{page.pageSize} offset (#{page.recordStart}-1) ]]>
+        </if>
+    </select>
+    <select id="countTaskList" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+        count(*)
+        FROM (<include refid="queryTaskListSql" />)t
+    </select>
+    <sql id="queryTaskListSql">
+        SELECT
+        t1.ID,
+        t1.task_code,
+        t1.task_name,
+        t1.task_status,
+        t1.task_remark,
+        t1.is_deleted,
+        t1.task_start_time,
+        t1.task_end_time,
+        t1.jira_label,
+        t1.confirm_user_id,
+        t1.create_user_id,
+        t2.real_name createUserName,
+        t1.create_ts,
+        t1.update_user_id,
+        t1.update_ts
+        FROM
+        t_okr_task t1
+        LEFT JOIN t_okr_sys_user t2 ON t1.create_user_id = t2.ID
+        where 1=1
+        <if test="vo.isFilterTime != null and !vo.isFilterTime.isEmpty()">
+            and (now() BETWEEN t1.task_start_time and t1.task_end_time)
         </if>
         order by create_ts desc
     </sql>

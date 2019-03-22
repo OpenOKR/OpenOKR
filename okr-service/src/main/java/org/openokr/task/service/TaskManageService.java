@@ -1,5 +1,6 @@
 package org.openokr.task.service;
 
+import com.google.common.collect.Lists;
 import com.zzheng.framework.base.utils.JSONUtils;
 import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.dao.pojo.Page;
@@ -7,10 +8,12 @@ import com.zzheng.framework.mybatis.service.impl.BaseServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.openokr.db.service.IBasicDBService;
 import org.openokr.db.service.IDailyDBService;
+import org.openokr.manage.entity.TeamUserRelaEntityCondition;
 import org.openokr.manage.service.IOkrObjectService;
 import org.openokr.manage.service.IOkrTeamService;
 import org.openokr.manage.vo.TeamsExtVO;
 import org.openokr.manage.vo.TeamsSearchVO;
+import org.openokr.manage.vo.TeamsVO;
 import org.openokr.sys.entity.UserEntity;
 import org.openokr.sys.service.IUserService;
 import org.openokr.sys.vo.UserVO;
@@ -18,6 +21,7 @@ import org.openokr.task.entity.*;
 import org.openokr.task.request.TaskSearchVO;
 import org.openokr.task.request.TeamTaskSearchVO;
 import org.openokr.task.vo.*;
+import org.openokr.util.JSONCloneObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -509,10 +513,31 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
             userVO.setId(conditionVO.getUserId());
             List<UserVO> userVOList = userService.getUserRole(userVO);
             //0开头的是管理员 00：超级管理员 01：系统管理员 02：普通管理员   10：用户
+            //只要他是管理员就查，仅查一次
             for (UserVO user:userVOList){
                 if ("0".equals(user.getRoleType().substring(1,1))){
+                    logger.info("当前用户为管理员 userId:{}"+user.getId());
                     //管理员返回所有任务
                     conditionVO.setUserId(null);
+                    TeamsVO teamsVO = new TeamsVO();
+                    teamsVO.setOwnerId(user.getId());
+                    List<TeamsVO> teamsVOS  = okrTeamService.getTeamListByUserOrType(teamsVO);
+                    if (teamsVOS==null){
+                        logger.info("当前管理员用户查询负责的团队为空");
+                    }
+                    List<String> teamIdList = Lists.newArrayList();
+                    for (TeamsVO vo : teamsVOS){
+                        teamIdList.add(vo.getId());
+                    }
+                    TeamUserRelaEntityCondition teamUserRelaEntityCondition =new TeamUserRelaEntityCondition();
+                    teamUserRelaEntityCondition.createCriteria().andTeamIdIn(teamIdList);
+                    List<UserVO> teamUserList = JSONCloneObject.cloneListObject(this.selectByCondition(teamUserRelaEntityCondition),UserVO.class);
+                    List<String> userIdList = Lists.newArrayList();
+                    for (UserVO vo : teamUserList){
+                        userIdList.add(vo.getId());
+                    }
+                    conditionVO.setUserId(null);
+                    return basicDBService.getSearchCondition(conditionVO);
                 }
             }
             return basicDBService.getSearchCondition(conditionVO);
@@ -523,6 +548,34 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
             logger.error("搜索条件查询异常 error:{}-->[conditionVO]={}", e.getMessage(), JSONUtils.objectToString(conditionVO), e);
             throw new BusinessException("搜索条件查询异常 失败");
         }
+    }
+
+    @Override
+    public Page getTakListByCondition(Page page, TaskSearchVO taskSearchVO) throws BusinessException {
+        try{
+
+            Map<String,Object> paramMap = new HashMap<>();
+            if(page != null){
+                paramMap.put("page",page);
+            }else {
+                paramMap.put("page",null);
+                page = new Page();
+            }
+            paramMap.put("vo",taskSearchVO);
+            Integer count = this.getMyBatisDao().selectOneBySql(MAPPER_NAMSPACE+".countTaskList",paramMap);
+            page.setTotalRecord(count);
+            if(count > 0){
+                List<TaskVO> taskVOS = this.getMyBatisDao().selectListBySql(MAPPER_NAMSPACE+".getTaskList",paramMap);
+                page.setRecords(taskVOS);
+            }
+        } catch (BusinessException e) {
+            logger.error("根据条件分页查询任务列表信息 busi-error:{}-->[page]={},[taskSearchVO]={}", e.getMessage(), JSONUtils.objectToString(page),JSONUtils.objectToString(taskSearchVO), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("根据条件分页查询任务列表信息 error:{}-->[page]={},[taskSearchVO]={}", e.getMessage(), JSONUtils.objectToString(page),JSONUtils.objectToString(taskSearchVO), e);
+            throw new BusinessException("根据条件分页查询任务列表信息 失败");
+        }
+        return page;
     }
 
 }

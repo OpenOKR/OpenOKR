@@ -10,7 +10,6 @@ import org.openokr.sys.vo.UserVO;
 import org.openokr.task.request.TeamTaskSearchVO;
 import org.openokr.task.vo.TeamTaskCountInfoVO;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -98,4 +97,12 @@ public interface IOkrTeamService {
      * @throws BusinessException
      */
     TeamTaskCountInfoVO getTeamTaskCountInfo(TeamsSearchVO teamsSearchVO) throws BusinessException;
+
+    /**
+     * 根据用户或类型查询团队列表
+     * @param teamsVO
+     * @return
+     * @throws BusinessException
+     */
+    List<TeamsVO> getTeamListByUserOrType(TeamsVO teamsVO)  throws BusinessException;
 }

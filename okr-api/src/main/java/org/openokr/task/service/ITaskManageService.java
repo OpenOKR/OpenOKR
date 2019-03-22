@@ -105,4 +105,13 @@ public interface ITaskManageService {
      */
     List<SearchConditionVO> getSearchCondition(SearchConditionVO conditionVO)throws BusinessException;
 
+
+    /**
+     * 分页查询任务列表信息-可以筛选时间
+     * @param page
+     * @param taskSearchVO
+     * @return
+     * @throws Exception
+     */
+    Page getTakListByCondition(Page page, TaskSearchVO taskSearchVO) throws BusinessException;
 }

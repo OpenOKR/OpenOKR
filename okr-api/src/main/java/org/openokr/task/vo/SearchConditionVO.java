@@ -55,6 +55,10 @@ public class SearchConditionVO extends BaseVO {
     @ApiModelProperty(value = "okr名称")
     private String okrName;
 
+    @ApiModelProperty(value = "用户id list，前端无需传入数据")
     private List<String> userIdList;
+
+    @ApiModelProperty(value = "是否是管理员,是管理员则传 1")
+    private String isAdmin;
 
 }
