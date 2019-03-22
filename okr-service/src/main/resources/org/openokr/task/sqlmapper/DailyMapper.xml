@@ -10,7 +10,6 @@
     </sql>
 
     <sql id="pageCondition">
-        SELECT * from (
         SELECT
         t1.ID,
         t1.report_user_id,
@@ -24,25 +23,11 @@
         t1.update_user_id,
         t1.update_ts,
         t2.task_name
-        -- 	okrid
-        ,omo.id okr_id
-        -- 	团队id
         ,ot2.id team_id
-        -- 	产品id
-        ,(case when oac.id = '01' then null else opi.id end ) tem_product_id
-        ,(case when oac.id = '00' then opi.id else oc.id end ) product_id
-        ,oac.id type_id
-        -- 	客户id
-        ,(case when oac.id = '00' then null else oc.id end) tem_cust_id
+        ,ot2.name team_name
         FROM t_okr_daily t1
         LEFT JOIN t_okr_task t2 ON t1.task_id = t2.id
-        left join T_OKR_TASK_APPORTION otp on otp.task_id = t2.id
-        LEFT join T_OKR_APPORTION_CATEGORY oac on otp.category_id = oac.id
-        left join T_OKR_PRODUCT_INFO opi on opi.id = otp.apportion_name_id
-        left join T_OKR_CUSTOMER oc on oc.id = otp.apportion_name_id
         LEFT JOIN T_OKR_TEAMS ot2 ON ot2.id = t2.belong_team
-        LEFT JOIN T_OKR_TASK_KR_REL otkr ON otkr.task_id = t2.id
-        LEFT JOIN T_OKR_MANAGE_OBJECTIVES omo ON omo.id = otkr.kr_id
         WHERE
             1 = 1
         <if test="condition.reportDayStr != null and condition.reportDayStr != ''" >
@@ -68,16 +53,7 @@
         <if test="condition.teamId != null and condition.teamId != '' " >
             AND ot2.id = #{condition.teamId}
         </if>
-        <if test="condition.okrId != null and condition.okrId != '' " >
-            AND omo.id = #{condition.okrId}
-        </if>
-        <if test="condition.categoryId != null and condition.categoryId != '' " >
-            AND oac.id = #{condition.categoryId}
-        </if>
-        ORDER BY t1.report_day DESC ,t1.update_ts DESC)t
-        <if test="condition.productId != null and condition.productId != '' " >
-            WHERE product_id = #{condition.productId}
-        </if>
+        ORDER BY t1.report_day DESC ,t1.update_ts DESC
     </sql>
 
     <select id="countDailyList" resultType="Integer" parameterType="HashMap">

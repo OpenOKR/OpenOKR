@@ -145,33 +145,16 @@
     </select>
 
     <select id="conditionQuerySql" parameterType="java.util.Map" resultType="org.openokr.task.vo.SearchConditionVO">
-        SELECT * from (
             SELECT
                 ot.id task_id
                 ,ot.task_name
                 ,otur.user_id
-                ,(case when (oac.id = '01' or oac.id = '02') then null else opt.id end ) tem_product_id
-                ,(case when (oac.id = '01' or oac.id = '02') then null else opt.product_name end ) tem_product_name
-                ,(case when (oac.id = '00' or oac.id = '03') then null else oc.id end) tem_cust_id
-                ,(case when (oac.id = '00' or oac.id = '03') then null else oc.name end ) tem_cust_name
-                ,(case when (oac.id = '00' or oac.id = '03') then  opt.id else oc.id end ) product_id
-                ,(case when (oac.id = '00' or oac.id = '03') then  opt.product_name else oc.name end ) product_name
-                ,oac.id  category_id
-                ,oac.category_name
                 ,ot2.name team_name
                 ,ot2.id team_id
-                ,omo.id okr_id
-                ,omo.name okr_Name
             FROM
                 T_OKR_TASK ot
             left join T_OKR_TASK_USER_REL otur on ot.id = otur.task_id
-            LEFT join T_OKR_TASK_APPORTION ota on ot.id = ota.task_id
-            LEFT JOIN T_OKR_PRODUCT_INFO opt ON opt.id = ota.apportion_name_id
-            left join T_OKR_CUSTOMER oc on oc.id = ota.apportion_name_id
-            left join T_OKR_APPORTION_CATEGORY oac on oac.id = ota.category_id
             left join T_OKR_TEAMS ot2 on ot2.id = ot.belong_team
-            LEFT join T_OKR_TASK_KR_REL otkr on otkr.task_id = ot.id
-            LEFT join T_OKR_MANAGE_OBJECTIVES omo on omo.id = otkr.kr_id
         WHERE 1=1
         <if test="condition.userId != null and condition.userId != ''" >
             AND otur.user_id = #{condition.userId}
@@ -182,21 +165,11 @@
                 #{userId}
             </foreach>
         </if>
-        <if test="condition.categoryId != null and condition.categoryId != ''" >
-            AND oac.id = #{condition.categoryId}
-        </if>
         <if test="condition.teamId != null and condition.teamId != ''" >
             AND ot2.id = #{condition.teamId}
         </if>
         <if test="condition.taskId != null and condition.taskId != ''" >
             AND ot.id = #{condition.taskId}
-        </if>
-        <if test="condition.okrId != null and condition.okrId != ''" >
-            AND omo.id = #{condition.okrId}
-        </if>
-        )t
-        <if test="condition.productId != null and condition.productId != ''" >
-            where product_id = #{condition.productId}
         </if>
     </select>
 
