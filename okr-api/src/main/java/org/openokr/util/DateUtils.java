@@ -71,6 +71,19 @@ public class DateUtils {
     }
 
     /**
+     * 按时间字符串，将时间加N天后，返回新的时间字符串，格式yyyy-MM-dd
+     * @param beginDateStr
+     * @param day
+     * @return
+     */
+    public static String addDay(String beginDateStr,int day) throws ParseException{
+        if (StringUtils.isBlank(beginDateStr)) {
+            return null;
+        }
+        return addDay(beginDateStr,FORMAT_SHORT,day);
+    }
+
+    /**
      * 按时间字符串，将时间加N天后，返回新的时间字符串
      * @param beginDateStr
      * @param pattern

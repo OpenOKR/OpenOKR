@@ -37,24 +37,23 @@ public class WeeklyStaSearchVO extends BaseVO {
 
     @ApiModelProperty(value = "结束时间字符串，根据开始时间和时间类型自动计算的，不传")
     public String getReportEndDateStr() throws ParseException {
-        String pattern = "yyyy-MM-dd";
         if (StringUtils.isBlank(reportStartDateStr)) {
             return null;
         }
         Calendar calendar = Calendar.getInstance();
-        switch (reportStartDateStr) {
+        switch (searchType) {
             case WeeklyStatisticConstants.SEARCH_TYPE_WEEK:
-                return DateUtils.addDay(reportStartDateStr,pattern,6);
+                return DateUtils.addDay(reportStartDateStr,6);
             case WeeklyStatisticConstants.SEARCH_TYPE_MONTH:
-                calendar.setTime(DateUtils.stringToDate(reportStartDateStr,pattern));
+                calendar.setTime(DateUtils.stringToDate(reportStartDateStr));
                 calendar.set(Calendar.DAY_OF_MONTH,1);
                 calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));
-                return DateUtils.dateToString(calendar.getTime(),pattern);
+                return DateUtils.dateToString(calendar.getTime());
             case WeeklyStatisticConstants.SEARCH_TYPE_YEAR:
-                calendar.setTime(DateUtils.stringToDate(reportStartDateStr,pattern));
+                calendar.setTime(DateUtils.stringToDate(reportStartDateStr));
                 calendar.set(Calendar.MONTH,11);
                 calendar.set(Calendar.DAY_OF_MONTH,31);
-                return DateUtils.dateToString(calendar.getTime(),pattern);
+                return DateUtils.dateToString(calendar.getTime());
             default:
                 return null;
         }

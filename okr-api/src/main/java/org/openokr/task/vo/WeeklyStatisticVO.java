@@ -21,6 +21,9 @@ public class WeeklyStatisticVO extends BaseVO {
     @ApiModelProperty(value = "部门名称，按人员归属统计时展示")
     private String orgName;
 
+    @ApiModelProperty(value = "部门人数，按人员归属统计时展示，只统计实际有提交日报的人员数量")
+    private String orgUserNum;
+
     @ApiModelProperty(value = "产品ID，按产品统计时展示")
     private String taskId;
 
