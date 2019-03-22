@@ -9,7 +9,6 @@
         t1.update_ts
         FROM t_okr_task t1
         LEFT join t_okr_sys_user t2 on t1.create_user_id = t2.id
-        where t1.TASK_END_TIME
         <where>
             <if test="vo.searchKey != null and !vo.searchKey.isEmpty()">
                 and (t1.task_name LIKE CONCAT('%', #{vo.searchKey }, '%') or t1.task_remark LIKE CONCAT('%', #{vo.searchKey }, '%'))
