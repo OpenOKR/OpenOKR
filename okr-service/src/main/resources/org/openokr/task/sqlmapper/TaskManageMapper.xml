@@ -150,12 +150,12 @@
                 ot.id task_id
                 ,ot.task_name
                 ,otur.user_id
-                ,(case when oac.id = '01' then null else opt.id end ) tem_product_id
-                ,(case when oac.id = '01' then null else opt.product_name end ) tem_product_name
-                ,(case when oac.id = '00' then null else oc.id end) tem_cust_id
-                ,(case when oac.id = '00' then null else oc.name end ) tem_cust_name
-                ,(case when oac.id = '00' then  opt.id else oc.id end ) product_id
-                ,(case when oac.id = '00' then  opt.product_name else oc.name end ) product_name
+                ,(case when (oac.id = '01' or oac.id = '02') then null else opt.id end ) tem_product_id
+                ,(case when (oac.id = '01' or oac.id = '02') then null else opt.product_name end ) tem_product_name
+                ,(case when (oac.id = '00' or oac.id = '03') then null else oc.id end) tem_cust_id
+                ,(case when (oac.id = '00' or oac.id = '03') then null else oc.name end ) tem_cust_name
+                ,(case when (oac.id = '00' or oac.id = '03') then  opt.id else oc.id end ) product_id
+                ,(case when (oac.id = '00' or oac.id = '03') then  opt.product_name else oc.name end ) product_name
                 ,oac.id  category_id
                 ,oac.category_name
                 ,ot2.name team_name
