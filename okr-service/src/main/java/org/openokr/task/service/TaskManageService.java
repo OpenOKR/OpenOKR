@@ -101,8 +101,10 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
             if(StringUtils.isBlank(taskSaveVO.getTaskVO().getTaskName())){
                 throw new BusinessException("任务名称为空，请确认!");
             }
-            if(taskSaveVO.getApportionVOS() == null || taskSaveVO.getApportionVOS().size() < 1){
-                throw new BusinessException("任务分摊信息为空，请确认!");
+            if(taskSaveVO.getApportionVOS() == null || taskSaveVO.getApportionVOS().size() < 1 ){
+                if(StringUtils.isBlank(taskSaveVO.getTaskVO().getId()) || !"TASK".equals(taskSaveVO.getTaskVO().getId().substring(0,4))){
+                    throw new BusinessException("任务分摊信息为空，请确认!");
+                }
             }
             Date date = new Date();
             taskVO = taskSaveVO.getTaskVO();
