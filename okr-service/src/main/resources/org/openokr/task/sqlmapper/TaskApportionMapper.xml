@@ -13,7 +13,7 @@
       t_okr_task_apportion t1
       LEFT JOIN T_OKR_PRODUCT_INFO t2 on t1.apportion_name_id = t2.id
       LEFT JOIN T_OKR_CUSTOMER t3 on t1.apportion_name_id = t3.id and t1.category_id = '00'
-      LEFT JOIN T_OKR_APPORTION_CATEGORY T4 ON T1.category_id = T4.ID and t1.category_id = '01'
+      LEFT JOIN T_OKR_APPORTION_CATEGORY T4 ON T1.category_id = T4.ID and (t1.category_id = '01' or t1.category_id = '02')
       where t1.task_id = #{taskId}
   </select>
 </mapper>
