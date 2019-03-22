@@ -38,7 +38,7 @@ public interface IWeeklyStaDBService {
     List<WeeklyStatisticVO> getStatisticByOrg(WeeklyStaSearchVO condition) throws BusinessException;
 
     /**
-     * 按人员所属查询周报饼图
+     * 按人员所属查询周报饼图 sql统计维度错误，考虑到页面上现在是直接用左侧列表的数据，所以懒得改了，有需要再说
      * @param condition
      * @return
      * @throws BusinessException
