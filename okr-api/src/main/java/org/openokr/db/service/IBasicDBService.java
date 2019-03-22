@@ -13,6 +13,7 @@ import java.util.List;
 public interface IBasicDBService {
 
     /**
+     * 若要同时查询多人的所有condition则 userId = null userIdList !=null
      * @param conditionVO
      * @return
      * @throws BusinessException

@@ -2,6 +2,7 @@ package org.openokr.task.web;
 
 import com.alibaba.fastjson.JSON;
 import com.zzheng.framework.base.utils.JSONUtils;
+import com.zzheng.framework.base.utils.StringUtils;
 import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.dao.pojo.Page;
 import io.swagger.annotations.Api;
@@ -281,7 +282,7 @@ public class TaskManageController extends BaseController {
     }
 
 
-    @ApiOperation(value = "查询用户所属任务列表数据", notes = "查询用户所属任务列表数据")
+    @ApiOperation(value = "查询团队报工页下拉搜索条件列表", notes = "查询团队报工页下拉搜索条件列表")
     @ApiImplicitParams(
             {
             }
@@ -313,6 +314,35 @@ public class TaskManageController extends BaseController {
         }
         return result;
     }
-
+    @ApiOperation(value = "根据条件分页查询任务列表数据", notes = "根据条件分页查询任务列表数据")
+    @ApiImplicitParams(
+            {
+            }
+    )
+    @RequestMapping(value = "/getTaskListByCondition.json", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<PageResponseData<List<TaskVO>>> getTaskListByCondition(@RequestBody TaskSearchVO vo) {
+        ResponseData<PageResponseData<List<TaskVO>>> result = new ResponseData<>();
+        try {
+            Page page = null;
+            if (vo.getCurrentPage()!=null&&vo.getPageSize()!=null){
+                page = new Page(vo.getCurrentPage(), vo.getPageSize());
+            }
+            page = taskManageService.getTakListByCondition(page,vo);
+            PageResponseData<List<TaskVO>> pageData = this.reBuildPageData(page,TaskVO.class);
+            result.setData(pageData);
+            result.setCode(0);
+            result.setSuccess(true);
+        } catch (BusinessException e){
+            logger.error("根据条件分页查询任务列表数据 异常：{},参数:[{}]", e.getMessage(), JSON.toJSONString(vo), e);
+            result.setCode(6000);
+            result.setMessage(e.getMessage());
+        }catch (Exception e){
+            logger.error("根据条件分页查询任务列表数据 异常：{},参数:[{}]", e.getMessage(), JSON.toJSONString(vo), e);
+            result.setCode(7000);
+            result.setMessage(e.getMessage());
+        }
+        return result;
+    }
 
 }

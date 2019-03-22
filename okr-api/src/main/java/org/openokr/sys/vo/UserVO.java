@@ -1,6 +1,7 @@
 package org.openokr.sys.vo;
 
 import com.zzheng.framework.base.vo.BaseVO;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -94,9 +95,9 @@ public class UserVO extends BaseVO implements Serializable {
      * 角色Id
      */
     private String roleName;
-    /**
-     * 角色类型  00：超级管理员 01：系统管理员 02：普通管理员   10：用户
-     */
+
+
+    @ApiModelProperty(value = "角色类型  00：超级管理员 01：系统管理员 02：普通管理员   10：用户")
     private String roleType;
 
 

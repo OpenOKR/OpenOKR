@@ -38,4 +38,10 @@ public class TaskSearchVO extends PageRequest implements Serializable {
 
     @ApiModelProperty(value = "okrId-全部报工页用")
     private String okrId;
+
+    @ApiModelProperty(value = "是否筛选任务有效期")
+    private String isFilterTime;
+
+    @ApiModelProperty(value = "是否是管理员,是管理员则传 1")
+    private String isAdmin;
 }

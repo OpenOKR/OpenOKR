@@ -224,4 +224,31 @@ public class OkrTeamService extends BaseServiceImpl implements IOkrTeamService {
             throw new BusinessException(" 获取团队成员数、累计占用工时、关联任务数 失败");
         }
     }
+
+    @Override
+    public List<TeamsVO> getTeamListByUserOrType(TeamsVO teamsVO) throws BusinessException {
+        try {
+            if(teamsVO == null){
+                throw new BusinessException("查询参数为空");
+            }
+            Map<String,Object> paramMap = new HashMap<>();
+            if (StringUtils.isNotEmpty(teamsVO.getOwnerId())){
+                paramMap.put("userId",teamsVO.getOwnerId());
+            }else {
+                paramMap.put("userId",null);
+            }
+            if (StringUtils.isNotEmpty(teamsVO.getType())){
+                paramMap.put("type",teamsVO.getType());
+            }else {
+                paramMap.put("type",null);
+            }
+            return this.getMyBatisDao().selectOneBySql(MAPPER_NAMESPACE+".getAllTeamByUserIdOrType",paramMap);
+        } catch (BusinessException e) {
+            logger.error(" 根据用户或类型查询团队列表 busi-error:{}-->[teamsSearchVO]={}", e.getMessage(),JSONUtils.objectToString(teamsVO), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error(" 根据用户或类型查询团队列表 error:{}-->[teamsSearchVO]={}", e.getMessage(), JSONUtils.objectToString(teamsVO), e);
+            throw new BusinessException(" 根据用户或类型查询团队列表 失败");
+        }
+    }
 }
