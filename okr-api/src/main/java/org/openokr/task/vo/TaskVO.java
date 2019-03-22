@@ -106,6 +106,10 @@ public class TaskVO extends BaseVO {
     @ApiModelProperty(value = "所属团队")
     private String belongTeam;
 
+    /** 所属团队 */
+    @ApiModelProperty(value = "所属团队名字")
+    private String belongTeamName;
+
     @ApiModelProperty(value = "关联的kr数目")
     private Integer count;
 

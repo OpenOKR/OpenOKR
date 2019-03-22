@@ -6,9 +6,10 @@
         SELECT
         t1.id, t1.task_code, t1.task_name, t1.task_status, t1.task_remark, t1.is_deleted, t1.task_start_time,
         t1.task_end_time, t1.jira_label, t1.confirm_user_id, t1.create_user_id,t2.real_name createUserName, t1.create_ts,t1.update_user_id,
-        t1.update_ts
+        t1.update_ts,t1.estimate_time,t3.NAME belongTeamName
         FROM t_okr_task t1
         LEFT join t_okr_sys_user t2 on t1.create_user_id = t2.id
+        left join T_OKR_TEAMS t3 on t1.belong_team = t3.id
         <where>
             <if test="vo.searchKey != null and !vo.searchKey.isEmpty()">
                 and (t1.task_name LIKE CONCAT('%', #{vo.searchKey }, '%') or t1.task_remark LIKE CONCAT('%', #{vo.searchKey }, '%'))
@@ -34,6 +35,7 @@
           count(t1.*)
         FROM t_okr_task t1
         LEFT join t_okr_sys_user t2 on t1.create_user_id = t2.id
+        left join T_OKR_TEAMS t3 on t1.belong_team = t3.id
         <where>
             <if test="vo.searchKey != null and !vo.searchKey.isEmpty()">
                 and (t1.task_name LIKE CONCAT('%', #{vo.searchKey }, '%') or t1.task_remark LIKE CONCAT('%', #{vo.searchKey }, '%'))
