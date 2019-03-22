@@ -62,8 +62,7 @@ public class WeeklyStatisticController extends BaseController {
     public ResponseData<WeeklyChartVO> getWeeklyChartByTask(@RequestBody WeeklyStaSearchVO vo) {
         ResponseData<WeeklyChartVO> result = new ResponseData<>();
         try {
-            WeeklyChartVO chartVO = new WeeklyChartVO();
-            // todo
+            WeeklyChartVO chartVO = weeklyStaManageService.getChartByTask(vo);
 
             result.setData(chartVO);
             result.setCode(0);
@@ -109,24 +108,9 @@ public class WeeklyStatisticController extends BaseController {
     public ResponseData<WeeklyChartVO> getWeeklyChartByOrg(@RequestBody WeeklyStaSearchVO vo) {
         ResponseData<WeeklyChartVO> result = new ResponseData<>();
         try {
-            switch (vo.getSearchType()) {
-                case WeeklyStatisticConstants.SEARCH_TYPE_WEEK:
-                    // 周 饼图 todo
-                    break;
-                case WeeklyStatisticConstants.SEARCH_TYPE_MONTH:
-                    // 月 todo
-                    break;
-                case WeeklyStatisticConstants.SEARCH_TYPE_YEAR:
-                    // 年 todo
-                    break;
-                default:
-                    break;
-            }
+            WeeklyChartVO chartVO = weeklyStaManageService.getChartByOrg(vo);
 
-            WeeklyChartVO data = new WeeklyChartVO();
-            // todo
-
-            result.setData(data);
+            result.setData(chartVO);
             result.setCode(0);
             result.setSuccess(true);
         } catch (BusinessException e){

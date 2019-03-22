@@ -11,12 +11,18 @@ import org.openokr.db.service.IWeeklyStaDBService;
 import org.openokr.task.request.WeeklyStaSearchVO;
 import org.openokr.task.vo.WeeklyChartVO;
 import org.openokr.task.vo.WeeklyStatisticVO;
+import org.openokr.task.vo.chart.LineDataVO;
 import org.openokr.task.vo.chart.PieDataVO;
+import org.openokr.util.DateUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -80,9 +86,20 @@ public class WeeklyStaManageService extends BaseServiceImpl implements IWeeklySt
                     this.handlePieData(chartVO, pieDataList);
                     break;
                 case WeeklyStatisticConstants.SEARCH_TYPE_MONTH:
-                    // 月 todo
-                    // 先获取1号所在周的周一，按周取数据，然后加七天继续，直到周日日期大于等于本月最后一天
+                    // 月 折线图 粒度精确到每周，横坐标显示每周一日期
+                    // 先获取1号所在周的周一，按周取数据，然后加七天继续，直到周一日期大于本月最后一天
                     // 对结果进行循环，然后分组
+                    List<LineDataVO> monthDataList = Lists.newArrayList();
+                    List<String> monthXAxis = Lists.newArrayList();
+
+                    // 获取本月最后一天
+                    Date lastDay = DateUtils.stringToDate(condition.getReportEndDateStr());
+
+                    // 周一与周日
+                    Date monday = getMonday(DateUtils.stringToDate(condition.getReportStartDateStr()));
+
+                    // 查询并循环处理
+                    this.handleTaskMonthData(condition, chartVO, monthDataList, monthXAxis, lastDay, monday);
                     break;
                 case WeeklyStatisticConstants.SEARCH_TYPE_YEAR:
                     // 年 todo
@@ -146,12 +163,24 @@ public class WeeklyStaManageService extends BaseServiceImpl implements IWeeklySt
 
             switch (condition.getSearchType()) {
                 case WeeklyStatisticConstants.SEARCH_TYPE_WEEK:
-                    // 周 饼图
-                    List<WeeklyStatisticVO> pieDataList = weeklyStaDBService.getWeeklyPieByOrg(condition);
-                    this.handlePieData(chartVO, pieDataList);
+                    // 周 不提供，直接用左侧列表数据即可
+
                     break;
                 case WeeklyStatisticConstants.SEARCH_TYPE_MONTH:
-                    // 月 todo
+                    // 月 折线图 粒度精确到每周，横坐标显示每周一日期
+                    // 先获取1号所在周的周一，按周取数据，然后加七天继续，直到周一日期大于本月最后一天
+                    // 对结果进行循环，然后分组
+                    List<LineDataVO> monthDataList = Lists.newArrayList();
+                    List<String> monthXAxis = Lists.newArrayList();
+
+                    // 获取本月最后一天
+                    Date lastDay = DateUtils.stringToDate(condition.getReportEndDateStr());
+
+                    // 周一
+                    Date monday = getMonday(DateUtils.stringToDate(condition.getReportStartDateStr()));
+
+                    // 查询并循环处理
+                    this.handleOrgMonthData(condition, chartVO, monthDataList, monthXAxis, lastDay, monday);
                     break;
                 case WeeklyStatisticConstants.SEARCH_TYPE_YEAR:
                     // 年 todo
@@ -183,4 +212,136 @@ public class WeeklyStaManageService extends BaseServiceImpl implements IWeeklySt
         }
         chartVO.setPieSeriesData(dataList);
     }
+
+    public static Date getMonday(Date date) throws ParseException {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        // 获得当前日期是一个星期的第几天
+        int dayWeek = cal.get(Calendar.DAY_OF_WEEK);
+        if (1 == dayWeek) {
+            cal.add(Calendar.DAY_OF_MONTH, -1);
+        }
+        // 设置一个星期的第一天，按中国的习惯一个星期的第一天是星期一
+        cal.setFirstDayOfWeek(Calendar.MONDAY);
+        // 获得当前日期是一个星期的第几天
+        int day = cal.get(Calendar.DAY_OF_WEEK);
+        // 根据日历的规则，给当前日期减去星期几与一个星期第一天的差值
+        cal.add(Calendar.DATE, cal.getFirstDayOfWeek() - day);
+        return cal.getTime();
+    }
+
+    private void handleTaskMonthData(WeeklyStaSearchVO condition, WeeklyChartVO chartVO, List<LineDataVO> monthDataList, List<String> monthXAxis, Date lastDay, Date monday) {
+        WeeklyStaSearchVO weekCondition = new WeeklyStaSearchVO();
+        weekCondition.setTeamId(condition.getTeamId());
+        List<WeeklyStatisticVO> weekData;
+        weekCondition.setSearchType(WeeklyStatisticConstants.SEARCH_TYPE_WEEK);
+        int index = 0;
+        while (monday.getTime()<=lastDay.getTime()) {
+            monthXAxis.add(DateUtils.dateToString(monday,"MM-dd"));
+            weekCondition.setReportStartDateStr(DateUtils.dateToString(monday));
+            weekData = weeklyStaDBService.getStatisticByTask(weekCondition);
+
+            if (weekData != null && !weekData.isEmpty()) {
+                for (WeeklyStatisticVO data:weekData) {
+                    LineDataVO line = new LineDataVO();
+                    line.setName(data.getTaskName());
+                    boolean flag = false;
+                    for (LineDataVO lineVO:monthDataList){
+                        if (lineVO.getName().equals(line.getName())) {
+                            line = lineVO;
+                            flag = true;
+                            break;
+                        }
+                    }
+                    this.handleLine(monthDataList, index, data, line, flag);
+                }
+            }
+
+            // 时间顺延一周
+            index++;
+            monday = DateUtils.addDay(monday,7);
+        }
+
+        // 结尾补0，以防万一
+        for (LineDataVO lineVO:monthDataList) {
+            List<BigDecimal> dataList = lineVO.getData();
+            if (dataList.size()<index) {
+                for (int i = dataList.size(); i < index; i++) {
+                    dataList.add(BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP));
+                }
+            }
+        }
+
+        chartVO.setXAxisData(monthXAxis);
+        chartVO.setLineSeriesData(monthDataList);
+    }
+
+    private void handleOrgMonthData(WeeklyStaSearchVO condition, WeeklyChartVO chartVO, List<LineDataVO> monthDataList, List<String> monthXAxis, Date lastDay, Date monday) {
+        WeeklyStaSearchVO weekCondition = new WeeklyStaSearchVO();
+        weekCondition.setTeamId(condition.getTeamId());
+        List<WeeklyStatisticVO> weekData;
+        weekCondition.setSearchType(WeeklyStatisticConstants.SEARCH_TYPE_WEEK);
+        int index = 0;
+        while (monday.getTime()<=lastDay.getTime()) {
+            monthXAxis.add(DateUtils.dateToString(monday,"MM-dd"));
+            weekCondition.setReportStartDateStr(DateUtils.dateToString(monday));
+            weekData = weeklyStaDBService.getStatisticByOrg(weekCondition);
+
+            if (weekData != null && !weekData.isEmpty()) {
+                for (WeeklyStatisticVO data:weekData) {
+                    LineDataVO line = new LineDataVO();
+                    line.setName(data.getOrgName());
+                    boolean flag = false;
+                    for (LineDataVO lineVO:monthDataList){
+                        if (lineVO.getName().equals(line.getName())) {
+                            line = lineVO;
+                            flag = true;
+                            break;
+                        }
+                    }
+                    this.handleLine(monthDataList, index, data, line, flag);
+                }
+            }
+
+            // 时间顺延一周
+            index++;
+            monday = DateUtils.addDay(monday,7);
+        }
+
+        // 结尾补0，以防万一
+        for (LineDataVO lineVO:monthDataList) {
+            List<BigDecimal> dataList = lineVO.getData();
+            if (dataList.size()<index) {
+                for (int i = dataList.size(); i < index; i++) {
+                    dataList.add(BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP));
+                }
+            }
+        }
+
+        chartVO.setXAxisData(monthXAxis);
+        chartVO.setLineSeriesData(monthDataList);
+    }
+
+    private void handleLine(List<LineDataVO> monthDataList, int index, WeeklyStatisticVO data, LineDataVO line, boolean flag) {
+        if (flag){
+            List<BigDecimal> dataList = line.getData();
+            // 应对可能存在的，某一时间区间没有这个name，但本区间有的情况
+            if (dataList.size() < index) {
+                for (int i = index - dataList.size(); i < index; i++) {
+                    dataList.add(BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP));
+                }
+            }
+            dataList.add(data.getDuration().setScale(2,BigDecimal.ROUND_HALF_UP));
+        } else {
+            List<BigDecimal> dataList = Lists.newArrayList();
+            // 应对可能存在的，某一时间区间没有这个name，但本区间有的情况
+            for (int i = 0;i < index;i++) {
+                dataList.add(BigDecimal.ZERO.setScale(2,BigDecimal.ROUND_HALF_UP));
+            }
+            dataList.add(data.getDuration().setScale(2,BigDecimal.ROUND_HALF_UP));
+            line.setData(dataList);
+            monthDataList.add(line);
+        }
+    }
+
 }

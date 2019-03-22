@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author yuxinzh
@@ -19,5 +20,5 @@ public class LineDataVO extends BaseVO{
     private String name;
 
     @ApiModelProperty(value = "折线图数据数组")
-    private BigDecimal[] data;
+    private List<BigDecimal> data;
 }
