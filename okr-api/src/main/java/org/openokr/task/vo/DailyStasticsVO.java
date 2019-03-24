@@ -17,14 +17,14 @@ import java.math.BigDecimal;
 public class DailyStasticsVO extends BaseVO {
 
     @ApiModelProperty(value = "耗费总工时")
-    private BigDecimal countDuration;
+    private BigDecimal costTimeNum;
 
-    @ApiModelProperty(value = "参与总人数")
-    private BigDecimal countPeople;
+    @ApiModelProperty(value = "任务总数")
+    private BigDecimal taskNum;
 
-    @ApiModelProperty(value = "包含项目数")
-    private BigDecimal countTask;
+    @ApiModelProperty(value = "产品总数")
+    private BigDecimal productNum;
 
-    @ApiModelProperty(value = "包含任务数，暂时不知道怎么算")
-    private BigDecimal countRelTask;
+    @ApiModelProperty(value = "人员总数")
+    private BigDecimal personnelNum;
 }

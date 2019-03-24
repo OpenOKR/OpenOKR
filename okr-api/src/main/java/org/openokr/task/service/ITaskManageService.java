@@ -114,4 +114,12 @@ public interface ITaskManageService {
      * @throws Exception
      */
     Page getTakListByCondition(Page page, TaskSearchVO taskSearchVO) throws BusinessException;
+
+    /**
+     * 获取报工统计信息
+     * @param taskSearchVO
+     * @return
+     * @throws BusinessException
+     */
+    DailyStasticsVO getDailyStasticsByOwnerId(TaskSearchVO taskSearchVO)throws BusinessException;
 }

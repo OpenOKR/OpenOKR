@@ -13,6 +13,8 @@
     <result column="update_user_id" jdbcType="VARCHAR" property="updateUserId" />
     <result column="update_ts" jdbcType="TIMESTAMP" property="updateTs" />
     <result column="audit_status" jdbcType="CHAR" property="auditStatus" />
+    <result column="audit_time" jdbcType="TIMESTAMP" property="auditTime" />
+    <result column="audit_user_id" jdbcType="VARCHAR" property="auditUserId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -74,7 +76,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, report_user_id, task_id, report_day, duration, remark, create_user_id, create_ts, 
-    update_user_id, update_ts, audit_status
+    update_user_id, update_ts, audit_status, audit_time, audit_user_id
   </sql>
   <select id="selectByCondition" parameterType="org.openokr.task.entity.DailyEntityCondition" resultMap="BaseResultMap">
     select
@@ -139,6 +141,12 @@
       <if test="record.auditStatus != null">
         audit_status = #{record.auditStatus,jdbcType=CHAR},
       </if>
+      <if test="record.auditTime != null">
+        audit_time = #{record.auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.auditUserId != null">
+        audit_user_id = #{record.auditUserId,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -150,9 +158,9 @@
     </if>
   </sql>
   <insert id="insertList" parameterType="java.util.List">
-     insert into t_okr_daily ( id,report_user_id,task_id,report_day,duration,remark,create_user_id,create_ts,update_user_id,update_ts,audit_status ) values
+     insert into t_okr_daily ( id,report_user_id,task_id,report_day,duration,remark,create_user_id,create_ts,update_user_id,update_ts,audit_status,audit_time,audit_user_id ) values
     <foreach collection="list" index="index" item="item" separator=",">
-       ( #{item.id,jdbcType=VARCHAR},#{item.reportUserId,jdbcType=VARCHAR},#{item.taskId,jdbcType=VARCHAR},#{item.reportDay,jdbcType=DATE},#{item.duration,jdbcType=NUMERIC},#{item.remark,jdbcType=VARCHAR},#{item.createUserId,jdbcType=VARCHAR},#{item.createTs,jdbcType=TIMESTAMP},#{item.updateUserId,jdbcType=VARCHAR},#{item.updateTs,jdbcType=TIMESTAMP},#{item.auditStatus,jdbcType=CHAR} )
+       ( #{item.id,jdbcType=VARCHAR},#{item.reportUserId,jdbcType=VARCHAR},#{item.taskId,jdbcType=VARCHAR},#{item.reportDay,jdbcType=DATE},#{item.duration,jdbcType=NUMERIC},#{item.remark,jdbcType=VARCHAR},#{item.createUserId,jdbcType=VARCHAR},#{item.createTs,jdbcType=TIMESTAMP},#{item.updateUserId,jdbcType=VARCHAR},#{item.updateTs,jdbcType=TIMESTAMP},#{item.auditStatus,jdbcType=CHAR},#{item.auditTime,jdbcType=TIMESTAMP},#{item.auditUserId,jdbcType=VARCHAR} )
     </foreach>
   </insert>
 </mapper>

@@ -240,4 +240,82 @@
         order by create_ts desc
     </sql>
 
+    <sql id="getDailyStasticsByOwnerIdSql">
+        t_okr_task T1
+        LEFT JOIN t_okr_task_apportion T2 ON T1.ID = T2.task_id
+        INNER JOIN t_okr_daily t3 on t1.id = t3.task_id
+        <if test="vo.isAdmin!=null and vo.isAdmin=='1'.toString()">
+        INNER JOIN (
+            SELECT DISTINCT
+                    t3.id, t3.user_name, t3.real_name, t3.photo_url
+            FROM
+                    t_okr_teams t1
+                    INNER JOIN t_okr_team_user_rela t2 ON t1.ID = t2.team_id
+                    INNER JOIN t_okr_sys_user t3 ON t2.user_id = t3.ID
+            <where>
+                <if test="vo.currentUserId != null and currentUserId != ''">
+                    AND t1.owner_id = #{vo.currentUserId}
+                </if>
+                <if test="vo.teamId != null">
+                and t1.id >=#{vo.teamId}
+                </if>
+            </where>
+        ) T4 ON T3.report_user_id = T4.ID
+        </if>
+        LEFT JOIN T_OKR_TASK_KR_REL t5 on t1.id = t5.task_id
+        <where>
+            <if test="vo.isAdmin==null or vo.isAdmin=='0'.toString()">
+                <if test="vo.currentUserId != null and vo.currentUserId != ''">
+                    and t3.report_user_id =#{vo.currentUserId}
+                </if>
+            </if>
+            <if test="vo.productId != null">
+                and T2.apportion_name_id >=#{vo.productId}
+            </if>
+            <if test="vo.taskId != null">
+                and T1.id >=#{vo.taskId}
+            </if>
+            <if test="vo.categoryId != null">
+                and t2.id >=#{vo.categoryId}
+            </if>
+            <if test="vo.okrId != null">
+                and t5.KR_ID >=#{vo.okrId}
+            </if>
+            <if test="vo.queryStartDate != null">
+                and t3.report_day >=#{vo.queryStartTime}
+            </if>
+            <if test="vo.queryEndDate != null">
+                <![CDATA[ and t3.report_day <=#{vo.queryEndTime} ]]>
+            </if>
+        </where>
+    </sql>
+
+    <!--根据用户id查找管理（负责）团队成员数、关联任务数、产品总数-->
+    <select id="getDailyStasticsByOwnerId" parameterType="java.util.Map" resultType="org.openokr.task.vo.DailyStasticsVO">
+        SELECT
+        <if test="vo.isAdmin==null or vo.isAdmin=='0'.toString()">
+            COUNT(DISTINCT T2.apportion_name_id) productNum,
+            COUNT(DISTINCT T1.*)  taskNum
+        </if>
+        <if test="vo.isAdmin!=null and vo.isAdmin=='1'.toString()">
+            COUNT(DISTINCT T2.apportion_name_id) productNum,
+            COUNT(DISTINCT T1.*)  taskNum,
+            COUNT(DISTINCT T4.ID) personnelNum
+        </if>
+        FROM
+          <include refid="getDailyStasticsByOwnerIdSql" />
+    </select>
+
+    <!--根据用户id查找管理（负责）团队成员耗费总工时总数-->
+    <select id="getTaskDurationByTeamOwnerId" parameterType="java.util.Map" resultType="java.math.BigDecimal">
+        SELECT
+            COALESCE(sum(COALESCE(t.duration,0) ),0)
+        FROM
+        (
+            SELECT
+                distinct t3.*
+            FROM
+                <include refid="getDailyStasticsByOwnerIdSql" />
+        ) t
+    </select>
 </mapper>

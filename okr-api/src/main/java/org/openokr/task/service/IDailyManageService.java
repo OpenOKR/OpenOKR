@@ -46,4 +46,11 @@ public interface IDailyManageService {
      * @throws BusinessException
      */
     void deleteDailyList(DailyVO dailyVO)throws BusinessException;
+
+    /**
+     * 审核日报
+     * @param dailyVO
+     * @throws BusinessException
+     */
+    void auditDailyInfo(DailyVO dailyVO)throws BusinessException;
 }

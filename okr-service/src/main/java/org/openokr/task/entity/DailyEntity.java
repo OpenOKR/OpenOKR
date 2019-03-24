@@ -1,13 +1,12 @@
 package org.openokr.task.entity;
 
 import com.zzheng.framework.mybatis.entity.BaseEntity;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * 
@@ -47,6 +46,12 @@ null/00  待审核
 01         已确认
 02         已驳回 */
     private String auditStatus;
+
+    /** 审核时间 */
+    private Date auditTime;
+
+    /** 审核人ID */
+    private String auditUserId;
 
     private static final long serialVersionUID = 1L;
 
@@ -234,6 +239,42 @@ null/00  待审核
     public void setAuditStatus(String auditStatus) {
         this.auditStatus = auditStatus;
         addSettedField("auditStatus");
+    }
+
+    /**
+     * 审核时间
+     * @return auditTime
+     */
+    @Column(name = "audit_time")
+    public Date getAuditTime() {
+        return auditTime;
+    }
+
+    /**
+     * 审核时间
+     * @param auditTime
+     */
+    public void setAuditTime(Date auditTime) {
+        this.auditTime = auditTime;
+        addSettedField("auditTime");
+    }
+
+    /**
+     * 审核人ID
+     * @return auditUserId
+     */
+    @Column(name = "audit_user_id")
+    public String getAuditUserId() {
+        return auditUserId;
+    }
+
+    /**
+     * 审核人ID
+     * @param auditUserId
+     */
+    public void setAuditUserId(String auditUserId) {
+        this.auditUserId = auditUserId;
+        addSettedField("auditUserId");
     }
 
     /**

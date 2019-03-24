@@ -871,6 +871,136 @@ public class DailyEntityCondition extends BaseEntityCondition implements Seriali
             return (Criteria) this;
         }
 
+        public Criteria andAuditTimeIsNull() {
+            addCriterion("audit_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditTimeIsNotNull() {
+            addCriterion("audit_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditTimeEqualTo(Date value) {
+            addCriterion("audit_time =", value, "auditTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditTimeNotEqualTo(Date value) {
+            addCriterion("audit_time <>", value, "auditTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditTimeGreaterThan(Date value) {
+            addCriterion("audit_time >", value, "auditTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("audit_time >=", value, "auditTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditTimeLessThan(Date value) {
+            addCriterion("audit_time <", value, "auditTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditTimeLessThanOrEqualTo(Date value) {
+            addCriterion("audit_time <=", value, "auditTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditTimeIn(List<Date> values) {
+            addCriterion("audit_time in", values, "auditTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditTimeNotIn(List<Date> values) {
+            addCriterion("audit_time not in", values, "auditTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditTimeBetween(Date value1, Date value2) {
+            addCriterion("audit_time between", value1, value2, "auditTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditTimeNotBetween(Date value1, Date value2) {
+            addCriterion("audit_time not between", value1, value2, "auditTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditUserIdIsNull() {
+            addCriterion("audit_user_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditUserIdIsNotNull() {
+            addCriterion("audit_user_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditUserIdEqualTo(String value) {
+            addCriterion("audit_user_id =", value, "auditUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditUserIdNotEqualTo(String value) {
+            addCriterion("audit_user_id <>", value, "auditUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditUserIdGreaterThan(String value) {
+            addCriterion("audit_user_id >", value, "auditUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditUserIdGreaterThanOrEqualTo(String value) {
+            addCriterion("audit_user_id >=", value, "auditUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditUserIdLessThan(String value) {
+            addCriterion("audit_user_id <", value, "auditUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditUserIdLessThanOrEqualTo(String value) {
+            addCriterion("audit_user_id <=", value, "auditUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditUserIdLike(String value) {
+            addCriterion("audit_user_id like", value, "auditUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditUserIdNotLike(String value) {
+            addCriterion("audit_user_id not like", value, "auditUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditUserIdIn(List<String> values) {
+            addCriterion("audit_user_id in", values, "auditUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditUserIdNotIn(List<String> values) {
+            addCriterion("audit_user_id not in", values, "auditUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditUserIdBetween(String value1, String value2) {
+            addCriterion("audit_user_id between", value1, value2, "auditUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditUserIdNotBetween(String value1, String value2) {
+            addCriterion("audit_user_id not between", value1, value2, "auditUserId");
+            return (Criteria) this;
+        }
+
         public Criteria andIdLikeInsensitive(String value) {
             addCriterion("upper(id) like", value.toUpperCase(), "id");
             return (Criteria) this;
@@ -903,6 +1033,11 @@ public class DailyEntityCondition extends BaseEntityCondition implements Seriali
 
         public Criteria andAuditStatusLikeInsensitive(String value) {
             addCriterion("upper(audit_status) like", value.toUpperCase(), "auditStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditUserIdLikeInsensitive(String value) {
+            addCriterion("upper(audit_user_id) like", value.toUpperCase(), "auditUserId");
             return (Criteria) this;
         }
 
@@ -1008,6 +1143,21 @@ public class DailyEntityCondition extends BaseEntityCondition implements Seriali
          */
         public Criteria andAuditStatusLikeIgnoreCase(String value) {
             addCriterion("upper(audit_status) like ", value.toUpperCase(), "auditStatus");
+            return (Criteria) this;
+        }
+
+        /**
+         *(扩展Mybatis原生like的不足)
+         *忽略字段大小写的模糊查询
+         *Java编码如下：
+         *  criteria.andNameLikeIgnoreCase("%Abc%"); 前后模糊,A字母大写
+         *  criteria.andName2LikeIgnoreCase("%aBc"); 前模糊,B字母大写
+         *  criteria.andName3LikeIgnoreCase("abC%"); 后模糊,C字母大写
+         *执行时SQL如下:
+         *  where name like '%abc%' or name2 like '%abc' or name3 like 'abc%'
+         */
+        public Criteria andAuditUserIdLikeIgnoreCase(String value) {
+            addCriterion("upper(audit_user_id) like ", value.toUpperCase(), "auditUserId");
             return (Criteria) this;
         }
     }

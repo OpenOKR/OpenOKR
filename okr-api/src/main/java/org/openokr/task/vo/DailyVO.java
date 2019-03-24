@@ -57,6 +57,9 @@ public class DailyVO extends BaseVO {
     @ApiModelProperty(value = "审核状态 00待审核、01已确认、02已驳回")
     private String auditStatus;
 
+    @ApiModelProperty(value = "审核人ID")
+    private String auditUserId;
+
     @ApiModelProperty(value = "产品名称")
     private String productName;
     @ApiModelProperty(value = "产品Id")

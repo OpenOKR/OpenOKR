@@ -88,7 +88,19 @@ public interface IOkrTeamService {
      */
     TeamsExtVO getByTeamId(String id);
 
+    /**
+     * 根据团队id查找团队内所有成员
+     * @param teamId
+     * @return
+     */
     List<UserVO> getUsersByTeamId(String teamId);
+
+    /**
+     * 根据用户id查找管理（负责）团队所有成员
+     * @param ownerId
+     * @return
+     */
+    List<UserVO> getTeamsUsersByOwnerId(String ownerId);
 
     /**
      * 获取团队成员数、累计占用工时、关联任务数

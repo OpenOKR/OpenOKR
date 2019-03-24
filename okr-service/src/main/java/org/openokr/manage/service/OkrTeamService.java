@@ -203,6 +203,24 @@ public class OkrTeamService extends BaseServiceImpl implements IOkrTeamService {
     }
 
     @Override
+    public List<UserVO> getTeamsUsersByOwnerId(String ownerId) {
+        try {
+            if (org.apache.commons.lang3.StringUtils.isBlank(ownerId)){
+                throw new BusinessException("查询参数用户ID为空");
+            }
+            Map<String,Object> paramMap = new HashMap<>();
+            paramMap.put("ownerId",ownerId);
+            return this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE+".getTeamsUsersByOwnerId",paramMap);
+        } catch (BusinessException e) {
+            logger.error("根据用户id查找管理（负责）团队所有成员 busi-error:{}-->[ownerId]={}", e.getMessage(),ownerId, e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("根据用户id查找管理（负责）团队所有成员 error:{}-->[ownerId]={}", e.getMessage(), ownerId, e);
+            throw new BusinessException("根据用户id查找管理（负责）团队所有成员 失败");
+        }
+    }
+
+    @Override
     public TeamTaskCountInfoVO getTeamTaskCountInfo(TeamsSearchVO teamsSearchVO) throws BusinessException {
         try {
             if(teamsSearchVO == null){

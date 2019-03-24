@@ -580,4 +580,34 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
         return page;
     }
 
+    @Override
+    public DailyStasticsVO getDailyStasticsByOwnerId(TaskSearchVO taskSearchVO) throws BusinessException {
+        DailyStasticsVO dailyStasticsVO;
+        try {
+            if(taskSearchVO == null){
+                throw new BusinessException("查询参数为空");
+            }
+            if (org.apache.commons.lang3.StringUtils.isBlank(taskSearchVO.getCurrentUserId())){
+                throw new BusinessException("查询参数用户ID为空");
+            }
+            Map<String,Object> paramMap = new HashMap<>();
+            paramMap.put("vo",taskSearchVO);
+            //根据用户id查找管理（负责）团队成员数、关联任务数、产品总数
+            dailyStasticsVO =  this.getMyBatisDao().selectOneBySql(MAPPER_NAMSPACE+".getDailyStasticsByOwnerId",paramMap);
+            if(dailyStasticsVO == null){
+                dailyStasticsVO = new DailyStasticsVO();
+            }else{
+                //根据用户id查找管理（负责）团队成员 耗费总工时
+                BigDecimal costTimeNum =  this.getMyBatisDao().selectOneBySql(MAPPER_NAMSPACE+".getTaskDurationByTeamOwnerId",paramMap);
+                dailyStasticsVO.setCostTimeNum(costTimeNum);
+            }
+        } catch (BusinessException e) {
+            logger.error("获取报工统计信息 busi-error:{}-->[ownerId]={}", e.getMessage(),JSONUtils.objectToString(taskSearchVO), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("获取报工统计信息 error:{}-->[ownerId]={}", e.getMessage(), JSONUtils.objectToString(taskSearchVO), e);
+            throw new BusinessException("获取报工统计信息 失败");
+        }
+        return dailyStasticsVO;
+    }
 }

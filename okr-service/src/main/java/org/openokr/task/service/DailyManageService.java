@@ -176,6 +176,38 @@ public class DailyManageService extends BaseServiceImpl implements IDailyManageS
 
     }
 
+    @Override
+    public void auditDailyInfo(DailyVO dailyVO) throws BusinessException {
+        String methodName = "auditDailyInfo-审核日报";
+        try {
+            if (dailyVO == null){
+                throw new BusinessException("审核对象为空");
+            }
+            if (StringUtils.isBlank(dailyVO.getId())) {
+                throw new BusinessException("参数日报ID为空");
+            }
+            Date date = new Date();
+            DailyEntity dailyEntity = this.selectByPrimaryKey(DailyEntity.class,dailyVO.getId());
+            if (dailyEntity!=null){
+                dailyEntity.setAuditStatus(dailyVO.getAuditStatus());
+                dailyEntity.setAuditUserId(dailyVO.getAuditUserId());
+                dailyEntity.setAuditTime(date);
+                dailyEntity.setUpdateUserId(dailyVO.getAuditUserId());
+                dailyEntity.setUpdateTs(date);
+                this.update(dailyEntity);
+            }else {
+                logger.info("根据日报Id未查询到将要审核的日报信息 dailyVO:{}",JSON.toJSONString(dailyVO));
+            }
+
+        } catch (BusinessException e) {
+            logger.error("{} 失败，[dailyVO]->{}",methodName, JSON.toJSONString(dailyVO));
+            throw e;
+        } catch (Exception e) {
+            logger.error("{} 异常，[dailyVO]->{}",methodName, JSON.toJSONString(dailyVO));
+            throw new BusinessException(e);
+        }
+    }
+
     private void insertDailyData(DailyVO dailyVO) throws BusinessException{
         String methodName = "insertDailyData-保存日报记录";
         try {
