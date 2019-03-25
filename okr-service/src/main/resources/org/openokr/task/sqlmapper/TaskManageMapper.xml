@@ -24,7 +24,7 @@
                 <![CDATA[AND t1.create_ts <= #{vo.queryEndDate}]]>
             </if>
         </where>
-        order by create_ts desc
+        order by t1.id desc
         <if test="page != null" >
             <![CDATA[ limit #{page.pageSize} offset (#{page.recordStart}-1) ]]>
         </if>

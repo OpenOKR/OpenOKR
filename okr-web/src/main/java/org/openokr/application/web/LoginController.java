@@ -6,6 +6,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.*;
 import org.apache.shiro.SecurityUtils;
@@ -178,13 +179,13 @@ public class LoginController extends BaseController {
     @ApiOperation(value = "验证是否登录接口",notes = "验证是否登录接口")
     @RequestMapping(value = "/checkLoginStatus.json",method = RequestMethod.GET)
     @ResponseBody
-    public ResponseData<String> checkLoginStatus() {
+    public ResponseData<Integer> checkLoginStatus() {
         ResponseData result = new ResponseData<>();
         try {
             if(org.apache.commons.lang3.StringUtils.isBlank(this.getCurrentUserId())){
-                result.setData("0");
+                result.setData(0);
             }else{
-                result.setData("1");
+                result.setData(1);
             }
             //登录，即身份验证
             result.setCode(0);
