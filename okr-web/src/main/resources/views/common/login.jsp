@@ -4,27 +4,6 @@
 <c:set var="pageJs" value="${staticContextPath}/assets/js/common/login.js"/>
 <c:set var="pageTitle" value="OKR管理系统"/>
 <%@ include file="/views/application/_include_top_login.jsp" %>
-<script>
-
-    function isPC() {
-        var userAgentInfo = navigator.userAgent;
-        var Agents = ["Android", "iPhone",
-            "SymbianOS", "Windows Phone",
-            "iPad", "iPod"];
-        var flag = true;
-        for (var v = 0; v < Agents.length; v++) {
-            if (userAgentInfo.indexOf(Agents[v]) > 0) {
-                flag = false;
-                break;
-            }
-        }
-        return flag;
-    }
-    //如果不是pc端，则跳转到移动端登录
-    if(!isPC()){
-        window.location.href = '/okrApp/Login';
-    }
-</script>
 <body class="login-body">
     <div class="login-out">
         <h1 class="logo"><img src="${staticContextPath}/assets/images/logo-login.png" alt="logo" ></h1>
