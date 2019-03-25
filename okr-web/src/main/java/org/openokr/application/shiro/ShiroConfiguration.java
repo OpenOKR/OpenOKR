@@ -56,6 +56,7 @@ public class ShiroConfiguration {
         //配置访问权限
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
 
+        filterChainDefinitionMap.put("/checkLoginStatus.json", "anon");
         filterChainDefinitionMap.put("/devLogin.json", "anon");
         filterChainDefinitionMap.put("/static/**", "anon");
 

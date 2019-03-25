@@ -83,19 +83,6 @@ public class UserController extends BaseController {
         return userService.updatePassword(this.getCurrentUserId(), oldPassword, newPassword, confirmNewPassword);
     }
 
-    @ApiOperation(value = "确认用户是否登录", notes = "确认用户是否登录")
-    @RequestMapping(value = "/user/checkUserLogin.json", method = RequestMethod.POST)
-    @ResponseBody
-    public ResponseData checkUserIsLogin() {
-        ResponseData result = new ResponseData();
-        if(StringUtils.isBlank(this.getCurrentUserId())){
-            result.setSuccess(false);
-        }else{
-            result.setSuccess(true);
-        }
-        return result;
-    }
-
     @ApiOperation(value = "获取用户选择列表", notes = "获取用户选择列表")
     @RequestMapping(value = "/user/getUserSelectInfo.json", method = RequestMethod.POST)
     @ResponseBody

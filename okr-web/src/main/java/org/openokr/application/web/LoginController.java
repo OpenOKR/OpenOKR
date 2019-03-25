@@ -2,10 +2,12 @@ package org.openokr.application.web;
 
 import com.alibaba.fastjson.JSON;
 import com.zzheng.framework.exception.BusinessException;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.*;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.util.WebUtils;
@@ -15,8 +17,10 @@ import org.openokr.application.shiro.ShiroConfiguration;
 import org.openokr.application.shiro.UsernamePasswordToken;
 import org.openokr.application.shiro.filter.FormAuthenticationFilter;
 import org.openokr.common.vo.response.ResponseData;
+import org.openokr.sys.vo.UserVOExt;
 import org.openokr.sys.vo.request.UserLoginVO;
 import org.openokr.utils.*;
+import org.openokr.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +37,7 @@ import java.util.Map;
  * Created by zhengzheng on 2018/12/19.
  */
 @Controller
+@Api(value = "登录控制器相关接口",description = "LoginController")
 public class LoginController extends BaseController {
 
     @Autowired
@@ -161,6 +166,35 @@ public class LoginController extends BaseController {
             result.setMessage(e.getMessage());
         }catch (Exception e){
             logger.error("接口登录 异常：{},参数:[{}]", e.getMessage(), JSON.toJSONString(userLoginVO), e);
+            result.setCode(7000);
+            result.setMessage(e.getMessage());
+        }
+        return result;
+    }
+    /**
+     * 登录失败
+     * @return
+     */
+    @ApiOperation(value = "验证是否登录接口",notes = "验证是否登录接口")
+    @RequestMapping(value = "/checkLoginStatus.json",method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseData<String> checkLoginStatus() {
+        ResponseData result = new ResponseData<>();
+        try {
+            if(org.apache.commons.lang3.StringUtils.isBlank(this.getCurrentUserId())){
+                result.setData("0");
+            }else{
+                result.setData("1");
+            }
+            //登录，即身份验证
+            result.setCode(0);
+            result.setSuccess(true);
+        } catch (BusinessException e){
+            logger.error("验证是否登录接口 异常：{},参数:[{}]", e.getMessage(),e);
+            result.setCode(6000);
+            result.setMessage(e.getMessage());
+        }catch (Exception e){
+            logger.error("验证是否登录接口 异常：{},参数:[{}]", e.getMessage(), e);
             result.setCode(7000);
             result.setMessage(e.getMessage());
         }

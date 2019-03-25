@@ -27,7 +27,7 @@ public class ResponseData<T> implements Serializable {
     /**
      * 业务数据
      */
-    @ApiModelProperty(value = "业务数据")
+    @ApiModelProperty(value = "业务数据（验证登录时 1:已登录 0:未登录）")
     private T data;
 
     @ApiModelProperty(value = "成功状态")
