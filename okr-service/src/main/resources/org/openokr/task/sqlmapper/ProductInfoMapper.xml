@@ -17,7 +17,10 @@
       WHERE
           t2.ID IS NULL
           <if test="condition.productName !=null and condition.productName != ''">
-              t1.product_name  = #{condition.productName}
+              and t1.product_name  = #{condition.productName}
+          </if>
+          <if test="condition.categoryId !=null and condition.categoryId != ''">
+              and t1.category_id  = #{condition.categoryId}
           </if>
   </select>
 </mapper>

@@ -40,17 +40,9 @@ public class ApportionCategoryManageService extends BaseServiceImpl implements I
     @Override
     public List<ApportionSelectVO> getApportionSelectList(String categoryId) throws BusinessException {
         try{
-            if(TaskConstant.CATEGORY_PRODUCT.equals(categoryId)){
-                //产品规划
-                ProductInfoVO productInfoVO = new ProductInfoVO();
-                return productInfoManageService.getProductInfoList(productInfoVO);
-            }else if(TaskConstant.CATEGORY_CUSTOMER.equals(categoryId) || TaskConstant.CATEGORY_IMPLEMENT.equals(categoryId)){
-                //客户定制
-                CustomerVO customerVO = new CustomerVO();
-                return customerManageService.getCutomerInfoList(customerVO);
-            }else{
-                return new ArrayList<>();
-            }
+            ProductInfoVO productInfoVO = new ProductInfoVO();
+            productInfoVO.setCategoryId(categoryId);
+            return productInfoManageService.getProductInfoList(productInfoVO);
         } catch (BusinessException e) {
             logger.error("获取分摊下拉选择信息列表 busi-error:{}-->[categoryId]={}", e.getMessage(), categoryId, e);
             throw e;
