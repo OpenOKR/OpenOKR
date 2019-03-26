@@ -22,5 +22,6 @@
           <if test="condition.categoryId !=null and condition.categoryId != ''">
               and t1.category_id  = #{condition.categoryId}
           </if>
+      ORDER BY T1.ID DESC
   </select>
 </mapper>
