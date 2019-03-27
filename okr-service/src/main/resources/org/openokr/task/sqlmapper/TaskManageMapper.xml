@@ -282,10 +282,10 @@
                 and t5.KR_ID >=#{vo.okrId}
             </if>
             <if test="vo.queryStartDate != null">
-                and t3.report_day >=#{vo.queryStartTime}
+                and t3.report_day >=#{vo.queryStartDate}
             </if>
             <if test="vo.queryEndDate != null">
-                <![CDATA[ and t3.report_day <=#{vo.queryEndTime} ]]>
+                <![CDATA[ and t3.report_day <=#{vo.queryEndDate} ]]>
             </if>
         </where>
     </sql>

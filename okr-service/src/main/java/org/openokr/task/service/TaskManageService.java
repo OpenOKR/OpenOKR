@@ -590,6 +590,12 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
             if (org.apache.commons.lang3.StringUtils.isBlank(taskSearchVO.getCurrentUserId())){
                 throw new BusinessException("查询参数用户ID为空");
             }
+            if(taskSearchVO.getQueryEndDate()!= null){
+                //结束日期处理  添加235959查询一整天记录
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+                SimpleDateFormat sdfTime = new SimpleDateFormat("yyyyMMddHHmmss");
+                taskSearchVO.setQueryEndDate(sdfTime.parse(sdf.format(taskSearchVO.getQueryEndDate())+"235959"));
+            }
             Map<String,Object> paramMap = new HashMap<>();
             paramMap.put("vo",taskSearchVO);
             //根据用户id查找管理（负责）团队成员数、关联任务数、产品总数
