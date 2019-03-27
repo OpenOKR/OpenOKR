@@ -198,7 +198,9 @@
         <if test="vo.currentUserId != null and !vo.currentUserId.isEmpty()">
             and (t2.user_id = #{vo.currentUserId})
         </if>
-        and (now() BETWEEN t1.task_start_time and t1.task_end_time)
+        <if test="vo.isFilterTime != null and !vo.isFilterTime.isEmpty()">
+            and (now() BETWEEN t1.task_start_time and t1.task_end_time)
+        </if>
         order by create_ts desc
     </sql>
 
