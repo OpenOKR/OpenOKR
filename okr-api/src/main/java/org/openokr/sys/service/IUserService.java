@@ -55,4 +55,12 @@ public interface IUserService {
      * @throws BusinessException
      */
     List<UserVO> getUserRole(UserVO userVO) throws BusinessException;
+
+    /**
+     * 判断用户是否为管理员
+     * @param userId
+     * @return
+     * @throws BusinessException
+     */
+    boolean checkUserIsAdmin(String userId) throws BusinessException;
 }

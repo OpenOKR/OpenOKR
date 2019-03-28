@@ -21,11 +21,14 @@
 
     <!--获取用户的所有团队信息(不包括公司团队)-->
     <select id="getTeamByUserId" parameterType="java.util.Map" resultMap="TeamsExtVO">
-        select t1.id, t1.name, t1.owner_id, t1.create_ts, (case when t1.owner_id = #{userId} then 1 else 0 end) as editFlag
+        select distinct t1.id, t1.name, t1.owner_id, t1.create_ts, (case when t1.owner_id = #{userId} then 1 else 0 end) as editFlag
         from t_okr_teams t1
         left join t_okr_team_user_rela t2 on t2.team_id=t1.id
         where t1.type='2'
-        and t2.user_id= #{userId}
+        <if test="isAdmin==null or isAdmin == '' ">
+          and t2.user_id= #{userId}
+        </if>
+
     </select>
 
     <!--根据用户id或者团队类型筛选团队-->

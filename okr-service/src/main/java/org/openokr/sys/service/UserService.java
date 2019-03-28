@@ -282,6 +282,32 @@ public class UserService extends BaseServiceImpl implements IUserService {
         }
     }
 
+    @Override
+    public boolean checkUserIsAdmin(String userId) throws BusinessException {
+        try {
+            if (org.apache.commons.lang3.StringUtils.isBlank(userId)){
+                throw new BusinessException("用户ID为空!");
+            }
+            UserVO userVO = new UserVO();
+            userVO.setId(userId);
+            List<UserVO> userVOS = this.getUserRole(userVO);
+            if(userVOS!=null && !userVOS.isEmpty()){
+                for(UserVO vo:userVOS){
+                    if("0".equals(vo.getRoleType().substring(0,1))){
+                        return true;
+                    }
+                }
+            }
+            return false;
+        } catch (BusinessException e) {
+            logger.error("判断用户是否为管理员 异常 busi-error:{}-->[userVO]={}", e.getMessage(), userId, e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("判断用户是否为管理员 异常 error:{}-->[userVO]={}", e.getMessage(),userId, e);
+            throw new BusinessException("判断用户是否为管理员 失败");
+        }
+    }
+
     private long countByUsername(String id, String username) {
         UserEntityCondition condition = new UserEntityCondition();
         if (StringUtils.isNotBlank(id)) {

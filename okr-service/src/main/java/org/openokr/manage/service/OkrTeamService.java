@@ -12,9 +12,11 @@ import org.openokr.manage.entity.TeamsEntity;
 import org.openokr.manage.vo.TeamsExtVO;
 import org.openokr.manage.vo.TeamsSearchVO;
 import org.openokr.manage.vo.TeamsVO;
+import org.openokr.sys.service.IUserService;
 import org.openokr.sys.vo.UserVO;
 import org.openokr.task.request.TeamTaskSearchVO;
 import org.openokr.task.vo.TeamTaskCountInfoVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,10 +32,14 @@ public class OkrTeamService extends BaseServiceImpl implements IOkrTeamService {
 
     private final static String MAPPER_NAMESPACE = "org.openokr.manage.sqlmapper.OkrTeamMapper";
 
+    @Autowired
+    IUserService userService;
+
     @Override
     public List<TeamsExtVO> getTeamByUserId(String userId) throws BusinessException {
         Map<String, Object> params = new HashMap<>();
         params.put("userId", userId);
+        params.put("isAdmin", userService.checkUserIsAdmin(userId)?"1":null);
         List<TeamsExtVO> teamsVOList = this.getDao().selectListBySql(MAPPER_NAMESPACE + ".getTeamByUserId", params);
         return teamsVOList;
     }

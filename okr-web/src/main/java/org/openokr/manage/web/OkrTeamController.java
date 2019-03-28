@@ -123,9 +123,9 @@ public class OkrTeamController extends BaseController {
             {
             }
     )
-    @RequestMapping(value = "/getTaskListByUser.json", method = RequestMethod.GET)
+    @RequestMapping(value = "/getTeamListByUser.json", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseData<List<TeamsExtVO>> getTaskListByUser() {
+    public ResponseData<List<TeamsExtVO>> getTeamListByUser() {
         ResponseData<List<TeamsExtVO>> result = new ResponseData<>();
         try {
             List<TeamsExtVO> teamsExtVOS = okrTeamService.getTeamByUserId(this.getCurrentUserId());
