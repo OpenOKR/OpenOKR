@@ -19,7 +19,7 @@
     <select id="findUserListByOrganizationId" parameterType="java.util.Map" resultType="java.util.Map">
         select t1.id as "id", t1.real_name as "realName", t1.organization_id as "pid", '2' as "type" from t_okr_sys_user t1
         join t_okr_sys_organization t2 on t2.id = t1.organization_id
-        where t2.id = #{organizationId} and t1.id != #{currentUserId}
+        where t2.id = #{organizationId}
     </select>
 
 </mapper>

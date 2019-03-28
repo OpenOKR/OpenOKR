@@ -123,6 +123,9 @@ public class OkrTeamService extends BaseServiceImpl implements IOkrTeamService {
         if (teamsVO.getTeamRelUsers() != null && teamsVO.getTeamRelUsers().size()>0) {
             List<TeamUserRelaEntity> userRelList = new ArrayList<>();
             for (UserVO userVO : teamsVO.getTeamRelUsers()) {
+                if(userVO.getId().equals(userId)){
+                    continue;
+                }
                 TeamUserRelaEntity relEntity = new TeamUserRelaEntity();
                 relEntity.setTeamId(teamId);
                 relEntity.setUserId(userVO.getId());
@@ -260,7 +263,7 @@ public class OkrTeamService extends BaseServiceImpl implements IOkrTeamService {
             }else {
                 paramMap.put("type",null);
             }
-            return this.getMyBatisDao().selectOneBySql(MAPPER_NAMESPACE+".getAllTeamByUserIdOrType",paramMap);
+            return this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE+".getAllTeamByUserIdOrType",paramMap);
         } catch (BusinessException e) {
             logger.error(" 根据用户或类型查询团队列表 busi-error:{}-->[teamsSearchVO]={}", e.getMessage(),JSONUtils.objectToString(teamsVO), e);
             throw e;
