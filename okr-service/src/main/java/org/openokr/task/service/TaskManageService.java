@@ -1,6 +1,5 @@
 package org.openokr.task.service;
 
-import com.google.common.collect.Lists;
 import com.zzheng.framework.base.utils.JSONUtils;
 import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.dao.pojo.Page;
@@ -9,20 +8,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.openokr.common.constant.TaskConstant;
 import org.openokr.db.service.IBasicDBService;
 import org.openokr.db.service.IDailyDBService;
-import org.openokr.manage.entity.TeamUserRelaEntityCondition;
 import org.openokr.manage.service.IOkrObjectService;
 import org.openokr.manage.service.IOkrTeamService;
 import org.openokr.manage.vo.TeamsExtVO;
 import org.openokr.manage.vo.TeamsSearchVO;
-import org.openokr.manage.vo.TeamsVO;
 import org.openokr.sys.entity.UserEntity;
 import org.openokr.sys.service.IUserService;
-import org.openokr.sys.vo.UserVO;
 import org.openokr.task.entity.*;
 import org.openokr.task.request.TaskSearchVO;
 import org.openokr.task.request.TeamTaskSearchVO;
 import org.openokr.task.vo.*;
-import org.openokr.util.JSONCloneObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -519,35 +514,15 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
             //0开头的是管理员 00：超级管理员 01：系统管理员 02：普通管理员   10：用户
             //只要他是管理员就查，仅查一次
             if (TaskConstant.IS_ADMIN.equals(conditionVO.getIsAdmin())){
-                UserVO userVO = new UserVO();
-                userVO.setId(conditionVO.getUserId());
-                List<UserVO> userVOList = userService.getUserRole(userVO);
-                for (UserVO user:userVOList){
-                    String roleType = user.getRoleType().substring(0,1);
-                    if ("0".equals(roleType)){
-                        logger.info("当前用户是管理员 userId:{}"+user.getId());
-                        //管理员返回所有任务
-                        conditionVO.setUserId(null);
-                        TeamsVO teamsVO = new TeamsVO();
-                        teamsVO.setOwnerId(user.getId());
-                        List<TeamsVO> teamsVOS  = okrTeamService.getTeamListByUserOrType(teamsVO);
-                        if (teamsVOS==null){
-                            logger.info("当前管理员用户查询负责的团队为空");
-                        }
-                        List<String> teamIdList = Lists.newArrayList();
-                        for (TeamsVO vo : teamsVOS){
-                            teamIdList.add(vo.getId());
-                        }
-                        TeamUserRelaEntityCondition teamUserRelaEntityCondition =new TeamUserRelaEntityCondition();
-                        teamUserRelaEntityCondition.createCriteria().andTeamIdIn(teamIdList);
-                        List<UserVO> teamUserList = JSONCloneObject.cloneListObject(this.selectByCondition(teamUserRelaEntityCondition),UserVO.class);
-                        List<String> userIdList = Lists.newArrayList();
-                        for (UserVO vo : teamUserList){
-                            userIdList.add(vo.getId());
-                        }
-                        return basicDBService.getSearchCondition(conditionVO);
-                    }
+                List<String> userIdList = basicDBService.getUserIdListByAdminTeam(conditionVO.getUserId());
+                if (userIdList.size()>0){
+                    conditionVO.setUserIdList(userIdList);
+                }else {
+                    //如果是管理员查询，所属的userIdList没有数据直接返回空列表即可
+                    logger.info("全部报工头部搜索条件查询-当前管理员所属团队相关人员为空");
+                    return new ArrayList<>();
                 }
+                conditionVO.setUserId(null);
             }
             return basicDBService.getSearchCondition(conditionVO);
         } catch (BusinessException e) {

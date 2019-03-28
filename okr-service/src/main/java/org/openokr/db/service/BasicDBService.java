@@ -8,6 +8,7 @@ import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.service.impl.BaseServiceImpl;
 import org.openokr.manage.entity.TeamUserRelaEntityCondition;
 import org.openokr.manage.service.IOkrTeamService;
+import org.openokr.manage.vo.TeamUserRelaVO;
 import org.openokr.manage.vo.TeamsVO;
 import org.openokr.sys.service.IUserService;
 import org.openokr.sys.vo.UserVO;
@@ -70,7 +71,7 @@ public class BasicDBService extends BaseServiceImpl implements IBasicDBService {
         userVO.setId(userId);
         List<UserVO> userVOList = userService.getUserRole(userVO);
         for (UserVO user:userVOList){
-            if ("0".equals(user.getRoleType().substring(1,1))){
+            if ("0".equals(user.getRoleType().substring(0,1))){
                 logger.info("当前用户是管理员 userId:{}"+user.getId());
                 //管理员返回所有任务
                 TeamsVO teamsVO = new TeamsVO();
@@ -83,12 +84,15 @@ public class BasicDBService extends BaseServiceImpl implements IBasicDBService {
                 for (TeamsVO vo : teamsVOS){
                     teamIdList.add(vo.getId());
                 }
+                if (teamIdList.size() == 0){
+                    return new ArrayList<>();
+                }
                 TeamUserRelaEntityCondition teamUserRelaEntityCondition =new TeamUserRelaEntityCondition();
                 teamUserRelaEntityCondition.createCriteria().andTeamIdIn(teamIdList);
-                List<UserVO> teamUserList = JSONCloneObject.cloneListObject(this.selectByCondition(teamUserRelaEntityCondition),UserVO.class);
+                List<TeamUserRelaVO> teamUserList = JSONCloneObject.cloneListObject(this.selectByCondition(teamUserRelaEntityCondition),TeamUserRelaVO.class);
                 List<String> userIdList = Lists.newArrayList();
-                for (UserVO vo : teamUserList){
-                    userIdList.add(vo.getId());
+                for (TeamUserRelaVO vo : teamUserList){
+                    userIdList.add(vo.getUserId());
                 }
                 return userIdList;
             }
