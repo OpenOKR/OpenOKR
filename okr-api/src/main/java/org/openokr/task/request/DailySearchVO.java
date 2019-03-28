@@ -58,4 +58,7 @@ public class DailySearchVO extends PageRequest {
     @ApiModelProperty(value = "是否是管理员查询,如果是管理员查询自己的所有团队报工则传 '1'")
     private String isAdmin;
 
+    @ApiModelProperty(value = "搜索关键词")
+    private String searchKey;
+
 }

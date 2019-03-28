@@ -159,7 +159,7 @@
         <if test="condition.userId != null and condition.userId != ''" >
             AND otur.user_id = #{condition.userId}
         </if>
-        <if test="(condition.userId == null or condition.userId == '') and condition.userIdList != null">
+        <if test="(condition.userId == null or condition.userId == '') and condition.userIdList != null and condition.userIdList.size()>0">
             AND otur.user_id in
             <foreach collection="condition.userIdList" item="userId" open="(" separator="," close=")">
                 #{userId}

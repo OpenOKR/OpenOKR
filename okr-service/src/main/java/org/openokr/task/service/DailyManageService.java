@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -41,20 +42,27 @@ public class DailyManageService extends BaseServiceImpl implements IDailyManageS
                 throw new BusinessException("查询条件对象为空");
             }
             //如果是管理员，并且要查所有人的日报
+            List<DailyVO> list = new ArrayList<>();
             if (StringUtils.isNotBlank(condition.getIsAdmin())){
                 List<String> userIdList = basicDBService.getUserIdListByAdminTeam(condition.getReportUserId());
                 condition.setReportUserId(null);
-                condition.setReportUserIdList(userIdList);
+                if (userIdList.size()>0){
+                    condition.setReportUserIdList(userIdList);
+                } else {
+                    page.setTotalRecord(0);
+                    page.setRecords(list);
+                    return page;
+                }
             }
             int count = dailyDBService.countDailyList(condition);
             if (count >= 0) {
-                List<DailyVO> list = dailyDBService.getDailyList(condition,page);
-                if (page == null) {
-                    page = new Page();
-                }
-                page.setTotalRecord(count);
-                page.setRecords(list);
+                list = dailyDBService.getDailyList(condition,page);
             }
+            if (page == null) {
+                page = new Page();
+            }
+            page.setTotalRecord(count);
+            page.setRecords(list);
 
             return page;
         } catch (BusinessException e) {

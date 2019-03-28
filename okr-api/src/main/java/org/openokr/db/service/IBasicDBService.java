@@ -14,6 +14,7 @@ public interface IBasicDBService {
 
     /**
      * 若要同时查询多人的所有condition则 userId = null userIdList !=null
+     * 如果两个同时为空则返回所有数据
      * @param conditionVO
      * @return
      * @throws BusinessException

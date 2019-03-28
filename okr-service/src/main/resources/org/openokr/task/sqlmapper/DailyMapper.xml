@@ -55,6 +55,9 @@
         <if test="condition.teamId != null and condition.teamId != '' " >
             AND ot2.id = #{condition.teamId}
         </if>
+        <if test="condition.searchKey != null and condition.searchKey != '' " >
+            AND t2.task_name = #{condition.searchKey}
+        </if>
         ORDER BY t1.report_day DESC ,t1.update_ts DESC
     </sql>
 
