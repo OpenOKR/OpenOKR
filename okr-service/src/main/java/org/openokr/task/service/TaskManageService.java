@@ -523,7 +523,7 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
                 userVO.setId(conditionVO.getUserId());
                 List<UserVO> userVOList = userService.getUserRole(userVO);
                 for (UserVO user:userVOList){
-                    String roleType = user.getRoleType().substring(1,2);
+                    String roleType = user.getRoleType().substring(0,1);
                     if ("0".equals(roleType)){
                         logger.info("当前用户是管理员 userId:{}"+user.getId());
                         //管理员返回所有任务
