@@ -67,6 +67,12 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
             if(page == null){
                 page = new Page(CURRENT_PAGE,PAGE_SIZE);
             }
+            if(taskSearchVO.getQueryEndDate()!= null){
+                //结束日期处理  添加235959查询一整天记录
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+                SimpleDateFormat sdfTime = new SimpleDateFormat("yyyyMMddHHmmss");
+                taskSearchVO.setQueryEndDate(sdfTime.parse(sdf.format(taskSearchVO.getQueryEndDate())+"235959"));
+            }
             Map<String,Object> paramMap = new HashMap<>();
             paramMap.put("page",page);
             paramMap.put("vo",taskSearchVO);
