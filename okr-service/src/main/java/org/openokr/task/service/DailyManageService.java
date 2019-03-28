@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -105,14 +106,6 @@ public class DailyManageService extends BaseServiceImpl implements IDailyManageS
                 throw new BusinessException("日报时间为空");
             }
 
-            // 先查询是否已经保存过当日日报
-//            DailySearchVO searchVO = new DailySearchVO();
-//            searchVO.setReportDayStr(dateStr);
-//            searchVO.setReportUserId(userId);
-//            List<DailyVO> dailyVOList = this.getDailyList(searchVO);
-//            if (dailyVOList != null && !dailyVOList.isEmpty()) {
-//                throw new BusinessException("今日已填写过日报");
-//            }
             logger.info("新增/更新日报 dailyList:{}",JSON.toJSONString(dailyList));
             for (DailyVO dailyVO:dailyList) {
                 if (StringUtils.isNotBlank(dailyVO.getId())){
@@ -131,8 +124,19 @@ public class DailyManageService extends BaseServiceImpl implements IDailyManageS
                         dailyEntity.setUpdateUserId(userId);
                         dailyEntity.setUpdateTs(new Date());
                         this.update(dailyEntity);
+
+                        //先查询是否累计是否报工超过15个小时
+                        BigDecimal totalDuration = getTotalDuration(userId, dateStr);
+                        if(totalDuration.compareTo(new BigDecimal(15))>0){
+                            throw new BusinessException(dateStr+"累计填报超过15个小时，请确认!");
+                        }
                     }
                 }else {
+                    //先查询是否累计是否报工超过15个小时
+                    BigDecimal totalDuration = getTotalDuration(userId, dateStr);
+                    if(totalDuration.add(dailyVO.getDuration()).compareTo(new BigDecimal(15))>0){
+                        throw new BusinessException(dateStr+"累计填报超过15个小时，请确认!");
+                    }
                     dailyVO.setId(null);
                     dailyVO.setReportDay(DateUtils.stringToDate(dateStr));
                     dailyVO.setReportUserId(userId);
@@ -151,6 +155,20 @@ public class DailyManageService extends BaseServiceImpl implements IDailyManageS
             logger.error("{} 异常，[dailyList]->{},[userId]->{},[dateStr]->{}",methodName, JSON.toJSONString(dailyList),userId,dateStr);
             throw new BusinessException(e);
         }
+    }
+
+    private BigDecimal getTotalDuration(String userId, String dateStr) {
+        DailySearchVO searchVO = new DailySearchVO();
+        searchVO.setReportDayStr(dateStr);
+        searchVO.setReportUserId(userId);
+        List<DailyVO> dailyVOList = this.getDailyList(searchVO);
+        BigDecimal totalDuration = new BigDecimal(0);
+        if (dailyVOList != null && !dailyVOList.isEmpty()) {
+            for(DailyVO vo:dailyVOList){
+                totalDuration = totalDuration.add(vo.getDuration());
+            }
+        }
+        return totalDuration;
     }
 
     @Override
