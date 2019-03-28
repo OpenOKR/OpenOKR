@@ -60,6 +60,7 @@ public class TaskManageController extends BaseController {
         ResponseData<PageResponseData<List<TaskVO>>> result = new ResponseData<>();
         try {
             Page page = new Page(vo.getCurrentPage(), vo.getPageSize());
+            vo.setCurrentUserId(this.getCurrentUserId());
             page = taskManageService.getTakListByPage(page,vo);
             PageResponseData<List<TaskVO>> pageData = new PageResponseData<>();
             pageData.setCurrentPage(page.getCurrentPage());

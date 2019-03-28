@@ -68,6 +68,7 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
                 SimpleDateFormat sdfTime = new SimpleDateFormat("yyyyMMddHHmmss");
                 taskSearchVO.setQueryEndDate(sdfTime.parse(sdf.format(taskSearchVO.getQueryEndDate())+"235959"));
             }
+            taskSearchVO.setIsAdmin(userService.checkUserIsAdmin(taskSearchVO.getCurrentUserId())?"1":"0");
             Map<String,Object> paramMap = new HashMap<>();
             paramMap.put("page",page);
             paramMap.put("vo",taskSearchVO);
