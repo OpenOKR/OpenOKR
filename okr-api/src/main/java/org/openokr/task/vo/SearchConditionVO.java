@@ -1,6 +1,5 @@
 package org.openokr.task.vo;
 
-import com.zzheng.framework.base.vo.BaseVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -9,7 +8,7 @@ import java.util.List;
 
 @Data
 @Api(value = "全部报工页搜索VO")
-public class SearchConditionVO extends BaseVO {
+public class SearchConditionVO extends ShareVO {
 
 
     @ApiModelProperty(value = "任务id")

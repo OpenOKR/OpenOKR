@@ -1,5 +1,6 @@
 package org.openokr.task.service;
 
+import com.alibaba.fastjson.JSON;
 import com.zzheng.framework.base.utils.JSONUtils;
 import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.dao.pojo.Page;
@@ -494,6 +495,7 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
             page.setTotalRecord(count);
             if(count>0){
                 List<TaskVO> taskVOS = this.getMyBatisDao().selectListBySql(MAPPER_NAMSPACE+".getTaskListByUserData",paramMap);
+                new FilterTaskName<TaskVO>().filter(taskVOS);
                 page.setRecords(taskVOS);
             }
         } catch (BusinessException e) {
@@ -525,7 +527,9 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
                 }
                 conditionVO.setUserId(null);
             }
-            return basicDBService.getSearchCondition(conditionVO);
+            List<SearchConditionVO> conditionVOS = basicDBService.getSearchCondition(conditionVO);
+            new FilterTaskName<SearchConditionVO>().filter(conditionVOS);
+            return conditionVOS;
         } catch (BusinessException e) {
             logger.error("搜索条件查询异常 busi-error:{}-->[conditionVO]={}", e.getMessage(), JSONUtils.objectToString(conditionVO), e);
             throw e;
@@ -533,6 +537,56 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
             logger.error("搜索条件查询异常 error:{}-->[conditionVO]={}", e.getMessage(), JSONUtils.objectToString(conditionVO), e);
             throw new BusinessException("搜索条件查询异常 失败");
         }
+    }
+
+    class FilterTaskName<T extends ShareVO> extends HashMap<String,Integer>{
+        void filter(List<T> shareVOList){
+            Set<String> taskNameList = new HashSet<>();
+            for (ShareVO shareVO:shareVOList){
+                Integer integer = get(shareVO.getTaskName());
+                if (integer == null){
+                    put(shareVO.getTaskName(),1);
+                } else {
+                    put(shareVO.getTaskName(),integer+1);
+                    if (get(shareVO.getTaskName())>1){
+                        taskNameList.add(shareVO.getTaskName());
+                    }
+                }
+            }
+            for (String taskName : taskNameList){
+                for (ShareVO shareVO : shareVOList){
+                    if (taskName.equals(shareVO.getTaskName())){
+                        shareVO.setTaskName(shareVO.getTaskName()+"-"+shareVO.getTeamName());
+                    }
+                }
+            }
+            logger.info("conditionVOS:{}", JSON.toJSONString(shareVOList));
+        }
+    }
+    private List<SearchConditionVO> filter(List<SearchConditionVO> conditionVOS){
+        logger.info("conditionVOS:{}", JSON.toJSONString(conditionVOS));
+        Map<String, Integer> voMap = new HashMap<>();
+        Set<String> taskNameList = new HashSet<>();
+        for (SearchConditionVO conditionVO : conditionVOS){
+            Integer integer = voMap.get(conditionVO.getTaskName());
+            if (integer == null){
+                voMap.put(conditionVO.getTaskName(),1);
+            } else {
+                voMap.put(conditionVO.getTaskName(),integer+1);
+                if (voMap.get(conditionVO.getTaskName())>1){
+                    taskNameList.add(conditionVO.getTaskName());
+                }
+            }
+        }
+        for (String taskName : taskNameList){
+            for (SearchConditionVO conditionVO : conditionVOS){
+                if (taskName.equals(conditionVO.getTaskName())){
+                    conditionVO.setTaskName(conditionVO.getTaskName()+"-"+conditionVO.getTeamName());
+                }
+            }
+        }
+        logger.info("conditionVOS:{}", JSON.toJSONString(conditionVOS));
+        return conditionVOS;
     }
 
     @Override
@@ -551,6 +605,7 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
             page.setTotalRecord(count);
             if(count > 0){
                 List<TaskVO> taskVOS = this.getMyBatisDao().selectListBySql(MAPPER_NAMSPACE+".getTaskList",paramMap);
+                new FilterTaskName<TaskVO>().filter(taskVOS);
                 page.setRecords(taskVOS);
             }
         } catch (BusinessException e) {

@@ -203,9 +203,12 @@
         t1.update_user_id,
         t1.update_ts,
         t2.user_id
+        ,T3.name team_name
+        ,t3.id team_id
         FROM
         t_okr_task t1
         LEFT JOIN T_OKR_TASK_USER_REL t2 ON t1.id = t2.task_id
+        LEFT JOIN t_okr_teams T3 ON T3.ID = T1.belong_team
         where 1=1
         <if test="vo.currentUserId != null and !vo.currentUserId.isEmpty()">
             and (t2.user_id = #{vo.currentUserId})
