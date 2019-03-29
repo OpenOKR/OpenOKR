@@ -560,33 +560,8 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
                     }
                 }
             }
-            logger.info("conditionVOS:{}", JSON.toJSONString(shareVOList));
+            logger.info("shareVOList:{}", JSON.toJSONString(shareVOList));
         }
-    }
-    private List<SearchConditionVO> filter(List<SearchConditionVO> conditionVOS){
-        logger.info("conditionVOS:{}", JSON.toJSONString(conditionVOS));
-        Map<String, Integer> voMap = new HashMap<>();
-        Set<String> taskNameList = new HashSet<>();
-        for (SearchConditionVO conditionVO : conditionVOS){
-            Integer integer = voMap.get(conditionVO.getTaskName());
-            if (integer == null){
-                voMap.put(conditionVO.getTaskName(),1);
-            } else {
-                voMap.put(conditionVO.getTaskName(),integer+1);
-                if (voMap.get(conditionVO.getTaskName())>1){
-                    taskNameList.add(conditionVO.getTaskName());
-                }
-            }
-        }
-        for (String taskName : taskNameList){
-            for (SearchConditionVO conditionVO : conditionVOS){
-                if (taskName.equals(conditionVO.getTaskName())){
-                    conditionVO.setTaskName(conditionVO.getTaskName()+"-"+conditionVO.getTeamName());
-                }
-            }
-        }
-        logger.info("conditionVOS:{}", JSON.toJSONString(conditionVOS));
-        return conditionVOS;
     }
 
     @Override
