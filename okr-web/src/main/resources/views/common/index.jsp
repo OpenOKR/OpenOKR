@@ -4,30 +4,6 @@
 <c:set var="pageJs" value="${staticContextPath}/assets/js/common/index.js"/>
 <c:set var="pageTitle" value="OKR目标管理系统"/>
 <%@ include file="/views/application/_include_top_main.jsp" %>
-<script id="editPassword" type="text/template">
-    <form class="ui-form inner3">
-        <ul class="form-grid font4">
-            <li class="col-sm-11">
-                <label class="form-lab">旧密码：</label>
-                <div class="form-control">
-                    <input id="oldPassword" name="oldPassword" type="password" class="inp" placeholder="请输入旧密码"/>
-                </div>
-            </li>
-            <li class="col-sm-11">
-                <label class="form-lab">新密码：</label>
-                <div class="form-control">
-                    <input id="newPassword" name="newPassword" type="password" class="inp" placeholder="请输入新密码"/>
-                </div>
-            </li>
-            <li class="col-sm-11">
-                <label class="form-lab">确认密码：</label>
-                <div class="form-control">
-                    <input id="confirmPassword" name="confirmPassword" type="password" class="inp" placeholder="请确认新密码"/>
-                </div>
-            </li>
-        </ul>
-    </form>
-</script>
 <body class="page-body" style="overflow: hidden;">
     <c:if test="${!flag}">
         <div class="header-bg">
@@ -52,7 +28,6 @@
                     </div>
                     <span class="user-name">${userName}</span>
                     <ul class="most-set-list">
-                        <li><a onclick="mainObj.editPassword();"><i class="iconfont icon-bianji"></i>修改密码</a></li>
                         <li><a href="${contextPath}/logout.htm"><i class="iconfont icon-out"></i>安全退出</a></li>
                     </ul>
                 </div>

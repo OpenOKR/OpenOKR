@@ -77,12 +77,10 @@ public class UserController extends BaseController {
     }
 
     @RequiresPermissions("user")
-    @RequestMapping(value = "/user/editPassword.json")
+    @RequestMapping(value = "/user/updatePassword.json")
     @ResponseBody
-    public ResponseResult editPassword(@JsonPathParam("$.oldPassword") String oldPassword,
-                                       @JsonPathParam("$.newPassword") String newPassword,
-                                       @JsonPathParam("$.confirmPassword") String confirmNewPassword) {
-        return userService.editPassword(this.getCurrentUserId(), oldPassword, newPassword, confirmNewPassword);
+    public ResponseResult updatePassword(String oldPassword, String newPassword, String confirmNewPassword) {
+        return userService.updatePassword(this.getCurrentUserId(), oldPassword, newPassword, confirmNewPassword);
     }
 
     @ApiOperation(value = "获取用户选择列表", notes = "获取用户选择列表")

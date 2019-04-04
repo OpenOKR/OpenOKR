@@ -22,19 +22,14 @@ public enum ObjectivesStatusEnum {
     STATUS_2("2", "待确认", "org"),
 
     /**
-     * 3-已生效
+     * 3-已确认
      */
-    STATUS_3("3", "执行中", "green"),
+    STATUS_3("3", "已确认", "green"),
 
     /**
      * 4-被驳回
      */
-    STATUS_4("4", "被驳回", "red"),
-
-    /**
-     * 5-结束
-     */
-    STATUS_5("5", "结束", "green");
+    STATUS_4("4", "被驳回", "red");
 
     private String name;
 

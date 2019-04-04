@@ -125,56 +125,6 @@ require(["jQuery"], function () {
         changeFrameHeight: function () {
             var $iframe = $('#mainContent');
             $iframe.height(document.documentElement.clientHeight - 56);
-        },
-
-        editPassword: function () {
-            require(["artDialog", "Tips", "Underscore", "RSA"], function () {
-                var template = $("#editPassword").html();
-                var _func = function (oldPassword, newPassword, confirmPassword) {
-                    // 保存
-                    ajaxUtil.ajaxWithBlock({
-                        url: App["contextPath"] + "/sys/user/editPassword.json",
-                        type: "post",
-                        data: JSON.stringify({oldPassword: oldPassword, newPassword: newPassword, confirmPassword: confirmPassword}),
-                        contentType: 'application/json;charset=utf-8' //设置请求头信息
-                    }, function (data) {
-                        require(["Tips"], function () {
-                            if (data.success) {
-                                TipsUtil.info(data.message);
-                                dialogObj.remove();
-                            } else {
-                                TipsUtil.warn(data.message);
-                            }
-                        });
-                    });
-                };
-                var dialogObj = dialog({
-                    title: '修改密码',
-                    content: template,
-                    quickClose: false,
-                    okValue: '确定',
-                    cancelValue: '取消',
-                    ok: function () {
-                        var oldPassword = $('#oldPassword').val(), newPassword = $('#newPassword').val(), confirmPassword = $('#confirmPassword').val();
-                        if (oldPassword === '' || newPassword === '' || confirmPassword === '') {
-                            TipsUtil.warn('请确保所有输入框完整');
-                            return false;
-                        }
-                        if (newPassword !== confirmPassword) {
-                            TipsUtil.warn('新密码和确认密码不一致，请检查');
-                            return false;
-                        }
-                        _func(oldPassword, newPassword, confirmPassword);
-                        return false;
-                    },
-                    cancel: function (){
-                        //关闭对话框
-                        dialogObj.close();
-                        return false;
-                    }
-                });
-                dialogObj.showModal();
-            });
         }
     });
 

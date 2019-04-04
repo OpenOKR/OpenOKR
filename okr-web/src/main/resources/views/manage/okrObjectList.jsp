@@ -19,7 +19,7 @@
                         <li data-edit="${team.editFlag}" onclick="pageObj.tabClick(this, '2', '${team.id}');">${team.name}</li>
                     </c:forEach>
                 </c:if>
-                <li onclick="pageObj.tabClick(this, '3', '1')">公司OKR</li>
+                <li onclick="pageObj.tabClick(this, '3', null)">公司OKR</li>
             </ul>
         </div>
         <div class="tab-content mt10">

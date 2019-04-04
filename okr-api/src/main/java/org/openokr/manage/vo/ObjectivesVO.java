@@ -105,11 +105,6 @@ public class ObjectivesVO extends BaseVO implements Serializable {
      */
     private String teamId;
 
-    /**
-     * 排序
-     */
-    private Integer sort;
-
 
 
     /**
@@ -376,20 +371,6 @@ public class ObjectivesVO extends BaseVO implements Serializable {
      */
     public void setTeamId(String teamId) {
         this.teamId = teamId;
-    }
-
-    /**
-     * 排序
-     */
-    public Integer getSort() {
-        return sort;
-    }
-
-    /**
-     * 排序
-     */
-    public void setSort(Integer sort) {
-        this.sort = sort;
     }
 
 }

@@ -27,7 +27,7 @@ public interface IUserService {
 
     ResponseResult delete(String id);
 
-    ResponseResult editPassword(String userId, String oldPassword, String newPassword, String confirmNewPassword);
+    ResponseResult updatePassword(String userId, String oldPassword, String newPassword, String confirmNewPassword);
 
     long countByOrganizationId(String organizationId);
 

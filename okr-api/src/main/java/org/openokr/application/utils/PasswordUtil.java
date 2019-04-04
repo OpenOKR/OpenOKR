@@ -10,9 +10,9 @@ public class PasswordUtil {
     private static final int SALT_SIZE = 8;
 
     public static final String ALGORITHM = "SHA-1";
-
-    private PasswordUtil() {
-        //empty
+    
+    private PasswordUtil(){
+    	//empty
     }
 
     public static class HashPassword {
@@ -43,13 +43,5 @@ public class PasswordUtil {
         byte[] bytePassword = Digests.sha1(plainText.getBytes(), salt, INTERATIONS);
         hashPassword.password = Encodes.encodeHex(bytePassword);
         return hashPassword;
-    }
-
-    public static boolean validaPassword(String plainPassword, String saltStr, String password) {
-        byte[] salt = Encodes.decodeHex(saltStr);
-        byte[] hashPassword = Digests.sha1(plainPassword.getBytes(), salt, INTERATIONS);
-        System.out.println(Encodes.encodeHex(salt));
-        System.out.println(Encodes.encodeHex(hashPassword));
-        return password.equals(Encodes.encodeHex(hashPassword));
     }
 }

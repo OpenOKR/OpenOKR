@@ -24,11 +24,5 @@ public interface IOkrBaseService {
 	 * @throws BusinessException
      */
 	String getCurrentTimeSessionId() throws BusinessException;
-
-	/**
-	 * 删除未处理消息
-	 * @param objectId
-	 */
-	void deleteAuditMsg(String objectId);
-
+	
 }

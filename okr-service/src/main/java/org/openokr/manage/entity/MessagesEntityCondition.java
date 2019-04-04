@@ -1003,146 +1003,6 @@ public class MessagesEntityCondition extends BaseEntityCondition implements Seri
             return (Criteria) this;
         }
 
-        public Criteria andRemarksIsNull() {
-            addCriterion("remarks is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarksIsNotNull() {
-            addCriterion("remarks is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarksEqualTo(String value) {
-            addCriterion("remarks =", value, "remarks");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarksNotEqualTo(String value) {
-            addCriterion("remarks <>", value, "remarks");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarksGreaterThan(String value) {
-            addCriterion("remarks >", value, "remarks");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarksGreaterThanOrEqualTo(String value) {
-            addCriterion("remarks >=", value, "remarks");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarksLessThan(String value) {
-            addCriterion("remarks <", value, "remarks");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarksLessThanOrEqualTo(String value) {
-            addCriterion("remarks <=", value, "remarks");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarksLike(String value) {
-            addCriterion("remarks like", value, "remarks");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarksNotLike(String value) {
-            addCriterion("remarks not like", value, "remarks");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarksIn(List<String> values) {
-            addCriterion("remarks in", values, "remarks");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarksNotIn(List<String> values) {
-            addCriterion("remarks not in", values, "remarks");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarksBetween(String value1, String value2) {
-            addCriterion("remarks between", value1, value2, "remarks");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarksNotBetween(String value1, String value2) {
-            addCriterion("remarks not between", value1, value2, "remarks");
-            return (Criteria) this;
-        }
-
-        public Criteria andDelFlagIsNull() {
-            addCriterion("del_flag is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDelFlagIsNotNull() {
-            addCriterion("del_flag is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDelFlagEqualTo(String value) {
-            addCriterion("del_flag =", value, "delFlag");
-            return (Criteria) this;
-        }
-
-        public Criteria andDelFlagNotEqualTo(String value) {
-            addCriterion("del_flag <>", value, "delFlag");
-            return (Criteria) this;
-        }
-
-        public Criteria andDelFlagGreaterThan(String value) {
-            addCriterion("del_flag >", value, "delFlag");
-            return (Criteria) this;
-        }
-
-        public Criteria andDelFlagGreaterThanOrEqualTo(String value) {
-            addCriterion("del_flag >=", value, "delFlag");
-            return (Criteria) this;
-        }
-
-        public Criteria andDelFlagLessThan(String value) {
-            addCriterion("del_flag <", value, "delFlag");
-            return (Criteria) this;
-        }
-
-        public Criteria andDelFlagLessThanOrEqualTo(String value) {
-            addCriterion("del_flag <=", value, "delFlag");
-            return (Criteria) this;
-        }
-
-        public Criteria andDelFlagLike(String value) {
-            addCriterion("del_flag like", value, "delFlag");
-            return (Criteria) this;
-        }
-
-        public Criteria andDelFlagNotLike(String value) {
-            addCriterion("del_flag not like", value, "delFlag");
-            return (Criteria) this;
-        }
-
-        public Criteria andDelFlagIn(List<String> values) {
-            addCriterion("del_flag in", values, "delFlag");
-            return (Criteria) this;
-        }
-
-        public Criteria andDelFlagNotIn(List<String> values) {
-            addCriterion("del_flag not in", values, "delFlag");
-            return (Criteria) this;
-        }
-
-        public Criteria andDelFlagBetween(String value1, String value2) {
-            addCriterion("del_flag between", value1, value2, "delFlag");
-            return (Criteria) this;
-        }
-
-        public Criteria andDelFlagNotBetween(String value1, String value2) {
-            addCriterion("del_flag not between", value1, value2, "delFlag");
-            return (Criteria) this;
-        }
-
         public Criteria andIdLikeInsensitive(String value) {
             addCriterion("upper(id) like", value.toUpperCase(), "id");
             return (Criteria) this;
@@ -1195,16 +1055,6 @@ public class MessagesEntityCondition extends BaseEntityCondition implements Seri
 
         public Criteria andMarkLikeInsensitive(String value) {
             addCriterion("upper(mark) like", value.toUpperCase(), "mark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarksLikeInsensitive(String value) {
-            addCriterion("upper(remarks) like", value.toUpperCase(), "remarks");
-            return (Criteria) this;
-        }
-
-        public Criteria andDelFlagLikeInsensitive(String value) {
-            addCriterion("upper(del_flag) like", value.toUpperCase(), "delFlag");
             return (Criteria) this;
         }
 
@@ -1370,36 +1220,6 @@ public class MessagesEntityCondition extends BaseEntityCondition implements Seri
          */
         public Criteria andMarkLikeIgnoreCase(String value) {
             addCriterion("upper(mark) like ", value.toUpperCase(), "mark");
-            return (Criteria) this;
-        }
-
-        /**
-         *(扩展Mybatis原生like的不足)
-         *忽略字段大小写的模糊查询
-         *Java编码如下：
-         *  criteria.andNameLikeIgnoreCase("%Abc%"); 前后模糊,A字母大写
-         *  criteria.andName2LikeIgnoreCase("%aBc"); 前模糊,B字母大写
-         *  criteria.andName3LikeIgnoreCase("abC%"); 后模糊,C字母大写
-         *执行时SQL如下:
-         *  where name like '%abc%' or name2 like '%abc' or name3 like 'abc%'
-         */
-        public Criteria andRemarksLikeIgnoreCase(String value) {
-            addCriterion("upper(remarks) like ", value.toUpperCase(), "remarks");
-            return (Criteria) this;
-        }
-
-        /**
-         *(扩展Mybatis原生like的不足)
-         *忽略字段大小写的模糊查询
-         *Java编码如下：
-         *  criteria.andNameLikeIgnoreCase("%Abc%"); 前后模糊,A字母大写
-         *  criteria.andName2LikeIgnoreCase("%aBc"); 前模糊,B字母大写
-         *  criteria.andName3LikeIgnoreCase("abC%"); 后模糊,C字母大写
-         *执行时SQL如下:
-         *  where name like '%abc%' or name2 like '%abc' or name3 like 'abc%'
-         */
-        public Criteria andDelFlagLikeIgnoreCase(String value) {
-            addCriterion("upper(del_flag) like ", value.toUpperCase(), "delFlag");
             return (Criteria) this;
         }
     }

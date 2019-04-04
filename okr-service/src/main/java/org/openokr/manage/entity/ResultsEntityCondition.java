@@ -6,7 +6,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 public class ResultsEntityCondition extends BaseEntityCondition implements Serializable {
@@ -113,32 +112,6 @@ public class ResultsEntityCondition extends BaseEntityCondition implements Seria
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
-        }
-
-        protected void addCriterionForJDBCDate(String condition, Date value, String property) {
-            if (value == null) {
-                throw new RuntimeException("Value for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Date(value.getTime()), property);
-        }
-
-        protected void addCriterionForJDBCDate(String condition, List<Date> values, String property) {
-            if (values == null || values.size() == 0) {
-                throw new RuntimeException("Value list for " + property + " cannot be null or empty");
-            }
-            List<java.sql.Date> dateList = new ArrayList<java.sql.Date>();
-            Iterator<Date> iter = values.iterator();
-            while (iter.hasNext()) {
-                dateList.add(new java.sql.Date(iter.next().getTime()));
-            }
-            addCriterion(condition, dateList, property);
-        }
-
-        protected void addCriterionForJDBCDate(String condition, Date value1, Date value2, String property) {
-            if (value1 == null || value2 == null) {
-                throw new RuntimeException("Between values for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Date(value1.getTime()), new java.sql.Date(value2.getTime()), property);
         }
 
         public Criteria andIdIsNull() {
@@ -782,52 +755,52 @@ public class ResultsEntityCondition extends BaseEntityCondition implements Seria
         }
 
         public Criteria andEndTsEqualTo(Date value) {
-            addCriterionForJDBCDate("end_ts =", value, "endTs");
+            addCriterion("end_ts =", value, "endTs");
             return (Criteria) this;
         }
 
         public Criteria andEndTsNotEqualTo(Date value) {
-            addCriterionForJDBCDate("end_ts <>", value, "endTs");
+            addCriterion("end_ts <>", value, "endTs");
             return (Criteria) this;
         }
 
         public Criteria andEndTsGreaterThan(Date value) {
-            addCriterionForJDBCDate("end_ts >", value, "endTs");
+            addCriterion("end_ts >", value, "endTs");
             return (Criteria) this;
         }
 
         public Criteria andEndTsGreaterThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("end_ts >=", value, "endTs");
+            addCriterion("end_ts >=", value, "endTs");
             return (Criteria) this;
         }
 
         public Criteria andEndTsLessThan(Date value) {
-            addCriterionForJDBCDate("end_ts <", value, "endTs");
+            addCriterion("end_ts <", value, "endTs");
             return (Criteria) this;
         }
 
         public Criteria andEndTsLessThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("end_ts <=", value, "endTs");
+            addCriterion("end_ts <=", value, "endTs");
             return (Criteria) this;
         }
 
         public Criteria andEndTsIn(List<Date> values) {
-            addCriterionForJDBCDate("end_ts in", values, "endTs");
+            addCriterion("end_ts in", values, "endTs");
             return (Criteria) this;
         }
 
         public Criteria andEndTsNotIn(List<Date> values) {
-            addCriterionForJDBCDate("end_ts not in", values, "endTs");
+            addCriterion("end_ts not in", values, "endTs");
             return (Criteria) this;
         }
 
         public Criteria andEndTsBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("end_ts between", value1, value2, "endTs");
+            addCriterion("end_ts between", value1, value2, "endTs");
             return (Criteria) this;
         }
 
         public Criteria andEndTsNotBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("end_ts not between", value1, value2, "endTs");
+            addCriterion("end_ts not between", value1, value2, "endTs");
             return (Criteria) this;
         }
 

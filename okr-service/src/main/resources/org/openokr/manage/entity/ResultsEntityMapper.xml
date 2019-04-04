@@ -11,7 +11,7 @@
     <result column="initial_value" jdbcType="VARCHAR" property="initialValue" />
     <result column="current_value" jdbcType="VARCHAR" property="currentValue" />
     <result column="owner_id" jdbcType="VARCHAR" property="ownerId" />
-    <result column="end_ts" jdbcType="DATE" property="endTs" />
+    <result column="end_ts" jdbcType="TIMESTAMP" property="endTs" />
     <result column="previous_name" jdbcType="VARCHAR" property="previousName" />
     <result column="status" jdbcType="CHAR" property="status" />
     <result column="del_flag" jdbcType="CHAR" property="delFlag" />
@@ -143,7 +143,7 @@
         owner_id = #{record.ownerId,jdbcType=VARCHAR},
       </if>
       <if test="record.endTs != null">
-        end_ts = #{record.endTs,jdbcType=DATE},
+        end_ts = #{record.endTs,jdbcType=TIMESTAMP},
       </if>
       <if test="record.previousName != null">
         previous_name = #{record.previousName,jdbcType=VARCHAR},
@@ -185,7 +185,7 @@
   <insert id="insertList" parameterType="java.util.List">
      insert into t_okr_manage_results ( id,object_id,name,description,metric_unit,target_value,initial_value,current_value,owner_id,end_ts,previous_name,status,del_flag,progress,create_ts,create_user_id,update_ts,update_user_id,pre_progress ) values
     <foreach collection="list" index="index" item="item" separator=",">
-       ( #{item.id,jdbcType=VARCHAR},#{item.objectId,jdbcType=VARCHAR},#{item.name,jdbcType=VARCHAR},#{item.description,jdbcType=VARCHAR},#{item.metricUnit,jdbcType=CHAR},#{item.targetValue,jdbcType=VARCHAR},#{item.initialValue,jdbcType=VARCHAR},#{item.currentValue,jdbcType=VARCHAR},#{item.ownerId,jdbcType=VARCHAR},#{item.endTs,jdbcType=DATE},#{item.previousName,jdbcType=VARCHAR},#{item.status,jdbcType=CHAR},#{item.delFlag,jdbcType=CHAR},#{item.progress,jdbcType=NUMERIC},#{item.createTs,jdbcType=TIMESTAMP},#{item.createUserId,jdbcType=VARCHAR},#{item.updateTs,jdbcType=TIMESTAMP},#{item.updateUserId,jdbcType=VARCHAR},#{item.preProgress,jdbcType=NUMERIC} )
+       ( #{item.id,jdbcType=VARCHAR},#{item.objectId,jdbcType=VARCHAR},#{item.name,jdbcType=VARCHAR},#{item.description,jdbcType=VARCHAR},#{item.metricUnit,jdbcType=CHAR},#{item.targetValue,jdbcType=VARCHAR},#{item.initialValue,jdbcType=VARCHAR},#{item.currentValue,jdbcType=VARCHAR},#{item.ownerId,jdbcType=VARCHAR},#{item.endTs,jdbcType=TIMESTAMP},#{item.previousName,jdbcType=VARCHAR},#{item.status,jdbcType=CHAR},#{item.delFlag,jdbcType=CHAR},#{item.progress,jdbcType=NUMERIC},#{item.createTs,jdbcType=TIMESTAMP},#{item.createUserId,jdbcType=VARCHAR},#{item.updateTs,jdbcType=TIMESTAMP},#{item.updateUserId,jdbcType=VARCHAR},#{item.preProgress,jdbcType=NUMERIC} )
     </foreach>
   </insert>
 </mapper>
