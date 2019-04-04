@@ -46,7 +46,7 @@
     </select>
 
     <!-- 获取团队负责人 -->
-    <select id="getTeamOwnerUserByTeamId" parameterType="java.util.Map" resultType="org.openokr.sys.vo.UserVOExt">
+    <select id="getTeamOwnerUserByTeamId" resultType="org.openokr.sys.vo.UserVOExt">
         select t1.id,
         t1.create_time,
         t1.password,
@@ -60,6 +60,48 @@
         from t_okr_sys_user t1
         left join t_okr_teams t2 on t2.owner_id = t1.id
         where t2.id = #{teamId}
+    </select>
+
+    <select id="selectUserDeptInfoList" parameterType="java.util.Map" resultType="org.openokr.sys.vo.request.UserSelectOgrVO">
+        select distinct t1.organization_id deptId, t2."name" deptName
+        from t_okr_sys_user t1
+        INNER JOIN t_okr_sys_organization t2 on t1.organization_id = t2.id
+    </select>
+
+    <select id="selectUserInfoListByDeptId" parameterType="java.util.Map" resultType="org.openokr.sys.vo.request.UserSelectUserVO">
+        select distinct t1.id userId, t1."real_name" userName
+        from t_okr_sys_user t1
+        where t1.organization_id = #{orgId}
+    </select>
+
+    <select id="selectTaskUserInfoList" parameterType="java.util.Map" resultType="org.openokr.task.vo.TaskUserInfoVO">
+        select distinct t1.id, t1."real_name" realName
+        from t_okr_sys_user t1
+        inner join t_okr_task_user_rel t2 on t1.id = t2.user_id
+        where t2.task_id = #{taskId}
+    </select>
+
+
+    <select id="getUserRole" parameterType="java.util.Map" resultType="org.openokr.sys.vo.UserVO">
+        SELECT
+            osu.id
+        ,osu.user_name
+        ,osu.email
+        ,osu.real_name
+        ,osu.phone
+        ,osu.organization_id
+        ,osu.photo_url
+        ,osu.active
+        ,osr.id role_id
+        ,osr.name role_name
+        ,osr.role_type
+        FROM
+            t_okr_sys_user osu
+        LEFT JOIN t_okr_sys_user_role osur on osu.id = osur.user_id
+        LEFT join t_okr_sys_role osr on osur.role_id = osr.id
+        <if test="userId != null and !userId.isEmpty() ">
+            where osu.id = #{userId}
+        </if>
     </select>
 
 </mapper>

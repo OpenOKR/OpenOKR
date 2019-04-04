@@ -24,4 +24,13 @@
     <dubbo:reference interface="org.openokr.sys.service.IUserService" id="userService"/>
     <dubbo:reference interface="org.openokr.sys.service.IOrganizationService" id="organizationService"/>
 
+    <!-- task -->
+    <dubbo:reference interface="org.openokr.task.service.ITaskManageService" id="taskManageService"/>
+    <dubbo:reference interface="org.openokr.task.service.IDailyManageService" id="dailyManageService"/>
+    <dubbo:reference interface="org.openokr.task.service.IWeeklyManageService" id="weeklyManageService"/>
+    <dubbo:reference interface="org.openokr.task.service.ICustomerManageService" id="customerManageService"/>
+	<dubbo:reference interface="org.openokr.task.service.IProductInfoManageService" id="productManageService"/>
+    <dubbo:reference interface="org.openokr.task.service.IApportionCategoryManageService" id="apportionCategoryManageService"/>
+    <dubbo:reference interface="org.openokr.task.service.IWeeklyStaManageService" id="weeklyStaManageService"/>
+
 </beans>

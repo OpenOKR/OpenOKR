@@ -23,7 +23,7 @@ framework:
     application:
       name: okr-service
     protocol:
-      port: 20243
+      port: 20254
     registry1:
       address: zookeeper://zkserver1:2181;zookeeper://zkserver2:2181
       file: /data/log/okr/okr-service-log/okr-service-dubbo1.cache

@@ -47,6 +47,7 @@ public class ShiroConfiguration {
         Map<String, Filter> filterMap = bean.getFilters();
         filterMap.put("authc", new FormAuthenticationFilter());
 
+
         //配置登录的url和登录成功的url,未授权页面
         bean.setSuccessUrl("/index.htm");
         bean.setLoginUrl("/login.htm");
@@ -55,6 +56,8 @@ public class ShiroConfiguration {
         //配置访问权限
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
 
+        filterChainDefinitionMap.put("/checkLoginStatus.json", "anon");
+        filterChainDefinitionMap.put("/devLogin.json", "anon");
         filterChainDefinitionMap.put("/static/**", "anon");
 
         filterChainDefinitionMap.put("/validateCodeServlet", "anon");
@@ -66,6 +69,7 @@ public class ShiroConfiguration {
 
         filterChainDefinitionMap.put("/**/*.htm", "user");//表示需要认证才可以访问
         filterChainDefinitionMap.put("/**/*.json", "user");//表示需要认证才可以访问
+
 
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;

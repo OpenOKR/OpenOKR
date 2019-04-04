@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.openokr.task.sqlmapper.TaskManageMapper">
+
+    <select id="getTableData" parameterType="java.util.Map" resultType="org.openokr.task.vo.TaskVO">
+        SELECT
+        distinct t1.id, t1.task_code, t1.task_name, t1.task_status, t1.task_remark, t1.is_deleted, t1.task_start_time,
+        t1.task_end_time, t1.jira_label, t1.confirm_user_id, t1.create_user_id,t2.real_name createUserName, t1.create_ts,t1.update_user_id,
+        t1.update_ts,t1.estimate_time,t3.NAME belongTeamName
+        FROM t_okr_task t1
+        LEFT join t_okr_sys_user t2 on t1.create_user_id = t2.id
+        left join T_OKR_TEAMS t3 on t1.belong_team = t3.id
+        left join t_okr_task_user_rel t4 on t1.id = t4.task_id
+        <where>
+            <if test="vo.searchKey != null and !vo.searchKey.isEmpty()">
+                and (t1.task_name LIKE CONCAT('%', #{vo.searchKey }, '%') or t1.task_remark LIKE CONCAT('%', #{vo.searchKey }, '%'))
+            </if>
+            <if test="vo.teamId != null and !vo.teamId.isEmpty()">
+                and t1.belong_team = #{vo.teamId}
+            </if>
+            <if test="vo.queryStartDate != null">
+                <![CDATA[AND t1.create_ts >= #{vo.queryStartDate}]]>
+            </if>
+            <if test="vo.queryEndDate != null">
+                <![CDATA[AND t1.create_ts <= #{vo.queryEndDate}]]>
+            </if>
+            <if test="vo.isAdmin != null and vo.isAdmin == '0'.toString()">
+                <if test="vo.currentUserId != null and vo.currentUserId !=''">
+                    t4.user_id = #{vo.currentUserId}
+                </if>
+            </if>
+        </where>
+        order by t1.id desc
+        <if test="page != null" >
+            <![CDATA[ limit #{page.pageSize} offset (#{page.recordStart}-1) ]]>
+        </if>
+    </select>
+
+    <select id="countTableData" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+          count(distinct t1.*)
+        FROM t_okr_task t1
+        LEFT join t_okr_sys_user t2 on t1.create_user_id = t2.id
+        left join T_OKR_TEAMS t3 on t1.belong_team = t3.id
+        left join t_okr_task_user_rel t4 on t1.id = t4.task_id
+        <where>
+            <if test="vo.searchKey != null and !vo.searchKey.isEmpty()">
+                and (t1.task_name LIKE CONCAT('%', #{vo.searchKey }, '%') or t1.task_remark LIKE CONCAT('%', #{vo.searchKey }, '%'))
+            </if>
+            <if test="vo.teamId != null and !vo.teamId.isEmpty()">
+                and t1.belong_team = #{vo.teamId}
+            </if>
+            <if test="vo.queryStartDate != null">
+                <![CDATA[AND t1.create_ts >= #{vo.queryStartDate}]]>
+            </if>
+            <if test="vo.queryEndDate != null">
+                <![CDATA[AND t1.create_ts <= #{vo.queryEndDate}]]>
+            </if>
+            <if test="vo.isAdmin != null and vo.isAdmin == '0'.toString()">
+                <if test="vo.currentUserId != null and vo.currentUserId !=''">
+                    t4.user_id = #{vo.currentUserId}
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <select id="getMyRenectReportProjectIIds" parameterType="java.util.Map" resultType="java.lang.String">
+        SELECT DISTINCT
+	      t1.project_id
+        FROM
+            (
+        SELECT
+            tta.project_id
+        FROM
+            T_OKR_DAILY td
+            INNER JOIN T_OKR_TASK_APPORTION tta ON td.task_id = tta.task_id
+        	INNER JOIN t_okr_task TT ON TTA.task_id = TT.ID
+        <where>
+            <if test="reportUserId != null and !reportUserId.isEmpty()">
+                and td.report_user_id = #{reportUserId}
+            </if>
+            <if test="reportUserId != null and !reportUserId.isEmpty()">
+                and tt.confirm_user_id = #{confirmUserId}
+            </if>
+        </where>
+        ORDER BY
+            td.report_day DESC
+            ) t1
+        <if test="vo.endDate != null">
+            <![CDATA[AND ar.create_ts <= #{vo.queryEndDate}]]>
+        </if>
+    </select>
+    <select id="getProjectRelTaskCountInfo" parameterType="java.util.Map" resultType="org.openokr.task.vo.MyTaskCountInfoVO">
+        SELECT
+            COUNT ( td.* ) relTaskNum,
+            COALESCE ( SUM ( td.DURATION ), 0 ) totalDuration
+        FROM
+            T_OKR_DAILY td
+            INNER JOIN t_okr_task_apportion tta ON td.task_id = tta.task_id
+        <where>
+            <if test="reportUserId != null and !reportUserId.isEmpty()">
+               AND td.report_user_id = #{reportUserId}
+            </if>
+            <if test="projectId != null and !projectId.isEmpty()">
+               AND tta.project_id = #{projectId}
+            </if>
+            <if test="queryStartDate != null">
+                <![CDATA[AND td.report_day >= #{reportStartDate}]]>
+            </if>
+            <if test="endDate != null">
+                <![CDATA[AND td.report_day <= #{reportEndDate}]]>
+            </if>
+        </where>
+    </select>
+    <select id="countProjectRelUserNum" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+            COUNT ( ttur.* ) totalUserNum
+        FROM
+            t_okr_task_apportion tta
+            inner join T_OKR_TASK_USER_REL ttur on tta.task_id = ttur.task_id
+        WHERE
+            <if test="projectId != null and !projectId.isEmpty()">
+               AND tta.project_id = #{projectId}
+            </if>
+    </select>
+    <select id="getMyRecentTaskInfo" parameterType="java.util.Map" resultType="org.openokr.task.vo.DailyVO">
+        SELECT
+            td.*,
+            TSU.user_name reportUserName
+        FROM
+            T_OKR_DAILY td
+            INNER JOIN t_okr_sys_user TSU td.report_user_id = TSU.ID
+        <where>
+            <if test="reportUserId != null and !reportUserId.isEmpty()">
+               AND td.report_user_id = #{reportUserId}
+            </if>
+        </where>
+        order by create_ts desc
+        <if test="page != null" >
+            <![CDATA[ limit 4 offset 0 ]]>
+        </if>
+    </select>
+
+
+    <select id="getTaskListByUserData" parameterType="java.util.Map" resultType="org.openokr.task.vo.TaskVO">
+        <include refid="querySql" />
+        <if test="page != null" >
+            <![CDATA[ limit #{page.pageSize} offset (#{page.recordStart}-1) ]]>
+        </if>
+    </select>
+
+
+    <select id="countTaskListByUserData" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+        count(*)
+        FROM (<include refid="querySql" />)t
+    </select>
+
+    <select id="conditionQuerySql" parameterType="java.util.Map" resultType="org.openokr.task.vo.SearchConditionVO">
+            SELECT
+                ot.id task_id
+                ,ot.task_name
+                ,otur.user_id
+                ,ot2.name team_name
+                ,ot2.id team_id
+            FROM
+                T_OKR_TASK ot
+            left join T_OKR_TASK_USER_REL otur on ot.id = otur.task_id
+            left join T_OKR_TEAMS ot2 on ot2.id = ot.belong_team
+        WHERE 1=1
+        <if test="condition.userId != null and condition.userId != ''" >
+            AND otur.user_id = #{condition.userId}
+        </if>
+        <if test="(condition.userId == null or condition.userId == '') and condition.userIdList != null and condition.userIdList.size()>0">
+            AND otur.user_id in
+            <foreach collection="condition.userIdList" item="userId" open="(" separator="," close=")">
+                #{userId}
+            </foreach>
+        </if>
+        <if test="condition.teamId != null and condition.teamId != ''" >
+            AND ot2.id = #{condition.teamId}
+        </if>
+        <if test="condition.taskId != null and condition.taskId != ''" >
+            AND ot.id = #{condition.taskId}
+        </if>
+    </select>
+
+
+    <sql id="querySql">
+        SELECT
+        t1.ID,
+        t1.task_code,
+        t1.task_name,
+        t1.task_status,
+        t1.task_remark,
+        t1.is_deleted,
+        t1.task_start_time,
+        t1.task_end_time,
+        t1.jira_label,
+        t1.confirm_user_id,
+        t1.create_user_id,
+        t1.create_ts,
+        t1.update_user_id,
+        t1.update_ts,
+        t2.user_id
+        ,T3.name team_name
+        ,t3.id team_id
+        FROM
+        t_okr_task t1
+        LEFT JOIN T_OKR_TASK_USER_REL t2 ON t1.id = t2.task_id
+        LEFT JOIN t_okr_teams T3 ON T3.ID = T1.belong_team
+        where 1=1
+        <if test="vo.currentUserId != null and !vo.currentUserId.isEmpty()">
+            and (t2.user_id = #{vo.currentUserId})
+        </if>
+        <if test="vo.isFilterTime != null and !vo.isFilterTime.isEmpty()">
+            and (now() BETWEEN t1.task_start_time and t1.task_end_time)
+        </if>
+        order by create_ts desc
+    </sql>
+
+    <select id="getTaskList" parameterType="java.util.Map" resultType="org.openokr.task.vo.TaskVO">
+        <include refid="queryTaskListSql" />
+        <if test="page != null" >
+            <![CDATA[ limit #{page.pageSize} offset (#{page.recordStart}-1) ]]>
+        </if>
+    </select>
+    <select id="countTaskList" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+        count(*)
+        FROM (<include refid="queryTaskListSql" />)t
+    </select>
+    <sql id="queryTaskListSql">
+        SELECT
+        t1.ID,
+        t1.task_code,
+        t1.task_name,
+        t1.task_status,
+        t1.task_remark,
+        t1.is_deleted,
+        t1.task_start_time,
+        t1.task_end_time,
+        t1.jira_label,
+        t1.confirm_user_id,
+        t1.create_user_id,
+        t2.real_name createUserName,
+        t1.create_ts,
+        t1.update_user_id,
+        t1.update_ts
+        FROM
+        t_okr_task t1
+        LEFT JOIN t_okr_sys_user t2 ON t1.create_user_id = t2.ID
+        where 1=1
+        <if test="vo.isFilterTime != null and !vo.isFilterTime.isEmpty()">
+            and (now() BETWEEN t1.task_start_time and t1.task_end_time)
+        </if>
+        order by create_ts desc
+    </sql>
+
+    <sql id="getDailyStasticsByOwnerIdSql">
+        t_okr_task T1
+        LEFT JOIN t_okr_task_apportion T2 ON T1.ID = T2.task_id
+        INNER JOIN t_okr_daily t3 on t1.id = t3.task_id
+        <if test="vo.isAdmin!=null and vo.isAdmin=='1'.toString()">
+        INNER JOIN (
+            SELECT DISTINCT
+                    t3.id, t3.user_name, t3.real_name, t3.photo_url
+            FROM
+                    t_okr_teams t1
+                    INNER JOIN t_okr_team_user_rela t2 ON t1.ID = t2.team_id
+                    INNER JOIN t_okr_sys_user t3 ON t2.user_id = t3.ID
+            <where>
+                <if test="vo.currentUserId != null and currentUserId != ''">
+                    AND t1.owner_id = #{vo.currentUserId}
+                </if>
+                <if test="vo.teamId != null">
+                and t1.id >=#{vo.teamId}
+                </if>
+            </where>
+        ) T4 ON T3.report_user_id = T4.ID
+        </if>
+        LEFT JOIN T_OKR_TASK_KR_REL t5 on t1.id = t5.task_id
+        <where>
+            <if test="vo.isAdmin==null or vo.isAdmin=='0'.toString()">
+                <if test="vo.currentUserId != null and vo.currentUserId != ''">
+                    and t3.report_user_id =#{vo.currentUserId}
+                </if>
+            </if>
+            <if test="vo.productId != null">
+                and T2.apportion_name_id >=#{vo.productId}
+            </if>
+            <if test="vo.taskId != null">
+                and T1.id >=#{vo.taskId}
+            </if>
+            <if test="vo.categoryId != null">
+                and t2.id >=#{vo.categoryId}
+            </if>
+            <if test="vo.okrId != null">
+                and t5.KR_ID >=#{vo.okrId}
+            </if>
+            <if test="vo.queryStartDate != null">
+                and t3.report_day >=#{vo.queryStartDate}
+            </if>
+            <if test="vo.queryEndDate != null">
+                <![CDATA[ and t3.report_day <=#{vo.queryEndDate} ]]>
+            </if>
+        </where>
+    </sql>
+
+    <!--根据用户id查找管理（负责）团队成员数、关联任务数、产品总数-->
+    <select id="getDailyStasticsByOwnerId" parameterType="java.util.Map" resultType="org.openokr.task.vo.DailyStasticsVO">
+        SELECT
+        <if test="vo.isAdmin==null or vo.isAdmin=='0'.toString()">
+            COUNT(DISTINCT T2.apportion_name_id) productNum,
+            COUNT(DISTINCT T1.*)  taskNum
+        </if>
+        <if test="vo.isAdmin!=null and vo.isAdmin=='1'.toString()">
+            COUNT(DISTINCT T2.apportion_name_id) productNum,
+            COUNT(DISTINCT T1.*)  taskNum,
+            COUNT(DISTINCT T4.ID) personnelNum
+        </if>
+        FROM
+          <include refid="getDailyStasticsByOwnerIdSql" />
+    </select>
+
+    <!--根据用户id查找管理（负责）团队成员耗费总工时总数-->
+    <select id="getTaskDurationByTeamOwnerId" parameterType="java.util.Map" resultType="java.math.BigDecimal">
+        SELECT
+            COALESCE(sum(COALESCE(t.duration,0) ),0)
+        FROM
+        (
+            SELECT
+                distinct t3.*
+            FROM
+                <include refid="getDailyStasticsByOwnerIdSql" />
+        ) t
+    </select>
+</mapper>

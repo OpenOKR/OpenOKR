@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.openokr.task.sqlmapper.CustomerMapper">
+  <resultMap id="BaseResultMap" type="org.openokr.task.vo.CustomerVO">
+  </resultMap>
+  <select id="getCutomerInfoList" parameterType="java.util.Map" resultType="org.openokr.task.vo.ApportionSelectVO">
+      select t1.id,t1.name from T_OKR_CUSTOMER t1
+      <where>
+          <if test="condition.type !=null and condition.type != ''">
+              t1.TYPE  = #{condition.type}
+          </if>
+          <if test="condition.status !=null and condition.status != ''">
+              t1.STATUS  = #{condition.status}
+          </if>
+          <if test="condition.name !=null and condition.name != ''">
+              t1.NAME  = #{condition.name}
+          </if>
+      </where>
+  </select>
+</mapper>
