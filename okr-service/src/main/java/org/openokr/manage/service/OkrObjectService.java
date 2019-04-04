@@ -299,13 +299,44 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         entity.setUpdateUserId(userId);
         this.update(entity);
 
-        // 删除对应消息
+        // 删除 目标审核 对应消息
         MessagesEntityCondition condition = new MessagesEntityCondition();
         condition.createCriteria().andTypeEqualTo(MessageTypeEnum.TYPE_2.getCode())
                 .andTargetIdEqualTo(objectId).andIsProcessedEqualTo("0");
         MessagesEntity messagesEntity = this.selectOneByCondition(condition);
-        messagesEntity.setDelFlag("1");
-        messagesEntity.setRemarks("删除目标，删除未处理负责人审核消息");
+        if (messagesEntity != null) {
+            messagesEntity.setDelFlag("1");
+            messagesEntity.setRemarks("删除目标，删除未处理负责人审核消息");
+            this.update(messagesEntity);
+        }
+
+        // 获取kr列表
+        ObjectivesExtVO objectVO = new ObjectivesExtVO();
+        BeanUtils.copyBean(entity, objectVO);
+        List<ObjectivesExtVO> list = new ArrayList<>();
+        list.add(objectVO);
+        OkrObjectSearchVO searchVO = new OkrObjectSearchVO();
+        searchVO.setObjectId(objectId);
+        this.setKrInfo(list, searchVO);
+        List<String> resultIds = new ArrayList<>();
+        if (!objectVO.getResultsExtList().isEmpty()) {
+            for (ResultsExtVO resultsExtVO : objectVO.getResultsExtList()) {
+                resultIds.add(resultsExtVO.getId());
+            }
+        }
+
+        // 删除 协同人审核 对应消息
+        condition = new MessagesEntityCondition();
+        condition.createCriteria().andTypeEqualTo(MessageTypeEnum.TYPE_3.getCode())
+                .andTargetIdIn(resultIds).andIsProcessedEqualTo("0");
+        List<MessagesEntity> messagesEntities = this.selectByCondition(condition);
+        if (messagesEntities != null && messagesEntities.size() > 0) {
+            for (MessagesEntity messagesEntity1 : messagesEntities) {
+                messagesEntity1.setDelFlag("1");
+                messagesEntity1.setRemarks("删除目标，删除未处理协同人审核消息");
+                this.update(messagesEntity1);
+            }
+        }
 
         responseResult.setMessage("删除成功");
         responseResult.setSuccess(true);
@@ -388,6 +419,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         messagesEntity.setMark(MessageMarkEnum.MARK_4.getCode());
         messagesEntity.setCreateUserId(currentUser.getId());
         messagesEntity.setCreateTs(new Date());
+        messagesEntity.setDelFlag("0");
         this.save(messagesEntity);
         if (!messagesEntityList.isEmpty()) {
             this.insertList(messagesEntityList);
