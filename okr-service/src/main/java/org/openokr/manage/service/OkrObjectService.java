@@ -204,6 +204,9 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         }
 
         // 获取object所属团队责任人，若修改的目标所属团队责任人和当前用户一致，直接将状态设置为已确认
+        if (StringUtils.isEmpty(objectVO.getTeamId()) || objectVO.getTeamId().equals("null")) {
+            return new ResponseResult(false, null, "请选择所属团队！");
+        }
         TeamsEntity teamsEntity = this.selectByPrimaryKey(TeamsEntity.class, objectVO.getTeamId());
         // 设置状态，当类型是 团队或公司时，不需要审核，其他情况下一律设置成未提交
         if (targetEntity.getType().equals(ObjectivesTypeEnum.TYPE_2.getCode()) || targetEntity.getType().equals(ObjectivesTypeEnum.TYPE_3.getCode())) {

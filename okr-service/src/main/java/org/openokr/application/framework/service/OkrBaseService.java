@@ -62,8 +62,13 @@ public class OkrBaseService extends BaseServiceImpl implements IOkrBaseService {
 			krIds.add(resultsEntity.getId());
 		}
 		condition = new MessagesEntityCondition();
-		condition.createCriteria().andTypeEqualTo(MessageTypeEnum.TYPE_3.getCode())
-				.andTargetIdIn(krIds).andIsProcessedEqualTo("0");
+		if (!krIds.isEmpty()) {
+			condition.createCriteria().andTypeEqualTo(MessageTypeEnum.TYPE_3.getCode())
+					.andTargetIdIn(krIds).andIsProcessedEqualTo("0");
+		} else {
+			condition.createCriteria().andTypeEqualTo(MessageTypeEnum.TYPE_3.getCode())
+					.andIsProcessedEqualTo("0");
+		}
 		messagesEntity.setDelFlag("1");
 		messagesEntity.setRemarks("协同人重新确认，删除旧数据");
 		this.updateByCondition(messagesEntity, condition);
