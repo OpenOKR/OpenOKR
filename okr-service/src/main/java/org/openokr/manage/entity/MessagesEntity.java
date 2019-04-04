@@ -49,6 +49,12 @@ public class MessagesEntity extends BaseEntity implements Serializable {
     /** 消息类型标记 1.提交审核、修改KR等等 2、审核通过、同意等等 3、审核不通过、不同意 4、系统消息 */
     private String mark;
 
+    /** 备注 */
+    private String remarks;
+
+    /** 删除标识 0-否 1-是 */
+    private String delFlag;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -265,6 +271,42 @@ public class MessagesEntity extends BaseEntity implements Serializable {
     public void setMark(String mark) {
         this.mark = mark;
         addSettedField("mark");
+    }
+
+    /**
+     * 备注
+     * @return remarks
+     */
+    @Column(name = "remarks")
+    public String getRemarks() {
+        return remarks;
+    }
+
+    /**
+     * 备注
+     * @param remarks
+     */
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+        addSettedField("remarks");
+    }
+
+    /**
+     * 删除标识 0-否 1-是
+     * @return delFlag
+     */
+    @Column(name = "del_flag")
+    public String getDelFlag() {
+        return delFlag;
+    }
+
+    /**
+     * 删除标识 0-否 1-是
+     * @param delFlag
+     */
+    public void setDelFlag(String delFlag) {
+        this.delFlag = delFlag;
+        addSettedField("delFlag");
     }
 
     /**

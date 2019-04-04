@@ -79,7 +79,7 @@
     <select id="getObjectTeamRel" parameterType="java.util.Map" resultType="org.openokr.manage.vo.TeamsVO">
         select t1.id, t1.name, t1.owner_id
         from t_okr_teams t1
-        left join t_okr_manage_object_team_rela t2 on t2.team_id=t1.id
+        join t_okr_manage_object_team_rela t2 on t2.team_id = t1.id
         where t2.object_id= #{objectId}
     </select>
 
@@ -87,7 +87,7 @@
     <select id="getRelTeams" parameterType="java.util.Map" resultMap="TeamsExtVO">
         select t1.id, t1.name,t1.type,t1.create_ts
         from t_okr_teams t1
-        left join t_okr_team_user_rela t2 on t2.team_id=t1.id
+        join t_okr_team_user_rela t2 on t2.team_id=t1.id
         where 1=1
         <if test="userId != null and !userId.isEmpty()">
             AND t2.user_id = #{userId}

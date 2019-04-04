@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -100,7 +101,7 @@ public class OkrTeamController extends BaseController {
         List<String> userIds = JSONUtils.objectToList(userIdList, String.class);
         return okrTeamService.deleteTeamUser(teamId, userIds);
     }
-
+   
     /**
      * 解散团队
      * @return
@@ -116,7 +117,14 @@ public class OkrTeamController extends BaseController {
     public List<UserVO> getUsersByTeamId(String teamId) {
         return okrTeamService.getUsersByTeamId(teamId);
     }
-
+/**
+     * 团队负责人转让
+     */
+    @PostMapping(value = "/transfer.json")
+    @ResponseBody
+    public ResponseResult transfer(String teamId, String userId) {
+        return okrTeamService.transfer(teamId, userId, getCurrentUserId());
+    }
 
     @ApiOperation(value = "查询用户所属团队列表数据", notes = "查询用户所属团队列表数据")
     @ApiImplicitParams(
@@ -143,5 +151,4 @@ public class OkrTeamController extends BaseController {
         }
         return result;
     }
-
 }

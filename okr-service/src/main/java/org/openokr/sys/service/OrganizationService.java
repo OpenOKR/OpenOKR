@@ -93,12 +93,13 @@ public class OrganizationService extends BaseServiceImpl implements IOrganizatio
         }
     }
 
+    /*返回当前机构以及所有子机构*/
     @Override
     public List<OrganizationVOExt> findCurrentAndChildren(String currentOrganizationId) {
         if (StringUtils.isEmpty(currentOrganizationId)) {
             return null;
         }
-        String sql = "SELECT t.id,t.parent_id as parentId,t.description,t.name,t.code FROM t_pfm_ssm_organization t WHERE t.id= #{id}";
+        String sql = "SELECT t.id,t.parent_id as parentId,t.description,t.name,t.code FROM t_okr_sys_organization t WHERE t.id= #{id}";////////
         Map<String, Object> parameterMap = new HashMap<>();
         parameterMap.put("id", currentOrganizationId);
         Map<String, Object> map = this.getDao().selectOneByDynamicSql(sql, parameterMap);
@@ -217,7 +218,7 @@ public class OrganizationService extends BaseServiceImpl implements IOrganizatio
      * 查找子数据
      */
     private void findChildren(List<OrganizationVOExt> organizationList, String parentId) {
-        String sql = "SELECT t.id,t.parent_id as \"parentId\",t.description,t.name,t.code FROM t_pfm_ssm_organization t where ( parent_id = #{id} ) ";
+        String sql = "SELECT t.id,t.parent_id as \"parentId\",t.description,t.name,t.code FROM t_okr_sys_organization t where ( parent_id = #{id} ) ";///////////
         Map<String, Object> parameterMap = new HashMap<>();
         parameterMap.put("id", parentId);
         List<Map<String, Object>> map = this.getDao().selectListByDynamicSql(sql, parameterMap);

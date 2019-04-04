@@ -6,46 +6,32 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * objectives status 枚举
- * Created by zhengzheng on 2018/12/25.
+ * Created by zhengzheng on 2019/2/3.
  */
-public enum ObjectivesStatusEnum {
+public enum ResultUserRelaStatusEnum {
 
     /**
-     * 1-未提交
+     * 0-待确认
      */
-    STATUS_1("1", "未提交", "gary"),
+    STATUS_1("1", "待确认"),
 
     /**
-     * 2-待确认
+     * 1-确认
      */
-    STATUS_2("2", "待确认", "org"),
+    STATUS_2("2", "确认"),
 
     /**
-     * 3-已生效
+     * 2-拒绝
      */
-    STATUS_3("3", "执行中", "green"),
-
-    /**
-     * 4-被驳回
-     */
-    STATUS_4("4", "被驳回", "red"),
-
-    /**
-     * 5-结束
-     */
-    STATUS_5("5", "结束", "green");
+    STATUS_3("3", "拒绝");
 
     private String name;
 
     private String code;
 
-    private String cssClass;
-
-    ObjectivesStatusEnum(String code, String name, String cssClass) {
+    ResultUserRelaStatusEnum(String code, String name) {
         this.code = code;
         this.name = name;
-        this.cssClass = cssClass;
     }
 
     public String getName() {
@@ -64,14 +50,6 @@ public enum ObjectivesStatusEnum {
         this.code = code;
     }
 
-    public String getCssClass() {
-        return cssClass;
-    }
-
-    public void setCssClass(String cssClass) {
-        this.cssClass = cssClass;
-    }
-
     private static List<Map<String, Object>> list = new ArrayList<>();
 
     private static Map<String, Object> map = new HashMap<>();
@@ -82,11 +60,10 @@ public enum ObjectivesStatusEnum {
      */
     public static List<Map<String, Object>> toList() {
         if (list.isEmpty()) {
-            for (ObjectivesStatusEnum enumerate : ObjectivesStatusEnum.values()) {
+            for (ResultUserRelaStatusEnum enumerate : ResultUserRelaStatusEnum.values()) {
                 Map<String, Object> map = new HashMap<>();
                 map.put("name", enumerate.getName());
                 map.put("code", enumerate.getCode());
-                map.put("cssClass", enumerate.getCssClass());
                 //
                 list.add(map);
             }
@@ -100,16 +77,16 @@ public enum ObjectivesStatusEnum {
      */
     public static Map<String, Object> toMap() {
         if (map.isEmpty()) {
-            for (ObjectivesStatusEnum enumerate : ObjectivesStatusEnum.values()) {
+            for (ResultUserRelaStatusEnum enumerate : ResultUserRelaStatusEnum.values()) {
                 map.put(enumerate.getCode(), enumerate.getName());
             }
         }
         return map;
     }
 
-    public static ObjectivesStatusEnum getByCode(String code) {
-        ObjectivesStatusEnum _enum = null;
-        for (ObjectivesStatusEnum enumerate : ObjectivesStatusEnum.values()) {
+    public static ResultUserRelaStatusEnum getByCode(String code) {
+        ResultUserRelaStatusEnum _enum = null;
+        for (ResultUserRelaStatusEnum enumerate : ResultUserRelaStatusEnum.values()) {
             if (enumerate.getCode().equals(code)) {
                 _enum = enumerate;
                 break;

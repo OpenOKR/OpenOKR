@@ -117,4 +117,11 @@ public interface IOkrTeamService {
      * @throws BusinessException
      */
     List<TeamsVO> getTeamListByUserOrType(TeamsVO teamsVO)  throws BusinessException;
+     /**
+     * 团队负责人转让
+     * @param teamId
+     * @param userId
+     * @return
+     */
+    ResponseResult transfer(String teamId, String userId, String currentUserId);
 }

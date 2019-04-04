@@ -5,6 +5,9 @@ import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.exception.BusinessException;
 import io.swagger.models.auth.In;
 import org.openokr.manage.vo.*;
+import org.openokr.manage.vo.MessagesExtVO;
+import org.openokr.manage.vo.ObjectivesExtVO;
+import org.openokr.manage.vo.OkrObjectSearchVO;
 import org.openokr.sys.vo.UserVO;
 import org.openokr.sys.vo.UserVOExt;
 import org.openokr.sys.vo.request.TreeDataVO;
@@ -21,6 +24,7 @@ public interface IOkrObjectService {
 
     /**
      * 获取当前用户所有的OKR列表信息(包括个人、团队、公司的OKR)
+     *
      * @param searchVO
      * @return
      * @throws BusinessException
@@ -29,6 +33,7 @@ public interface IOkrObjectService {
 
     /**
      * 根据O获取KR所有的协同者
+     *
      * @param objectId
      * @param limitAmount 查询个数
      * @return
@@ -37,6 +42,7 @@ public interface IOkrObjectService {
 
     /**
      * 根据类型获取OKR列表
+     *
      * @param searchVO
      * @return
      * @throws BusinessException
@@ -45,6 +51,7 @@ public interface IOkrObjectService {
 
     /**
      * 获取个人OKR
+     *
      * @param searchVO
      * @return
      * @throws BusinessException
@@ -53,6 +60,7 @@ public interface IOkrObjectService {
 
     /**
      * 获取团队OKR
+     *
      * @param searchVO
      * @return
      * @throws BusinessException
@@ -61,6 +69,7 @@ public interface IOkrObjectService {
 
     /**
      * 获取公司OKR
+     *
      * @param searchVO
      * @return
      * @throws BusinessException
@@ -69,6 +78,7 @@ public interface IOkrObjectService {
 
     /**
      * 获取目标详情
+     *
      * @param objectId
      * @return
      * @throws BusinessException
@@ -77,6 +87,7 @@ public interface IOkrObjectService {
 
     /**
      * 保存目标
+     *
      * @param objectVO
      * @return
      * @throws BusinessException
@@ -85,6 +96,7 @@ public interface IOkrObjectService {
 
     /**
      * 删除目标
+     *
      * @param objectId 目标ID
      * @param userId
      * @return
@@ -94,6 +106,7 @@ public interface IOkrObjectService {
 
     /**
      * 获取父目标下拉数据
+     *
      * @param userId
      * @param type
      * @return
@@ -103,6 +116,7 @@ public interface IOkrObjectService {
 
     /**
      * 目标审核提交
+     *
      * @param objectId
      * @param userVOExt
      * @return
@@ -111,6 +125,7 @@ public interface IOkrObjectService {
 
     /**
      * 目标审核（同步处理消息状态）
+     *
      * @param messagesExtVO
      * @param currentUserId
      * @return
