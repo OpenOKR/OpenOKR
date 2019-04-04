@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.openokr.task.sqlmapper.WeeklyStaMapper">
+
+    <select id="getStatisticByTask" parameterType="HashMap" resultType="org.openokr.task.vo.WeeklyStatisticVO">
+        SELECT
+            c.category_name,
+            d.product_name task_name,
+            COALESCE (
+                SUM (
+                apportion_rate / 100 * duration
+                ),0
+            ) duration
+        FROM
+            t_okr_task A
+        INNER JOIN t_okr_task_apportion b ON A . ID = b.task_id
+        <if test="condition.categoryId != null and condition.categoryId != ''">
+            AND b.category_id = #{condition.categoryId}
+        </if>
+        INNER JOIN t_okr_apportion_category C ON b.category_id = C . ID
+        INNER JOIN t_okr_product_info d ON b.apportion_name_id = d. ID
+        INNER JOIN t_okr_daily e ON e.task_id = A ."id"
+        <![CDATA[
+            AND to_char(e.report_day, 'yyyy-MM-dd') >= #{condition.reportStartDateStr}
+            AND to_char(e.report_day, 'yyyy-MM-dd') <= #{condition.reportEndDateStr}
+        ]]>
+        WHERE
+            a.belong_team = #{condition.teamId}
+        GROUP BY
+            t1. ID
+        ORDER BY
+            duration DESC
+    </select>
+
+    <select id="getWeeklyPieByTask" parameterType="HashMap" resultType="org.openokr.task.vo.WeeklyStatisticVO">
+        <![CDATA[
+        SELECT
+            T .category_id,
+            T .category_name,
+            SUM (T .duration) duration
+        FROM
+            (
+                SELECT
+                    t2. ID,
+                    t3.category_id,
+                    t4.category_name,
+                    COALESCE (t2.duration, 0) * COALESCE (t3.apportion_rate, 0) / 100 duration
+                FROM
+                    t_okr_task t1
+                INNER JOIN t_okr_daily t2 ON t1. ID = t2.task_id
+                AND to_char(t2.report_day, 'yyyy-MM-dd') >= #{ condition .reportStartDateStr }
+                AND to_char(t2.report_day, 'yyyy-MM-dd') <= #{ condition .reportEndDateStr }
+                INNER JOIN t_okr_task_apportion t3 ON t1. ID = t3.task_id
+                INNER JOIN t_okr_apportion_category t4 ON t3.category_id = t4. ID
+                INNER JOIN t_okr_product_info t5 ON t3.apportion_name_id = t5. ID
+                WHERE
+                    t1.belong_team = #{ condition .teamId }
+                AND t3.category_id IS NOT NULL
+                AND t3.category_id != ''
+            ) T
+        GROUP BY
+            T .category_id,
+            T .category_name
+        ]]>
+    </select>
+
+    <select id="getStatisticByOrg" parameterType="HashMap" resultType="org.openokr.task.vo.WeeklyStatisticVO">
+        <![CDATA[
+        SELECT
+            t1. ID org_id,
+            t1. NAME org_name,
+            COALESCE(COUNT (DISTINCT t2. ID),0) org_user_num,
+            COALESCE (
+                SUM (
+                    t3.duration
+                ),
+                0
+            ) duration
+        FROM
+            t_okr_sys_organization t1
+        INNER JOIN t_okr_sys_user t2 ON t1. ID = t2.organization_id
+        LEFT JOIN t_okr_daily t3 ON t3.report_user_id = t2. ID
+        AND to_char(t3.report_day, 'yyyy-MM-dd') >= #{condition.reportStartDateStr}
+        AND to_char(t3.report_day, 'yyyy-MM-dd') <= #{condition.reportEndDateStr}
+        LEFT JOIN t_okr_task t4 ON t4. ID = t3.task_id
+        WHERE
+            t4.belong_team = #{condition.teamId}
+        GROUP BY
+            t1. ID
+        ORDER BY
+            duration DESC
+        ]]>
+    </select>
+
+    <select id="getWeeklyPieByOrg" parameterType="HashMap" resultType="org.openokr.task.vo.WeeklyStatisticVO">
+        <![CDATA[
+        SELECT
+            T .category_id,
+            T .category_name,
+            SUM (T .duration) duration
+        FROM
+            (
+                SELECT
+                    t3. ID,
+                    t5.category_id,
+                    t6.category_name,
+                    COALESCE (t3.duration, 0) * COALESCE (t5.apportion_rate, 0) / 100 duration
+                FROM
+                    t_okr_sys_organization t1
+                INNER JOIN t_okr_sys_user t2 ON t1. ID = t2.organization_id
+                LEFT JOIN t_okr_daily t3 ON t3.report_user_id = t2. ID
+                AND to_char(t3.report_day, 'yyyy-MM-dd') >= #{condition.reportStartDateStr}
+                AND to_char(t3.report_day, 'yyyy-MM-dd') <= #{condition.reportEndDateStr}
+                LEFT JOIN t_okr_task t4 ON t4. ID = t3.task_id
+                LEFT JOIN t_okr_task_apportion t5 ON t4. ID = t5.task_id
+                LEFT JOIN t_okr_apportion_category t6 ON t5.category_id = t6. ID
+                WHERE
+                    t3. ID IS NOT NULL
+                AND t4.belong_team = #{condition.teamId}
+                AND t5.category_id IS NOT NULL
+                AND t5.category_id != ''
+            ) T
+        GROUP BY
+            T .category_id,
+            T .category_name
+        ]]>
+    </select>
+</mapper>

@@ -1,10 +1,11 @@
 package org.openokr.manage.vo;
 
+import lombok.Data;
 import org.openokr.sys.vo.UserVO;
 
 import java.io.Serializable;
 import java.util.List;
-
+@Data
 public class TeamsExtVO extends TeamsVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -23,43 +24,5 @@ public class TeamsExtVO extends TeamsVO implements Serializable {
     private List<String> teamRelUserIds;
     private List<UserVO> teamRelUsers;
 
-    public String getUserId() {
-        return userId;
-    }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getEditFlag() {
-        return editFlag;
-    }
-
-    public void setEditFlag(String editFlag) {
-        this.editFlag = editFlag;
-    }
-
-    public String getParentName() {
-        return parentName;
-    }
-
-    public void setParentName(String parentName) {
-        this.parentName = parentName;
-    }
-
-    public List<String> getTeamRelUserIds() {
-        return teamRelUserIds;
-    }
-
-    public void setTeamRelUserIds(List<String> teamRelUserIds) {
-        this.teamRelUserIds = teamRelUserIds;
-    }
-
-    public List<UserVO> getTeamRelUsers() {
-        return teamRelUsers;
-    }
-
-    public void setTeamRelUsers(List<UserVO> teamRelUsers) {
-        this.teamRelUsers = teamRelUsers;
-    }
 }

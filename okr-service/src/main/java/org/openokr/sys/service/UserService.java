@@ -1,21 +1,31 @@
 package org.openokr.sys.service;
 
+import com.alibaba.fastjson.JSON;
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.base.utils.BeanUtils;
 import com.zzheng.framework.base.utils.StringUtils;
+import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.dao.pojo.Page;
 import com.zzheng.framework.mybatis.service.impl.BaseServiceImpl;
 import org.openokr.application.utils.PasswordUtil;
 import org.openokr.sys.entity.UserEntity;
 import org.openokr.sys.entity.UserEntityCondition;
 import org.openokr.sys.vo.UserRoleVO;
+import org.openokr.sys.vo.UserVO;
 import org.openokr.sys.vo.UserVOExt;
+import org.openokr.sys.vo.request.UserSelectOgrVO;
+import org.openokr.sys.vo.request.UserSelectUserVO;
+import org.openokr.sys.vo.request.UserSelectVO;
+import org.openokr.task.vo.TaskUserInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhengzheng on 2018/12/18.
@@ -202,6 +212,99 @@ public class UserService extends BaseServiceImpl implements IUserService {
         params.put("teamId", teamId);
         UserVOExt userVOExt = this.getMyBatisDao().selectOneBySql(MAPPER_NAMESPACE + ".getTeamOwnerUserByTeamId", params);
         return userVOExt;
+    }
+
+    @Override
+    public UserSelectVO getUserSelectInfo() throws BusinessException {
+        UserSelectVO userSelectVO = new UserSelectVO();
+        try{
+            List<UserSelectOgrVO> ogrVOS = this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE + ".selectUserDeptInfoList", null);
+            if(ogrVOS != null && !ogrVOS.isEmpty()){
+                userSelectVO.setDeptList(ogrVOS);
+                Map<String, Object> params;
+                List<UserSelectUserVO> userVOS;
+                for(UserSelectOgrVO ogrVO:ogrVOS){
+                    params = new HashMap<>();
+                    params.put("orgId", ogrVO.getDeptId());
+                    userVOS = this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE + ".selectUserInfoListByDeptId", params);
+                    ogrVO.setUserList(userVOS);
+                }
+            }
+        } catch (BusinessException e) {
+            logger.error("获取用户选择列表 busi-error:{}", e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("获取用户选择列表 error:{}-->", e.getMessage(), e);
+            throw new BusinessException("获取用户选择列表 失败");
+        }
+        return userSelectVO;
+    }
+
+    @Override
+    public List<TaskUserInfoVO> getTaskUserInfoList(String taskId) throws BusinessException {
+        List<TaskUserInfoVO> taskUserInfoVOS;
+        try{
+            //1:参数校验
+            if(StringUtils.isBlank(taskId)){
+                throw new BusinessException("任务ID为空，请确认!");
+            }
+            Map<String, Object> params = new HashMap<>();
+            params.put("taskId", taskId);
+            taskUserInfoVOS = this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE + ".selectTaskUserInfoList", params);
+        } catch (BusinessException e) {
+            logger.error("获取任务关联人员信息 busi-error:{}-->[taskId]={}", e.getMessage(),taskId, e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("获取任务关联人员信息 error:{}-->[taskId]={}", e.getMessage(),taskId, e);
+            throw new BusinessException("获取任务关联人员信息 失败");
+        }
+        return taskUserInfoVOS;
+    }
+
+    @Override
+    public List<UserVO> getUserRole(UserVO userVO) throws BusinessException {
+        try {
+            Map<String, Object> params = new HashMap<>();
+            if (userVO!=null && org.apache.commons.lang3.StringUtils.isNotBlank(userVO.getId())){
+                params.put("userId", userVO.getId());
+            } else {
+                params.put("userId", null);
+            }
+            List<UserVO> userVOList = this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE+".getUserRole", params);
+            return userVOList;
+        } catch (BusinessException e) {
+            logger.error("获取用户权限列表异常 busi-error:{}-->[userVO]={}", e.getMessage(), JSON.toJSONString(userVO), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("获取用户权限列表异常 error:{}-->[userVO]={}", e.getMessage(),JSON.toJSONString(userVO), e);
+            throw new BusinessException("获取用户权限列表 失败");
+        }
+    }
+
+    @Override
+    public boolean checkUserIsAdmin(String userId) throws BusinessException {
+        try {
+            if (org.apache.commons.lang3.StringUtils.isBlank(userId)){
+                throw new BusinessException("用户ID为空!");
+            }
+            UserVO userVO = new UserVO();
+            userVO.setId(userId);
+            List<UserVO> userVOS = this.getUserRole(userVO);
+            if(userVOS!=null && !userVOS.isEmpty()){
+                for(UserVO vo:userVOS){
+                    if("0".equals(vo.getRoleType().substring(0,1))){
+                        return true;
+                    }
+                }
+            }
+            return false;
+        } catch (BusinessException e) {
+            logger.error("判断用户是否为管理员 异常 busi-error:{}-->[userVO]={}", e.getMessage(), userId, e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("判断用户是否为管理员 异常 error:{}-->[userVO]={}", e.getMessage(),userId, e);
+            throw new BusinessException("判断用户是否为管理员 失败");
+        }
     }
 
     private long countByUsername(String id, String username) {

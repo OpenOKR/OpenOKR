@@ -25,6 +25,8 @@
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
         <maven.compiler.compilerVersion>1.7</maven.compiler.compilerVersion>
+        <springfox-swagger2.version>2.2.2</springfox-swagger2.version>
+        <springfox-swagger-ui.version>2.2.2</springfox-swagger-ui.version>
         <!-- end -->
     </properties>
 
@@ -50,7 +52,28 @@
     <!-- 依赖预配置 -->
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${springfox-swagger2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${springfox-swagger-ui.version}</version>
+            </dependency>
 
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.16.18</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>1.2.47</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -77,6 +100,7 @@
                 <module>okr-api</module>
                 <module>okr-service</module>
                 <module>okr-web</module>
+                <module>okr-m-web</module>
             </modules>
             <activation>
                 <os>
@@ -91,6 +115,7 @@
                 <module>okr-api</module>
                 <module>okr-service</module>
                 <module>okr-web</module>
+                <module>okr-m-web</module>
             </modules>
             <activation>
                 <os>

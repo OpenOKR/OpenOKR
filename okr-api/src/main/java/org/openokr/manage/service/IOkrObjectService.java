@@ -3,11 +3,16 @@ package org.openokr.manage.service;
 
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.exception.BusinessException;
+import io.swagger.models.auth.In;
+import org.openokr.manage.vo.*;
 import org.openokr.manage.vo.MessagesExtVO;
 import org.openokr.manage.vo.ObjectivesExtVO;
 import org.openokr.manage.vo.OkrObjectSearchVO;
 import org.openokr.sys.vo.UserVO;
 import org.openokr.sys.vo.UserVOExt;
+import org.openokr.sys.vo.request.TreeDataVO;
+import org.openokr.task.vo.TaskKrInfoVO;
+import org.openokr.task.vo.TaskKrRelVO;
 
 import java.util.List;
 
@@ -126,5 +131,31 @@ public interface IOkrObjectService {
      * @return
      */
     ResponseResult auditConfirm(MessagesExtVO messagesExtVO, String currentUserId);
+
+    /**
+     * 获取当前用户所有的OKR树状接口信息
+     * @param currentUserId
+     * @return
+     * @throws BusinessException
+     */
+    List<TreeDataVO> findAllOkrTreeData(String currentUserId) throws BusinessException;
+
+    /**
+     * 获取任务目标列表
+     * @param taskId
+     * @param type
+     * @return
+     * @throws BusinessException
+     */
+    List<TaskKrInfoVO> getTaskObjectList(String taskId, String type)  throws BusinessException;
+
+
+    /**
+     * 获取目标协同人数
+     * @param krId
+     * @return
+     * @throws BusinessException
+     */
+    Integer countObjectRelUserNum(String krId)  throws BusinessException;
 
 }

@@ -4,8 +4,11 @@ package org.openokr.manage.service;
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.exception.BusinessException;
 import org.openokr.manage.vo.TeamsExtVO;
+import org.openokr.manage.vo.TeamsSearchVO;
 import org.openokr.manage.vo.TeamsVO;
 import org.openokr.sys.vo.UserVO;
+import org.openokr.task.request.TeamTaskSearchVO;
+import org.openokr.task.vo.TeamTaskCountInfoVO;
 
 import java.util.List;
 
@@ -22,6 +25,14 @@ public interface IOkrTeamService {
      * @throws BusinessException
      */
     List<TeamsExtVO> getTeamByUserId(String userId) throws BusinessException;
+
+    /**
+     * 根据用户ID/团队名获取团队信息(不包括公司团队)
+     * @param teamTaskSearchVO
+     * @return
+     * @throws BusinessException
+     */
+    List<TeamsExtVO> getTeamByUserIdOrTeamName(TeamTaskSearchVO teamTaskSearchVO) throws BusinessException;
 
     /**
      * 获取用户关联的团队(影响团队或者参与的团队)
@@ -77,9 +88,36 @@ public interface IOkrTeamService {
      */
     TeamsExtVO getByTeamId(String id);
 
+    /**
+     * 根据团队id查找团队内所有成员
+     * @param teamId
+     * @return
+     */
     List<UserVO> getUsersByTeamId(String teamId);
 
     /**
+     * 根据用户id查找管理（负责）团队所有成员
+     * @param ownerId
+     * @return
+     */
+    List<UserVO> getTeamsUsersByOwnerId(String ownerId);
+
+    /**
+     * 获取团队成员数、累计占用工时、关联任务数
+     * @param teamsSearchVO
+     * @return
+     * @throws BusinessException
+     */
+    TeamTaskCountInfoVO getTeamTaskCountInfo(TeamsSearchVO teamsSearchVO) throws BusinessException;
+
+    /**
+     * 根据用户或类型查询团队列表
+     * @param teamsVO
+     * @return
+     * @throws BusinessException
+     */
+    List<TeamsVO> getTeamListByUserOrType(TeamsVO teamsVO)  throws BusinessException;
+     /**
      * 团队负责人转让
      * @param teamId
      * @param userId
