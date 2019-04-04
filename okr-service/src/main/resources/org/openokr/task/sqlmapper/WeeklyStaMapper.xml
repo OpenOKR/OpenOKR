@@ -4,27 +4,28 @@
 
     <select id="getStatisticByTask" parameterType="HashMap" resultType="org.openokr.task.vo.WeeklyStatisticVO">
         SELECT
-            t1. ID task_id,
-            t1.task_name,
+            c.category_name,
+            d.product_name task_name,
             COALESCE (
                 SUM (
-                    t2.duration * t3.apportion_rate / 100
-                ),
-                0
+                apportion_rate / 100 * duration
+                ),0
             ) duration
         FROM
-            t_okr_task t1
-        LEFT JOIN t_okr_daily t2 ON t1. ID = t2.task_id
-        <![CDATA[
-        AND to_char(t2.report_day, 'yyyy-MM-dd') >= #{condition.reportStartDateStr}
-        AND to_char(t2.report_day, 'yyyy-MM-dd') <= #{condition.reportEndDateStr}
-        ]]>
-        LEFT JOIN t_okr_task_apportion t3 ON t1. ID = t3.task_id
+            t_okr_task A
+        INNER JOIN t_okr_task_apportion b ON A . ID = b.task_id
         <if test="condition.categoryId != null and condition.categoryId != ''">
-            AND t3.category_id = #{condition.categoryId}
+            AND b.category_id = #{condition.categoryId}
         </if>
+        INNER JOIN t_okr_apportion_category C ON b.category_id = C . ID
+        INNER JOIN t_okr_product_info d ON b.apportion_name_id = d. ID
+        INNER JOIN t_okr_daily e ON e.task_id = A ."id"
+        <![CDATA[
+            AND to_char(e.report_day, 'yyyy-MM-dd') >= #{condition.reportStartDateStr}
+            AND to_char(e.report_day, 'yyyy-MM-dd') <= #{condition.reportEndDateStr}
+        ]]>
         WHERE
-            t1.belong_team = #{condition.teamId}
+            a.belong_team = #{condition.teamId}
         GROUP BY
             t1. ID
         ORDER BY
@@ -46,14 +47,14 @@
                     COALESCE (t2.duration, 0) * COALESCE (t3.apportion_rate, 0) / 100 duration
                 FROM
                     t_okr_task t1
-                LEFT JOIN t_okr_daily t2 ON t1. ID = t2.task_id
-                AND to_char(t2.report_day, 'yyyy-MM-dd') >= #{condition.reportStartDateStr}
-                AND to_char(t2.report_day, 'yyyy-MM-dd') <= #{condition.reportEndDateStr}
-                LEFT JOIN t_okr_task_apportion t3 ON t1. ID = t3.task_id
-                LEFT JOIN t_okr_apportion_category t4 ON t3.category_id = t4. ID
+                INNER JOIN t_okr_daily t2 ON t1. ID = t2.task_id
+                AND to_char(t2.report_day, 'yyyy-MM-dd') >= #{ CONDITION .reportStartDateStr }
+                AND to_char(t2.report_day, 'yyyy-MM-dd') <= #{ CONDITION .reportEndDateStr }
+                INNER JOIN t_okr_task_apportion t3 ON t1. ID = t3.task_id
+                INNER JOIN t_okr_apportion_category t4 ON t3.category_id = t4. ID
+                INNER JOIN t_okr_product_info t5 ON t3.apportion_name_id = t5. ID
                 WHERE
-                    t2. ID IS NOT NULL
-                AND t1.belong_team = #{condition.teamId}
+                    t1.belong_team = #{ CONDITION .teamId }
                 AND t3.category_id IS NOT NULL
                 AND t3.category_id != ''
             ) T
