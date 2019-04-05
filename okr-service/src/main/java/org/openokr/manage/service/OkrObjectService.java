@@ -326,11 +326,11 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         }
 
         // 删除 协同人审核 对应消息
-        condition = new MessagesEntityCondition();
-        condition.createCriteria().andTypeEqualTo(MessageTypeEnum.TYPE_3.getCode())
-                .andTargetIdIn(resultIds).andIsProcessedEqualTo("0");
-        List<MessagesEntity> messagesEntities = this.selectByCondition(condition);
-        if (messagesEntities != null && messagesEntities.size() > 0) {
+        if (resultIds.size() > 0) {
+            condition = new MessagesEntityCondition();
+            condition.createCriteria().andTypeEqualTo(MessageTypeEnum.TYPE_3.getCode())
+                    .andTargetIdIn(resultIds).andIsProcessedEqualTo("0");
+            List<MessagesEntity> messagesEntities = this.selectByCondition(condition);
             for (MessagesEntity messagesEntity1 : messagesEntities) {
                 messagesEntity1.setDelFlag("1");
                 messagesEntity1.setRemarks("删除目标，删除未处理协同人审核消息");
