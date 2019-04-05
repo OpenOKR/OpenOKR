@@ -3,12 +3,16 @@ package org.openokr.manage.service;
 
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.exception.BusinessException;
-import org.openokr.manage.vo.LogVO;
+import io.swagger.models.auth.In;
+import org.openokr.manage.vo.*;
 import org.openokr.manage.vo.MessagesExtVO;
 import org.openokr.manage.vo.ObjectivesExtVO;
 import org.openokr.manage.vo.OkrObjectSearchVO;
 import org.openokr.sys.vo.UserVO;
 import org.openokr.sys.vo.UserVOExt;
+import org.openokr.sys.vo.request.TreeDataVO;
+import org.openokr.task.vo.TaskKrInfoVO;
+import org.openokr.task.vo.TaskKrRelVO;
 
 import java.util.List;
 
@@ -20,6 +24,7 @@ public interface IOkrObjectService {
 
     /**
      * 获取当前用户所有的OKR列表信息(包括个人、团队、公司的OKR)
+     *
      * @param searchVO
      * @return
      * @throws BusinessException
@@ -28,6 +33,7 @@ public interface IOkrObjectService {
 
     /**
      * 根据O获取KR所有的协同者
+     *
      * @param objectId
      * @param limitAmount 查询个数
      * @return
@@ -36,6 +42,7 @@ public interface IOkrObjectService {
 
     /**
      * 根据类型获取OKR列表
+     *
      * @param searchVO
      * @return
      * @throws BusinessException
@@ -44,6 +51,7 @@ public interface IOkrObjectService {
 
     /**
      * 获取个人OKR
+     *
      * @param searchVO
      * @return
      * @throws BusinessException
@@ -52,6 +60,7 @@ public interface IOkrObjectService {
 
     /**
      * 获取团队OKR
+     *
      * @param searchVO
      * @return
      * @throws BusinessException
@@ -60,6 +69,7 @@ public interface IOkrObjectService {
 
     /**
      * 获取公司OKR
+     *
      * @param searchVO
      * @return
      * @throws BusinessException
@@ -68,6 +78,7 @@ public interface IOkrObjectService {
 
     /**
      * 获取目标详情
+     *
      * @param objectId
      * @return
      * @throws BusinessException
@@ -76,6 +87,7 @@ public interface IOkrObjectService {
 
     /**
      * 保存目标
+     *
      * @param objectVO
      * @return
      * @throws BusinessException
@@ -84,6 +96,7 @@ public interface IOkrObjectService {
 
     /**
      * 删除目标
+     *
      * @param objectId 目标ID
      * @param userId
      * @return
@@ -93,6 +106,7 @@ public interface IOkrObjectService {
 
     /**
      * 获取父目标下拉数据
+     *
      * @param userId
      * @param type
      * @return
@@ -102,6 +116,7 @@ public interface IOkrObjectService {
 
     /**
      * 目标审核提交
+     *
      * @param objectId
      * @param userVOExt
      * @return
@@ -110,10 +125,37 @@ public interface IOkrObjectService {
 
     /**
      * 目标审核（同步处理消息状态）
+     *
      * @param messagesExtVO
      * @param currentUserId
      * @return
      */
     ResponseResult auditConfirm(MessagesExtVO messagesExtVO, String currentUserId);
+
+    /**
+     * 获取当前用户所有的OKR树状接口信息
+     * @param currentUserId
+     * @return
+     * @throws BusinessException
+     */
+    List<TreeDataVO> findAllOkrTreeData(String currentUserId) throws BusinessException;
+
+    /**
+     * 获取任务目标列表
+     * @param taskId
+     * @param type
+     * @return
+     * @throws BusinessException
+     */
+    List<TaskKrInfoVO> getTaskObjectList(String taskId, String type)  throws BusinessException;
+
+
+    /**
+     * 获取目标协同人数
+     * @param krId
+     * @return
+     * @throws BusinessException
+     */
+    Integer countObjectRelUserNum(String krId)  throws BusinessException;
 
 }

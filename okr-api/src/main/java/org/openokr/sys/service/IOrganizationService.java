@@ -1,7 +1,9 @@
 package org.openokr.sys.service;
 
 import com.zzheng.framework.adapter.vo.ResponseResult;
+import com.zzheng.framework.exception.BusinessException;
 import org.openokr.sys.vo.OrganizationVOExt;
+import org.openokr.sys.vo.request.TreeDataVO;
 
 import java.util.List;
 import java.util.Map;
@@ -20,5 +22,11 @@ public interface IOrganizationService {
     List<OrganizationVOExt> findCurrentAndChildren(String currentOrganizationId);
 
     List<Map<String, Object>> findContainUserOfAll(String currentUserId);
+
+    /**
+     * 获取组织机构树
+     * @return
+     */
+    List<TreeDataVO> findOrganizationTreeData(String currentUserId) throws BusinessException;
 
 }

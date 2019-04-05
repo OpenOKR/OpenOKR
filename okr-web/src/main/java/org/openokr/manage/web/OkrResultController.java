@@ -9,6 +9,7 @@ import org.openokr.manage.service.IOkrMessageService;
 import org.openokr.manage.service.IOkrObjectService;
 import org.openokr.manage.service.IOkrResultService;
 import org.openokr.manage.vo.CheckinsExtVO;
+import org.openokr.manage.vo.MessagesExtVO;
 import org.openokr.manage.vo.MessagesVO;
 import org.openokr.manage.vo.ResultsExtVO;
 import org.openokr.utils.DateUtils;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -112,5 +114,14 @@ public class OkrResultController extends BaseController {
         model.addAttribute("message", message);
         model.addAttribute("metricUnitEnumList", ResultMetricUnitEnum.toList());
         return "manage/okrResultAudit";
+    }
+
+    /**
+     * 协同审核确认
+     * @return
+     */
+    @PostMapping(value = "")
+    public ResponseResult auditConfirm(@JsonPathParam("vo") MessagesExtVO messagesExtVO) {
+        return okrResultService.auditConfirm(messagesExtVO, getCurrentUserId());
     }
 }

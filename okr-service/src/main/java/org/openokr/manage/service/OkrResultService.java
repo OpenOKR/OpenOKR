@@ -11,6 +11,7 @@ import org.openokr.application.framework.service.OkrBaseService;
 import org.openokr.application.utils.GetChangeDateUtil;
 import org.openokr.manage.entity.CheckinsEntity;
 import org.openokr.manage.entity.MessagesEntity;
+import org.openokr.manage.entity.MessagesEntityCondition;
 import org.openokr.manage.entity.ObjectivesEntity;
 import org.openokr.manage.entity.ResultUserRelaEntity;
 import org.openokr.manage.entity.ResultUserRelaEntityCondition;
@@ -23,8 +24,10 @@ import org.openokr.manage.enumerate.MessageTypeEnum;
 import org.openokr.manage.enumerate.ObjectivesStatusEnum;
 import org.openokr.manage.enumerate.ObjectivesTypeEnum;
 import org.openokr.manage.enumerate.ResultMetricUnitEnum;
+import org.openokr.manage.enumerate.ResultUserRelaStatusEnum;
 import org.openokr.manage.vo.CheckinsExtVO;
 import org.openokr.manage.vo.LogVO;
+import org.openokr.manage.vo.MessagesExtVO;
 import org.openokr.manage.vo.ResultsExtVO;
 import org.openokr.manage.vo.TeamsVO;
 import org.openokr.sys.vo.UserVO;
@@ -57,9 +60,22 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
         resultsEntity.setUpdateUserId(userId);
         this.update(resultsEntity);
 
-        //删除KR要更新O的进度
+        // 删除KR要更新O的进度
         this.calculateObjectProgress(resultsEntity, userId);
         addOrDelResultLogInfo("删除", resultsEntity, userId);
+
+        // 删除对应消息
+        MessagesEntityCondition condition = new MessagesEntityCondition();
+        condition.createCriteria().andTypeEqualTo(MessageTypeEnum.TYPE_3.getCode())
+                .andTargetIdEqualTo(resultId).andIsProcessedEqualTo("0");
+        List<MessagesEntity> entityList = this.selectByCondition(condition);
+        if (!entityList.isEmpty()) {
+            for (MessagesEntity entity : entityList) {
+                entity.setDelFlag("1");
+                entity.setRemarks("删除关键结果，删除未处理协同人审核消息");
+            }
+            this.update(entityList);
+        }
 
         responseResult.setSuccess(true).setMessage("删除成功");
         return responseResult;
@@ -145,13 +161,18 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
                 ResultUserRelaEntity relEntity = new ResultUserRelaEntity();
                 relEntity.setResultId(resultId);
                 relEntity.setUserId(userVO.getId());
-                relEntity.setStatus("0");//待确认状态
+                relEntity.setStatus(ResultUserRelaStatusEnum.STATUS_1.getCode());//待确认状态
                 relEntity.setCreateTs(new Date());
                 relEntity.setCreateUserId(userId);
                 resultUserRelList.add(relEntity);
             }
             this.insertList(resultUserRelList);
         }
+
+        if (entity.getStatus().equals(ObjectivesStatusEnum.STATUS_1.getCode())) {
+            deleteAuditMsg(entity.getId());
+        }
+
         responseResult.setSuccess(true).setMessage("保存成功");
         return responseResult;
     }
@@ -250,6 +271,42 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
     @Override
     public List<CheckinsExtVO> findCheckinList(Map<String, Object> params) {
         return this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE + ".findCheckinList", params);
+    }
+
+    @Override
+    public ResponseResult auditConfirm(MessagesExtVO messagesExtVO, String userId) {
+        // 获取关键结果和协同人的关联 bean
+        ResultUserRelaEntityCondition condition = new ResultUserRelaEntityCondition();
+        condition.createCriteria().andUserIdEqualTo(userId).andResultIdEqualTo(messagesExtVO.getTargetId());
+        ResultUserRelaEntity entity = this.selectOneByCondition(condition);
+        // 更新object
+        if (messagesExtVO.getRadio().equals("0")) {
+            entity.setStatus(ResultUserRelaStatusEnum.STATUS_3.getCode());
+        } else {
+            entity.setStatus(ResultUserRelaStatusEnum.STATUS_2.getCode());
+        }
+        this.update(entity);
+        // 原消息进行更新
+        MessagesEntity messagesEntity = this.selectByPrimaryKey(MessagesEntity.class, messagesExtVO.getId());
+        messagesEntity.setIsProcessed("1");
+        messagesEntity.setIsRead("1");
+        messagesEntity.setUpdateUserId(userId);
+        messagesEntity.setUpdateTs(new Date());
+        this.update(messagesEntity);
+        // 新建消息，将同意或不同意封装成消息发回提交审核用户
+        MessagesEntity newMessageEntity = new MessagesEntity();
+        newMessageEntity.setTitle("目标审核" + ObjectivesStatusEnum.getByCode(entity.getStatus()).getName());
+        newMessageEntity.setUserId(entity.getUserId());
+        newMessageEntity.setContent(messagesExtVO.getContent());
+        newMessageEntity.setType(MessageTypeEnum.TYPE_4.getCode());
+        newMessageEntity.setTargetId(entity.getId());
+        newMessageEntity.setIsProcessed("1");
+        newMessageEntity.setIsRead("0");
+        newMessageEntity.setMark(entity.getStatus().equals(ObjectivesStatusEnum.STATUS_3.getCode()) ? MessageMarkEnum.MARK_2.getCode() : MessageMarkEnum.MARK_3.getCode());
+        newMessageEntity.setCreateUserId(userId);
+        newMessageEntity.setCreateTs(new Date());
+        this.save(newMessageEntity);
+        return new ResponseResult(true, null, "操作成功");
     }
 
     //计算KR的进度

@@ -68,6 +68,9 @@ public class ObjectivesEntity extends BaseEntity implements Serializable {
     /** 团队ID(type为团队和公司的时候才存储) */
     private String teamId;
 
+    /** 排序 */
+    private Integer sort;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -392,6 +395,24 @@ public class ObjectivesEntity extends BaseEntity implements Serializable {
     public void setTeamId(String teamId) {
         this.teamId = teamId;
         addSettedField("teamId");
+    }
+
+    /**
+     * 排序
+     * @return sort
+     */
+    @Column(name = "sort")
+    public Integer getSort() {
+        return sort;
+    }
+
+    /**
+     * 排序
+     * @param sort
+     */
+    public void setSort(Integer sort) {
+        this.sort = sort;
+        addSettedField("sort");
     }
 
     /**

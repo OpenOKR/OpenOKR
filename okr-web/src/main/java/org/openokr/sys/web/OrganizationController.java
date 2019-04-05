@@ -2,11 +2,14 @@ package org.openokr.sys.web;
 
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.base.utils.JSONUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.openokr.application.framework.annotation.JsonPathParam;
 import org.openokr.application.web.BaseController;
 import org.openokr.sys.service.IOrganizationService;
 import org.openokr.sys.vo.OrganizationVOExt;
+import org.openokr.sys.vo.request.TreeDataVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +22,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/sys")
+@Api(value = "组织管理相关接口",description = "OrganizationController")
 public class OrganizationController extends BaseController {
 
     @Autowired
@@ -62,6 +66,15 @@ public class OrganizationController extends BaseController {
     @ResponseBody
     public List<Map<String, Object>> findContainUserOfAll() {
         List<Map<String, Object>> list = organizationService.findContainUserOfAll(getCurrentUserId());
+        return list;
+    }
+
+    @ApiOperation(value = "获取组织结构树", notes = "获取组织结构树")
+    @RequiresPermissions("user")
+    @PostMapping(value = "/organization/findOrganizationTreeData.json")
+    @ResponseBody
+    public List<TreeDataVO> findOrganizationTreeData() {
+        List<TreeDataVO> list = organizationService.findOrganizationTreeData(getCurrentUserId());
         return list;
     }
 }

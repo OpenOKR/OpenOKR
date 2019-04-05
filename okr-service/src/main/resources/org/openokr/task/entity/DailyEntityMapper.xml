@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.openokr.task.entity.DailyEntityMapper">
+  <resultMap id="BaseResultMap" type="org.openokr.task.entity.DailyEntity">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="report_user_id" jdbcType="VARCHAR" property="reportUserId" />
+    <result column="task_id" jdbcType="VARCHAR" property="taskId" />
+    <result column="report_day" jdbcType="DATE" property="reportDay" />
+    <result column="duration" jdbcType="NUMERIC" property="duration" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_user_id" jdbcType="VARCHAR" property="createUserId" />
+    <result column="create_ts" jdbcType="TIMESTAMP" property="createTs" />
+    <result column="update_user_id" jdbcType="VARCHAR" property="updateUserId" />
+    <result column="update_ts" jdbcType="TIMESTAMP" property="updateTs" />
+    <result column="audit_status" jdbcType="CHAR" property="auditStatus" />
+    <result column="audit_time" jdbcType="TIMESTAMP" property="auditTime" />
+    <result column="audit_user_id" jdbcType="VARCHAR" property="auditUserId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, report_user_id, task_id, report_day, duration, remark, create_user_id, create_ts, 
+    update_user_id, update_ts, audit_status, audit_time, audit_user_id
+  </sql>
+  <select id="selectByCondition" parameterType="org.openokr.task.entity.DailyEntityCondition" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_okr_daily
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <include refid="PostgreSqlPaginationSuffix" />
+  </select>
+  <delete id="deleteByCondition" parameterType="org.openokr.task.entity.DailyEntityCondition">
+    delete from t_okr_daily
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <select id="countByCondition" parameterType="org.openokr.task.entity.DailyEntityCondition" resultType="java.lang.Long">
+    select count(*) from t_okr_daily
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByCondition" parameterType="map">
+    update t_okr_daily
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reportUserId != null">
+        report_user_id = #{record.reportUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taskId != null">
+        task_id = #{record.taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reportDay != null">
+        report_day = #{record.reportDay,jdbcType=DATE},
+      </if>
+      <if test="record.duration != null">
+        duration = #{record.duration,jdbcType=NUMERIC},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTs != null">
+        create_ts = #{record.createTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateUserId != null">
+        update_user_id = #{record.updateUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTs != null">
+        update_ts = #{record.updateTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.auditStatus != null">
+        audit_status = #{record.auditStatus,jdbcType=CHAR},
+      </if>
+      <if test="record.auditTime != null">
+        audit_time = #{record.auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.auditUserId != null">
+        audit_user_id = #{record.auditUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <sql id="PostgreSqlPaginationSuffix">
+    <if test="page != null">
+      <![CDATA[ limit #{page.pageSize} offset #{page.recordStartPrev} ]]>
+    </if>
+  </sql>
+  <insert id="insertList" parameterType="java.util.List">
+     insert into t_okr_daily ( id,report_user_id,task_id,report_day,duration,remark,create_user_id,create_ts,update_user_id,update_ts,audit_status,audit_time,audit_user_id ) values
+    <foreach collection="list" index="index" item="item" separator=",">
+       ( #{item.id,jdbcType=VARCHAR},#{item.reportUserId,jdbcType=VARCHAR},#{item.taskId,jdbcType=VARCHAR},#{item.reportDay,jdbcType=DATE},#{item.duration,jdbcType=NUMERIC},#{item.remark,jdbcType=VARCHAR},#{item.createUserId,jdbcType=VARCHAR},#{item.createTs,jdbcType=TIMESTAMP},#{item.updateUserId,jdbcType=VARCHAR},#{item.updateTs,jdbcType=TIMESTAMP},#{item.auditStatus,jdbcType=CHAR},#{item.auditTime,jdbcType=TIMESTAMP},#{item.auditUserId,jdbcType=VARCHAR} )
+    </foreach>
+  </insert>
+</mapper>

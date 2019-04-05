@@ -217,7 +217,9 @@ require(["jQuery"], function () {
             });
             require(["countUp"], function (CountUp) {
                 $(".charts-total .num,.vals .num").each(function () {
-                    var countUp = new CountUp(this, 0, $(this).data("new"), 0, 1, pageObj.options);
+                    var dataNew = $(this).data('new');
+                    dataNew = (dataNew === null || dataNew === '') ? 0 : dataNew;
+                    var countUp = new CountUp(this, 0, dataNew, 0, 1, pageObj.options);
                     countUp.start();
                 });
                 $(".vals .num").each(function () {
@@ -230,7 +232,7 @@ require(["jQuery"], function () {
 
         deleteFunc: function (id) {
             require(["artDialog"], function () {
-                artDialogUtil.confirm("确认删除该Object吗？", function () {
+                artDialogUtil.confirm("确认删除该目标吗？", function () {
                     $.ajax({
                         url: App["contextPath"] + "/manage/okrObject/deleteObject.json?objectId=" + id,
                         dataType: "json",
@@ -238,6 +240,7 @@ require(["jQuery"], function () {
                             require(["Tips"], function () {
                                 if (data.success) {
                                     TipsUtil.info(data.message);
+                                    top.mainObj.menuClick(null, App.contextPath + '/manage/okrObject/init.htm', 'menu-2');
                                 } else {
                                     TipsUtil.warn(data.message);
                                 }

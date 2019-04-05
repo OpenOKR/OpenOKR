@@ -7,11 +7,11 @@ import com.zzheng.framework.exception.BusinessException;
 import org.apache.commons.collections.ListUtils;
 import org.openokr.application.framework.service.OkrBaseService;
 import org.openokr.application.utils.GetChangeDateUtil;
-import org.openokr.manage.entity.CheckinsEntity;
-import org.openokr.manage.entity.CheckinsEntityCondition;
+import org.openokr.manage.entity.*;
 import org.openokr.manage.entity.LogEntity;
 import org.openokr.manage.entity.LogEntityCondition;
 import org.openokr.manage.entity.MessagesEntity;
+import org.openokr.manage.entity.MessagesEntityCondition;
 import org.openokr.manage.entity.ObjectLabelRelaEntity;
 import org.openokr.manage.entity.ObjectLabelRelaEntityCondition;
 import org.openokr.manage.entity.ObjectTeamRelaEntity;
@@ -25,26 +25,17 @@ import org.openokr.manage.enumerate.MessageMarkEnum;
 import org.openokr.manage.enumerate.MessageTypeEnum;
 import org.openokr.manage.enumerate.ObjectivesStatusEnum;
 import org.openokr.manage.enumerate.ObjectivesTypeEnum;
-import org.openokr.manage.vo.CheckinsExtVO;
-import org.openokr.manage.vo.LabelVO;
-import org.openokr.manage.vo.LogVO;
-import org.openokr.manage.vo.MessagesExtVO;
-import org.openokr.manage.vo.ObjectivesExtVO;
-import org.openokr.manage.vo.OkrObjectSearchVO;
-import org.openokr.manage.vo.ResultsExtVO;
-import org.openokr.manage.vo.TeamsVO;
+import org.openokr.manage.vo.*;
 import org.openokr.sys.service.IUserService;
 import org.openokr.sys.vo.UserVO;
 import org.openokr.sys.vo.UserVOExt;
+import org.openokr.sys.vo.request.TreeDataVO;
+import org.openokr.task.vo.TaskKrInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Transactional
@@ -71,7 +62,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         params.put("limitAmount", searchVO.getLimitAmount());
         params.put("timeSessionId", searchVO.getTimeSessionId());
         List<ObjectivesExtVO> objectivesExtList = this.getDao().selectListBySql(MAPPER_NAMESPACE + ".getAllOkrList", params);
-        if (objectivesExtList != null && objectivesExtList.size()>0) {
+        if (objectivesExtList != null && objectivesExtList.size() > 0) {
             for (ObjectivesExtVO objectivesExtVO : objectivesExtList) {
                 List<UserVO> userList = this.getJoinUsersByObjectId(objectivesExtVO.getId(), searchVO.getLimitAmount());
                 if (userList != null) {
@@ -192,7 +183,8 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         ResponseResult responseResult = new ResponseResult();
         String objectId = objectVO.getId();
         String userId = objectVO.getCreateUserId();
-        ObjectivesEntity targetEntity; ObjectivesEntity originalEntity = new ObjectivesEntity();
+        ObjectivesEntity targetEntity;
+        ObjectivesEntity originalEntity = new ObjectivesEntity();
 
         if (StringUtils.isEmpty(objectId)) {
             targetEntity = new ObjectivesEntity();
@@ -204,6 +196,9 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         }
 
         // 获取object所属团队责任人，若修改的目标所属团队责任人和当前用户一致，直接将状态设置为已确认
+        if (StringUtils.isEmpty(objectVO.getTeamId()) || objectVO.getTeamId().equals("null")) {
+            return new ResponseResult(false, null, "请选择所属团队！");
+        }
         TeamsEntity teamsEntity = this.selectByPrimaryKey(TeamsEntity.class, objectVO.getTeamId());
         // 设置状态，当类型是 团队或公司时，不需要审核，其他情况下一律设置成未提交
         if (targetEntity.getType().equals(ObjectivesTypeEnum.TYPE_2.getCode()) || targetEntity.getType().equals(ObjectivesTypeEnum.TYPE_3.getCode())) {
@@ -231,7 +226,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
             teamRelaCondition.createCriteria().andObjectIdEqualTo(objectId);
             List<ObjectTeamRelaEntity> teamRelaList = this.selectByCondition(teamRelaCondition);
             // 先删除旧数据
-            if (teamRelaList !=null && teamRelaList.size()>0) {
+            if (teamRelaList != null && teamRelaList.size() > 0) {
                 this.delete(teamRelaList);
             }
 
@@ -240,7 +235,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
             labelRelCondition.createCriteria().andObjectIdEqualTo(objectId);
             List<ObjectLabelRelaEntity> labelsRelList = this.selectByCondition(labelRelCondition);
             // 先删除旧数据
-            if (labelsRelList !=null && labelsRelList.size()>0) {
+            if (labelsRelList != null && labelsRelList.size() > 0) {
                 this.delete(labelsRelList);
             }
             // 更新检查变化的字段，写入历史操作日志
@@ -249,7 +244,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
 
         objectId = targetEntity.getId();
         // 新增影响团队
-        if (objectVO.getRelTeams() != null && objectVO.getRelTeams().size()>0) {
+        if (objectVO.getRelTeams() != null && objectVO.getRelTeams().size() > 0) {
             List<ObjectTeamRelaEntity> teamsEntityList = new ArrayList<>();
             for (TeamsVO teamsVO : objectVO.getRelTeams()) {
                 ObjectTeamRelaEntity relaEntity = new ObjectTeamRelaEntity();
@@ -263,7 +258,7 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         }
 
         // 新增目标关联标签
-        if (objectVO.getRelLabels() != null && objectVO.getRelLabels().size()>0) {
+        if (objectVO.getRelLabels() != null && objectVO.getRelLabels().size() > 0) {
             List<ObjectLabelRelaEntity> labelsRelList = new ArrayList<>();
             for (LabelVO labelVO : objectVO.getRelLabels()) {
                 ObjectLabelRelaEntity relaEntity = new ObjectLabelRelaEntity();
@@ -276,6 +271,10 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
             this.insertList(labelsRelList);
         }
 
+        if (targetEntity.getStatus().equals(ObjectivesStatusEnum.STATUS_1.getCode())) {
+            deleteAuditMsg(targetEntity.getId());
+        }
+
         responseResult.setMessage("保存成功");
         return responseResult;
     }
@@ -283,22 +282,64 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
     @Override
     public ResponseResult deleteObject(String objectId, String userId) throws BusinessException {
         ResponseResult responseResult = new ResponseResult();
-
         //1、如果该目标已经是别人的父目标,则无法删除该目标
         ObjectivesEntityCondition parentCondition = new ObjectivesEntityCondition();
-        parentCondition.createCriteria().andParentIdEqualTo(objectId);
-        List<ObjectivesEntity> parentList = this.selectByCondition(parentCondition);
-        if (parentList !=null && parentList.size()>0) {
-            responseResult.setMessage("该目标还存在子目标,无法删除");
+        parentCondition.createCriteria().andParentIdEqualTo(objectId).andDelFlagEqualTo("0");
+        List<ObjectivesEntity> childrenList = this.selectByCondition(parentCondition);
+
+        if (!childrenList.isEmpty()) {
+            responseResult.setMessage("目标存在子目标，无法删除");
             responseResult.setSuccess(false);
             return responseResult;
         }
+
         ObjectivesEntity entity = this.selectByPrimaryKey(ObjectivesEntity.class, objectId);
         entity.setDelFlag("1");//设为已删除状态
         entity.setUpdateTs(new Date());
         entity.setUpdateUserId(userId);
         this.update(entity);
+
+        // 删除 目标审核 对应消息
+        MessagesEntityCondition condition = new MessagesEntityCondition();
+        condition.createCriteria().andTypeEqualTo(MessageTypeEnum.TYPE_2.getCode())
+                .andTargetIdEqualTo(objectId).andIsProcessedEqualTo("0");
+        MessagesEntity messagesEntity = this.selectOneByCondition(condition);
+        if (messagesEntity != null) {
+            messagesEntity.setDelFlag("1");
+            messagesEntity.setRemarks("删除目标，删除未处理负责人审核消息");
+            this.update(messagesEntity);
+        }
+
+        // 获取kr列表
+        ObjectivesExtVO objectVO = new ObjectivesExtVO();
+        BeanUtils.copyBean(entity, objectVO);
+        List<ObjectivesExtVO> list = new ArrayList<>();
+        list.add(objectVO);
+        OkrObjectSearchVO searchVO = new OkrObjectSearchVO();
+        searchVO.setObjectId(objectId);
+        this.setKrInfo(list, searchVO);
+        List<String> resultIds = new ArrayList<>();
+        if (!objectVO.getResultsExtList().isEmpty()) {
+            for (ResultsExtVO resultsExtVO : objectVO.getResultsExtList()) {
+                resultIds.add(resultsExtVO.getId());
+            }
+        }
+
+        // 删除 协同人审核 对应消息
+        if (resultIds.size() > 0) {
+            condition = new MessagesEntityCondition();
+            condition.createCriteria().andTypeEqualTo(MessageTypeEnum.TYPE_3.getCode())
+                    .andTargetIdIn(resultIds).andIsProcessedEqualTo("0");
+            List<MessagesEntity> messagesEntities = this.selectByCondition(condition);
+            for (MessagesEntity messagesEntity1 : messagesEntities) {
+                messagesEntity1.setDelFlag("1");
+                messagesEntity1.setRemarks("删除目标，删除未处理协同人审核消息");
+                this.update(messagesEntity1);
+            }
+        }
+
         responseResult.setMessage("删除成功");
+        responseResult.setSuccess(true);
         return responseResult;
     }
 
@@ -332,20 +373,41 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
 
         // 获取kr列表
         ObjectivesExtVO objectivesExtVO = this.getObjectById(objectId);
+        // 获取团队负责人
+        UserVOExt userVOExt = userService.getTeamOwnerUserByTeamId(objectivesExtVO.getTeamId());
+        // 协同人消息列表初始化
+        List<MessagesEntity> messagesEntityList = new ArrayList<>();
+
         StringBuilder content = new StringBuilder().append(currentUser.getRealName()).append(" 提交目标审核请求<br/>" +
                 "目标名：").append(objectivesExtVO.getName()).append("<br/>");
+        // 关键结果列表 html拼凑
         if (objectivesExtVO.getResultsExtList() != null && objectivesExtVO.getResultsExtList().size() > 0) {
             content.append("关键结果：<br/>");
             for (int i = 0; i < objectivesExtVO.getResultsExtList().size(); i++) {
                 ResultsExtVO resultsExtVO = objectivesExtVO.getResultsExtList().get(i);
-                content.append("K").append((i+1)).append(".").append(resultsExtVO.getName()).append("<br/>");
+                content.append("K").append((i + 1)).append(".").append(resultsExtVO.getName()).append("<br/>");
+                if (!resultsExtVO.getJoinUsers().isEmpty()) {
+                    for (UserVO joinUser : resultsExtVO.getJoinUsers()) {
+                        // 协同人确认消息
+                        MessagesEntity messagesEntity = new MessagesEntity();
+                        messagesEntity.setTitle("协同人确认请求");
+                        messagesEntity.setUserId(joinUser.getId());
+                        messagesEntity.setContent(currentUser.getRealName() + " 提交关键结果协同请求<br/>" + "关键结果：" +
+                                resultsExtVO.getName());
+                        messagesEntity.setType(MessageTypeEnum.TYPE_3.getCode());
+                        messagesEntity.setTargetId(resultsExtVO.getId());
+                        messagesEntity.setIsProcessed("0");
+                        messagesEntity.setIsRead("0");
+                        messagesEntity.setMark(MessageMarkEnum.MARK_4.getCode());
+                        messagesEntity.setCreateUserId(currentUser.getId());
+                        messagesEntity.setCreateTs(new Date());
+                        messagesEntityList.add(messagesEntity);
+                    }
+                }
             }
         }
 
-        // 获取团队负责人
-        UserVOExt userVOExt = userService.getTeamOwnerUserByTeamId(objectivesExtVO.getTeamId());
-
-        // 新建审核消息
+        // 目标审核消息，协同人确认消息 保存
         MessagesEntity messagesEntity = new MessagesEntity();
         messagesEntity.setTitle("目标审核请求");
         messagesEntity.setUserId(userVOExt.getId());
@@ -355,9 +417,14 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         messagesEntity.setIsProcessed("0");
         messagesEntity.setIsRead("0");
         messagesEntity.setMark(MessageMarkEnum.MARK_4.getCode());
-        messagesEntity.setCreateUserId(userVOExt.getId());
+        messagesEntity.setCreateUserId(currentUser.getId());
         messagesEntity.setCreateTs(new Date());
+        messagesEntity.setDelFlag("0");
         this.save(messagesEntity);
+        if (!messagesEntityList.isEmpty()) {
+            this.insertList(messagesEntityList);
+        }
+
         return new ResponseResult(true, null, "提交成功");
     }
 
@@ -394,6 +461,116 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
         newMessageEntity.setCreateTs(new Date());
         this.save(newMessageEntity);
         return new ResponseResult(true, null, "操作成功");
+    }
+
+    @Override
+    public List<TreeDataVO> findAllOkrTreeData(String currentUserId) throws BusinessException {
+        List<TreeDataVO> treeDataVOS = new ArrayList<>();
+        try{
+            TreeDataVO treeDataVO;
+            OkrObjectSearchVO searchVO = new OkrObjectSearchVO();
+            searchVO.setUserId(currentUserId);
+            List<ObjectivesExtVO> okrDataList = this.getAllOkrList(searchVO);
+            if(okrDataList != null && !okrDataList.isEmpty()){
+/*                for(ObjectivesExtVO okr:okrDataList){
+                    if(org.apache.commons.lang3.StringUtils.isBlank(okr.getParentId())){
+                        treeDataVO = new TreeDataVO();
+                        treeDataVO.setId(okr.getId());
+                        treeDataVO.setLabel(okr.getName());
+                        treeDataVO.setChildren(findOkrChildrenData(okr,okrDataList));
+                        treeDataVOS.add(treeDataVO);
+                    }else{
+                        continue;
+                    }
+                }*/
+                if(treeDataVOS.isEmpty()){
+                    for(ObjectivesExtVO okr:okrDataList){
+                        treeDataVO = new TreeDataVO();
+                        treeDataVO.setId(okr.getId());
+                        treeDataVO.setLabel(okr.getName());
+                        treeDataVOS.add(treeDataVO);
+                    }
+                }
+            }
+        } catch (BusinessException e) {
+            logger.error("获取当前用户所有的OKR树状接口信息 busi-error:{}", e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("获取当前用户所有的OKR树状接口信息 error:{}-->", e.getMessage(), e);
+            throw new BusinessException("获取当前用户所有的OKR树状接口信息 失败");
+        }
+        return treeDataVOS;
+    }
+
+    @Override
+    public List<TaskKrInfoVO> getTaskObjectList(String taskId, String type) throws BusinessException {
+        try{
+            if(org.apache.commons.lang3.StringUtils.isBlank(taskId)){
+                throw new BusinessException("任务ID为空!");
+            }
+            if(org.apache.commons.lang3.StringUtils.isBlank(type)){
+                throw new BusinessException("类型为空!");
+            }
+            Map<String,Object> paramMap = new HashMap<>();
+            paramMap.put("taskId",taskId);
+            paramMap.put("type",type);
+            List<TaskKrInfoVO> taskKrInfoVOS =  this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE+".getTaskObjectList",paramMap);
+            if(taskKrInfoVOS != null && !taskKrInfoVOS.isEmpty()){
+                for(TaskKrInfoVO vo:taskKrInfoVOS){
+                    vo.setCount(this.countObjectRelUserNum(vo.getId()));
+                }
+            }
+            return taskKrInfoVOS;
+        } catch (BusinessException e) {
+            logger.error("获取任务目标列表 busi-error:{}", e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("获取任务目标列表 error:{}-->", e.getMessage(), e);
+            throw new BusinessException("获取任务目标列表 失败");
+        }
+    }
+
+    @Override
+    public Integer countObjectRelUserNum(String krId) throws BusinessException {
+        try{
+            if(org.apache.commons.lang3.StringUtils.isBlank(krId)){
+                throw new BusinessException("目标ID为空!");
+            }
+            Map<String,Object> paramMap = new HashMap<>();
+            paramMap.put("krId",krId);
+            return this.getMyBatisDao().selectOneBySql(MAPPER_NAMESPACE+".countObjectRelUserNum",paramMap);
+        } catch (BusinessException e) {
+            logger.error("获取目标协同人数 busi-error:{}", e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("获取目标协同人数 error:{}-->", e.getMessage(), e);
+            throw new BusinessException("获取目标协同人数 失败");
+        }
+    }
+
+    private List<TreeDataVO> findOkrChildrenData(ObjectivesExtVO okr,List<ObjectivesExtVO> okrDataList) throws BusinessException {
+        List<TreeDataVO> treeDataVOS = new ArrayList<>();
+        try{
+            TreeDataVO treeDataVO;
+            if(okrDataList!=null && !okrDataList.isEmpty()){
+                for(ObjectivesExtVO okrData:okrDataList){
+                    if(okr.getId().equals(okr.getParentId())){
+                        treeDataVO = new TreeDataVO();
+                        treeDataVO.setId(okrData.getId());
+                        treeDataVO.setLabel(okrData.getName());
+                        treeDataVO.setChildren(findOkrChildrenData(okrData,okrDataList));
+                        treeDataVOS.add(treeDataVO);
+                    }
+                }
+            }
+        } catch (BusinessException e) {
+            logger.error("获取组织机构树 busi-error:{}", e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("获取组织机构树 error:{}-->", e.getMessage(), e);
+            throw new BusinessException("获取组织机构树 失败");
+        }
+        return treeDataVOS;
     }
 
     /**
@@ -470,26 +647,27 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
 
     /**
      * 历史操作日志
-     * @param originalEntity 原始的实体
-     * @param targetEntity 页面修改后的实体
-     * @param originalTeamRelList 原始影响团队
+     *
+     * @param originalEntity        原始的实体
+     * @param targetEntity          页面修改后的实体
+     * @param originalTeamRelList   原始影响团队
      * @param originalLabelsRelList 原始标签
-     * @param targetRelTeams 修改后影响团队
-     * @param targetRelLabels 修改后标签
+     * @param targetRelTeams        修改后影响团队
+     * @param targetRelLabels       修改后标签
      */
     private void setObjectLogInfo(ObjectivesEntity originalEntity, ObjectivesEntity targetEntity,
                                   List<ObjectTeamRelaEntity> originalTeamRelList, List<ObjectLabelRelaEntity> originalLabelsRelList,
                                   List<TeamsVO> targetRelTeams, List<LabelVO> targetRelLabels) {
-        Map<String ,Object> compareMap = GetChangeDateUtil.compareFields(originalEntity, targetEntity,
+        Map<String, Object> compareMap = GetChangeDateUtil.compareFields(originalEntity, targetEntity,
                 new String[]{"name", "confidenceLevel", "status", "parentId", "teamId"});
         StringBuilder message = new StringBuilder();
         if (compareMap != null && !compareMap.isEmpty()) {
             for (String key : compareMap.keySet()) {
-                if (key.equals("name")){
+                if (key.equals("name")) {
                     message.append("目标名称修改为：").append(compareMap.get(key)).append("，");
                     continue;
                 }
-                if (key.equals("confidenceLevel")){
+                if (key.equals("confidenceLevel")) {
                     message.append("目标把握度修改为：").append(compareMap.get(key)).append("成，");
                     continue;
                 }
@@ -513,9 +691,12 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
                 }
             }
         }
-        List<String> originalTeamRelaIds = new ArrayList<>(); List<String> targetTeamRelaIds = new ArrayList<>();
-        List<String> originalLabelRelaIds = new ArrayList<>(); List<String> targetLabelRelaIds = new ArrayList<>();
-        StringBuilder targetTeamRelaNames = new StringBuilder("["); StringBuilder targetLabelRelaNames = new StringBuilder("[");
+        List<String> originalTeamRelaIds = new ArrayList<>();
+        List<String> targetTeamRelaIds = new ArrayList<>();
+        List<String> originalLabelRelaIds = new ArrayList<>();
+        List<String> targetLabelRelaIds = new ArrayList<>();
+        StringBuilder targetTeamRelaNames = new StringBuilder("[");
+        StringBuilder targetLabelRelaNames = new StringBuilder("[");
         // 影响团队
         for (ObjectTeamRelaEntity entity : originalTeamRelList) {
             originalTeamRelaIds.add(entity.getTeamId());
@@ -571,4 +752,5 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
             this.saveOkrLog(logVO);
         }
     }
+
 }

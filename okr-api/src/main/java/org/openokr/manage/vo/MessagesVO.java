@@ -74,6 +74,16 @@ public class MessagesVO extends BaseVO implements Serializable {
      */
     private String mark;
 
+    /**
+     * 备注
+     */
+    private String remarks;
+
+    /**
+     * 删除标识 0-否 1-是
+     */
+    private String delFlag;
+
 
 
     /**
@@ -256,6 +266,34 @@ public class MessagesVO extends BaseVO implements Serializable {
      */
     public void setMark(String mark) {
         this.mark = mark;
+    }
+
+    /**
+     * 备注
+     */
+    public String getRemarks() {
+        return remarks;
+    }
+
+    /**
+     * 备注
+     */
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+    /**
+     * 删除标识 0-否 1-是
+     */
+    public String getDelFlag() {
+        return delFlag;
+    }
+
+    /**
+     * 删除标识 0-否 1-是
+     */
+    public void setDelFlag(String delFlag) {
+        this.delFlag = delFlag;
     }
 
 }

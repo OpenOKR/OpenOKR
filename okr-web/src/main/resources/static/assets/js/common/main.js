@@ -199,7 +199,9 @@ require(["jQuery", "countUp"], function () {
         window.pageObj = pageObj;
         pageObj.loadOKRList(); //初始化OKR列表
         $(".charts-total .num").each(function(){
-            var countUp = new CountUp(this, 0, $(this).data("end"), 2, 1, pageObj.options);
+            var dataEnd = $(this).data('end');
+            dataEnd = (dataEnd === null || dataEnd === '') ? 0 : dataEnd;
+            var countUp = new CountUp(this, 0, dataEnd, 2, 1, pageObj.options);
             countUp.start();
         });
         pageObj.loadOKRExecution('1'); //初始化OKR执行情况

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.openokr.task.entity.TaskEntityMapper">
+  <resultMap id="BaseResultMap" type="org.openokr.task.entity.TaskEntity">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="task_code" jdbcType="VARCHAR" property="taskCode" />
+    <result column="task_name" jdbcType="VARCHAR" property="taskName" />
+    <result column="task_status" jdbcType="CHAR" property="taskStatus" />
+    <result column="task_remark" jdbcType="VARCHAR" property="taskRemark" />
+    <result column="is_deleted" jdbcType="CHAR" property="isDeleted" />
+    <result column="task_start_time" jdbcType="TIMESTAMP" property="taskStartTime" />
+    <result column="task_end_time" jdbcType="TIMESTAMP" property="taskEndTime" />
+    <result column="jira_label" jdbcType="VARCHAR" property="jiraLabel" />
+    <result column="confirm_user_id" jdbcType="VARCHAR" property="confirmUserId" />
+    <result column="create_user_id" jdbcType="VARCHAR" property="createUserId" />
+    <result column="create_ts" jdbcType="TIMESTAMP" property="createTs" />
+    <result column="update_user_id" jdbcType="VARCHAR" property="updateUserId" />
+    <result column="update_ts" jdbcType="TIMESTAMP" property="updateTs" />
+    <result column="belong_team" jdbcType="VARCHAR" property="belongTeam" />
+    <result column="estimate_time" jdbcType="NUMERIC" property="estimateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, task_code, task_name, task_status, task_remark, is_deleted, task_start_time, 
+    task_end_time, jira_label, confirm_user_id, create_user_id, create_ts, update_user_id, 
+    update_ts, belong_team, estimate_time
+  </sql>
+  <select id="selectByCondition" parameterType="org.openokr.task.entity.TaskEntityCondition" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_okr_task
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <include refid="PostgreSqlPaginationSuffix" />
+  </select>
+  <delete id="deleteByCondition" parameterType="org.openokr.task.entity.TaskEntityCondition">
+    delete from t_okr_task
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <select id="countByCondition" parameterType="org.openokr.task.entity.TaskEntityCondition" resultType="java.lang.Long">
+    select count(*) from t_okr_task
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByCondition" parameterType="map">
+    update t_okr_task
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taskCode != null">
+        task_code = #{record.taskCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taskName != null">
+        task_name = #{record.taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taskStatus != null">
+        task_status = #{record.taskStatus,jdbcType=CHAR},
+      </if>
+      <if test="record.taskRemark != null">
+        task_remark = #{record.taskRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isDeleted != null">
+        is_deleted = #{record.isDeleted,jdbcType=CHAR},
+      </if>
+      <if test="record.taskStartTime != null">
+        task_start_time = #{record.taskStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.taskEndTime != null">
+        task_end_time = #{record.taskEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.jiraLabel != null">
+        jira_label = #{record.jiraLabel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.confirmUserId != null">
+        confirm_user_id = #{record.confirmUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTs != null">
+        create_ts = #{record.createTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateUserId != null">
+        update_user_id = #{record.updateUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTs != null">
+        update_ts = #{record.updateTs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.belongTeam != null">
+        belong_team = #{record.belongTeam,jdbcType=VARCHAR},
+      </if>
+      <if test="record.estimateTime != null">
+        estimate_time = #{record.estimateTime,jdbcType=NUMERIC},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <sql id="PostgreSqlPaginationSuffix">
+    <if test="page != null">
+      <![CDATA[ limit #{page.pageSize} offset #{page.recordStartPrev} ]]>
+    </if>
+  </sql>
+  <insert id="insertList" parameterType="java.util.List">
+     insert into t_okr_task ( id,task_code,task_name,task_status,task_remark,is_deleted,task_start_time,task_end_time,jira_label,confirm_user_id,create_user_id,create_ts,update_user_id,update_ts,belong_team,estimate_time ) values
+    <foreach collection="list" index="index" item="item" separator=",">
+       ( #{item.id,jdbcType=VARCHAR},#{item.taskCode,jdbcType=VARCHAR},#{item.taskName,jdbcType=VARCHAR},#{item.taskStatus,jdbcType=CHAR},#{item.taskRemark,jdbcType=VARCHAR},#{item.isDeleted,jdbcType=CHAR},#{item.taskStartTime,jdbcType=TIMESTAMP},#{item.taskEndTime,jdbcType=TIMESTAMP},#{item.jiraLabel,jdbcType=VARCHAR},#{item.confirmUserId,jdbcType=VARCHAR},#{item.createUserId,jdbcType=VARCHAR},#{item.createTs,jdbcType=TIMESTAMP},#{item.updateUserId,jdbcType=VARCHAR},#{item.updateTs,jdbcType=TIMESTAMP},#{item.belongTeam,jdbcType=VARCHAR},#{item.estimateTime,jdbcType=NUMERIC} )
+    </foreach>
+  </insert>
+</mapper>
