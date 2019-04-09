@@ -191,6 +191,7 @@ public class WeeklyStaManageService extends BaseServiceImpl implements IWeeklySt
                 pieData = new PieDataVO();
                 pieData.setName(data.getCategoryName());
                 pieData.setValue(data.getDuration().setScale(2, BigDecimal.ROUND_HALF_UP));
+                dataList.add(pieData);
             }
         }
         chartVO.setPieSeriesData(dataList);
