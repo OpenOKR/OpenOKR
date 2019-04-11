@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.openokr.common.vo.response.PageRequest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,8 +31,8 @@ public class DailySearchVO extends PageRequest {
     @ApiModelProperty(value = "填写人ID，不用传，后台自动填入当前登录人ID")
     private String reportUserId;
 
-    @ApiModelProperty(value = "填写人ID，不用传，前台不用填")
-    private List<String> reportUserIdList;
+    @ApiModelProperty(value = "填写人ID，如果要查指定某个人的日报则加入该list中，一个或者多个都支持一起查询")
+    private List<String> reportUserIdList = new ArrayList<String>();
 
     @ApiModelProperty(value = "项目ID，不筛选不用传")
     private String taskId;

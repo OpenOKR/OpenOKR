@@ -45,7 +45,13 @@ public class DailyManageService extends BaseServiceImpl implements IDailyManageS
             //如果是管理员，并且要查所有人的日报
             List<DailyVO> list = new ArrayList<>();
             if (StringUtils.isNotBlank(condition.getIsAdmin())){
-                List<String> userIdList = basicDBService.getUserIdListByAdminTeam(condition.getReportUserId());
+                List<String> userIdList = null;
+                //如果ReportUserId不为空表示管理员要查指定某个人的周报
+                if (condition.getReportUserIdList() != null && condition.getReportUserIdList().size() >0){
+                    userIdList = condition.getReportUserIdList();
+                } else {
+                    userIdList = basicDBService.getUserIdListByAdminTeam(condition.getReportUserId());
+                }
                 condition.setReportUserId(null);
                 if (userIdList.size()>0){
                     condition.setReportUserIdList(userIdList);

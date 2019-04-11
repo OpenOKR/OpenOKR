@@ -3,6 +3,7 @@ package org.openokr.task.vo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.openokr.sys.vo.UserVOSimplify;
 
 import java.util.List;
 
@@ -59,5 +60,8 @@ public class SearchConditionVO extends ShareVO {
 
     @ApiModelProperty(value = "是否是管理员,是管理员则传 1")
     private String isAdmin;
+
+    @ApiModelProperty(value = "用户信息 list，团队管理员才会有该列表，返回列表的第一条数据里才会有这个userVOList，前端无需传入数据")
+    private List<UserVOSimplify> userVOList;
 
 }

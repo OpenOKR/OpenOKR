@@ -14,7 +14,9 @@ import org.openokr.manage.service.IOkrTeamService;
 import org.openokr.manage.vo.TeamsExtVO;
 import org.openokr.manage.vo.TeamsSearchVO;
 import org.openokr.sys.entity.UserEntity;
+import org.openokr.sys.entity.UserEntityCondition;
 import org.openokr.sys.service.IUserService;
+import org.openokr.sys.vo.UserVOSimplify;
 import org.openokr.task.entity.*;
 import org.openokr.task.request.TaskSearchVO;
 import org.openokr.task.request.TeamTaskSearchVO;
@@ -514,12 +516,18 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
             if (conditionVO == null || StringUtils.isBlank(conditionVO.getUserId())){
                 throw new BusinessException("查询参数为空");
             }
+            List<String> userIdList = null;
+            List<UserVOSimplify> userVOList = null;
             //0开头的是管理员 00：超级管理员 01：系统管理员 02：普通管理员   10：用户
             //只要他是管理员就查，仅查一次
             if (TaskConstant.IS_ADMIN.equals(conditionVO.getIsAdmin())){
-                List<String> userIdList = basicDBService.getUserIdListByAdminTeam(conditionVO.getUserId());
+                userIdList = basicDBService.getUserIdListByAdminTeam(conditionVO.getUserId());
                 if (userIdList.size()>0){
                     conditionVO.setUserIdList(userIdList);
+                    UserEntityCondition condition = new UserEntityCondition();
+                    condition.createCriteria().andIdIn(userIdList);
+                    List<UserEntity> userEntityList =  selectByCondition(condition);
+                    userVOList = JSONUtils.objectToList(userEntityList,UserVOSimplify.class);
                 }else {
                     //如果是管理员查询，所属的userIdList没有数据直接返回空列表即可
                     logger.info("全部报工头部搜索条件查询-当前管理员所属团队相关人员为空");
@@ -529,6 +537,10 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
             }
             List<SearchConditionVO> conditionVOS = basicDBService.getSearchCondition(conditionVO);
             new FilterTaskName<SearchConditionVO>().filter(conditionVOS);
+            if (conditionVOS != null && conditionVOS.get(0) !=null){
+                conditionVOS.get(0).setUserVOList(userVOList);
+                conditionVOS.get(0).setUserIdList(userIdList);
+            }
             return conditionVOS;
         } catch (BusinessException e) {
             logger.error("搜索条件查询异常 busi-error:{}-->[conditionVO]={}", e.getMessage(), JSONUtils.objectToString(conditionVO), e);
@@ -539,6 +551,10 @@ public class TaskManageService extends BaseServiceImpl implements ITaskManageSer
         }
     }
 
+    /**
+     * 遍历list，如果有两个团队有同样的任务名称，则在后面加上团队名称
+     * @param <T>
+     */
     class FilterTaskName<T extends ShareVO> extends HashMap<String,Integer>{
         void filter(List<T> shareVOList){
             Set<String> taskNameList = new HashSet<>();
