@@ -61,7 +61,7 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
         this.update(resultsEntity);
 
         // 删除KR要更新O的进度
-        this.calculateObjectProgress(resultsEntity, userId);
+        this.calculateObjectProgress(resultsEntity, userId, false);
         addOrDelResultLogInfo("删除", resultsEntity, userId);
 
         // 删除对应消息
@@ -109,7 +109,7 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
             resultId = entity.getId();
 
             //计算O的进度
-            this.calculateObjectProgress(entity, userId);
+            this.calculateObjectProgress(entity, userId, true);
             addOrDelResultLogInfo("新增", entity, entity.getCreateUserId());
         } else { //更新
             ResultsEntity targetEntity = this.selectByPrimaryKey(ResultsEntity.class, resultId);
@@ -122,7 +122,7 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
             //如果修改了KR的目标值：要重新计算进度
             this.calculateResultProgress(targetEntity, targetEntity.getCurrentValue());
             //计算O的进度
-            this.calculateObjectProgress(targetEntity, userId);
+            this.calculateObjectProgress(targetEntity, userId, true);
 
             //更新KR信息
             this.update(targetEntity);
@@ -225,7 +225,7 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
         ObjectivesEntity objectivesEntity = this.selectByPrimaryKey(ObjectivesEntity.class, resultsEntity.getObjectId());
 
         //计算O的进度
-        this.calculateObjectProgress(resultsEntity, checkinsVO.getCreateUserId());
+        this.calculateObjectProgress(resultsEntity, checkinsVO.getCreateUserId(), false);
 
         // 消息通知影响团队
         List<TeamsVO> teamsVOList = okrTeamService.getObjectTeamRel(resultsEntity.getObjectId());
@@ -332,7 +332,7 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
     }
 
     //计算O的进度
-    private void calculateObjectProgress(ResultsEntity entity, String userId) {
+    private void calculateObjectProgress(ResultsEntity entity, String userId, boolean statusFlag) {
         String objectId = entity.getObjectId();
         ResultsEntityCondition resultsEntityCondition = new ResultsEntityCondition();
         resultsEntityCondition.createCriteria().andObjectIdEqualTo(objectId).andDelFlagEqualTo("0").
@@ -350,19 +350,25 @@ public class OkrResultService extends OkrBaseService implements IOkrResultServic
             count++;
             objectPreProgress = objectPreProgress.add(entity.getProgress());
         }
-        objectPreProgress = objectPreProgress.divide(new BigDecimal(count), 2, BigDecimal.ROUND_UP);
         ObjectivesEntity objectivesEntity = this.selectByPrimaryKey(ObjectivesEntity.class, objectId);
-        objectivesEntity.setProgress(objectPreProgress);
+        if (count != 0) {
+            objectPreProgress = objectPreProgress.divide(new BigDecimal(count), 2, BigDecimal.ROUND_UP);
+            objectivesEntity.setProgress(objectPreProgress);
+        } else {
+            objectivesEntity.setProgress(new BigDecimal(0));
+        }
 
         // 获取object所属团队责任人，若修改的目标所属团队责任人和当前用户一致，直接将状态设置为已确认
         TeamsEntity teamsEntity = this.selectByPrimaryKey(TeamsEntity.class, objectivesEntity.getTeamId());
         // 设置状态，当类型是 团队或公司时，不需要审核，其他情况下一律设置成未提交
-        if (objectivesEntity.getType().equals(ObjectivesTypeEnum.TYPE_2.getCode()) || objectivesEntity.getType().equals(ObjectivesTypeEnum.TYPE_3.getCode())) {
-            objectivesEntity.setStatus(ObjectivesStatusEnum.STATUS_3.getCode());
-        } else if (teamsEntity.getOwnerId().equals(userId)) {
-            objectivesEntity.setStatus(ObjectivesStatusEnum.STATUS_3.getCode());
-        } else {
-            objectivesEntity.setStatus(ObjectivesStatusEnum.STATUS_1.getCode());//一旦有修改,目标就要变成未提交状态
+        if (statusFlag) {
+            if (objectivesEntity.getType().equals(ObjectivesTypeEnum.TYPE_2.getCode()) || objectivesEntity.getType().equals(ObjectivesTypeEnum.TYPE_3.getCode())) {
+                objectivesEntity.setStatus(ObjectivesStatusEnum.STATUS_3.getCode());
+            } else if (teamsEntity.getOwnerId().equals(userId)) {
+                objectivesEntity.setStatus(ObjectivesStatusEnum.STATUS_3.getCode());
+            } else {
+                objectivesEntity.setStatus(ObjectivesStatusEnum.STATUS_1.getCode());//一旦有修改,目标就要变成未提交状态
+            }
         }
         objectivesEntity.setUpdateTs(new Date());
         objectivesEntity.setUpdateUserId(userId);
