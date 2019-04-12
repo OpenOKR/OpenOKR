@@ -27,7 +27,7 @@
         WHERE
             a.belong_team = #{condition.teamId}
         GROUP BY
-            t1. ID
+            c.category_name,d.product_name
         ORDER BY
             duration DESC
     </select>
@@ -48,13 +48,13 @@
                 FROM
                     t_okr_task t1
                 INNER JOIN t_okr_daily t2 ON t1. ID = t2.task_id
-                AND to_char(t2.report_day, 'yyyy-MM-dd') >= #{ condition .reportStartDateStr }
-                AND to_char(t2.report_day, 'yyyy-MM-dd') <= #{ condition .reportEndDateStr }
+                AND to_char(t2.report_day, 'yyyy-MM-dd') >= #{condition.reportStartDateStr}
+                AND to_char(t2.report_day, 'yyyy-MM-dd') <= #{condition.reportEndDateStr}
                 INNER JOIN t_okr_task_apportion t3 ON t1. ID = t3.task_id
                 INNER JOIN t_okr_apportion_category t4 ON t3.category_id = t4. ID
                 INNER JOIN t_okr_product_info t5 ON t3.apportion_name_id = t5. ID
                 WHERE
-                    t1.belong_team = #{ condition .teamId }
+                    t1.belong_team = #{condition.teamId}
                 AND t3.category_id IS NOT NULL
                 AND t3.category_id != ''
             ) T
