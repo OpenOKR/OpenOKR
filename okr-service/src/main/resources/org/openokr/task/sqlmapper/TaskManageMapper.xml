@@ -304,6 +304,9 @@
             <if test="vo.queryEndDate != null">
                 <![CDATA[ and t3.report_day <= #{vo.queryEndDate} ]]>
             </if>
+            <if test="vo.isAdmin==null or vo.isAdmin!='1'.toString()">
+                and t1.belong_team =#{vo.teamId}
+            </if>
         </where>
     </sql>
 
