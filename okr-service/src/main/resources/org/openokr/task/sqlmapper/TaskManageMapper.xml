@@ -26,7 +26,7 @@
             </if>
             <if test="vo.isAdmin != null and vo.isAdmin == '0'.toString()">
                 <if test="vo.currentUserId != null and vo.currentUserId !=''">
-                    t4.user_id = #{vo.currentUserId}
+                    and t4.user_id = #{vo.currentUserId}
                 </if>
             </if>
         </where>
@@ -58,7 +58,7 @@
             </if>
             <if test="vo.isAdmin != null and vo.isAdmin == '0'.toString()">
                 <if test="vo.currentUserId != null and vo.currentUserId !=''">
-                    t4.user_id = #{vo.currentUserId}
+                    and t4.user_id = #{vo.currentUserId}
                 </if>
             </if>
         </where>
