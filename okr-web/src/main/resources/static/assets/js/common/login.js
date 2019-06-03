@@ -46,7 +46,6 @@ require(["jQuery"], function () {
         //登录验证码请求
         if (parseInt(pageObj.loginFailCount) > 3) {
             $('#validateCodeDiv').show();
-            $('#validateCodeDiv').style.visibility='visible';
             $('#validateCodeDiv').append("<img id='validateCodeImg' src='" + App.contextPath + "/validateCodeServlet'/>");
         }
         //登录错误消息
