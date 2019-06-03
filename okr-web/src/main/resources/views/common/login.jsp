@@ -25,7 +25,7 @@
                             <div class="msg-box error"><i class="iconfont icon-waring"></i>${message}</div>
                         </div>
                         <!-- 输错三次出现验证码 -->
-                        <div class="item item-code item-focus" style="display:none" id="validateCodeDiv">
+                        <div class="item item-code item-focus" style="display: none;" id="validateCodeDiv">
                             <label class="lab-sub"> 验证码 </label>
                             <input id="validateCode" name="validateCode" type="text"/>
                         </div>
