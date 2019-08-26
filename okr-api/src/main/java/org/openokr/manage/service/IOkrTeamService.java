@@ -4,6 +4,7 @@ package org.openokr.manage.service;
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.exception.BusinessException;
 import org.openokr.manage.vo.TeamsExtVO;
+import org.openokr.manage.vo.TeamsMapVO;
 import org.openokr.manage.vo.TeamsSearchVO;
 import org.openokr.manage.vo.TeamsVO;
 import org.openokr.sys.vo.UserVO;
@@ -124,4 +125,11 @@ public interface IOkrTeamService {
      * @return
      */
     ResponseResult transfer(String teamId, String userId, String currentUserId);
+
+    /**
+     * 递归获取okr地图
+     * @param timeSessionId
+     * @return
+     */
+    TeamsMapVO getMap(String timeSessionId) throws BusinessException;
 }
