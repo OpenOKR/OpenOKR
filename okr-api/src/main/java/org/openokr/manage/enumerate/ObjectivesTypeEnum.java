@@ -97,4 +97,7 @@ public enum ObjectivesTypeEnum {
         }
         return _enum;
     }
+
+    //顶级公司Id
+    public static final String TOP_CORP_ID = "1";
 }

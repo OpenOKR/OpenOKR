@@ -3,16 +3,14 @@ package org.openokr.manage.service;
 
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.exception.BusinessException;
-import io.swagger.models.auth.In;
-import org.openokr.manage.vo.*;
 import org.openokr.manage.vo.MessagesExtVO;
 import org.openokr.manage.vo.ObjectivesExtVO;
+import org.openokr.manage.vo.OkrMapVO;
 import org.openokr.manage.vo.OkrObjectSearchVO;
 import org.openokr.sys.vo.UserVO;
 import org.openokr.sys.vo.UserVOExt;
 import org.openokr.sys.vo.request.TreeDataVO;
 import org.openokr.task.vo.TaskKrInfoVO;
-import org.openokr.task.vo.TaskKrRelVO;
 
 import java.util.List;
 
@@ -157,5 +155,13 @@ public interface IOkrObjectService {
      * @throws BusinessException
      */
     Integer countObjectRelUserNum(String krId)  throws BusinessException;
+
+    /**
+     * 获取okr地图
+     * @param timeSessionId
+     * @return
+     * @throws BusinessException
+     */
+    OkrMapVO getMap(String timeSessionId) throws BusinessException;
 
 }

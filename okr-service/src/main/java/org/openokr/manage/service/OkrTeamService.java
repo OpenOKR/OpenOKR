@@ -6,11 +6,12 @@ import com.zzheng.framework.base.utils.JSONUtils;
 import com.zzheng.framework.base.utils.StringUtils;
 import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.service.impl.BaseServiceImpl;
-import org.openokr.common.constant.MapConstant;
 import org.openokr.manage.entity.TeamUserRelaEntity;
 import org.openokr.manage.entity.TeamUserRelaEntityCondition;
 import org.openokr.manage.entity.TeamsEntity;
-import org.openokr.manage.vo.*;
+import org.openokr.manage.vo.TeamsExtVO;
+import org.openokr.manage.vo.TeamsSearchVO;
+import org.openokr.manage.vo.TeamsVO;
 import org.openokr.sys.service.IUserService;
 import org.openokr.sys.vo.UserVO;
 import org.openokr.task.request.TeamTaskSearchVO;
@@ -29,8 +30,6 @@ public class OkrTeamService extends BaseServiceImpl implements IOkrTeamService {
 
     @Autowired
     IUserService userService;
-    @Autowired
-    IOkrObjectService okrObjectService;
 
     @Override
     public List<TeamsExtVO> getTeamByUserId(String userId) throws BusinessException {
@@ -288,85 +287,6 @@ public class OkrTeamService extends BaseServiceImpl implements IOkrTeamService {
         }
         return new ResponseResult(true, null, "操作成功！");
     }
-
-    @Override
-    public TeamsMapVO getMap(String timeSessionId) throws BusinessException {
-        try {
-            if (timeSessionId == null) {
-                throw new BusinessException("查询参数为空");
-            }
-
-            TeamsExtVO teamsExtVO = getByTeamId(MapConstant.TOP_CORP_ID);
-            TeamsMapVO mapVO = new TeamsMapVO();
-            mapVO.setId(teamsExtVO.getId());
-            mapVO.setLayer(MapConstant.LAYER_CORP);
-            mapVO.setLabel(teamsExtVO.getName());
-
-            OkrObjectSearchVO okrObjectSearchVO = new OkrObjectSearchVO();
-            okrObjectSearchVO.setTimeSessionId(timeSessionId);
-            okrObjectSearchVO.setType(MapConstant.LAYER_CORP_CODE);
-            okrObjectSearchVO.setTeamId(mapVO.getId());
-            List<ObjectivesExtVO> extVOList = okrObjectService.getOkrListByType(okrObjectSearchVO);
-
-            mapVO = recursionMap(mapVO, teamsExtVO.getParentId());
-
-            return null;
-        } catch (BusinessException e) {
-            logger.error(" 递归获取okr地图 busi-error:{}-->[timeSessionId]={}", e.getMessage(), timeSessionId, e);
-            throw e;
-        } catch (Exception e) {
-            logger.error(" 递归获取okr地图 error:{}-->[timeSessionId]={}", e.getMessage(), timeSessionId, e);
-            throw new BusinessException(" 递归获取okr地图 失败");
-        }
-    }
-
-    private TeamsMapVO recursionMap(TeamsMapVO mapVO, String parentId) throws BusinessException {
-        Map<String, Object> pMap = new HashMap<>();
-        pMap.put("teamId", mapVO.getId());
-        List<UserVO> userVOList = this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE + ".getUserByTeamId", pMap);
-        if(userVOList != null && userVOList.size() > 0){
-            for(UserVO userVO : userVOList){
-                TeamsMapVO vo = new TeamsMapVO();
-                vo.setId(userVO.getId());
-                vo.setLayer(MapConstant.LAYER_STAFF);
-                vo.setLabel(userVO.getUserName());
-                List<TeamsMapVO> mapList = mapVO.getChildren();
-                if(mapList == null){
-                    mapList = new ArrayList<>();
-                }
-                mapList.add(vo);
-                mapVO.setChildren(mapList);
-            }
-        }
-
-
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("parentId", parentId);
-        List<TeamsVO> list = this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE + ".getTeamsByParentId", paramMap);
-        if(list == null || list.size() == 0){
-            return null;
-        }
-        for(TeamsVO teamsVO : list){
-            TeamsMapVO vo = new TeamsMapVO();
-            vo.setId(teamsVO.getId());
-            vo.setLayer(MapConstant.LAYER_TEAM);
-            vo.setLabel(teamsVO.getName());
-            List<TeamsMapVO> mapList = mapVO.getChildren();
-            if(mapList == null){
-                mapList = new ArrayList<>();
-            }
-            mapList.add(vo);
-            mapVO.setChildren(mapList);
-        }
-        for (TeamsMapVO vo : mapVO.getChildren()) {
-            if(vo.getLayer().equals(MapConstant.LAYER_CORP) || vo.getLayer().equals(MapConstant.LAYER_TEAM)){
-                recursionMap(vo, vo.getId());
-            }
-        }
-        return mapVO;
-    }
-
-
 }
 
     

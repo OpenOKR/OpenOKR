@@ -9,11 +9,7 @@ import org.openokr.application.web.BaseController;
 import org.openokr.manage.service.IOkrMessageService;
 import org.openokr.manage.service.IOkrObjectService;
 import org.openokr.manage.service.IOkrTeamService;
-import org.openokr.manage.vo.MessagesExtVO;
-import org.openokr.manage.vo.MessagesVO;
-import org.openokr.manage.vo.ObjectivesExtVO;
-import org.openokr.manage.vo.OkrObjectSearchVO;
-import org.openokr.manage.vo.TeamsExtVO;
+import org.openokr.manage.vo.*;
 import org.openokr.sys.vo.request.TreeDataVO;
 import org.openokr.utils.StringUtils;
 import org.openokr.utils.UserUtils;
@@ -25,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -67,6 +64,25 @@ public class OkrObjectController extends BaseController {
         }
         List<ObjectivesExtVO> objectivesExtList = okrObjectService.getOkrListByType(searchVO);
         responseResult.setInfo(objectivesExtList);
+        return responseResult;
+    }
+
+    /**
+     * 获取OKR地图
+     * @return
+     */
+    @RequestMapping(value = "/getOkrMap.json")
+    @ResponseBody
+    public ResponseResult getOkrMap(@JsonPathParam("$.searchVO") OkrObjectSearchVO searchVO) {
+
+        ResponseResult responseResult = new ResponseResult();
+        if (StringUtils.isEmpty(searchVO.getUserId())) {
+            searchVO.setUserId(getCurrentUserId());
+        }
+        OkrMapVO okrMapVO = okrObjectService.getMap(searchVO.getTimeSessionId());
+        List<OkrMapVO> list = new ArrayList<>();
+        list.add(okrMapVO);
+        responseResult.setInfo(list);
         return responseResult;
     }
 

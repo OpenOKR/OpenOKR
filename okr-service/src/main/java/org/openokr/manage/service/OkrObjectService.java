@@ -8,19 +8,6 @@ import org.apache.commons.collections.ListUtils;
 import org.openokr.application.framework.service.OkrBaseService;
 import org.openokr.application.utils.GetChangeDateUtil;
 import org.openokr.manage.entity.*;
-import org.openokr.manage.entity.LogEntity;
-import org.openokr.manage.entity.LogEntityCondition;
-import org.openokr.manage.entity.MessagesEntity;
-import org.openokr.manage.entity.MessagesEntityCondition;
-import org.openokr.manage.entity.ObjectLabelRelaEntity;
-import org.openokr.manage.entity.ObjectLabelRelaEntityCondition;
-import org.openokr.manage.entity.ObjectTeamRelaEntity;
-import org.openokr.manage.entity.ObjectTeamRelaEntityCondition;
-import org.openokr.manage.entity.ObjectivesEntity;
-import org.openokr.manage.entity.ObjectivesEntityCondition;
-import org.openokr.manage.entity.ResultsEntity;
-import org.openokr.manage.entity.ResultsEntityCondition;
-import org.openokr.manage.entity.TeamsEntity;
 import org.openokr.manage.enumerate.MessageMarkEnum;
 import org.openokr.manage.enumerate.MessageTypeEnum;
 import org.openokr.manage.enumerate.ObjectivesStatusEnum;
@@ -751,6 +738,107 @@ public class OkrObjectService extends OkrBaseService implements IOkrObjectServic
             logVO.setCreateUserId(targetEntity.getUpdateUserId());
             this.saveOkrLog(logVO);
         }
+    }
+
+    @Override
+    public OkrMapVO getMap(String timeSessionId) throws BusinessException{
+        try {
+            if (timeSessionId == null) {
+                throw new BusinessException("查询参数为空");
+            }
+
+            OkrObjectSearchVO okrObjectSearchVO = new OkrObjectSearchVO();
+            okrObjectSearchVO.setTimeSessionId(timeSessionId);
+            okrObjectSearchVO.setType(ObjectivesTypeEnum.TYPE_3.getCode());
+            okrObjectSearchVO.setTeamId(ObjectivesTypeEnum.TOP_CORP_ID);
+            List<ObjectivesExtVO> extVOList = getOkrListByType(okrObjectSearchVO);
+            if(extVOList == null || extVOList.size() == 0){
+                return null;
+            }
+            OkrMapVO okrMapVO = new OkrMapVO();
+            okrMapVO.setLayer(ObjectivesTypeEnum.getByCode(extVOList.get(0).getType()).getName());
+            okrMapVO.setOrgName(extVOList.get(0).getTeamName());
+
+            List<OkrMapVO> mapVOList = new ArrayList<>();
+            for(ObjectivesExtVO extVO : extVOList){
+                OkrMapVO mapVO = new OkrMapVO();
+                mapVO.setId(extVO.getId());
+                mapVO.setLayer(ObjectivesTypeEnum.getByCode(extVO.getType()).getName());
+                mapVO.setOrgName(extVO.getTeamName());
+                mapVO.setObjective(extVO.getName());
+                if(extVO.getProgress() != null){
+                    mapVO.setProgress(Integer.toString(extVO.getProgress().intValue()));
+                }
+                if(extVO.getResultsExtList() != null && extVO.getResultsExtList().size() > 0){
+                    for(ResultsExtVO vo : extVO.getResultsExtList()){
+                        ObjectiveVO objectiveVO = new ObjectiveVO();
+                        objectiveVO.setKey(vo.getId());
+                        objectiveVO.setContent(vo.getName());
+                        List<ObjectiveVO> objectiveVOList = mapVO.getKeys();
+                        objectiveVOList.add(objectiveVO);
+                        mapVO.setKeys(objectiveVOList);
+                    }
+                }
+                mapVOList.add(mapVO);
+            }
+            for(OkrMapVO mapVO : mapVOList){
+                mapVO = recursionMap(mapVO, mapVO.getId(), timeSessionId);
+            }
+            okrMapVO.setChildren(mapVOList);
+            return okrMapVO;
+        } catch (BusinessException e) {
+            logger.error(" 递归获取okr地图 busi-error:{}-->[timeSessionId]={}", e.getMessage(), timeSessionId, e);
+            throw e;
+        } catch (Exception e) {
+            logger.error(" 递归获取okr地图 error:{}-->[timeSessionId]={}", e.getMessage(), timeSessionId, e);
+            throw new BusinessException(" 递归获取okr地图 失败");
+        }
+    }
+
+    private OkrMapVO recursionMap(OkrMapVO okrMapVO, String parentId, String timeSessionId) throws BusinessException{
+        List<ObjectivesExtVO> extVOList = getOkrListByParentId(parentId, timeSessionId);
+        if(extVOList == null || extVOList.size() == 0){
+            return null;
+        }
+
+        List<OkrMapVO> mapVOList = new ArrayList<>();
+        for(ObjectivesExtVO extVO : extVOList){
+            OkrMapVO mapVO = new OkrMapVO();
+            mapVO.setId(extVO.getId());
+            mapVO.setLayer(ObjectivesTypeEnum.getByCode(extVO.getType()).getName());
+            mapVO.setOrgName(extVO.getTeamName());
+            mapVO.setObjective(extVO.getName());
+            if(extVO.getProgress() != null){
+                mapVO.setProgress(Integer.toString(extVO.getProgress().intValue()));
+            }
+            if(extVO.getResultsExtList() != null && extVO.getResultsExtList().size() > 0){
+                for(ResultsExtVO vo : extVO.getResultsExtList()){
+                    ObjectiveVO objectiveVO = new ObjectiveVO();
+                    objectiveVO.setKey(vo.getId());
+                    objectiveVO.setContent(vo.getName());
+                    List<ObjectiveVO> objectiveVOList = mapVO.getKeys();
+                    objectiveVOList.add(objectiveVO);
+                    mapVO.setKeys(objectiveVOList);
+                }
+            }
+            mapVOList.add(mapVO);
+        }
+        okrMapVO.setChildren(mapVOList);
+        for(OkrMapVO mapVO : mapVOList){
+            recursionMap(mapVO, mapVO.getId(), timeSessionId);
+        }
+
+        return okrMapVO;
+    }
+
+    private List<ObjectivesExtVO> getOkrListByParentId(String parentId, String timeSessionId) throws BusinessException {
+        Map<String,Object> paramMap = new HashMap<>();
+        paramMap.put("parentId", parentId);
+        paramMap.put("timeSessionId", timeSessionId);
+        List<ObjectivesExtVO> objectivesExtList = this.getDao().selectListBySql(MAPPER_NAMESPACE+".getOkrListByParentId", paramMap);
+        // 设置KR信息
+        this.setKrInfo(objectivesExtList, new OkrObjectSearchVO());
+        return objectivesExtList;
     }
 
 }
