@@ -10,10 +10,7 @@ import org.openokr.common.constant.MapConstant;
 import org.openokr.manage.entity.TeamUserRelaEntity;
 import org.openokr.manage.entity.TeamUserRelaEntityCondition;
 import org.openokr.manage.entity.TeamsEntity;
-import org.openokr.manage.vo.TeamsExtVO;
-import org.openokr.manage.vo.TeamsMapVO;
-import org.openokr.manage.vo.TeamsSearchVO;
-import org.openokr.manage.vo.TeamsVO;
+import org.openokr.manage.vo.*;
 import org.openokr.sys.service.IUserService;
 import org.openokr.sys.vo.UserVO;
 import org.openokr.task.request.TeamTaskSearchVO;
@@ -32,6 +29,8 @@ public class OkrTeamService extends BaseServiceImpl implements IOkrTeamService {
 
     @Autowired
     IUserService userService;
+    @Autowired
+    IOkrObjectService okrObjectService;
 
     @Override
     public List<TeamsExtVO> getTeamByUserId(String userId) throws BusinessException {
@@ -303,6 +302,11 @@ public class OkrTeamService extends BaseServiceImpl implements IOkrTeamService {
             mapVO.setLayer(MapConstant.LAYER_CORP);
             mapVO.setLabel(teamsExtVO.getName());
 
+            OkrObjectSearchVO okrObjectSearchVO = new OkrObjectSearchVO();
+            okrObjectSearchVO.setTimeSessionId(timeSessionId);
+            okrObjectSearchVO.setType(MapConstant.LAYER_CORP_CODE);
+            okrObjectSearchVO.setTeamId(mapVO.getId());
+            List<ObjectivesExtVO> extVOList = okrObjectService.getOkrListByType(okrObjectSearchVO);
 
             mapVO = recursionMap(mapVO, teamsExtVO.getParentId());
 
@@ -345,7 +349,7 @@ public class OkrTeamService extends BaseServiceImpl implements IOkrTeamService {
         for(TeamsVO teamsVO : list){
             TeamsMapVO vo = new TeamsMapVO();
             vo.setId(teamsVO.getId());
-            vo.setLayer(MapConstant.LAYER_CORP);
+            vo.setLayer(MapConstant.LAYER_TEAM);
             vo.setLabel(teamsVO.getName());
             List<TeamsMapVO> mapList = mapVO.getChildren();
             if(mapList == null){
@@ -355,7 +359,7 @@ public class OkrTeamService extends BaseServiceImpl implements IOkrTeamService {
             mapVO.setChildren(mapList);
         }
         for (TeamsMapVO vo : mapVO.getChildren()) {
-            if(vo.getLayer().equals(MapConstant.LAYER_CORP)){
+            if(vo.getLayer().equals(MapConstant.LAYER_CORP) || vo.getLayer().equals(MapConstant.LAYER_TEAM)){
                 recursionMap(vo, vo.getId());
             }
         }
