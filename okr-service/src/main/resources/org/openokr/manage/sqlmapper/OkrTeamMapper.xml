@@ -146,4 +146,19 @@
             </if>
         </where>
     </select>
+
+    <!--根据parent_id查找子团队-->
+    <select id="getTeamsByParentId" parameterType="java.util.Map" resultType="org.openokr.manage.vo.TeamsVO">
+        SELECT * FROM t_okr_teams
+        where parent_id = #{parentId} and id != #{parentId}
+    </select>
+
+    <!--根据team_id查找团队下所有成员-->
+    <select id="getUserByTeamId" parameterType="java.util.Map" resultType="org.openokr.sys.vo.UserVO">
+        select t2.id, t2.user_name from t_okr_team_user_rela t1
+          left join t_okr_sys_user t2
+          on t1.user_id = t2.id
+        where t1.team_id = #{teamId} and t2.id != '';
+    </select>
+
 </mapper>
