@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -67,24 +66,7 @@ public class OkrObjectController extends BaseController {
         return responseResult;
     }
 
-    /**
-     * 获取OKR地图
-     * @return
-     */
-    @RequestMapping(value = "/getOkrMap.json")
-    @ResponseBody
-    public ResponseResult getOkrMap(@JsonPathParam("$.searchVO") OkrObjectSearchVO searchVO) {
 
-        ResponseResult responseResult = new ResponseResult();
-        if (StringUtils.isEmpty(searchVO.getUserId())) {
-            searchVO.setUserId(getCurrentUserId());
-        }
-        OkrMapVO okrMapVO = okrObjectService.getMap(searchVO.getTimeSessionId());
-        List<OkrMapVO> list = new ArrayList<>();
-        list.add(okrMapVO);
-        responseResult.setInfo(list);
-        return responseResult;
-    }
 
     /**
      * OKR详情页面
