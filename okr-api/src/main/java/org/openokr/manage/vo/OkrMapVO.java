@@ -40,7 +40,7 @@ public class OkrMapVO extends BaseVO implements Serializable {
     /**
      * 前端使用
      */
-    private String showContent = "false";
+    private Boolean showContent = false;
 
     private List<ObjectiveVO> keys = new ArrayList<>();
 
