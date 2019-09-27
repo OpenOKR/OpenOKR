@@ -56,13 +56,6 @@ server:
 
 spring:
   profiles: local
-logging:
-  file: ../log/okr-m-web
-
-framework:
-  dubbo:
-    registry1:
-      address: zookeeper://localhost:2181;
 app:
   jsDebug: true
   staticResourceVersion: dev

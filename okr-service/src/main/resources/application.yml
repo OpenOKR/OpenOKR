@@ -25,7 +25,7 @@ framework:
     protocol:
       port: 20254
     registry1:
-      address: zookeeper://zkserver1:2181;zookeeper://zkserver2:2181
+      address: zookeeper://zkserver1:2181;
       file: /data/log/okr/okr-service-log/okr-service-dubbo1.cache
 
 logging:
@@ -41,24 +41,18 @@ app:
 spring:
   profiles: local
   datasource:
-    url: jdbc:postgresql://172.16.11.35:5433/okr_dev
+    url: jdbc:postgresql://pgserver:5432/okr_dev
     username: okr_dev
     password: okr_dev
 
 logging:
   file: ../log/okr_service
 
-framework:
-  dubbo:
-    registry1:
-      address: zookeeper://localhost:2181;
-      file: ./log/okr-service-dubbo1.cache
-
 ---
 spring:
   profiles: dev
   datasource:
-    url: jdbc:postgresql://172.16.11.35:5433/okr_dev
+    url: jdbc:postgresql://pgserver:5432/okr_dev
     username: okr_dev
     password: okr_dev
 
@@ -66,7 +60,7 @@ spring:
 spring:
   profiles: test
   datasource:
-    url: jdbc:postgresql://172.16.11.35:5433/okr_dev
+    url: jdbc:postgresql://pgserver:5432/okr_dev
     username: okr_dev
     password: okr_dev
 
@@ -74,7 +68,7 @@ spring:
 spring:
   profiles: uat
   datasource:
-    url: jdbc:postgresql://xxx.xxx.xxx.xxx:5433/okr_uat
+    url: jdbc:postgresql://pgserver:5432/okr_uat
     username: okr_uat
     password: okr_uat
 
@@ -82,6 +76,6 @@ spring:
 spring:
   profiles: prd
   datasource:
-    url: jdbc:postgresql://127.0.0.1:5432/okr
+    url: jdbc:postgresql://pgserver:5432/okr
     username: okr
     password: okr
