@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ehcache name="defaultCache" updateCheck="false">
 
-    <diskStore path="ehcache/okr-web" />
+    <diskStore path="/data/log/okr/okr-web-log/ehcache" />
 
     <!-- 默认缓存配置. -->
     <defaultCache maxEntriesLocalHeap="100" eternal="false" timeToIdleSeconds="300" timeToLiveSeconds="600"

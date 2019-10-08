@@ -36,13 +36,13 @@ framework:
 logging:
   config: classpath:logback.xml
   level:
-    root: debug
+    root: info
   file: /data/log/okr/okr-web-log/okr-web
 
 app:
   defaultPassword: 123456
   multiAccountLogin: true
-  jsDebug: false
+  jsDebug: true
   staticResourceVersion: $[mvn.staticResourceVersion]
 
 ---
@@ -59,7 +59,9 @@ spring:
 app:
   jsDebug: true
   staticResourceVersion: dev
-
+logging:
+  level:
+    root: debug
 ---
 spring:
   profiles: dev
@@ -82,6 +84,5 @@ spring:
 ---
 spring:
   profiles: prd
-
 app:
   jsDebug: true

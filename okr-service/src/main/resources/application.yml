@@ -2,17 +2,10 @@
 spring:
   profiles:
     active: local
-  aop:
-    auto: true
-    proxy-target-class: true
   datasource:
     name: dataSource
-    type: org.apache.tomcat.jdbc.pool.DataSource
+    type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: org.postgresql.Driver
-    tomcat:
-      jdbc-interceptors: ConnectionState;StatementFinalizer
-      validation-query: select 1
-
 framework:
   mybatis:
     base-packages: org.openokr,com.zzheng.framework
@@ -46,7 +39,8 @@ spring:
     password: okr_dev
 
 logging:
-  file: ../log/okr_service
+  level:
+    root: debug
 
 ---
 spring:
