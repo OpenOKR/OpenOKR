@@ -171,7 +171,7 @@ require(["jQuery"], function () {
                     require(["artDialog"], function () {
                         artDialogUtil.confirm("确认删除机构（" + selectedNodes[0].name + "）吗？", function () {
                             $.ajax({
-                                url: App["contextPath"] + "/ssm/organization/delete.json?id=" + selectedNodes[0].id,
+                                url: App["contextPath"] + "/sys/organization/delete.json?id=" + selectedNodes[0].id,
                                 dataType: "json",
                                 success: function (data) {
                                     if (data.success) {
