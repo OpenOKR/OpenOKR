@@ -8,15 +8,19 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
-import org.openokr.application.web.ValidateCodeServlet;
+import org.openokr.application.ldap.AuthUser;
+import org.openokr.application.utils.PasswordUtil;
 import org.openokr.sys.service.IUserService;
 import org.openokr.sys.vo.*;
 import org.openokr.utils.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.naming.NamingException;
 import java.io.Serializable;
 import java.util.List;
 
@@ -25,6 +29,8 @@ import java.util.List;
  */
 @Service
 public class AuthRealm extends AuthorizingRealm {
+
+    protected static Logger logger = LoggerFactory.getLogger(AuthRealm.class);
 
     @Value("${app.multiAccountLogin}")
     private Boolean userMultiAccountLog;
@@ -45,21 +51,47 @@ public class AuthRealm extends AuthorizingRealm {
             failCount = Integer.parseInt(CacheUtils.get(UserUtils.USER_CACHE, key).toString());
         }
         //校验登录验证码
-        String code = (String) session.getAttribute(ValidateCodeServlet.VALIDATE_CODE);
-        if (failCount > 3) {
-            if ((token.getCaptcha() == null || !token.getCaptcha().toUpperCase().equals(code.toUpperCase()))) {
-                throw new AuthenticationException("msg:验证码错误,请重试.");
-            }
-        }
+//        String code = (String) session.getAttribute(ValidateCodeServlet.VALIDATE_CODE);
+//        if (failCount > 3) {
+//            if ((token.getCaptcha() == null || !token.getCaptcha().toUpperCase().equals(code.toUpperCase()))) {
+//                throw new AuthenticationException("msg:验证码错误,请重试.");
+//            }
+//        }
 
         //校验用户名密码
+        //------------------- ldap验证 start ------------------------------//
+        //ldap 验证成功标志
+        Boolean ldapVerify = false;
+        char[] password = token.getPassword();
+        StringBuilder passwordStr = new StringBuilder();
+        for (int i = 0; i < password.length; i++) {
+            passwordStr.append(password[i]);
+        }
+        try {
+            String userInfo = AuthUser.findUser(token.getUsername(),passwordStr.toString());
+            ldapVerify = true;
+            logger.info("通过LDAP进行用户验证-成功 用户信息：" + userInfo);
+        } catch (NamingException e) {
+            ldapVerify = false;
+            logger.warn("通过LDAP进行用户验证-验证失败 cause ：" + e.getCause());
+        }
+        //------------------- ldap验证 end ------------------------------//
         UserVO user = userService.getByUserName(token.getUsername());
         if (user != null) {
             // 用户是否激活
             if (!user.getActive()) {
                 throw new AuthenticationException("msg:用户被禁用，请联系管理员！");
             }
-            byte[] salt = Encodes.decodeHex(user.getSalt());
+            byte[] salt;
+            if (ldapVerify) {
+                //如果ldap认证通过则将用户密码换为ldap的密码，加密方式与原系统的加密方式需要一致
+                PasswordUtil.HashPassword hashPassword = PasswordUtil.encrypt(passwordStr.toString());
+                user.setPassword(hashPassword.getPassword());
+                salt = Encodes.decodeHex(hashPassword.getSalt());
+            } else {
+                //原系统的盐
+                salt = Encodes.decodeHex(user.getSalt());
+            }
             return new SimpleAuthenticationInfo(new Principal(user, token.isMobileLogin()),
                     user.getPassword(), ByteSource.Util.bytes(salt), getName());
         }
