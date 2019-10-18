@@ -1,5 +1,6 @@
 package org.openokr.application.shiro;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -8,7 +9,7 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
-import org.openokr.application.ldap.AuthUser;
+import org.openokr.application.ldap.LdapUser;
 import org.openokr.application.utils.PasswordUtil;
 import org.openokr.sys.service.IUserService;
 import org.openokr.sys.vo.*;
@@ -68,12 +69,20 @@ public class AuthRealm extends AuthorizingRealm {
             passwordStr.append(password[i]);
         }
         try {
-            String userInfo = AuthUser.findUser(token.getUsername(),passwordStr.toString());
+            String userInfo = LdapUser.findUser(token.getUsername(),passwordStr.toString());
             ldapVerify = true;
             logger.info("通过LDAP进行用户验证-成功 用户信息：" + userInfo);
         } catch (NamingException e) {
             ldapVerify = false;
             logger.warn("通过LDAP进行用户验证-验证失败 cause ：" + e.getCause());
+        }
+        try {
+            String userListJsonStr = LdapUser.getUserByFiler(token.getUsername(), passwordStr.toString(), "00");
+            UserListDataVO userListDataVO = JSON.parseObject(userListJsonStr, UserListDataVO.class);
+            List<UserVO> userVOList = userListDataVO.getUserList();
+            userService.mergeUserFromLdap(userVOList, "00");
+        } catch (Exception e) {
+            logger.warn("同步用户-失败 cause ：" + e.getCause());
         }
         //------------------- ldap验证 end ------------------------------//
         UserVO user = userService.getByUserName(token.getUsername());

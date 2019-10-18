@@ -75,7 +75,7 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/user/updatePassword.json")
     @ResponseBody
     public ResponseResult updatePassword(String oldPassword, String newPassword, String confirmNewPassword) {
-        return userService.updatePassword(this.getCurrentUserId(), oldPassword, newPassword, confirmNewPassword);
+        return userService.editPassword(this.getCurrentUserId(), oldPassword, newPassword, confirmNewPassword);
     }
 
     @ApiOperation(value = "确认用户是否登录", notes = "确认用户是否登录")

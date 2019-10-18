@@ -63,4 +63,33 @@ public interface IUserService {
      * @throws BusinessException
      */
     boolean checkUserIsAdmin(String userId) throws BusinessException;
+
+    /**
+     * 同步更新okr用户，来自ldap的用户与okr用户进行遍历比对，如果存在ldap存在的用户则新增okr对应的用户
+     * 可使用 userRole | orgId 来筛选用于筛选的 okr 用户结果
+     * @param userVOList
+     * @param userRole 用户角色类型，用于筛选okr用户的角色
+     *                 00 : ldap用户中 管理员  对应 yqb-okr-user 管理员用户
+     *                 01 ：ldap用户中普通用户 对应 yqb-okr-user 普通用户
+     *                 若存在 ldap 多于 okr 的用户，也将用该 userRole 创建新用户
+     *                 相关关系在 RoleEnum 中进行对应与添加
+     * @throws BusinessException
+     */
+    void mergeUserFromLdap(List<UserVO> userVOList, String userRole) throws BusinessException;
+
+
+    /**
+     * 根据用户角色+组织id筛选用户
+     * @param role
+     * @param orgId
+     * @return
+     * @throws BusinessException
+     */
+    List<UserVO> getUserListByCondition(String role, String orgId) throws BusinessException;
+
+    /**
+     * 同步来自 ldap 系统用户
+     * @throws BusinessException
+     */
+    void syncUserFromLdap() throws BusinessException;
 }
