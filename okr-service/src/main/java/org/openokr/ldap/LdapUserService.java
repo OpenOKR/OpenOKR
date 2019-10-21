@@ -1,10 +1,12 @@
-package org.openokr.application.ldap;
+package org.openokr.ldap;
 
-import org.openokr.utils.StringUtils;
+import com.zzheng.framework.exception.BusinessException;
+import org.apache.commons.lang3.StringUtils;
+import org.openokr.enumerate.RoleEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.naming.Context;
@@ -19,16 +21,16 @@ import javax.naming.ldap.LdapContext;
 import java.util.Hashtable;
 
 /**
- * @Desc:   连接LDAP验证用户名密码是否正确
+ * @Desc:
  * @author: cww
- * @DateTime: 2019/10/15 14:46
+ * @DateTime: 2019/10/21 14:43
  */
-@Component
-public class LdapUser {
-
-    protected static Logger logger = LoggerFactory.getLogger(LdapUser.class);
+@Service
+public class LdapUserService implements ILdapUserService {
+    protected static Logger logger = LoggerFactory.getLogger(LdapUserService.class);
 
     private static String LDAP_FACTORY = "com.sun.jndi.ldap.LdapCtxFactory";
+
     private static String LDAP_SAMACCOUNTNAME = "sAMAccountName";
     private static String LDAP_DISPLAYNAME = "displayName";
     private static String LDAP_MAIL = "mail";
@@ -38,6 +40,7 @@ public class LdapUser {
     private static String ldapUrl;
     private static String accountPrefix;
     private static String baseDn;
+
     /**
      * LDAP 访问地址
      */
@@ -62,54 +65,47 @@ public class LdapUser {
         baseDn = this.BASE_DN;
     }
 
-    private static LdapContext connectLDAP(String username, String ldapPwd) throws NamingException, javax.naming.NamingException {
-        if (StringUtils.isBlank(ldapUrl)) {
-            logger.warn("通过LDAP进行用户验证-LDAP 访问地址为空-验证结束");
-            throw new NamingException("LDAP URL is null");
-        }
-
-        if (StringUtils.isBlank(accountPrefix)) {
-            logger.warn("通过LDAP进行用户验证-LDAP 用户id前缀为空-将继续验证");
-        }
-//        String ldapUrl = "ldap://adsrv01.yqb.yuanqubao.com/dc=yqb,dc=yuanqubao,dc=com";  // LDAP 访问地址
-        String ldapAccount = accountPrefix + "\\" + username;
-        Hashtable env = new Hashtable();
-        env.put(Context.INITIAL_CONTEXT_FACTORY, LDAP_FACTORY);
-        env.put(Context.PROVIDER_URL, ldapUrl + "/" + baseDn);
-        env.put(Context.SECURITY_AUTHENTICATION, "simple");
-        env.put(Context.SECURITY_PRINCIPAL, ldapAccount);
-
-        env.put(Context.SECURITY_CREDENTIALS, ldapPwd);
-        LdapContext ctxTDS = new InitialLdapContext(env,null);
-        return ctxTDS;
-    }
-
-    public static String findUser(String umAccount, String ldapPwd) throws javax.naming.NamingException {
-        // 设置搜索过滤条件
-        logger.info("查询 ldap 用户列表-开始 用户：" +umAccount);
-        String filter = "(sAMAccountName=" + umAccount + ")";
-        return getUser(umAccount, ldapPwd, filter);
-    }
-
     /**
-     * 查询 ldap 用户列表
-     * @param adminAccount
-     * @param password
-     * @param userRole  查询ldap中的用户角色类型 00 : ldap用户中 管理员 | 01 ldap用户中 yqb-okr-user 普通用户
-     * @return
-     * @throws javax.naming.NamingException
+     * 验证 ldap 用户权限
+     *
+     * @param ldapAccount
+     * @param ldapPwd
+     * @return 返回用户信息 json 字符串
+     * @throws BusinessException
      */
-    public static String getUserByFiler(String adminAccount, String password, String userRole) throws javax.naming.NamingException, Exception {
-        String filter = null;
-        logger.info("查询 ldap 用户列表-开始 用户：" +adminAccount + ", 查询角色userRole : " + userRole);
-        if ("00".equals(userRole)) {
-            filter = "(&(|(objectclass=person))(|(|(memberof=CN=app-admin,CN=Users," + baseDn + "))))";
-        } else if ("01".equals(userRole) || StringUtils.isBlank(userRole)) {
-            filter = "(&(|(objectclass=person))(|(|(memberof=CN=yqb-okr-user,CN=Users," + baseDn + "))))";
+    @Override
+    public String userPermissionValidation(String ldapAccount, String ldapPwd) throws BusinessException {
+        // 设置搜索过滤条件
+        logger.info("查询 ldap 用户列表-开始 用户：" + ldapAccount);
+        String filter = "(sAMAccountName=" + ldapAccount + ")";
+        try {
+            return getUser(ldapAccount, ldapPwd, filter);
+        } catch (NamingException e) {
+            logger.error("查询 ldap 用户列表-异常 e:{},cause:{}", e.getMessage(),e.getCause());
+            throw new BusinessException("查询 ldap 用户列表 异常 e:" + e.getCause());
+        } catch (Exception e) {
+            logger.error("查询 ldap 用户列表-失败 e:{},cause:{}", e.getMessage(),e.getCause());
+            throw new BusinessException("查询 ldap 用户列表 失败 e:" + e.getCause());
         }
-        String userListJsonStr = getUser(adminAccount, password, filter);
-        logger.info("查询 ldap 用户列表-完成 返回 userListJsonStr ：" + userListJsonStr);
-        return userListJsonStr;
+    }
+    @Value("${spring.profiles}")
+    private String profile;
+    @Override
+    public String getUserByFilter(String ldapAccount, String ldapPwd, String findRole) throws BusinessException {
+        String filter;
+        logger.info("查询 ldap 用户列表-开始 用户：" +ldapAccount + ", 查询角色userRole : " + findRole);
+        try {
+            filter = RoleEnum.getFilterByProfileAndRole(findRole).replace("baseDn",baseDn);
+            String userListJsonStr = getUser(ldapAccount, ldapPwd, filter);
+            logger.info("查询 ldap 用户列表-完成 返回 userListJsonStr ：" + userListJsonStr);
+            return userListJsonStr;
+        } catch (NamingException e) {
+            logger.error("查询 ldap 用户列表-异常 e:{},cause:{}", e.getMessage(),e.getCause());
+            throw new BusinessException("查询 ldap 用户列表 异常 e:" + e.getCause());
+        } catch (Exception e) {
+            logger.error("查询 ldap 用户列表-失败 e:{},cause:{}", e.getMessage(),e.getCause());
+            throw new BusinessException("查询 ldap 用户列表 失败 e:" + e.getCause());
+        }
     }
 
     private static String getUser(String account, String password, String filter) throws javax.naming.NamingException {
@@ -154,5 +150,28 @@ public class LdapUser {
             }
         }
         return finalUserListJson;
+    }
+
+
+    private static LdapContext connectLDAP(String username, String ldapPwd) throws NamingException, javax.naming.NamingException {
+        if (StringUtils.isBlank(ldapUrl)) {
+            logger.warn("通过LDAP进行用户验证-LDAP 访问地址为空-验证结束");
+            throw new NamingException("LDAP URL is null");
+        }
+
+        if (StringUtils.isBlank(accountPrefix)) {
+            logger.warn("通过LDAP进行用户验证-LDAP 用户id前缀为空-将继续验证");
+        }
+//        String ldapUrl = "ldap://adsrv01.yqb.yuanqubao.com/dc=yqb,dc=yuanqubao,dc=com";  // LDAP 访问地址
+        String ldapAccount = accountPrefix + "\\" + username;
+        Hashtable env = new Hashtable();
+        env.put(Context.INITIAL_CONTEXT_FACTORY, LDAP_FACTORY);
+        env.put(Context.PROVIDER_URL, ldapUrl + "/" + baseDn);
+        env.put(Context.SECURITY_AUTHENTICATION, "simple");
+        env.put(Context.SECURITY_PRINCIPAL, ldapAccount);
+
+        env.put(Context.SECURITY_CREDENTIALS, ldapPwd);
+        LdapContext ctxTDS = new InitialLdapContext(env,null);
+        return ctxTDS;
     }
 }

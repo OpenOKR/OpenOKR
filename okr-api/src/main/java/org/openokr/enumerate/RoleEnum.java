@@ -1,5 +1,10 @@
 package org.openokr.enumerate;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * @Desc:   用户角色枚举类
  * @author: cww
@@ -33,6 +38,16 @@ public enum RoleEnum {
      */
     private String profile;
 
+    /**
+     * 角色筛选与筛选条件关联
+     */
+    private static Map<String, String> filter = new HashMap<>();
+    static {
+        // baseDn 需要根据实际配置文件替换
+        filter.put("00","(&(|(objectclass=person))(|(|(memberof=CN=app-admin,CN=Users,baseDn))))");
+        filter.put("01","(&(|(objectclass=person))(|(|(memberof=CN=yqb-okr-user,CN=Users,baseDn))))");
+    }
+
     private RoleEnum(String id, String profile, String roleId) {
         this.id = id;
         this.profile = profile;
@@ -46,5 +61,19 @@ public enum RoleEnum {
             }
         }
         return null;
+    }
+
+    public static List<String> getRoleArrayByProfile(String profile) {
+        List<String> roleList = new ArrayList<>();
+        for (RoleEnum roleEnum : RoleEnum.values()) {
+            if (roleEnum.profile.equals(profile)) {
+                roleList.add(roleEnum.id);
+            }
+        }
+        return roleList;
+    }
+
+    public static String getFilterByProfileAndRole(String role) {
+        return filter.get(role);
     }
 }

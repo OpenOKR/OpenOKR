@@ -11,6 +11,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.openokr.application.ldap.LdapUser;
 import org.openokr.application.utils.PasswordUtil;
+import org.openokr.ldap.ILdapUserService;
 import org.openokr.sys.service.IUserService;
 import org.openokr.sys.vo.*;
 import org.openokr.utils.*;
@@ -39,6 +40,8 @@ public class AuthRealm extends AuthorizingRealm {
     @Autowired
     private IUserService userService;
 
+    @Autowired
+    private ILdapUserService ldapUserService;
     //认证,登录
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
@@ -69,18 +72,19 @@ public class AuthRealm extends AuthorizingRealm {
             passwordStr.append(password[i]);
         }
         try {
-            String userInfo = LdapUser.findUser(token.getUsername(),passwordStr.toString());
+//            String userInfo = LdapUser.findUser(token.getUsername(),passwordStr.toString());
+            String userInfo = ldapUserService.userPermissionValidation(token.getUsername(), passwordStr.toString());
             ldapVerify = true;
             logger.info("通过LDAP进行用户验证-成功 用户信息：" + userInfo);
-        } catch (NamingException e) {
+        } catch (Exception e) {
             ldapVerify = false;
             logger.warn("通过LDAP进行用户验证-验证失败 cause ：" + e.getCause());
         }
         try {
-            String userListJsonStr = LdapUser.getUserByFiler(token.getUsername(), passwordStr.toString(), "00");
+            String userListJsonStr = ldapUserService.getUserByFilter(token.getUsername(), passwordStr.toString(), "01");
             UserListDataVO userListDataVO = JSON.parseObject(userListJsonStr, UserListDataVO.class);
             List<UserVO> userVOList = userListDataVO.getUserList();
-            userService.mergeUserFromLdap(userVOList, "00");
+            userService.mergeUserFromLdap(userVOList, "01");
         } catch (Exception e) {
             logger.warn("同步用户-失败 cause ：" + e.getCause());
         }
