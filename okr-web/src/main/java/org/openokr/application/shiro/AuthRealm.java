@@ -79,14 +79,14 @@ public class AuthRealm extends AuthorizingRealm {
             ldapVerify = false;
             logger.warn("通过LDAP进行用户验证-验证失败 cause ：" + e.getCause());
         }
-        try {
-            String userListJsonStr = ldapUserService.getUserByFilter(token.getUsername(), passwordStr.toString(), "01");
-            UserListDataVO userListDataVO = JSON.parseObject(userListJsonStr, UserListDataVO.class);
-            List<UserVO> userVOList = userListDataVO.getUserList();
-            userService.mergeUserFromLdap(userVOList, "01");
-        } catch (Exception e) {
-            logger.warn("同步用户-失败 cause ：" + e.getCause());
-        }
+//        try {
+//            String userListJsonStr = ldapUserService.getUserByFilter(token.getUsername(), passwordStr.toString(), "01");
+//            UserListDataVO userListDataVO = JSON.parseObject(userListJsonStr, UserListDataVO.class);
+//            List<UserVO> userVOList = userListDataVO.getUserList();
+//            userService.mergeUserFromLdap(userVOList, "01");
+//        } catch (Exception e) {
+//            logger.warn("同步用户-失败 cause ：" + e.getCause());
+//        }
         //------------------- ldap验证 end ------------------------------//
         UserVO user = userService.getByUserName(token.getUsername());
         if (user != null) {
