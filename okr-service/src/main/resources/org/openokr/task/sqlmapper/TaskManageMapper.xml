@@ -287,7 +287,7 @@
                 </if>
             </if>
             <if test="vo.productId != null">
-                and T2.apportion_name_id >=#{vo.productId}
+                and T2.apportion_name_id =#{vo.productId}
             </if>
             <if test="vo.taskId != null">
                 and T1.id =#{vo.taskId}

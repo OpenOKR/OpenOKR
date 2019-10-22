@@ -96,6 +96,11 @@ public class UserVO extends BaseVO implements Serializable {
      */
     private String roleName;
 
+    /**
+     * 部门
+     */
+    private String organizationName;
+
 
     @ApiModelProperty(value = "角色类型  00：超级管理员 01：系统管理员 02：普通管理员   10：用户")
     private String roleType;

@@ -25,7 +25,7 @@
         t2.task_name
         ,ot2.id team_id
         ,ot2.name team_name
-        ,t3.user_name report_user_name
+        ,(case WHEN (t3.real_name is not NULL) then t3.real_name else t3.user_name end) report_user_name
         FROM t_okr_daily t1
         LEFT JOIN t_okr_task t2 ON t1.task_id = t2.id
         LEFT JOIN T_OKR_TEAMS ot2 ON ot2.id = t2.belong_team

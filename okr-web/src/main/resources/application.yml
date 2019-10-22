@@ -24,6 +24,11 @@ spring:
       max-request-size: 10Mb
   resources:
     static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/
+  ldap:
+    urls: ldap://adsrv01.yqb.yuanqubao.com
+    account-prefix: YQB
+    embedded:
+      base-dn: dc=yqb,dc=yuanqubao,dc=com
 
 framework:
   dubbo:

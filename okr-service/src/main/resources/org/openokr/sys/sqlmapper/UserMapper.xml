@@ -82,6 +82,22 @@
     </select>
 
 
+    <select id="getUserListByCondition" parameterType="java.util.Map" resultType="org.openokr.sys.vo.UserVO">
+        SELECT
+        t1.ID,
+        user_name
+        FROM
+        t_okr_sys_user t1
+        LEFT JOIN t_okr_sys_user_role t2 ON t1.ID = t2.user_id
+        WHERE 1 = 1
+        <if test="roleId != null and !roleId.isEmpty()">
+          and  t2.role_id = #{roleId}
+        </if>
+        <if test="orgId != null and !orgId.isEmpty()" >
+            and t1.organization_id = #{orgId}
+        </if>
+    </select>
+
     <select id="getUserRole" parameterType="java.util.Map" resultType="org.openokr.sys.vo.UserVO">
         SELECT
             osu.id
@@ -103,5 +119,6 @@
             where osu.id = #{userId}
         </if>
     </select>
+
 
 </mapper>

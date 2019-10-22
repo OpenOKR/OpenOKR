@@ -5,9 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.concurrent.CountDownLatch;
 
+@EnableScheduling
 @SpringBootApplication(scanBasePackages = {"org.openokr"},
         exclude = org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration.class)
 @ImportResource({

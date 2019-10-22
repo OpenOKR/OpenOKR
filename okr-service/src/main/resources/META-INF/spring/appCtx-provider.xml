@@ -37,4 +37,7 @@
 	<dubbo:service interface="org.openokr.task.service.IApportionCategoryManageService" ref="apportionCategoryManageService"/>
 	<dubbo:service interface="org.openokr.task.service.IWeeklyStaManageService" ref="weeklyStaManageService"/>
 
+	<!---->
+	<dubbo:service interface="org.openokr.ldap.ILdapUserService" ref="ldapUserService"/>
+
 </beans>

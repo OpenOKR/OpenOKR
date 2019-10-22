@@ -1,6 +1,7 @@
 package org.openokr.sys.service;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
 import com.zzheng.framework.adapter.vo.ResponseResult;
 import com.zzheng.framework.base.utils.BeanUtils;
 import com.zzheng.framework.base.utils.StringUtils;
@@ -8,6 +9,8 @@ import com.zzheng.framework.exception.BusinessException;
 import com.zzheng.framework.mybatis.dao.pojo.Page;
 import com.zzheng.framework.mybatis.service.impl.BaseServiceImpl;
 import org.openokr.application.utils.PasswordUtil;
+import org.openokr.enumerate.OrgEnum;
+import org.openokr.enumerate.RoleEnum;
 import org.openokr.sys.entity.UserEntity;
 import org.openokr.sys.entity.UserEntityCondition;
 import org.openokr.sys.vo.UserRoleVO;
@@ -44,6 +47,9 @@ public class UserService extends BaseServiceImpl implements IUserService {
 
     @Value("${app.defaultPassword}")
     private String defaultPassword;
+
+    @Value("${spring.profiles}")
+    private String profile;
 
     @Override
     public UserVOExt getById(String id) {
@@ -305,6 +311,87 @@ public class UserService extends BaseServiceImpl implements IUserService {
             logger.error("判断用户是否为管理员 异常 error:{}-->[userVO]={}", e.getMessage(),userId, e);
             throw new BusinessException("判断用户是否为管理员 失败");
         }
+    }
+
+    @Override
+    public void mergeUserFromLdap(List<UserVO> userVOList, String userRole) throws BusinessException {
+        try {
+            logger.info("ldap 用户定时同步-开始");
+            //根据入参查询okr现有符合条件的用户
+            String userRoleId = RoleEnum.getRoleId(userRole,profile);
+            // 如果是同步来自ldap的普通用户，那么查询okr这边用户时则不过滤角色，即找出okr中的所有角色的用户，
+            // 避免ldap中用户为普通用户，在okr中为管理员，每次同步都会出现要在okr中新增来自ldap中的普通用户，
+            // 但是okr又存在该用户，只是该用户为管理员，而导致的新增失败
+            List<UserVO> okrUserVOList;
+            if ("00".equals(userRole)) {
+                // 在比对两边系统管理用户时则需要对okr系统的用户角色进行过滤
+                okrUserVOList = getUserListByCondition(userRoleId, null);
+            } else {
+                okrUserVOList = getUserListByCondition(null, null);
+            }
+            //需要在okr中新增的用户列表
+            List<UserVOExt> toAddUser = Lists.newArrayList();
+            boolean isExist = false;
+            for (UserVO ldapUser : userVOList) {
+                for (UserVO okrUser : okrUserVOList) {
+                    // 目前只匹配用户名字段，如果存在一个用户在两个部门，那么只会在 okr 中新增一个用户，所属部门取决于先遍历到哪个部门
+                    // 这是潜在问题，因为当前只能用这个字段
+                    if (ldapUser.getUserName().equals(okrUser.getUserName())) {
+                        isExist = true;
+                        break;
+                    }
+                }
+                //okr中需要增加用户场景
+                if (!isExist) {
+                    UserVOExt userVO = new UserVOExt();
+                    userVO.setActive(true);
+                    userVO.setUserName(ldapUser.getUserName());
+                    userVO.setRealName(ldapUser.getRealName());
+                    userVO.setEmail(ldapUser.getEmail());
+                    userVO.setPhone(ldapUser.getPhone());
+                    // 根据 ldap 查询回来的部门名称模糊匹配 okr 的部门名称获得 okr 这边的orgId，匹配不到，则默认先设置为研发部门
+                    userVO.setOrganizationId(OrgEnum.getOrgIdByDesc(profile,ldapUser.getOrganizationName()));
+                    userVO.setRoleId(userRoleId);
+                    userVO.setPassword(defaultPassword);
+                    ResponseResult result = addOrModify(userVO, null);
+                    logger.info("ldap 用户定时同步 新增用户 " + ldapUser.getUserName() + " 结果 ：" + result.getMessage());
+                    toAddUser.add(userVO);
+                }
+                isExist = false;
+            }
+            if (toAddUser.size() > 0) {
+                logger.info("ldap 用户定时同步-需要新增用户完成 userList：{}", JSON.toJSONString(toAddUser));
+            } else {
+                logger.info("ldap 用户定时同步-不存在需要新增的用户-流程结束 ");
+            }
+        } catch (BusinessException e) {
+            logger.error("ldap 用户定时同步 异常 busi-error:{}-->[userVOList]={}", e.getMessage(), JSON.toJSONString(userVOList), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("ldap 用户定时同步 异常 error:{}-->[userVOList]={}", e.getMessage(),JSON.toJSONString(userVOList), e);
+            throw new BusinessException("ldap 用户定时同步 失败");
+        }
+    }
+
+    @Override
+    public List<UserVO> getUserListByCondition(String role, String orgId) throws BusinessException {
+        try {
+            Map<String, Object> params = new HashMap<>();
+            params.put("roleId", role);
+            params.put("orgId", orgId);
+            return this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE+".getUserListByCondition", params);
+        } catch (BusinessException e) {
+            logger.error("根据条件筛选用户 异常 busi-error:{}-->[role]={},[orgId]={}", e.getMessage(), role, orgId, e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("根据条件筛选用户 异常 error:{}-->[role]={},[orgId]={}", e.getMessage(), role, orgId, e);
+            throw new BusinessException("根据条件筛选用户 失败");
+        }
+    }
+
+    @Override
+    public void syncUserFromLdap() throws BusinessException {
+
     }
 
     private long countByUsername(String id, String username) {
