@@ -35,8 +35,8 @@
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
-            <id>onlyou-repositories</id>
-            <url>http://172.16.11.54:8888/content/groups/onlyou-repositories-group/</url>
+            <id>yqb-public</id>
+            <url>https://mvn.yuanqubao.net/repository/yqb-public/</url>
         </repository>
     </repositories>
     <pluginRepositories>
@@ -44,8 +44,8 @@
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
-            <id>onlyou-repositories</id>
-            <url>http://172.16.11.54:8888/content/groups/onlyou-repositories-group/</url>
+            <id>yqb-public</id>
+            <url>https://mvn.yuanqubao.net/repository/yqb-public/</url>
         </pluginRepository>
     </pluginRepositories>
 
