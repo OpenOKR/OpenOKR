@@ -29,6 +29,4 @@ hs_err_pid*
 /ehcache
 
 # modules target path
-/okr-api/target
-/okr-service/target
-/okr-web/target
+target
