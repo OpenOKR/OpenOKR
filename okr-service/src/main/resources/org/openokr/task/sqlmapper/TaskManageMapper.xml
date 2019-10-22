@@ -274,7 +274,7 @@
                     AND t1.owner_id = #{vo.currentUserId}
                 </if>
                 <if test="vo.teamId != null">
-                and t1.id >=#{vo.teamId}
+                and t1.id =#{vo.teamId}
                 </if>
             </where>
         ) T4 ON T3.report_user_id = T4.ID
@@ -287,16 +287,16 @@
                 </if>
             </if>
             <if test="vo.productId != null">
-                and T2.apportion_name_id >=#{vo.productId}
+                and T2.apportion_name_id =#{vo.productId}
             </if>
             <if test="vo.taskId != null">
-                and T1.id >=#{vo.taskId}
+                and T1.id =#{vo.taskId}
             </if>
             <if test="vo.categoryId != null">
-                and t2.id >=#{vo.categoryId}
+                and t2.id =#{vo.categoryId}
             </if>
             <if test="vo.okrId != null">
-                and t5.KR_ID >=#{vo.okrId}
+                and t5.KR_ID =#{vo.okrId}
             </if>
             <if test="vo.queryStartDate != null">
                 and t3.report_day >=#{vo.queryStartDate}
