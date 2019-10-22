@@ -9,8 +9,8 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
-import org.openokr.application.ldap.LdapUser;
 import org.openokr.application.utils.PasswordUtil;
+import org.openokr.application.web.ValidateCodeServlet;
 import org.openokr.ldap.ILdapUserService;
 import org.openokr.sys.service.IUserService;
 import org.openokr.sys.vo.*;
@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import javax.naming.NamingException;
 import java.io.Serializable;
 import java.util.List;
 
@@ -55,12 +54,12 @@ public class AuthRealm extends AuthorizingRealm {
             failCount = Integer.parseInt(CacheUtils.get(UserUtils.USER_CACHE, key).toString());
         }
         //校验登录验证码
-//        String code = (String) session.getAttribute(ValidateCodeServlet.VALIDATE_CODE);
-//        if (failCount > 3) {
-//            if ((token.getCaptcha() == null || !token.getCaptcha().toUpperCase().equals(code.toUpperCase()))) {
-//                throw new AuthenticationException("msg:验证码错误,请重试.");
-//            }
-//        }
+        String code = (String) session.getAttribute(ValidateCodeServlet.VALIDATE_CODE);
+        if (failCount > 3) {
+            if ((token.getCaptcha() == null || !token.getCaptcha().toUpperCase().equals(code.toUpperCase()))) {
+                throw new AuthenticationException("msg:验证码错误,请重试.");
+            }
+        }
 
         //校验用户名密码
         //------------------- ldap验证 start ------------------------------//
