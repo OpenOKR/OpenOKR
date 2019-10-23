@@ -41,18 +41,18 @@ public class LdapUser {
     /**
      * LDAP 访问地址
      */
-    @Value("${spring.ldap.urls}")
+    @Value("${app.ldap.urls}")
     private String LDAP_URL;
 
     /**
      * 用户名前缀
      */
-    @Value("${spring.ldap.account-prefix}")
+    @Value("${app.ldap.account-prefix}")
     private String ACCOUNT_PREFIX;
     /**
      * 用户名前缀
      */
-    @Value("${spring.ldap.embedded.base-dn}")
+    @Value("${app.ldap.embedded.base-dn}")
     private String BASE_DN;
 
     @PostConstruct

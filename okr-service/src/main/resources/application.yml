@@ -6,14 +6,6 @@ spring:
     name: dataSource
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: org.postgresql.Driver
-  ldap:
-    urls: ldap://adsrv01.yqb.yuanqubao.com
-    account-prefix: YQB
-    embedded:
-      base-dn: dc=yqb,dc=yuanqubao,dc=com
-    adminUser: wwchen
-    pwd: a730ai919a+
-    sync-cycle: 1
 framework:
   mybatis:
     base-packages: org.openokr,com.zzheng.framework
@@ -37,6 +29,14 @@ logging:
 
 app:
   defaultPassword: 123456
+  ldap:
+    urls: ldap://adsrv01.yqb.yuanqubao.com
+    account-prefix: YQB
+    embedded:
+      base-dn: dc=yqb,dc=yuanqubao,dc=com
+    adminUser: wwchen
+    pwd: a730ai919a+
+    sync-cycle: 1
 
 ---
 spring:

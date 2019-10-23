@@ -26,11 +26,11 @@ import java.util.List;
 public class ScheduledController {
 
     private Logger logger = LoggerFactory.getLogger(ScheduledController.class);
-    @Value("${spring.ldap.adminUser}")
+    @Value("${app.ldap.adminUser}")
     private String account;
-    @Value("${spring.ldap.pwd}")
+    @Value("${app.ldap.pwd}")
     private String pwd;
-    @Value("${spring.ldap.sync-cycle}")
+    @Value("${app.ldap.sync-cycle}")
     private String cycle;
     @Value("${spring.profiles}")
     private String profile;
