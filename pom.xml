@@ -32,14 +32,20 @@
 
     <repositories>
         <repository>
-            <id>yqb-public</id>
-            <url>http://mvn.yuanqubao.net/repository/yqb-public/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>onlyou-repositories</id>
+            <url>http://172.16.11.54:8888/content/groups/onlyou-repositories-group/</url>
         </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
-            <id>yqb-public</id>
-            <url>http://mvn.yuanqubao.net/repository/yqb-public/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>onlyou-repositories</id>
+            <url>http://172.16.11.54:8888/content/groups/onlyou-repositories-group/</url>
         </pluginRepository>
     </pluginRepositories>
 
@@ -56,11 +62,13 @@
                 <artifactId>springfox-swagger-ui</artifactId>
                 <version>${springfox-swagger-ui.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>1.16.18</version>
             </dependency>
+
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
@@ -80,15 +88,19 @@
                 <version>4.0.9</version>
                 <scope>test</scope>
             </dependency>
+
         </dependencies>
     </dependencyManagement>
 
     <build>
         <pluginManagement>
             <plugins>
+
             </plugins>
         </pluginManagement>
+
     </build>
+
     <profiles>
         <profile>
             <id>api</id>
