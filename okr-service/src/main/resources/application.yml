@@ -34,8 +34,8 @@ app:
     account-prefix: YQB
     embedded:
       base-dn: dc=yqb,dc=yuanqubao,dc=com
-    adminUser: wwchen
-    pwd: a730ai919a+
+    adminUser: ldap
+    pwd: xZcb5GRd8m
     sync-cycle: 1
 
 ---
