@@ -1,83 +1,11 @@
 ## default config
-spring:
-  profiles:
-    active: local
-  datasource:
-    name: dataSource
-    type: com.zaxxer.hikari.HikariDataSource
-    driver-class-name: org.postgresql.Driver
-framework:
-  mybatis:
-    base-packages: org.openokr,com.zzheng.framework
-    mapper-locations:
-      - classpath*:org/openokr/**/*Mapper.xml
-      - classpath*:com/zzheng/framework/FrameworkMapper.xml
-  dubbo:
-    application:
-      name: okr-service
-    protocol:
-      port: 20254
-    registry1:
-      address: zookeeper://zkserver1:2181;
-      file: /data/log/okr/okr-service-log/okr-service-dubbo1.cache
+custom-vault:
+  # 是否启用从vault server获取配置文件
+  enable: true
+  # vault 引擎目录
+  engine: okr
+  # vault 秘钥路径
+  path: okr-service
+  # engine/path下的某个key
+  key: okr-service
 
-logging:
-  config: classpath:logback.xml
-  level:
-    root: debug
-  file: /data/log/okr/okr-service-log/okr-service
-
-app:
-  defaultPassword: 123456
-  ldap:
-    urls: ldap://adsrv01.yqb.yuanqubao.com
-    account-prefix: YQB
-    embedded:
-      base-dn: dc=yqb,dc=yuanqubao,dc=com
-    adminUser: ldap
-    pwd: xZcb5GRd8m
-    sync-cycle: 1
-
----
-spring:
-  profiles: local
-  datasource:
-    url: jdbc:postgresql://pgserver:5432/okr_dev
-    username: okr_dev
-    password: okr_dev
-
-logging:
-  level:
-    root: debug
-
----
-spring:
-  profiles: dev
-  datasource:
-    url: jdbc:postgresql://pgserver:5432/okr_dev
-    username: okr_dev
-    password: okr_dev
-
----
-spring:
-  profiles: test
-  datasource:
-    url: jdbc:postgresql://pgserver:5432/okr_dev
-    username: okr_dev
-    password: okr_dev
-
----
-spring:
-  profiles: uat
-  datasource:
-    url: jdbc:postgresql://pgserver:5432/okr_uat
-    username: okr_uat
-    password: okr_uat
-
----
-spring:
-  profiles: prd
-  datasource:
-    url: jdbc:postgresql://pgserver:5432/okr
-    username: okr
-    password: okr

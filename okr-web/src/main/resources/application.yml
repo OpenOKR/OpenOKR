@@ -1,94 +1,10 @@
 ## default config
-server:
-  port: 8892
-  session:
-    timeout: 1800
-  context-path: /
-  undertow:
-    accesslog:
-      enabled: true
-      dir: /data/log/okr/okr-web-log/
-      prefix: okr-web-access.
-  error:
-      path: /error
-spring:
-  profiles:
-    active: local
-  mvc:
-    view:
-      prefix: /views/
-      suffix: .jsp
-  http:
-    multipart:
-      max-file-size: 10Mb
-      max-request-size: 10Mb
-  resources:
-    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/
-
-
-framework:
-  dubbo:
-    application:
-      name: okr-web
-    registry1:
-      address: zookeeper://zkserver1:2181
-      file: /data/log/okr/okr-web-log/okr-web-dubbo1.cache
-
-logging:
-  config: classpath:logback.xml
-  level:
-    root: info
-  file: /data/log/okr/okr-web-log/okr-web
-
-app:
-  defaultPassword: 123456
-  multiAccountLogin: true
-  jsDebug: true
-  staticResourceVersion: $[mvn.staticResourceVersion]
-  ldap:
-    urls: ldap://adsrv01.yqb.yuanqubao.com
-    account-prefix: YQB
-    embedded:
-      base-dn: dc=yqb,dc=yuanqubao,dc=com
-
----
-server:
-  undertow:
-    accesslog:
-      dir: ../log
-      prefix: ../log/okr-web-access.
-  session:
-    timeout: 10800
-
-spring:
-  profiles: local
-app:
-  jsDebug: true
-  staticResourceVersion: dev
-logging:
-  level:
-    root: debug
----
-spring:
-  profiles: dev
-
-app:
-  jsDebug: true
-
----
-spring:
-  profiles: test
-
-app:
-  jsDebug: true
-  staticResourceVersion: dev
-
----
-spring:
-  profiles: uat
-
----
-spring:
-  profiles: prd
-app:
-  jsDebug: true
+custom-vault:
+  # 是否启用从vault server获取配置文件
+  enable: true
+  # vault 引擎目录
+  engine: okr
+  # vault 秘钥路径
+  path: okr-web
+  # engine/path下的某个key
+  key: okr-web

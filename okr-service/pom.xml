@@ -147,6 +147,11 @@
             <artifactId>unboundid-ldapsdk</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.yuanqubao</groupId>
+            <artifactId>yqb-vault</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

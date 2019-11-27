@@ -1,3 +1,5 @@
 # Auto Configure
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 org.openokr.application.framework.autoconfigure.MvcAutoConfiguration
+
+org.springframework.boot.env.PropertySourceLoader=com.yuanqubao.vault.VaultPropertySourceLoader
