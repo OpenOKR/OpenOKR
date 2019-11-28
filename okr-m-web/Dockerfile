@@ -1,4 +1,4 @@
-FROM openjdk:7u121-jre
+FROM openjdk:8u171-jre
 
 ENV PROJECT_NAME okr-m-web
 ENV DEPLOY_DIR /data/webroot/okr

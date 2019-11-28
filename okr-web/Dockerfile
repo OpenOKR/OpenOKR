@@ -1,4 +1,4 @@
-FROM openjdk:7u121-jre
+FROM openjdk:8u171-jre
 
 ENV USERNAME deploy
 RUN useradd -ms /bin/bash ${USERNAME}
