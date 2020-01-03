@@ -291,6 +291,20 @@ public class OkrTeamService extends BaseServiceImpl implements IOkrTeamService {
         }
         return new ResponseResult(true, null, "操作成功！");
     }
+
+    @Override
+    public List<TeamsVO> getAllTeams() throws BusinessException {
+        try {
+            Map<String,Object> paramMap = new HashMap<>();
+            return this.getMyBatisDao().selectListBySql(MAPPER_NAMESPACE+".getAllTeamIds",paramMap);
+        } catch (BusinessException e) {
+            logger.error(" 查询团队列表 busi-error:{}-->[teamsSearchVO]={}", e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            logger.error(" 查询团队列表 error:{}-->[teamsSearchVO]={}", e.getMessage(), e);
+            throw new BusinessException(" 查询团队列表 失败");
+        }
+    }
 }
 
     

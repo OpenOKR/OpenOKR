@@ -74,11 +74,13 @@ public class BasicDBService extends BaseServiceImpl implements IBasicDBService {
             if ("0".equals(user.getRoleType().substring(0,1))){
                 logger.info("当前用户是管理员 userId:{}"+user.getId());
                 //管理员返回所有任务
+                //2020年1月3日17:28:53 管理员返回所有团队，不管是否有负责团队
                 TeamsVO teamsVO = new TeamsVO();
                 teamsVO.setOwnerId(user.getId());
                 List<TeamsVO> teamsVOS  = okrTeamService.getTeamListByUserOrType(teamsVO);
                 if (teamsVOS==null){
-                    logger.info("当前管理员用户查询负责的团队为空");
+                    logger.info("当前管理员用户查询负责的团队为空 - 将查询所有团队");
+                    teamsVOS = okrTeamService.getAllTeams();
                 }
                 List<String> teamIdList = Lists.newArrayList();
                 for (TeamsVO vo : teamsVOS){

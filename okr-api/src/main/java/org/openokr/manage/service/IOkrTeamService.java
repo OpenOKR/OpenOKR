@@ -124,4 +124,11 @@ public interface IOkrTeamService {
      * @return
      */
     ResponseResult transfer(String teamId, String userId, String currentUserId);
+
+    /**
+     * 获取所有团队id List
+     * @return
+     * @throws BusinessException
+     */
+    List<TeamsVO> getAllTeams() throws BusinessException;
 }
