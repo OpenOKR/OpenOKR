@@ -27,6 +27,7 @@
         <mybatisVOJavaFileDir>../okr-api/src/main/java</mybatisVOJavaFileDir>
         <i18nJavaScriptTargetDir>../okr-api/src/main/webapp/assets/js/application/i18n</i18nJavaScriptTargetDir>
         <start-class>org.openokr.ApplicationOkrService</start-class>
+		 <postgresql.version>42.1.4</postgresql.version>
     </properties>
 
     <dependencies>
