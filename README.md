@@ -19,7 +19,7 @@ These people have contributed to OpenOKR's design and implementation:
 | [Zheng Zhen](https://github.com/Eyre-zz) | Backend engineer |
 | [Lin Lin](https://github.com/lynnezz) | QA Engineer |
 
-
+https://0kr.cn
 ## License
 
 This project is licensed under the GNU GPL 3.0 License - see the [LICENSE](LICENSE) file for details
