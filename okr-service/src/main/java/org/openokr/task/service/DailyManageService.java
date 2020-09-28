@@ -57,10 +57,6 @@ public class DailyManageService extends BaseServiceImpl implements IDailyManageS
                 condition.setReportUserId(null);
                 if (userIdList != null && userIdList.size()>0){
                     condition.setReportUserIdList(userIdList);
-                } else {
-                    page.setTotalRecord(0);
-                    page.setRecords(list);
-                    return page;
                 }
             }
             int count = dailyDBService.countDailyList(condition);
